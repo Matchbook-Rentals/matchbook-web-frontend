@@ -4,11 +4,16 @@ import React, { useState, useEffect, useRef, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { ChevronRight, MoreHorizontal } from 'lucide-react';
-import { SingleFamilyIcon } from '@/components/icons-v3';
+import { ChevronRight, MoreHorizontal, ChevronLeft, ChevronRight as ChevronRightIcon, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 import { Card, CardContent } from '@/components/ui/card';
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { APP_PAGE_MARGIN } from '@/constants/styles';
 import { RenterDashboardApplicationCard } from './renter-dashboard-application-card';
@@ -64,27 +69,24 @@ const DashboardHeader = () => (
 );
 
 // Recent Searches Section
-const INITIAL_SEARCHES_COUNT = 3;
-const SEARCHES_PER_PAGE = 9;
-
 const SearchCard = ({ trip, compact = false }: { trip: DashboardTrip; compact?: boolean }) => (
   <Link
     href={`/guest/rent/searches/${trip.id}`}
-    className="flex w-full max-w-[318px] h-[52px] items-center gap-2 px-0 hover:bg-transparent"
+    className="flex w-full h-[52px] items-center gap-2 px-0 hover:bg-transparent border border-red-400 sm:border-orange-400 md:border-yellow-400 lg:border-green-400 xl:border-blue-400 2xl:border-purple-400"
   >
-    <div className="flex w-9 h-9 items-center justify-center p-3 bg-white rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs shrink-0">
-      <SingleFamilyIcon className="w-6 h-6" />
+    <div className="flex w-10 h-10 items-center justify-center p-2 bg-white rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs shrink-0">
+      <Home className="w-5 h-5 text-gray-600" />
     </div>
 
-    <div className="flex items-center justify-center min-w-[77px] h-[52px] font-poppins font-medium text-[#373940] text-[11px] tracking-[0] leading-[normal]">
+    <div className="flex items-center min-w-[77px] font-poppins font-medium text-[#373940] text-[11px]">
       {getLocationDisplay(trip)}
     </div>
 
-    <div className="flex items-center justify-center min-w-[109px] h-[52px] font-poppins font-normal text-[#777b8b] text-[10px] tracking-[0] leading-[normal]">
+    <div className="flex items-center min-w-[109px] font-poppins font-normal text-[#777b8b] text-[10px]">
       {formatDateRange(trip.startDate, trip.endDate)}
     </div>
 
-    <div className="flex items-center justify-center min-w-[72px] h-[52px] font-poppins font-normal text-[#777b8b] text-[10px] tracking-[0] leading-[normal]">
+    <div className="flex items-center min-w-[72px] font-poppins font-normal text-[#777b8b] text-[10px]">
       {formatOccupants(trip.numAdults, trip.numChildren, trip.numPets)}
     </div>
 
@@ -93,63 +95,77 @@ const SearchCard = ({ trip, compact = false }: { trip: DashboardTrip; compact?: 
 );
 
 const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [api, setApi] = useState<CarouselApi>();
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setCanScrollPrev(api.canScrollPrev());
+    setCanScrollNext(api.canScrollNext());
+
+    api.on('select', () => {
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+    });
+
+    api.on('reInit', () => {
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+    });
+  }, [api]);
 
   if (searches.length === 0) return null;
 
-  const hasMore = searches.length > INITIAL_SEARCHES_COUNT;
-  const remainingCount = searches.length - INITIAL_SEARCHES_COUNT;
-
-  const visibleSearches = isExpanded
-    ? searches.slice(0, INITIAL_SEARCHES_COUNT + currentPage * SEARCHES_PER_PAGE)
-    : searches.slice(0, INITIAL_SEARCHES_COUNT);
-
-  const totalExpandedPages = Math.ceil((searches.length - INITIAL_SEARCHES_COUNT) / SEARCHES_PER_PAGE);
-  const hasMorePages = isExpanded && currentPage < totalExpandedPages;
-
   return (
     <section className="mb-8">
-      <h2 className="text-lg font-medium text-[#404040] mb-4">Recent Searches</h2>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
-        {visibleSearches.map((trip) => (
-          <SearchCard key={trip.id} trip={trip} compact />
-        ))}
+      <div className="flex items-center gap-3 mb-4">
+        <h2 className="text-lg font-medium text-[#404040]">Recent Searches</h2>
+        
+        {searches.length > 1 && (
+          <div className="flex items-center gap-1">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => api?.scrollPrev()}
+              disabled={!canScrollPrev}
+              className="h-7 w-7 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+            >
+              <ChevronLeft className="h-4 w-4" />
+              <span className="sr-only">Previous searches</span>
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => api?.scrollNext()}
+              disabled={!canScrollNext}
+              className="h-7 w-7 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+            >
+              <ChevronRightIcon className="h-4 w-4" />
+              <span className="sr-only">Next searches</span>
+            </Button>
+          </div>
+        )}
       </div>
 
-      {/* See more button */}
-      {hasMore && !isExpanded && (
-        <button
-          onClick={() => setIsExpanded(true)}
-          className="mt-4 text-sm text-primaryBrand hover:text-primaryBrand/80 font-medium"
-        >
-          See more searches ({remainingCount})
-        </button>
-      )}
-
-      {/* Load more / Show less when expanded */}
-      {isExpanded && (
-        <div className="flex items-center gap-4 mt-4">
-          {hasMorePages && (
-            <button
-              onClick={() => setCurrentPage((p) => p + 1)}
-              className="text-sm text-primaryBrand hover:text-primaryBrand/80 font-medium"
-            >
-              Load more ({searches.length - visibleSearches.length} remaining)
-            </button>
-          )}
-          <button
-            onClick={() => {
-              setIsExpanded(false);
-              setCurrentPage(1);
-            }}
-            className="text-sm text-gray-500 hover:text-gray-700 font-medium"
-          >
-            Show less
-          </button>
-        </div>
-      )}
+      <Carousel
+        setApi={setApi}
+        opts={{
+          align: 'start',
+          loop: false,
+        }}
+        className="w-full"
+        keyboardControls={false}
+      >
+        <CarouselContent className="-ml-3">
+          {searches.map((trip) => (
+            <CarouselItem key={trip.id} className="pl-3 basis-full xs:basis-1/2">
+              <SearchCard trip={trip} compact />
+            </CarouselItem>
+          ))}
+        </CarouselContent>
+      </Carousel>
     </section>
   );
 };
@@ -166,89 +182,64 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
   const hasMore = bookings.length > INITIAL_BOOKINGS_COUNT;
 
   return (
-    <section>
-      <h2 className="text-lg font-medium text-[#404040] mb-4 md:mb-6 lg:mb-8">Your Bookings</h2>
-      <div className="flex flex-col gap-12">
+    <section className="flex flex-col items-start gap-3.5">
+      <header className="flex items-center justify-between w-full">
+        <h2 className="font-poppins font-semibold text-[#484a54] text-sm">
+          Bookings
+        </h2>
+      </header>
+
+      <div className="flex flex-col gap-12 w-full">
         {visibleBookings.map((booking) => (
           <Card
             key={booking.id}
-            className="flex items-start bg-white border-0 shadow-none overflow-hidden"
-            style={{ borderRadius: 'clamp(10px, 2vw, 15px)' }}
+            className="w-full bg-white rounded-[15px] border-0 shadow-none"
           >
-            <CardContent className="flex items-start p-0 w-full">
-              <div
-                className="relative flex-shrink-0"
-                style={{
-                  width: 'clamp(140px, 30vw, 293px)',
-                  height: 'clamp(120px, 22vw, 211px)',
-                }}
-              >
-                <Image
-                  src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
-                  alt={booking.listing?.title || 'Property'}
-                  fill
-                  className="object-cover"
-                  style={{ borderRadius: 'clamp(10px, 2vw, 15px) 0 0 clamp(10px, 2vw, 15px)' }}
-                />
-              </div>
+            <CardContent className="p-0">
+              <div className="flex items-stretch">
+                <div className="relative flex-shrink-0 w-[207px]">
+                  <Image
+                    src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
+                    alt={booking.listing?.title || 'Property'}
+                    fill
+                    className="object-cover rounded-l-xl"
+                  />
+                </div>
 
-              <div
-                className="flex flex-col justify-between flex-1"
-                style={{
-                  padding: 'clamp(8px, 1.5vw, 16px) clamp(12px, 1.5vw, 16px) clamp(8px, 1.5vw, 16px) clamp(16px, 3vw, 32px)',
-                  minHeight: 'clamp(120px, 22vw, 211px)',
-                }}
-              >
-                <div className="flex flex-col" style={{ gap: 'clamp(2px, 0.5vw, 4px)' }}>
-                  <h3
-                    className="font-poppins font-semibold text-[#373940] leading-normal"
-                    style={{ fontSize: 'clamp(14px, 2vw, 20px)' }}
-                  >
-                    {booking.listing?.title || 'Untitled Property'}
-                  </h3>
-
-                  <div className="flex flex-col">
-                    <p
-                      className="font-poppins font-normal text-[#6b7085] leading-relaxed"
-                      style={{ fontSize: 'clamp(11px, 1.5vw, 15px)' }}
-                    >
+                <div className="flex flex-col flex-1 pl-6 pr-3">
+                  <div className="flex flex-col gap-2 min-w-0">
+                    <h3 className="font-poppins font-medium text-[#373940] text-base truncate">
+                      {booking.listing?.title || 'Untitled Property'}
+                    </h3>
+                    <p className="font-poppins font-normal text-[#777b8b] text-xs">
                       {formatDateRange(booking.startDate, booking.endDate)}
                     </p>
-                    <p
-                      className="font-poppins font-normal text-[#6b7085] leading-relaxed"
-                      style={{ fontSize: 'clamp(11px, 1.5vw, 15px)' }}
-                    >
+                    <p className="font-poppins font-normal text-[#777b8b] text-xs">
                       {booking.listing?.locationString || 'Location not available'}
                     </p>
                     {booking.trip && (
-                      <p
-                        className="font-poppins font-normal text-[#6b7085] leading-relaxed"
-                        style={{ fontSize: 'clamp(11px, 1.5vw, 15px)' }}
-                      >
+                      <p className="font-poppins font-normal text-[#777b8b] text-xs">
                         {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
                       </p>
                     )}
+                    <div className="flex items-center gap-3">
+                      <Button
+                        variant="outline"
+                        className="h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold text-[11px]"
+                        asChild
+                      >
+                        <Link href={`/app/rent/bookings/${booking.id}`}>View Details</Link>
+                      </Button>
+                      {booking.listing?.userId && (
+                        <Button
+                          className="h-[29px] px-3.5 py-2.5 rounded-lg bg-[#3c8787] hover:bg-[#3c8787]/90 text-white font-poppins font-semibold text-[11px]"
+                          asChild
+                        >
+                          <Link href={`/app/rent/messages?userId=${booking.listing.userId}`}>Message Host</Link>
+                        </Button>
+                      )}
+                    </div>
                   </div>
-                </div>
-
-                <div className="flex items-center" style={{ gap: 'clamp(8px, 1.5vw, 16px)' }}>
-                  <Button
-                    variant="outline"
-                    className="rounded-[8px] border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold"
-                    style={{ height: 'clamp(30px, 4vw, 40px)', padding: '0 clamp(12px, 1.5vw, 20px)', fontSize: 'clamp(12px, 1.3vw, 14px)' }}
-                    asChild
-                  >
-                    <Link href={`/app/rent/bookings/${booking.id}`}>View Details</Link>
-                  </Button>
-                  {booking.listing?.userId && (
-                    <Button
-                      className="rounded-[8px] bg-[#3c8787] hover:bg-[#3c8787]/90 text-white font-poppins font-semibold"
-                      style={{ height: 'clamp(30px, 4vw, 40px)', padding: '0 clamp(16px, 2vw, 24px)', fontSize: 'clamp(12px, 1.3vw, 14px)' }}
-                      asChild
-                    >
-                      <Link href={`/app/rent/messages?userId=${booking.listing.userId}`}>Message Host</Link>
-                    </Button>
-                  )}
                 </div>
               </div>
             </CardContent>
@@ -315,7 +306,7 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
 
   return (
     <section className="mb-8">
-      <div className="flex items-center justify-between px-6 py-3">
+      <div className="flex items-center justify-between mb-4">
         <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Applications</h2>
         <BrandButton variant="outline" size="xs" href="/app/rent/applications">
           Your Application
@@ -354,11 +345,6 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
   const [gridColumns, setGridColumns] = useState(2);
   const gridRef = useRef<HTMLDivElement>(null);
 
-  if (favorites.length === 0) return null;
-
-  const displayedFavorites = favorites.slice(0, displayedCount);
-  const hasMore = displayedCount < favorites.length;
-
   // Transform favorites to listing format for HomepageListingCard
   const favoriteListings = favorites.map((fav) => ({
     ...fav.listing,
@@ -395,6 +381,9 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
     setDisplayedCount((prev) => Math.min(prev + FAVORITES_PER_LOAD, favorites.length));
   }, [favorites.length]);
 
+  const displayedFavorites = favorites.slice(0, displayedCount);
+  const hasMore = displayedCount < favorites.length;
+
   // IntersectionObserver to trigger loading more
   useEffect(() => {
     if (!hasMore) return;
@@ -413,6 +402,8 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
     observer.observe(triggerElement);
     return () => observer.disconnect();
   }, [displayedFavorites.length, gridColumns, hasMore, loadMore]);
+
+  if (favorites.length === 0) return null;
 
   return (
     <section className="mb-8">
@@ -440,7 +431,7 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
 const EmptyState = () => (
   <div className="text-center py-16">
     <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-      <SingleFamilyIcon className="w-8 h-8 text-gray-400" />
+      <Home className="w-8 h-8 text-gray-400" />
     </div>
     <h2 className="text-xl font-medium text-[#404040] mb-2">No activity yet</h2>
     <p className="text-gray-500 mb-6">Start searching for your perfect rental home</p>
