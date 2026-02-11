@@ -2,13 +2,7 @@ import { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 import SearchNavbar from "@/components/newnew/search-navbar";
 import PopularListingsSectionWrapper from "@/components/home-components/popular-listings-section-wrapper";
-import RentEasyCopy from "@/components/marketing-landing-components/rent-easy-copy";
 import Footer from "@/components/marketing-landing-components/footer";
-import { HowItWorks } from "@/components/home-components/how-it-works";
-import { BecomeHostCopy } from "@/components/home-components/become-host";
-import { ProsConsGrid } from "@/components/home-components/pros-cons-grid";
-import RecentArticle from "@/components/home-components/recent-article";
-import FAQSection from "@/components/home-components/faq-section";
 import { cookies } from "next/headers";
 import { currentUser } from "@clerk/nextjs/server";
 import { getMostRecentTrip, getAllUserTrips } from "@/app/actions/trips";
@@ -22,10 +16,6 @@ export const metadata: Metadata = {
   title: 'MatchBook Rentals | Monthly Rentals',
   description: 'MatchBook is a monthly rental platform built to make renting easier and more affordable for hosts and renters. Find furnished and unfurnished rentals, with leases from 30 days to 1 year.',
 };
-
-const SPACER_CLASS = "h-[40px] md:h-[90px]";
-
-const Spacer = () => <div className={SPACER_CLASS} />;
 
 const serializeUser = (user: any) => {
   if (!user) return null;
@@ -140,20 +130,7 @@ const NewNewHomePage = async () => {
           userState={userState}
           recentTripId={recentTripId}
         />
-        <Spacer />
-        <RentEasyCopy />
-        <Spacer />
-        <Spacer />
-        <HowItWorks />
-        <Spacer />
-        <BecomeHostCopy />
-        <Spacer />
-        <ProsConsGrid />
-        <Spacer />
-        <RecentArticle />
-        <Spacer />
-        <FAQSection />
-        <Spacer />
+        <div className="h-[40px]" />
         <Footer />
       </div>
     </HomePageWrapper>
