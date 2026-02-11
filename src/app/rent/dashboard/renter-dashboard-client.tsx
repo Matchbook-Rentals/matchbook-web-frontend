@@ -72,21 +72,21 @@ const DashboardHeader = () => (
 const SearchCard = ({ trip, compact = false }: { trip: DashboardTrip; compact?: boolean }) => (
   <Link
     href={`/guest/rent/searches/${trip.id}`}
-    className="flex w-full h-[52px] items-center gap-3 px-3 hover:bg-transparent bg-white rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs"
+    className="flex w-full h-[52px] items-center gap-3 px-3 hover:bg-transparent bg-inherit rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs"
   >
     <div className="flex w-8 h-8 items-center justify-center shrink-0">
-      <Home className="w-4 h-4 text-gray-600" />
+      <Home size={20} className="text-gray-600" />
     </div>
 
     <div className="flex-1 flex items-center font-poppins font-medium text-[#373940] text-[11px] truncate">
       {getLocationDisplay(trip)}
     </div>
 
-    <div className="flex-1 flex items-center font-poppins font-normal text-[#777b8b] text-[10px] truncate">
+    <div className="flex-1 flex items-center font-poppins font-normal text-[#777b8b] text-[11px] truncate">
       {formatDateRange(trip.startDate, trip.endDate)}
     </div>
 
-    <div className="flex-1 flex items-center font-poppins font-normal text-[#777b8b] text-[10px] truncate">
+    <div className="flex-1 flex items-center font-poppins font-normal text-[#777b8b] text-[11px] truncate">
       {formatOccupants(trip.numAdults, trip.numChildren, trip.numPets)}
     </div>
 
@@ -223,17 +223,17 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
             className="w-full bg-white rounded-[15px] border-0 shadow-none"
           >
             <CardContent className="p-0">
-              <div className="flex items-stretch">
-                <div className="relative flex-shrink-0 w-[207px]">
+              <div className="flex flex-col sm:flex-row items-stretch overflow-hidden">
+                <div className="relative flex-shrink-0 w-full sm:w-[207px] h-[200px] sm:h-auto">
                   <Image
                     src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
                     alt={booking.listing?.title || 'Property'}
                     fill
-                    className="object-cover rounded-l-xl"
+                    className="object-cover sm:rounded-l-xl rounded-t-xl sm:rounded-tr-none"
                   />
                 </div>
 
-                <div className="flex flex-col flex-1 pl-6 pr-3">
+                <div className="flex flex-col flex-1 p-4 sm:pl-6 sm:pr-3 min-w-0">
                   <div className="flex flex-col gap-2 min-w-0">
                     <h3 className="font-poppins font-medium text-[#373940] text-base truncate">
                       {booking.listing?.title || 'Untitled Property'}
@@ -249,7 +249,7 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
                         {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
                       </p>
                     )}
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-wrap items-center gap-3 pt-2">
                       <Button
                         variant="outline"
                         className="h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold text-[11px]"
@@ -308,9 +308,9 @@ const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
   }));
 
   return (
-    <section className="mb-8">
+    <section className="mb-8 overflow-x-hidden">
       <h2 className="text-lg font-medium text-[#404040] mb-4">Your Matches</h2>
-      <div className="flex gap-4 overflow-x-auto pb-2">
+      <div className="flex gap-4 overflow-x-auto pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
         {matches.map((match, index) => (
           <HomepageListingCard
             key={match.id}
@@ -479,7 +479,7 @@ export default function RenterDashboardClient({ data }: RenterDashboardClientPro
     favorites.length > 0;
 
   return (
-    <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto`}>
+    <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto overflow-x-hidden`}>
       <DashboardHeader />
       {hasContent ? (
         <>
