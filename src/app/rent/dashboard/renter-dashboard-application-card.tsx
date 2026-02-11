@@ -28,38 +28,26 @@ export const RenterDashboardApplicationCard = ({
   return (
     <Card className="w-full bg-white rounded-[15px] border-[0.4px] border-[#0b6e6e] shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)]">
       <CardContent className="p-[17px]">
-        <div className="flex items-start gap-6">
+        <div className="flex gap-6">
+          {/* Image Column */}
           <div
             className="w-[148px] h-[134px] rounded-xl bg-cover bg-center flex-shrink-0"
             style={{ backgroundImage: `url(${imageUrl})` }}
           />
 
-          <div className="flex flex-col gap-[5px] flex-1">
-            <div className="flex items-center gap-2">
+          {/* Content Grid - 5 rows */}
+          <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto_auto_auto_1fr] gap-x-4 gap-y-[5px] flex-1 min-w-0">
+            {/* Row 1: Title + Badge | More Menu */}
+            <div className="flex items-start gap-2">
               <h3 className="[font-family:'Poppins',Helvetica] font-medium text-[#373940] text-base">
                 {title}
               </h3>
-              <Badge className="h-6 px-2.5 py-1 bg-[#e6f6fd] rounded-full border border-[#00a6e8] hover:bg-[#e6f6fd]">
+              <Badge className="h-6 px-2.5 py-1 bg-[#e6f6fd] rounded-full border border-[#00a6e8] hover:bg-[#e6f6fd] flex-shrink-0">
                 <span className="[font-family:'Poppins',Helvetica] font-medium text-[#00a6e8] text-[10px] leading-5">
                   {status}
                 </span>
               </Badge>
             </div>
-
-            <div className="[font-family:'Poppins',Helvetica] font-light text-black text-xs">
-              {dateRange}
-            </div>
-
-            <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-[10px]">
-              {location}
-            </div>
-
-            <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-[10px]">
-              {guests}
-            </div>
-          </div>
-
-          <div className="flex flex-col items-end justify-between h-[134px] flex-shrink-0">
             <Button
               variant="outline"
               size="icon"
@@ -68,7 +56,23 @@ export const RenterDashboardApplicationCard = ({
               <MoreVerticalIcon className="w-4 h-4 text-[#3c8787]" />
             </Button>
 
-            <div className="flex items-center gap-3">
+            {/* Row 2: Date */}
+            <div className="[font-family:'Poppins',Helvetica] font-light text-black text-xs col-span-2">
+              {dateRange}
+            </div>
+
+            {/* Row 3: Location */}
+            <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-[10px] col-span-2">
+              {location}
+            </div>
+
+            {/* Row 4: Guests */}
+            <div className="[font-family:'Poppins',Helvetica] font-normal text-[#777b8b] text-[10px] col-span-2">
+              {guests}
+            </div>
+
+            {/* Row 5: Buttons (right aligned) */}
+            <div className="col-span-2 flex items-end justify-end gap-3">
               <BrandButton
                 variant="outline"
                 size="sm"

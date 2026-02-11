@@ -126,8 +126,8 @@ export default function PropertyDetailsSection({
         </div>
       </div>
 
-      {/* Action Buttons */}
-      <div className="space-y-2">
+      {/* Action Rows */}
+      <div className="flex flex-col gap-2">
         <button
           onClick={() => {
             if (bookingId) {
@@ -149,25 +149,22 @@ export default function PropertyDetailsSection({
           <Calendar className="w-6 h-6 text-gray-700" />
           <span className="text-gray-900 text-base">Modify Dates</span>
         </button>
-      </div>
 
-      {/* Address with Copy */}
-      <div className="flex items-center py-4">
-        <span className="text-gray-900 text-base">{address}</span>
-        <button
-          onClick={handleCopyAddress}
-          className="ml-4 p-2 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
-        >
-          {copiedAddress ? (
-            <span className="text-sm font-medium text-teal-600">Copied!</span>
-          ) : (
-            <Copy className="w-5 h-5 text-gray-600" />
-          )}
-        </button>
-      </div>
+        {/* Address with Copy */}
+        <div className="flex items-center p-4">
+          <span className="text-gray-900 text-base truncate min-w-0">{address}</span>
+          <button
+            onClick={handleCopyAddress}
+            className="ml-4 p-2 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
+          >
+            {copiedAddress ? (
+              <span className="text-sm font-medium text-teal-600">Copied!</span>
+            ) : (
+              <Copy className="w-5 h-5 text-gray-600" />
+            )}
+          </button>
+        </div>
 
-      {/* More Action Links */}
-      <div className="space-y-2">
         <button 
           onClick={handleViewListing}
           className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
