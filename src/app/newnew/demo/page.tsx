@@ -231,7 +231,7 @@ export default async function StaticDemoPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-background">
       {/* Navbar */}
       <RenterNavbar
         userId={userId}
