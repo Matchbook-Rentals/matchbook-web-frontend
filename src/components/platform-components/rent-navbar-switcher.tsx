@@ -23,9 +23,14 @@ export default function RentNavbarSwitcher({ userId, user, isSignedIn }: RentNav
   const pathname = usePathname();
 
   const isDashboard = pathname === '/rent/dashboard';
+  const isBookingDetail = pathname.startsWith('/rent/bookings/');
 
   if (isDashboard) {
     return <DashboardNavbar userId={userId} user={user} isSignedIn={isSignedIn} />;
+  }
+
+  if (isBookingDetail) {
+    return null;
   }
 
   return <RenterNavbar userId={userId} user={user} isSignedIn={isSignedIn} />;

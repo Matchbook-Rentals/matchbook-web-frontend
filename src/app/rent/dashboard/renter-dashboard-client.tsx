@@ -17,6 +17,7 @@ import {
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { APP_PAGE_MARGIN } from '@/constants/styles';
 import { RenterDashboardApplicationCard } from './renter-dashboard-application-card';
+import DemoButton from './demo-button';
 import type {
   RenterDashboardData,
   DashboardTrip,
@@ -28,9 +29,35 @@ import type {
 
 interface RenterDashboardClientProps {
   data: RenterDashboardData;
+  isAdmin: boolean;
 }
 
 const PLACEHOLDER_IMAGE = '/stock_interior.webp';
+
+// Section Empty State
+const SectionEmptyState = ({
+  imageSrc,
+  title,
+  subtitle,
+  imageSize = 64,
+}: {
+  imageSrc: string;
+  title: string;
+  subtitle: string;
+  imageSize?: number;
+}) => (
+  <div className="flex flex-col items-center justify-center py-10">
+    <Image
+      src={imageSrc}
+      alt=""
+      width={imageSize}
+      height={imageSize}
+      className="mb-3 opacity-80"
+    />
+    <p className="font-poppins font-medium text-sm text-[#484a54]">{title}</p>
+    <p className="font-poppins text-xs text-[#777b8b] mt-1">{subtitle}</p>
+  </div>
+);
 
 // Helper functions
 const formatDateRange = (startDate: Date | null, endDate: Date | null): string => {
@@ -62,9 +89,15 @@ const getLocationDisplay = (trip: DashboardTrip): string => {
 };
 
 // Dashboard Header
-const DashboardHeader = () => (
-  <div className="mb-8">
+const DashboardHeader = ({ isAdmin }: { isAdmin: boolean }) => (
+  <div className="mb-8 flex items-center justify-between">
     <h1 className="text-2xl font-semibold text-[#404040]">Renter Dashboard</h1>
+    {isAdmin && (
+      <div className="flex gap-2">
+        <DemoButton />
+        <DemoButton variant="empty" />
+      </div>
+    )}
   </div>
 );
 
@@ -124,7 +157,16 @@ const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
     });
   }, [api]);
 
-  if (searches.length === 0) return null;
+  if (searches.length === 0) return (
+    <section className="mb-8">
+      <h2 className="text-lg font-medium text-[#404040] mb-4">Recent Searches</h2>
+      <SectionEmptyState
+        imageSrc="/empty-states/no-searches.png"
+        title="No recent searches"
+        subtitle="Start exploring rentals to see your searches here"
+      />
+    </section>
+  );
 
   // Group searches into pairs for mobile
   const mobileSlides = [];
@@ -203,7 +245,16 @@ const INITIAL_BOOKINGS_COUNT = 3;
 const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
   const [showAll, setShowAll] = useState(false);
 
-  if (bookings.length === 0) return null;
+  if (bookings.length === 0) return (
+    <section className="mb-8">
+      <h2 className="font-poppins font-semibold text-[#484a54] text-sm mb-4">Bookings</h2>
+      <SectionEmptyState
+        imageSrc="/empty-states/no-bookings.png"
+        title="No bookings yet"
+        subtitle="Your confirmed bookings will appear here"
+      />
+    </section>
+  );
 
   const visibleBookings = showAll ? bookings : bookings.slice(0, INITIAL_BOOKINGS_COUNT);
   const hasMore = bookings.length > INITIAL_BOOKINGS_COUNT;
@@ -255,7 +306,7 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
                         className="h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold text-[11px]"
                         asChild
                       >
-                        <Link href={`/app/rent/bookings/${booking.id}`}>View Details</Link>
+                        <Link href={`/rent/bookings/${booking.id}`}>View Details</Link>
                       </Button>
                       {booking.listing?.userId && (
                         <Button
@@ -289,7 +340,16 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
 const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
   const router = useRouter();
 
-  if (matches.length === 0) return null;
+  if (matches.length === 0) return (
+    <section className="mb-8">
+      <h2 className="text-lg font-medium text-[#404040] mb-4">Your Matches</h2>
+      <SectionEmptyState
+        imageSrc="/empty-states/no-matches.png"
+        title="No matches yet"
+        subtitle="Apply to listings to get matched with hosts"
+      />
+    </section>
+  );
 
   const handleBookNow = (matchId: string) => {
     router.push(`/app/rent/match/${matchId}/lease-signing`);
@@ -329,7 +389,21 @@ const MatchesSection = ({ matches }: { matches: DashboardMatch[] }) => {
 
 // Applications Section
 const ApplicationsSection = ({ applications }: { applications: DashboardApplication[] }) => {
-  if (applications.length === 0) return null;
+  if (applications.length === 0) return (
+    <section className="mb-8">
+      <div className="flex items-center justify-between mb-4">
+        <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Applications</h2>
+        <BrandButton variant="outline" size="xs" href="/app/rent/applications">
+          Your Application
+        </BrandButton>
+      </div>
+      <SectionEmptyState
+        imageSrc="/empty-states/no-applications.png"
+        title="No applications"
+        subtitle="Apply to listings you're interested in"
+      />
+    </section>
+  );
 
   return (
     <section className="mb-8 overflow-x-hidden">
@@ -430,7 +504,16 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
     return () => observer.disconnect();
   }, [displayedFavorites.length, gridColumns, hasMore, loadMore]);
 
-  if (favorites.length === 0) return null;
+  if (favorites.length === 0) return (
+    <section className="mb-8">
+      <h2 className="text-lg font-medium text-[#404040] mb-4">Favorites</h2>
+      <SectionEmptyState
+        imageSrc="/empty-states/no-favorites.png"
+        title="No favorites yet"
+        subtitle="Save listings you love to find them later"
+      />
+    </section>
+  );
 
   return (
     <section className="mb-8 overflow-x-hidden">
@@ -454,44 +537,17 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
   );
 };
 
-// Empty State
-const EmptyState = () => (
-  <div className="text-center py-16">
-    <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-4">
-      <Home className="w-8 h-8 text-gray-400" />
-    </div>
-    <h2 className="text-xl font-medium text-[#404040] mb-2">No activity yet</h2>
-    <p className="text-gray-500 mb-6">Start searching for your perfect rental home</p>
-    <Button asChild className="bg-primaryBrand hover:bg-primaryBrand/90">
-      <Link href="/">Start Searching</Link>
-    </Button>
-  </div>
-);
-
-export default function RenterDashboardClient({ data }: RenterDashboardClientProps) {
+export default function RenterDashboardClient({ data, isAdmin }: RenterDashboardClientProps) {
   const { recentSearches, bookings, matches, applications, favorites } = data;
-
-  const hasContent =
-    recentSearches.length > 0 ||
-    bookings.length > 0 ||
-    matches.length > 0 ||
-    applications.length > 0 ||
-    favorites.length > 0;
 
   return (
     <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto overflow-x-hidden`}>
-      <DashboardHeader />
-      {hasContent ? (
-        <>
-          <RecentSearchesSection searches={recentSearches} />
-          <BookingsSection bookings={bookings} />
-          <MatchesSection matches={matches} />
-          <ApplicationsSection applications={applications} />
-          <FavoritesSection favorites={favorites} />
-        </>
-      ) : (
-        <EmptyState />
-      )}
+      <DashboardHeader isAdmin={isAdmin} />
+      <RecentSearchesSection searches={recentSearches} />
+      <BookingsSection bookings={bookings} />
+      <MatchesSection matches={matches} />
+      <ApplicationsSection applications={applications} />
+      <FavoritesSection favorites={favorites} />
     </div>
   );
 }

@@ -321,7 +321,7 @@ export const TablelessPaymentsTable = ({
         ) : (
           <div className="flex flex-col w-full">
             {/* Header with Payments title and Manage Payment Methods button */}
-            <div className="flex items-center justify-between px-6 py-3 border-b border-gray-100">
+            <div className="flex items-center justify-between px-0 py-3 border-b border-gray-100">
               <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Payments</h2>
               <BrandButton
                 variant="outline"
