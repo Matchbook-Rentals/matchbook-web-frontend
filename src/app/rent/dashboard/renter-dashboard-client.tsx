@@ -133,7 +133,7 @@ const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
   }
 
   return (
-    <section className="mb-8">
+    <section className="mb-8 overflow-x-hidden">
       <div className="flex items-center gap-3 mb-4">
         <h2 className="text-lg font-medium text-[#404040]">Recent Searches</h2>
         
@@ -209,14 +209,14 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
   const hasMore = bookings.length > INITIAL_BOOKINGS_COUNT;
 
   return (
-    <section className="flex flex-col items-start gap-3.5">
+    <section className="flex flex-col items-start gap-3.5 overflow-x-hidden">
       <header className="flex items-center justify-between w-full">
         <h2 className="font-poppins font-semibold text-[#484a54] text-sm">
           Bookings
         </h2>
       </header>
 
-      <div className="flex flex-col gap-12 w-full">
+      <div className="flex flex-col gap-12 w-full overflow-x-hidden">
         {visibleBookings.map((booking) => (
           <Card
             key={booking.id}
@@ -332,7 +332,7 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
   if (applications.length === 0) return null;
 
   return (
-    <section className="mb-8">
+    <section className="mb-8 overflow-x-hidden">
       <div className="flex items-center justify-between mb-4">
         <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Applications</h2>
         <BrandButton variant="outline" size="xs" href="/app/rent/applications">
@@ -433,7 +433,7 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
   if (favorites.length === 0) return null;
 
   return (
-    <section className="mb-8">
+    <section className="mb-8 overflow-x-hidden">
       <div className="flex items-center gap-2 mb-4">
         <h2 className="text-lg font-medium text-[#404040]">Favorites</h2>
         <span className="text-sm text-gray-500">({favorites.length})</span>

@@ -26,12 +26,12 @@ export const RenterDashboardApplicationCard = ({
   userId,
 }: RenterDashboardApplicationCardProps): JSX.Element => {
   return (
-    <Card className="w-full bg-inherit rounded-[15px] border-[0.4px] border-[#0b6e6e] shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)]">
+    <Card className="w-full bg-inherit rounded-[15px] border-[0.4px] border-[#0b6e6e] shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)] overflow-hidden">
       <CardContent className="p-[17px]">
-        <div className="flex gap-6">
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           {/* Image Column */}
           <div
-            className="w-[148px] h-[134px] rounded-xl bg-cover bg-center flex-shrink-0"
+            className="w-full sm:w-[148px] h-[150px] sm:h-[134px] rounded-xl bg-cover bg-center flex-shrink-0"
             style={{ backgroundImage: `url(${imageUrl})` }}
           />
 
@@ -75,7 +75,7 @@ export const RenterDashboardApplicationCard = ({
             <div className="col-span-2 flex items-end justify-end gap-2 sm:gap-3">
               <BrandButton
                 variant="outline"
-                size="medium"
+                size="sm"
                 href={`/app/rent/applications/${applicationId}`}
                 className="!flex-1 sm:!flex-initial !max-w-[115px] sm:!w-[115px] !h-[29px] !px-2 sm:!px-3.5 !py-2.5 !min-w-0 rounded-lg border-[#3c8787] hover:bg-transparent"
               >
@@ -87,7 +87,7 @@ export const RenterDashboardApplicationCard = ({
               {userId && (
                 <BrandButton
                   variant="outline"
-                  size="medium"
+                  size="sm"
                   href={`/app/rent/messages?userId=${userId}`}
                   className="!flex-1 sm:!flex-initial !max-w-[115px] sm:!w-[115px] !h-[29px] !px-2 sm:!px-3.5 !py-2.5 !min-w-0 rounded-lg border-[#3c8787] hover:bg-transparent"
                 >
