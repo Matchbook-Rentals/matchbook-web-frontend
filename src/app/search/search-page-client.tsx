@@ -20,6 +20,7 @@ import { calculateRent } from '@/lib/calculate-rent';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Map, XIcon } from 'lucide-react';
+import { UpdatedFilterIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
 import { createTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
@@ -163,7 +164,7 @@ function SearchFilterBar({ onFiltersClick, filters, onRemoveFilter, onSetAllFilt
         <span className="hidden md:inline font-['Poppins',Helvetica] font-medium text-[#3c8787] text-sm tracking-[0] leading-[normal]">
           Filters
         </span>
-        <img className="w-5 h-5" alt="Filters" src="/frame-4.svg" />
+        <UpdatedFilterIcon className="w-5 h-5 text-primaryBrand" />
       </Button>
     </div>
   );
