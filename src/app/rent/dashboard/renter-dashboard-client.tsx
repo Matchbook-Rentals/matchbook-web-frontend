@@ -26,6 +26,7 @@ import type {
   DashboardApplication,
   DashboardFavorite,
 } from '@/app/actions/renter-dashboard';
+import type { DemoData, AllData } from './_actions';
 
 interface RenterDashboardClientProps {
   data: RenterDashboardData;
@@ -89,13 +90,21 @@ const getLocationDisplay = (trip: DashboardTrip): string => {
 };
 
 // Dashboard Header
-const DashboardHeader = ({ isAdmin }: { isAdmin: boolean }) => (
+const DashboardHeader = ({ 
+  isAdmin, 
+  onDemoDataLoaded, 
+  onAllDataLoaded 
+}: { 
+  isAdmin: boolean;
+  onDemoDataLoaded?: (data: DemoData) => void;
+  onAllDataLoaded?: (data: AllData) => void;
+}) => (
   <div className="mb-8 flex items-center justify-between">
     <h1 className="text-2xl font-semibold text-[#404040]">Renter Dashboard</h1>
     {isAdmin && (
       <div className="flex gap-2">
-        <DemoButton />
-        <DemoButton variant="empty" />
+        <DemoButton onDemoDataLoaded={onDemoDataLoaded} />
+        <DemoButton variant="empty" onAllDataLoaded={onAllDataLoaded} />
       </div>
     )}
   </div>
@@ -538,11 +547,23 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
 };
 
 export default function RenterDashboardClient({ data, isAdmin }: RenterDashboardClientProps) {
-  const { recentSearches, bookings, matches, applications, favorites } = data;
+  const [dashboardData, setDashboardData] = useState(data);
+  const { recentSearches, bookings, matches, applications, favorites } = dashboardData;
+
+  const handleDemoDataLoaded = (demoData: DemoData) => {
+    // Merge demo data with current data (for visualization purposes)
+    console.log("Demo data would be merged here:", demoData);
+    alert(`Demo data loaded! Check console for details.\n\nTrips: ${demoData.trips.length}\nBookings: ${demoData.bookings.length}\nFavorites: ${demoData.favorites.length}\nApplications: ${demoData.applications.length}`);
+  };
+
+  const handleAllDataLoaded = (allData: AllData) => {
+    console.log("All user data:", allData);
+    alert(`All data dumped! Check console for details.\n\nTrips: ${allData.trips.length}\nBookings: ${allData.bookings.length}\nFavorites: ${allData.favorites.length}\nApplications: ${allData.applications.length}\nHousing Requests: ${allData.housingRequests.length}\nMatches: ${allData.matches.length}`);
+  };
 
   return (
     <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto overflow-x-hidden`}>
-      <DashboardHeader isAdmin={isAdmin} />
+      <DashboardHeader isAdmin={isAdmin} onDemoDataLoaded={handleDemoDataLoaded} onAllDataLoaded={handleAllDataLoaded} />
       <RecentSearchesSection searches={recentSearches} />
       <BookingsSection bookings={bookings} />
       <MatchesSection matches={matches} />
