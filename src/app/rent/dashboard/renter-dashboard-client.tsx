@@ -17,7 +17,6 @@ import {
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { APP_PAGE_MARGIN } from '@/constants/styles';
 import { RenterDashboardApplicationCard } from './renter-dashboard-application-card';
-import DemoButton from './demo-button';
 import type {
   RenterDashboardData,
   DashboardTrip,
@@ -26,11 +25,11 @@ import type {
   DashboardApplication,
   DashboardFavorite,
 } from '@/app/actions/renter-dashboard';
-import type { DemoData, AllData } from './_actions';
 
 interface RenterDashboardClientProps {
   data: RenterDashboardData;
   isAdmin: boolean;
+  currentMode?: string;
 }
 
 const PLACEHOLDER_IMAGE = '/stock_interior.webp';
@@ -92,19 +91,38 @@ const getLocationDisplay = (trip: DashboardTrip): string => {
 // Dashboard Header
 const DashboardHeader = ({ 
   isAdmin, 
-  onDemoDataLoaded, 
-  onAllDataLoaded 
+  currentMode 
 }: { 
   isAdmin: boolean;
-  onDemoDataLoaded?: (data: DemoData) => void;
-  onAllDataLoaded?: (data: AllData) => void;
+  currentMode?: string;
 }) => (
   <div className="mb-8 flex items-center justify-between">
     <h1 className="text-2xl font-semibold text-[#404040]">Renter Dashboard</h1>
     {isAdmin && (
       <div className="flex gap-2">
-        <DemoButton onDemoDataLoaded={onDemoDataLoaded} />
-        <DemoButton variant="empty" onAllDataLoaded={onAllDataLoaded} />
+        <Button 
+          variant={currentMode === 'demo' ? 'default' : 'outline'} 
+          size="sm"
+          asChild
+        >
+          <Link href="/rent/dashboard?mode=demo">See Demo</Link>
+        </Button>
+        <Button 
+          variant={currentMode === 'empty' ? 'default' : 'secondary'} 
+          size="sm"
+          asChild
+        >
+          <Link href="/rent/dashboard?mode=empty">See Empty</Link>
+        </Button>
+        {currentMode && (
+          <Button 
+            variant="ghost" 
+            size="sm"
+            asChild
+          >
+            <Link href="/rent/dashboard">Reset</Link>
+          </Button>
+        )}
       </div>
     )}
   </div>
@@ -424,21 +442,21 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
       </div>
       <div className="space-y-4">
         {applications.map((app) => {
-          const location = app.listing.city && app.listing.state
+          const location = app.listing?.city && app.listing?.state
             ? `${app.listing.city}, ${app.listing.state}`
-            : app.listing.state || 'Location not available';
+            : app.listing?.state || 'Location not available';
 
           return (
             <RenterDashboardApplicationCard
               key={app.id}
-              title={app.listing.title}
+              title={app.listing?.title || 'Untitled Property'}
               status="Pending"
               dateRange={formatDateRange(app.startDate, app.endDate)}
               location={location}
-              guests={formatOccupants(app.trip.numAdults, app.trip.numChildren, app.trip.numPets)}
-              imageUrl={app.listing.listingImages[0]?.url || PLACEHOLDER_IMAGE}
+              guests={formatOccupants(app.trip?.numAdults || 0, app.trip?.numChildren || 0, app.trip?.numPets || 0)}
+              imageUrl={app.listing?.listingImages?.[0]?.url || PLACEHOLDER_IMAGE}
               applicationId={app.id}
-              userId={app.listing.user?.id}
+              userId={app.listing?.user?.id}
             />
           );
         })}
@@ -456,16 +474,18 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
   const gridRef = useRef<HTMLDivElement>(null);
 
   // Transform favorites to listing format for HomepageListingCard
-  const favoriteListings = favorites.map((fav) => ({
-    ...fav.listing,
-    listingImages: fav.listing.listingImages.map((img) => ({
-      ...img,
-      listingId: fav.listingId,
-      category: null,
-      rank: 0,
-      createdAt: new Date(),
-    })),
-  }));
+  const favoriteListings = favorites
+    .filter((fav) => fav.listing !== null)
+    .map((fav) => ({
+      ...fav.listing,
+      listingImages: fav.listing?.listingImages?.map((img) => ({
+        ...img,
+        listingId: fav.listingId,
+        category: null,
+        rank: 0,
+        createdAt: new Date(),
+      })) || [],
+    }));
 
   // Reset displayed count when favorites change
   useEffect(() => {
@@ -546,24 +566,12 @@ const FavoritesSection = ({ favorites }: { favorites: DashboardFavorite[] }) => 
   );
 };
 
-export default function RenterDashboardClient({ data, isAdmin }: RenterDashboardClientProps) {
-  const [dashboardData, setDashboardData] = useState(data);
-  const { recentSearches, bookings, matches, applications, favorites } = dashboardData;
-
-  const handleDemoDataLoaded = (demoData: DemoData) => {
-    // Merge demo data with current data (for visualization purposes)
-    console.log("Demo data would be merged here:", demoData);
-    alert(`Demo data loaded! Check console for details.\n\nTrips: ${demoData.trips.length}\nBookings: ${demoData.bookings.length}\nFavorites: ${demoData.favorites.length}\nApplications: ${demoData.applications.length}`);
-  };
-
-  const handleAllDataLoaded = (allData: AllData) => {
-    console.log("All user data:", allData);
-    alert(`All data dumped! Check console for details.\n\nTrips: ${allData.trips.length}\nBookings: ${allData.bookings.length}\nFavorites: ${allData.favorites.length}\nApplications: ${allData.applications.length}\nHousing Requests: ${allData.housingRequests.length}\nMatches: ${allData.matches.length}`);
-  };
+export default function RenterDashboardClient({ data, isAdmin, currentMode }: RenterDashboardClientProps) {
+  const { recentSearches, bookings, matches, applications, favorites } = data;
 
   return (
     <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto overflow-x-hidden`}>
-      <DashboardHeader isAdmin={isAdmin} onDemoDataLoaded={handleDemoDataLoaded} onAllDataLoaded={handleAllDataLoaded} />
+      <DashboardHeader isAdmin={isAdmin} currentMode={currentMode} />
       <RecentSearchesSection searches={recentSearches} />
       <BookingsSection bookings={bookings} />
       <MatchesSection matches={matches} />
