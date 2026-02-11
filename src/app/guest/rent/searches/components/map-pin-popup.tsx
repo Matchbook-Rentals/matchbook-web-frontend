@@ -1,8 +1,14 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import maplibregl from 'maplibre-gl';
 import { MapMarker } from '@/store/map-selection-store';
-import { Heart } from 'lucide-react';
+import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { calculateRent } from '@/lib/calculate-rent';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel"
 
 const POPUP_WIDTH = 280;
 const SCALE = 1;
@@ -20,6 +26,9 @@ interface MapPinPopupProps {
 
 export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, trip, tripId }: MapPinPopupProps) {
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
+  const [isHovered, setIsHovered] = useState(false);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [currentSlide, setCurrentSlide] = useState(0);
   const popupRef = useRef<HTMLDivElement>(null);
   const listing = marker.listing;
 
@@ -41,8 +50,36 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
     return () => { map.off('move', updatePosition); };
   }, [mapRef, updatePosition]);
 
+  // Carousel navigation
+  const scrollPrev = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    carouselApi?.scrollPrev();
+  }, [carouselApi]);
+
+  const scrollNext = useCallback((e: React.MouseEvent) => {
+    e.stopPropagation();
+    carouselApi?.scrollNext();
+  }, [carouselApi]);
+
+  const onSelect = useCallback(() => {
+    if (!carouselApi) return;
+    setCurrentSlide(carouselApi.selectedScrollSnap());
+  }, [carouselApi]);
+
+  useEffect(() => {
+    if (!carouselApi) return;
+    carouselApi.on('select', onSelect);
+    onSelect();
+    return () => { carouselApi.off('select', onSelect); };
+  }, [carouselApi, onSelect]);
+
+  const hasMultipleImages = listing.listingImages.length > 1;
+  const canScrollPrev = currentSlide > 0;
+  const canScrollNext = currentSlide < listing.listingImages.length - 1;
+
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) return;
+    if ((e.target as HTMLElement).closest('.carousel-controls')) return;
     window.open(`/search/listing/${listing.id}`, '_blank');
   };
 
@@ -84,20 +121,96 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
         className="relative bg-white rounded-2xl shadow-xl overflow-hidden cursor-pointer"
         style={{ transform: `scale(${SCALE})`, transformOrigin: 'bottom center' }}
         onClick={handleCardClick}
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
       >
-        {/* Image with heart button */}
+        {/* Image Carousel with heart button */}
         <div className="relative">
-          <img
-            className="w-full aspect-[5/4] object-cover"
-            alt={listing.title}
-            src={listing.listingImages[0]?.url || '/placeholder-property.jpg'}
-          />
+          <Carousel
+            opts={{ loop: false }}
+            setApi={setCarouselApi}
+            className="w-full"
+            keyboardControls={false}
+          >
+            <CarouselContent className="ml-0">
+              {listing.listingImages.length > 0 ? (
+                listing.listingImages.map((image, index) => (
+                  <CarouselItem key={image.id || index} className="pl-0">
+                    <div className="w-full aspect-[5/4] overflow-hidden">
+                      <img
+                        className="w-full h-full object-cover"
+                        alt={`Property image ${index + 1}`}
+                        src={image.url}
+                      />
+                    </div>
+                  </CarouselItem>
+                ))
+              ) : (
+                <CarouselItem className="pl-0">
+                  <div className="w-full aspect-[5/4] overflow-hidden">
+                    <img
+                      className="w-full h-full object-cover"
+                      alt="Property"
+                      src="/placeholder-property.jpg"
+                    />
+                  </div>
+                </CarouselItem>
+              )}
+            </CarouselContent>
+
+            {/* Navigation Arrows */}
+            {hasMultipleImages && isHovered && (
+              <>
+                {canScrollPrev && (
+                  <button
+                    className="carousel-controls absolute left-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                    onClick={scrollPrev}
+                  >
+                    <ChevronLeft className="w-4 h-4 text-gray-700" />
+                  </button>
+                )}
+                {canScrollNext && (
+                  <button
+                    className="carousel-controls absolute right-2 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full bg-white/90 hover:bg-white shadow-md transition-all"
+                    onClick={scrollNext}
+                  >
+                    <ChevronRight className="w-4 h-4 text-gray-700" />
+                  </button>
+                )}
+              </>
+            )}
+          </Carousel>
+
+          {/* Dot Indicators */}
+          {hasMultipleImages && (
+            <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 items-center">
+              {(() => {
+                const totalImages = listing.listingImages.length;
+                const batchSize = 5;
+                const currentBatch = Math.floor(currentSlide / batchSize);
+                const batchStart = currentBatch * batchSize;
+                const batchEnd = Math.min(batchStart + batchSize, totalImages);
+                const positionInBatch = currentSlide - batchStart;
+
+                return Array.from({ length: batchEnd - batchStart }, (_, i) => (
+                  <div
+                    key={i}
+                    className={`w-1.5 h-1.5 rounded-full transition-colors ${
+                      i === positionInBatch ? 'bg-white' : 'bg-white/50'
+                    }`}
+                  />
+                ));
+              })()}
+            </div>
+          )}
+
+          {/* Heart Button */}
           <button
             onClick={handleHeartClick}
-            className="absolute top-3 right-3 w-10 h-10 flex items-center justify-center rounded-full bg-white shadow-md hover:shadow-lg transition-shadow"
+            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-gray-200 transition-colors"
           >
             <Heart
-              className={`w-5 h-5 ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-500'}`}
+              className={`w-[18px] h-[18px] ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-500'}`}
             />
           </button>
         </div>

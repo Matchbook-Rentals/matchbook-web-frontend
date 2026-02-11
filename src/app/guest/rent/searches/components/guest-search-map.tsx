@@ -6,8 +6,6 @@ import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
 import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { useSearchParams } from 'next/navigation';
-import GuestDesktopListingCard from './guest-desktop-map-click-card';
-import ListingCard from './guest-desktop-map-click-card';
 import MapPinPopup from './map-pin-popup';
 
 // Import custom hooks
@@ -530,28 +528,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
               </svg>
             </button>
           </div>
-          {selectedMarker && isFullscreen && center && (
-            <>
-              <div className="hidden md:block">
-                <GuestDesktopListingCard
-                  listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
-                  distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
-                  onClose={() => setSelectedMarker(null)}
-                  customSnapshot={customSnapshot}
-                />
-              </div>
-              <div className="block md:hidden">
-                <ListingCard
-                  listing={{ ...selectedMarker.listing, price: selectedMarker.listing.price ?? 0 }}
-                  distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
-                  onClose={() => setSelectedMarker(null)}
-                  className="top-4 left-1/2 transform -translate-x-1/2 w-96"
-                  customSnapshot={customSnapshot}
-                />
-              </div>
-            </>
-          )}
-          {selectedMarker && !isFullscreen && (
+          {selectedMarker && (
             <MapPinPopup
               marker={selectedMarker}
               mapRef={mapRef}
