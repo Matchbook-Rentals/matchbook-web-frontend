@@ -4,6 +4,7 @@ import prisma from "@/lib/prismadb";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { Trip, Booking, Application } from "@prisma/client";
 import RenterDashboardClient from './renter-dashboard-client';
+import { redirect } from 'next/navigation';
 
 interface SearchParams {
   mode?: string;
@@ -14,6 +15,9 @@ export default async function RenterDashboardPage({
 }: {
   searchParams: SearchParams;
 }) {
+  // Redirect to the new application page
+  redirect('/app/rent/applications/general');
+
   const mode = searchParams.mode;
   const isAdmin = await checkAdminAccess();
   const { userId } = auth();
