@@ -8,6 +8,7 @@ import { ChevronRight, MoreHorizontal } from 'lucide-react';
 import { SingleFamilyIcon } from '@/components/icons-v3';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
+import { Card, CardContent } from '@/components/ui/card';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { APP_PAGE_MARGIN } from '@/constants/styles';
 import { RenterDashboardApplicationCard } from './renter-dashboard-application-card';
@@ -165,61 +166,93 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
   const hasMore = bookings.length > INITIAL_BOOKINGS_COUNT;
 
   return (
-    <section className="mb-8">
-      <h2 className="text-lg font-medium text-[#404040] mb-4">Your Bookings</h2>
-      <div className="space-y-4">
+    <section>
+      <h2 className="text-lg font-medium text-[#404040] mb-4 md:mb-6 lg:mb-8">Your Bookings</h2>
+      <div className="flex flex-col gap-12">
         {visibleBookings.map((booking) => (
-          <div
+          <Card
             key={booking.id}
-            className="bg-inherit rounded-xl overflow-hidden flex flex-col md:flex-row"
+            className="flex items-start bg-white border-0 shadow-none overflow-hidden"
+            style={{ borderRadius: 'clamp(10px, 2vw, 15px)' }}
           >
-            <div className="relative w-full md:w-64 h-48 md:h-auto flex-shrink-0 rounded-[12px] overflow-hidden">
-              <Image
-                src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
-                alt={booking.listing?.title || 'Property'}
-                fill
-                className="object-cover"
-              />
-            </div>
-            <div className="flex-1 p-4 flex flex-col justify-between">
-              <div>
-                <h3 className="font-poppins font-medium text-[#373940] text-[19px]">
-                  {booking.listing?.title || 'Untitled Property'}
-                </h3>
-                <div className="flex flex-col justify-center py-1 flex-1">
-                  <p className="font-poppins font-normal text-[15px] text-[#777B8B]">
-                    {formatDateRange(booking.startDate, booking.endDate)}
-                  </p>
-                </div>
-                <div className="flex flex-col justify-center py-1 flex-1">
-                  <p className="font-poppins font-normal text-[15px] text-[#777B8B]">
-                    {booking.listing?.locationString || 'Location not available'}
-                  </p>
-                </div>
-                {booking.trip && (
-                  <div className="flex flex-col justify-center py-1 flex-1">
-                    <p className="font-poppins font-normal text-[15px] text-[#777B8B]">
-                      {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
-                    </p>
-                  </div>
-                )}
+            <CardContent className="flex items-start p-0 w-full">
+              <div
+                className="relative flex-shrink-0"
+                style={{
+                  width: 'clamp(140px, 30vw, 293px)',
+                  height: 'clamp(120px, 22vw, 211px)',
+                }}
+              >
+                <Image
+                  src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
+                  alt={booking.listing?.title || 'Property'}
+                  fill
+                  className="object-cover"
+                  style={{ borderRadius: 'clamp(10px, 2vw, 15px) 0 0 clamp(10px, 2vw, 15px)' }}
+                />
               </div>
-              <div className="flex gap-3 mt-4">
-                <BrandButton variant="outline" size="sm" href={`/app/rent/bookings/${booking.id}`}>
-                  View Details
-                </BrandButton>
-                {booking.listing?.userId && (
-                  <BrandButton
-                    variant="default"
-                    size="sm"
-                    href={`/app/rent/messages?userId=${booking.listing.userId}`}
+
+              <div
+                className="flex flex-col justify-between flex-1"
+                style={{
+                  padding: 'clamp(8px, 1.5vw, 16px) clamp(12px, 1.5vw, 16px) clamp(8px, 1.5vw, 16px) clamp(16px, 3vw, 32px)',
+                  minHeight: 'clamp(120px, 22vw, 211px)',
+                }}
+              >
+                <div className="flex flex-col" style={{ gap: 'clamp(2px, 0.5vw, 4px)' }}>
+                  <h3
+                    className="font-poppins font-semibold text-[#373940] leading-normal"
+                    style={{ fontSize: 'clamp(14px, 2vw, 20px)' }}
                   >
-                    Message Host
-                  </BrandButton>
-                )}
+                    {booking.listing?.title || 'Untitled Property'}
+                  </h3>
+
+                  <div className="flex flex-col">
+                    <p
+                      className="font-poppins font-normal text-[#6b7085] leading-relaxed"
+                      style={{ fontSize: 'clamp(11px, 1.5vw, 15px)' }}
+                    >
+                      {formatDateRange(booking.startDate, booking.endDate)}
+                    </p>
+                    <p
+                      className="font-poppins font-normal text-[#6b7085] leading-relaxed"
+                      style={{ fontSize: 'clamp(11px, 1.5vw, 15px)' }}
+                    >
+                      {booking.listing?.locationString || 'Location not available'}
+                    </p>
+                    {booking.trip && (
+                      <p
+                        className="font-poppins font-normal text-[#6b7085] leading-relaxed"
+                        style={{ fontSize: 'clamp(11px, 1.5vw, 15px)' }}
+                      >
+                        {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
+                      </p>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center" style={{ gap: 'clamp(8px, 1.5vw, 16px)' }}>
+                  <Button
+                    variant="outline"
+                    className="rounded-[8px] border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold"
+                    style={{ height: 'clamp(30px, 4vw, 40px)', padding: '0 clamp(12px, 1.5vw, 20px)', fontSize: 'clamp(12px, 1.3vw, 14px)' }}
+                    asChild
+                  >
+                    <Link href={`/app/rent/bookings/${booking.id}`}>View Details</Link>
+                  </Button>
+                  {booking.listing?.userId && (
+                    <Button
+                      className="rounded-[8px] bg-[#3c8787] hover:bg-[#3c8787]/90 text-white font-poppins font-semibold"
+                      style={{ height: 'clamp(30px, 4vw, 40px)', padding: '0 clamp(16px, 2vw, 24px)', fontSize: 'clamp(12px, 1.3vw, 14px)' }}
+                      asChild
+                    >
+                      <Link href={`/app/rent/messages?userId=${booking.listing.userId}`}>Message Host</Link>
+                    </Button>
+                  )}
+                </div>
               </div>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         ))}
       </div>
       {hasMore && !showAll && (
@@ -282,10 +315,10 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
 
   return (
     <section className="mb-8">
-      <div className="flex items-center justify-between mb-4">
-        <h2 className="text-lg font-medium text-[#404040]">Pending Applications</h2>
-        <BrandButton variant="outline" size="sm" href="/app/rent/applications">
-          Your Applications
+      <div className="flex items-center justify-between px-6 py-3">
+        <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Pending Applications</h2>
+        <BrandButton variant="outline" size="xs" href="/app/rent/applications">
+          Manage Applications
         </BrandButton>
       </div>
       <div className="space-y-4">
