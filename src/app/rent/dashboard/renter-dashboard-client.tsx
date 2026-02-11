@@ -72,25 +72,25 @@ const DashboardHeader = () => (
 const SearchCard = ({ trip, compact = false }: { trip: DashboardTrip; compact?: boolean }) => (
   <Link
     href={`/guest/rent/searches/${trip.id}`}
-    className="flex w-full h-[52px] items-center gap-2 px-0 hover:bg-transparent"
+    className="flex w-full h-[52px] items-center gap-3 px-3 hover:bg-transparent bg-white rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs"
   >
-    <div className="flex w-10 h-10 items-center justify-center p-2 bg-white rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs shrink-0">
-      <Home className="w-5 h-5 text-gray-600" />
+    <div className="flex w-8 h-8 items-center justify-center shrink-0">
+      <Home className="w-4 h-4 text-gray-600" />
     </div>
 
-    <div className="flex items-center min-w-[77px] font-poppins font-medium text-[#373940] text-[11px]">
+    <div className="flex-1 flex items-center font-poppins font-medium text-[#373940] text-[11px] truncate">
       {getLocationDisplay(trip)}
     </div>
 
-    <div className="flex items-center min-w-[109px] font-poppins font-normal text-[#777b8b] text-[10px]">
+    <div className="flex-1 flex items-center font-poppins font-normal text-[#777b8b] text-[10px] truncate">
       {formatDateRange(trip.startDate, trip.endDate)}
     </div>
 
-    <div className="flex items-center min-w-[72px] font-poppins font-normal text-[#777b8b] text-[10px]">
+    <div className="flex-1 flex items-center font-poppins font-normal text-[#777b8b] text-[10px] truncate">
       {formatOccupants(trip.numAdults, trip.numChildren, trip.numPets)}
     </div>
 
-    <ChevronRight className="w-[15px] h-[15px] text-gray-700 shrink-0" />
+    <ChevronRight className="w-4 h-4 text-gray-400 shrink-0" />
   </Link>
 );
 
