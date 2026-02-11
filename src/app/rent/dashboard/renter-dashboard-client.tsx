@@ -316,9 +316,9 @@ const ApplicationsSection = ({ applications }: { applications: DashboardApplicat
   return (
     <section className="mb-8">
       <div className="flex items-center justify-between px-6 py-3">
-        <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Pending Applications</h2>
+        <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Applications</h2>
         <BrandButton variant="outline" size="xs" href="/app/rent/applications">
-          Manage Applications
+          Your Application
         </BrandButton>
       </div>
       <div className="space-y-4">
