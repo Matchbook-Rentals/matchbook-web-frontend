@@ -26,7 +26,7 @@ export const RenterDashboardApplicationCard = ({
   userId,
 }: RenterDashboardApplicationCardProps): JSX.Element => {
   return (
-    <Card className="w-full bg-white rounded-[15px] border-[0.4px] border-[#0b6e6e] shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)]">
+    <Card className="w-full bg-inherit rounded-[15px] border-[0.4px] border-[#0b6e6e] shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)]">
       <CardContent className="p-[17px]">
         <div className="flex gap-6">
           {/* Image Column */}
@@ -72,12 +72,12 @@ export const RenterDashboardApplicationCard = ({
             </div>
 
             {/* Row 5: Buttons (right aligned) */}
-            <div className="col-span-2 flex items-end justify-end gap-3">
+            <div className="col-span-2 flex items-end justify-end gap-2 sm:gap-3">
               <BrandButton
                 variant="outline"
-                size="sm"
+                size="medium"
                 href={`/app/rent/applications/${applicationId}`}
-                className="w-[115px] h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] hover:bg-transparent"
+                className="!flex-1 sm:!flex-initial !max-w-[115px] sm:!w-[115px] !h-[29px] !px-2 sm:!px-3.5 !py-2.5 !min-w-0 rounded-lg border-[#3c8787] hover:bg-transparent"
               >
                 <span className="[font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-[11px] leading-5">
                   View
@@ -87,9 +87,9 @@ export const RenterDashboardApplicationCard = ({
               {userId && (
                 <BrandButton
                   variant="outline"
-                  size="sm"
+                  size="medium"
                   href={`/app/rent/messages?userId=${userId}`}
-                  className="w-[115px] h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] hover:bg-transparent"
+                  className="!flex-1 sm:!flex-initial !max-w-[115px] sm:!w-[115px] !h-[29px] !px-2 sm:!px-3.5 !py-2.5 !min-w-0 rounded-lg border-[#3c8787] hover:bg-transparent"
                 >
                   <span className="[font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-[11px] leading-5">
                     Message Host
