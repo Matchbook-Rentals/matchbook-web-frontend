@@ -72,7 +72,7 @@ const DashboardHeader = () => (
 const SearchCard = ({ trip, compact = false }: { trip: DashboardTrip; compact?: boolean }) => (
   <Link
     href={`/guest/rent/searches/${trip.id}`}
-    className="flex w-full h-[52px] items-center gap-2 px-0 hover:bg-transparent border border-red-400 sm:border-orange-400 md:border-yellow-400 lg:border-green-400 xl:border-blue-400 2xl:border-purple-400"
+    className="flex w-full h-[52px] items-center gap-2 px-0 hover:bg-transparent"
   >
     <div className="flex w-10 h-10 items-center justify-center p-2 bg-white rounded-[10px] border border-solid border-[#eaecf0] shadow-shadows-shadow-xs shrink-0">
       <Home className="w-5 h-5 text-gray-600" />
@@ -98,6 +98,14 @@ const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 640);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     if (!api) return;
@@ -117,6 +125,12 @@ const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
   }, [api]);
 
   if (searches.length === 0) return null;
+
+  // Group searches into pairs for mobile
+  const mobileSlides = [];
+  for (let i = 0; i < searches.length; i += 2) {
+    mobileSlides.push(searches.slice(i, i + 2));
+  }
 
   return (
     <section className="mb-8">
@@ -154,16 +168,29 @@ const RecentSearchesSection = ({ searches }: { searches: DashboardTrip[] }) => {
         opts={{
           align: 'start',
           loop: false,
+          slidesToScroll: 1,
         }}
         className="w-full"
         keyboardControls={false}
       >
         <CarouselContent className="-ml-3">
-          {searches.map((trip) => (
-            <CarouselItem key={trip.id} className="pl-3 basis-full xs:basis-1/2">
-              <SearchCard trip={trip} compact />
-            </CarouselItem>
-          ))}
+          {isMobile
+            ? // Mobile: Each slide has 2 cards stacked
+              mobileSlides.map((slideTrips, idx) => (
+                <CarouselItem key={idx} className="pl-3 basis-full">
+                  <div className="flex flex-col gap-3">
+                    {slideTrips.map((trip) => (
+                      <SearchCard key={trip.id} trip={trip} compact />
+                    ))}
+                  </div>
+                </CarouselItem>
+              ))
+            : // Desktop: Each slide has 1 card, side by side
+              searches.map((trip) => (
+                <CarouselItem key={trip.id} className="pl-3 basis-1/2">
+                  <SearchCard trip={trip} compact />
+                </CarouselItem>
+              ))}
         </CarouselContent>
       </Carousel>
     </section>
@@ -249,7 +276,7 @@ const BookingsSection = ({ bookings }: { bookings: DashboardBooking[] }) => {
       {hasMore && !showAll && (
         <button
           onClick={() => setShowAll(true)}
-          className="mt-4 text-sm text-primaryBrand hover:text-primaryBrand/80 font-medium"
+          className="mt-2 mb-4 text-xs text-primaryBrand hover:text-primaryBrand/80 font-medium"
         >
           View More Bookings ({bookings.length - INITIAL_BOOKINGS_COUNT})
         </button>
