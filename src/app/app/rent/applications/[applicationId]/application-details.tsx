@@ -286,7 +286,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
 
 
         {/* Dates Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Dates</h2>
@@ -322,7 +322,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
         </Card>
 
         {/* Trip Summary Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Summary</h2>
@@ -350,7 +350,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
         </Card>
 
         {/* Personal Information Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Renters</h2>
@@ -425,7 +425,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
 
         {/* Income Information Section */}
         {getIncomeData().length > 0 && (
-          <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
             <CardContent className="flex flex-col gap-6 p-6">
               <div className="flex items-center justify-between w-full">
                 <h2 className={STYLES.headerText}>Income</h2>
@@ -488,7 +488,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
 
         {/* Residential History Section */}
         {getResidentialHistory().length > 0 && (
-          <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
             <CardContent className="flex flex-col gap-6 p-6">
               <div className="flex items-center justify-between w-full">
                 <h2 className={STYLES.headerText}>Residential History</h2>
@@ -553,7 +553,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
         )}
 
         {/* Self-Reporting Questionnaire Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Self-Reporting Questionnaire</h2>

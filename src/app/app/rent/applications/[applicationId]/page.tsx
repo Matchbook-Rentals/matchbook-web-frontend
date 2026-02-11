@@ -10,11 +10,13 @@ const ApplicationDetailsPage = async ({ params, searchParams }: ApplicationDetai
   const housingRequest = await getHousingRequestById(params.applicationId);
   
   return (
-    <ApplicationDetails 
-      applicationId={params.applicationId} 
-      housingRequest={housingRequest} 
-      from={searchParams.from} 
-    />
+    <div className="max-w-[1280px] mx-auto w-full">
+      <ApplicationDetails
+        applicationId={params.applicationId}
+        housingRequest={housingRequest}
+        from={searchParams.from}
+      />
+    </div>
   );
 };
 
