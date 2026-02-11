@@ -1,8 +1,7 @@
 import { Button } from "@/components/ui/button";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
-import PaymentsSection from "./payments-section";
-import { RentPaymentsTable } from "@/app/app/rent/bookings/components/rent-payments-table";
+import { TablelessPaymentsTable } from "./tableless-payments-table";
 import RenterNavbar from "@/components/renter-navbar";
 import prisma from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
@@ -260,15 +259,9 @@ export default async function StaticDemoPage() {
           <MapPlaceholder {...mapCoordinates} />
         </div>
 
-        {/* Fake Payments Section */}
+        {/* Payments Section */}
         <div className="px-6 py-8">
-          <PaymentsSection />
-        </div>
-
-        {/* Real Payments Table */}
-        <div className="px-6 py-8">
-          <h2 className="text-xl font-semibold text-gray-900 mb-4">Real Payments Table</h2>
-          <RentPaymentsTable
+          <TablelessPaymentsTable
             paymentsData={samplePaymentsData}
             hostName="Daniel Resner"
             hostAvatar="/avatar-5.png"
