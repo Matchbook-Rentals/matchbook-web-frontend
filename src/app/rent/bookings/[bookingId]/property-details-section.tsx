@@ -101,7 +101,7 @@ export default function PropertyDetailsSection({
 
       {/* Title and Trip Details */}
       <div>
-        <h1 className="text-3xl font-semibold text-gray-900 mb-2">
+        <h1 className="text-2xl font-medium text-[#373940] mb-2">
           {title}
         </h1>
         <p className="text-gray-600">{getTripSummary()}</p>
@@ -109,13 +109,13 @@ export default function PropertyDetailsSection({
 
       {/* Date Boxes */}
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-[#095859]/10 p-4 rounded-lg">
+        <div className="bg-[rgba(231,240,240,0.98)] p-4 rounded-2xl">
           <div className="text-sm font-medium text-gray-900 mb-1">Move-In</div>
-          <div className="text-gray-900">{formatDisplayDate(startDate)}</div>
+          <div className="text-sm text-gray-900">{formatDisplayDate(startDate)}</div>
         </div>
-        <div className="bg-[#095859]/10 p-4 rounded-lg">
+        <div className="bg-[rgba(231,240,240,0.98)] p-4 rounded-2xl">
           <div className="text-sm font-medium text-gray-900 mb-1">Move-Out</div>
-          <div className="text-gray-900">{formatDisplayDate(endDate)}</div>
+          <div className="text-sm text-gray-900">{formatDisplayDate(endDate)}</div>
         </div>
       </div>
 
@@ -130,7 +130,7 @@ export default function PropertyDetailsSection({
           className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
         >
           <Package className="w-6 h-6 text-gray-700" />
-          <span className="text-gray-900 text-base">Move in Instructions</span>
+          <span className="text-gray-900 text-sm">Move in Instructions</span>
         </button>
 
         <button
@@ -138,12 +138,12 @@ export default function PropertyDetailsSection({
           className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
         >
           <Calendar className="w-6 h-6 text-gray-700" />
-          <span className="text-gray-900 text-base">Modify Dates</span>
+          <span className="text-gray-900 text-sm">Modify Dates</span>
         </button>
 
         {/* Address with Copy */}
         <div className="flex items-center p-4">
-          <span className="text-gray-900 text-base truncate min-w-0">{address}</span>
+          <span className="text-gray-900 text-sm truncate min-w-0">{address}</span>
           <button
             onClick={handleCopyAddress}
             className="ml-4 p-2 hover:bg-gray-100 rounded transition-colors flex-shrink-0"
@@ -161,7 +161,7 @@ export default function PropertyDetailsSection({
           className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
         >
           <Home className="w-6 h-6 text-gray-700" />
-          <span className="text-gray-900 text-base">View Listing</span>
+          <span className="text-gray-900 text-sm">View Listing</span>
         </button>
 
         <button
@@ -169,7 +169,7 @@ export default function PropertyDetailsSection({
           className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
         >
           <MapPin className="w-6 h-6 text-gray-700" />
-          <span className="text-gray-900 text-base">Get Directions</span>
+          <span className="text-gray-900 text-sm">Get Directions</span>
         </button>
 
         <button
@@ -177,7 +177,7 @@ export default function PropertyDetailsSection({
           className="w-full flex items-center gap-3 p-4 hover:bg-gray-50 transition-colors text-left rounded-lg"
         >
           <FileText className="w-6 h-6 text-gray-700" />
-          <span className="text-gray-900 text-base">View Lease</span>
+          <span className="text-gray-900 text-sm">View Lease</span>
         </button>
       </div>
     </div>
