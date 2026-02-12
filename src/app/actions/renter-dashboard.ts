@@ -114,41 +114,111 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
     throw new Error('Unauthorized');
   }
 
-  const user = await currentUser();
+  // Fetch all data in parallel for optimal performance
+  const [
+    user,
+    recentSearchesRaw,
+    bookingsRaw,
+    matchesRaw,
+    applicationsRaw,
+    favoritesRaw,
+  ] = await Promise.all([
+    // User profile data
+    currentUser(),
 
-  // Fetch trips with favorites (without listing), matches (with listing), and housing requests
-  const [trips, bookingsRaw, housingRequestsRaw] = await Promise.all([
+    // Recent Searches: Fetch the 10 most recent trips for the "Recent Searches" section
+    // Only need basic trip information, no related data
     prisma.trip.findMany({
       where: { userId },
       orderBy: { createdAt: 'desc' },
       take: 10,
-      include: {
-        favorites: true,
-        matches: {
-          include: {
-            listing: {
-              include: {
-                listingImages: true,
-                monthlyPricing: true,
-              },
-            },
-          },
-        },
-        housingRequests: true,
+      select: {
+        id: true,
+        locationString: true,
+        city: true,
+        state: true,
+        startDate: true,
+        endDate: true,
+        numAdults: true,
+        numChildren: true,
+        numPets: true,
+        createdAt: true,
       },
     }),
+
+    // Bookings: Fetch all user bookings
     getUserBookings(),
+
+    // Matches: Fetch all matches across all user trips
+    // Include full listing data with images and pricing
+    // Note: Match model doesn't have createdAt, so we don't order by date
+    prisma.match.findMany({
+      where: {
+        trip: { userId },
+      },
+      include: {
+        listing: {
+          include: {
+            listingImages: true,
+            monthlyPricing: true,
+          },
+        },
+      },
+    }),
+
+    // Applications: Fetch all pending housing requests without matches
     getUserHousingRequests(),
+
+    // Favorites: Fetch ALL favorites across ALL trips (not limited to recent trips)
+    // This ensures we show all favorited listings, not just those from the 10 most recent trips
+    prisma.favorite.findMany({
+      where: {
+        trip: { userId },
+        listingId: { not: null },
+      },
+      select: {
+        id: true,
+        tripId: true,
+        listingId: true,
+      },
+      orderBy: { createdAt: 'desc' },
+    }),
   ]);
 
-  // Collect all favorite listingIds to fetch listings separately
-  const favoriteListingIds = trips.flatMap((trip) =>
-    trip.favorites
-      .filter((fav) => fav.listingId !== null)
-      .map((fav) => fav.listingId as string)
+  // For favorites, we need to:
+  // 1. Filter out favorites that have been upgraded to matches
+  // 2. Check which ones have applications
+  // 3. Fetch the listing data for each favorite
+  
+  // Create a set of listing IDs that are now matches (upgraded from favorites)
+  // These should not appear in the Favorites section
+  const matchedListingIds = new Set(
+    matchesRaw.map((match) => match.listingId)
   );
 
-  // Fetch listings for favorites if there are any
+  // Filter out favorites that have been upgraded to matches
+  const activeFavorites = favoritesRaw.filter(
+    (fav) => fav.listingId !== null && !matchedListingIds.has(fav.listingId as string)
+  );
+
+  const favoriteListingIds = activeFavorites.map((fav) => fav.listingId as string);
+
+  // Fetch all housing requests to check which favorites have applications
+  const allHousingRequests = await prisma.housingRequest.findMany({
+    where: {
+      trip: { userId },
+      listingId: { in: favoriteListingIds },
+    },
+    select: {
+      listingId: true,
+    },
+  });
+
+  const listingsWithApplications = new Set(
+    allHousingRequests.map((req) => req.listingId)
+  );
+
+  // Fetch listing data for all favorites in one query
   let favoriteListingsMap: Map<string, DashboardListing> = new Map();
   if (favoriteListingIds.length > 0) {
     const favoriteListings = await prisma.listing.findMany({
@@ -185,21 +255,12 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
     );
   }
 
-  // Transform trips for recent searches
-  const recentSearches: DashboardTrip[] = trips.map((trip) => ({
-    id: trip.id,
-    locationString: trip.locationString,
-    city: trip.city,
-    state: trip.state,
-    startDate: trip.startDate,
-    endDate: trip.endDate,
-    numAdults: trip.numAdults,
-    numChildren: trip.numChildren,
-    numPets: trip.numPets,
-    createdAt: trip.createdAt,
-  }));
+  // Transform data for each section
 
-  // Transform bookings
+  // Recent Searches: Already in the correct format from the query
+  const recentSearches: DashboardTrip[] = recentSearchesRaw;
+
+  // Bookings: Transform booking data
   const bookings: DashboardBooking[] = bookingsRaw.map((booking) => ({
     id: booking.id,
     listingId: booking.listingId,
@@ -212,37 +273,35 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
     trip: booking.trip,
   }));
 
-  // Collect all matches from all trips
-  const matches: DashboardMatch[] = trips.flatMap((trip) =>
-    trip.matches.map((match) => ({
-      id: match.id,
-      tripId: match.tripId,
-      listingId: match.listingId,
-      monthlyRent: match.monthlyRent,
-      listing: {
-        id: match.listing.id,
-        title: match.listing.title,
-        category: match.listing.category,
-        roomCount: match.listing.roomCount,
-        bathroomCount: match.listing.bathroomCount,
-        streetAddress1: match.listing.streetAddress1,
-        city: match.listing.city,
-        state: match.listing.state,
-        postalCode: match.listing.postalCode,
-        shortestLeasePrice: match.listing.shortestLeasePrice,
-        listingImages: match.listing.listingImages.map((img) => ({
-          id: img.id,
-          url: img.url,
-        })),
-        monthlyPricing: match.listing.monthlyPricing.map((p) => ({
-          price: p.price,
-        })),
-      },
-    }))
-  );
+  // Matches: Transform match data with listing information
+  const matches: DashboardMatch[] = matchesRaw.map((match) => ({
+    id: match.id,
+    tripId: match.tripId,
+    listingId: match.listingId,
+    monthlyRent: match.monthlyRent,
+    listing: {
+      id: match.listing.id,
+      title: match.listing.title,
+      category: match.listing.category,
+      roomCount: match.listing.roomCount,
+      bathroomCount: match.listing.bathroomCount,
+      streetAddress1: match.listing.streetAddress1,
+      city: match.listing.city,
+      state: match.listing.state,
+      postalCode: match.listing.postalCode,
+      shortestLeasePrice: match.listing.shortestLeasePrice,
+      listingImages: match.listing.listingImages.map((img) => ({
+        id: img.id,
+        url: img.url,
+      })),
+      monthlyPricing: match.listing.monthlyPricing.map((p) => ({
+        price: p.price,
+      })),
+    },
+  }));
 
-  // Transform housing requests to applications (pending ones without matches)
-  const applications: DashboardApplication[] = housingRequestsRaw
+  // Applications: Filter and transform housing requests
+  const applications: DashboardApplication[] = applicationsRaw
     .filter((req) => req.status === 'pending' && !req.hasMatch)
     .map((req) => ({
       id: req.id,
@@ -284,29 +343,24 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
       },
     }));
 
-  // Collect all favorites from all trips, marking which ones have applications
-  const favorites: DashboardFavorite[] = trips.flatMap((trip) =>
-    trip.favorites
-      .filter((fav) => fav.listingId !== null && fav.tripId !== null)
-      .map((fav) => {
-        const hasApplication = trip.housingRequests.some(
-          (req) => req.listingId === fav.listingId
-        );
-        const listing = favoriteListingsMap.get(fav.listingId as string);
+  // Favorites: Transform favorite data with listing and application status
+  // Note: We're using activeFavorites which already excludes matches
+  const favorites: DashboardFavorite[] = activeFavorites
+    .map((fav) => {
+      const listing = favoriteListingsMap.get(fav.listingId as string);
+      
+      // Skip favorites without listing data (listing may have been deleted)
+      if (!listing) return null;
 
-        // Skip favorites without listing data
-        if (!listing) return null;
-
-        return {
-          id: fav.id,
-          tripId: fav.tripId as string,
-          listingId: fav.listingId as string,
-          isApplied: hasApplication,
-          listing,
-        };
-      })
-      .filter((fav): fav is DashboardFavorite => fav !== null)
-  );
+      return {
+        id: fav.id,
+        tripId: fav.tripId as string,
+        listingId: fav.listingId as string,
+        isApplied: listingsWithApplications.has(fav.listingId as string),
+        listing,
+      };
+    })
+    .filter((fav): fav is DashboardFavorite => fav !== null);
 
   return {
     user: user
