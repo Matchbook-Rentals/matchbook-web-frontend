@@ -1,6 +1,6 @@
 "use client";
 
-import { MoreVerticalIcon, ArrowLeft, PlusIcon } from "lucide-react";
+import { MoreVerticalIcon, PlusIcon } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import {
@@ -23,7 +23,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "@/components/ui/button";
-import { BrandButton } from "@/components/ui/brandButton";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import PaymentModificationReviewModal from "@/components/PaymentModificationReviewModal";
 import { PaymentMethodsSection } from "@/components/payment-review/sections/PaymentMethodsSection";
 import { AddPaymentMethodInline } from "@/components/stripe/add-payment-method-inline";
@@ -86,7 +91,6 @@ export const TablelessPaymentsTable = ({
   const [selectedModification, setSelectedModification] = useState<RentPaymentData['modificationData'] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
-  const [showPaymentMethods, setShowPaymentMethods] = useState(false);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
 
@@ -248,95 +252,84 @@ export const TablelessPaymentsTable = ({
     console.log('Payment method selected:', selectedPaymentMethod);
   };
 
-  const handleBackToTable = () => {
-    setShowPaymentMethods(false);
-  };
-
   return (
     <>
       <div className="flex flex-col w-full rounded-lg overflow-hidden">
-        {showPaymentMethods ? (
-          <>
-            <div className="p-6 border-b border-gray-100">
-              <div className="flex items-center">
-                <Button
-                  variant="ghost"
-                  onClick={handleBackToTable}
-                  className="flex items-center text-gray-600 hover:text-gray-900 transition-colors"
-                >
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Payments
-                </Button>
+        <div className="flex flex-col w-full">
+          {/* Payment Methods Accordion - closed by default */}
+          <Accordion type="single" collapsible className="border-b border-gray-100">
+            <AccordionItem value="payment-methods" className="border-0">
+              <div className="flex items-center justify-between px-0 py-3">
+                <AccordionTrigger className="hover:no-underline font-['Poppins'] font-medium text-[14px] leading-5 w-auto p-0 gap-1.5" style={{ color: '#0D1B2A' }}>
+                  Payment Methods
+                </AccordionTrigger>
               </div>
-            </div>
-            <div className="p-6">
-              <PaymentMethodsSection
-                selectedMethod={selectedPaymentMethod}
-                onSelectMethod={handleSelectPaymentMethod}
-                onProceedToPayment={handleProceedToPayment}
-                isProcessing={false}
-                hidePaymentMethods={false}
-                initialPaymentMethods={initialPaymentMethods}
-                onPaymentMethodsRefresh={() => {
-                  // This callback enables the window.refreshPaymentMethods function
-                }}
-              />
-
-              {!showAddPaymentForm && (
-                <Button
-                  variant="ghost"
-                  className="flex items-center gap-2 text-teal-600 hover:text-teal-700 h-auto p-0 font-normal mt-4"
-                  onClick={() => {
-                    setShowAddPaymentForm(true);
-                    setTimeout(() => {
-                      window.scrollTo({ 
-                        top: document.body.scrollHeight, 
-                        behavior: 'smooth' 
-                      });
-                    }, 100);
+              <AccordionContent className="px-0 pb-4">
+                <PaymentMethodsSection
+                  selectedMethod={selectedPaymentMethod}
+                  onSelectMethod={handleSelectPaymentMethod}
+                  onProceedToPayment={handleProceedToPayment}
+                  isProcessing={false}
+                  hidePaymentMethods={false}
+                  initialPaymentMethods={initialPaymentMethods}
+                  hideHeader={true}
+                  onPaymentMethodsRefresh={() => {
+                    // This callback enables the window.refreshPaymentMethods function
                   }}
-                >
-                  <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-teal-600 flex items-center justify-center">
-                    <PlusIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
-                  </div>
-                  Add New Payment Method
-                </Button>
-              )}
+                />
 
-              {showAddPaymentForm && (
-                <div className="mt-4 min-h-[600px]">
-                  <AddPaymentMethodInline
-                    onSuccess={() => {
-                      setShowAddPaymentForm(false);
-                      if (window.refreshPaymentMethods) {
-                        window.refreshPaymentMethods();
-                      }
+                {!showAddPaymentForm && (
+                  <Button
+                    variant="ghost"
+                    className="flex items-center gap-2 text-teal-600 hover:text-teal-700 h-auto p-0 font-normal mt-4"
+                    onClick={() => {
+                      setShowAddPaymentForm(true);
+                      setTimeout(() => {
+                        window.scrollTo({ 
+                          top: document.body.scrollHeight, 
+                          behavior: 'smooth' 
+                        });
+                      }, 100);
                     }}
-                    onCancel={() => setShowAddPaymentForm(false)}
-                  />
-                </div>
-              )}
-            </div>
-          </>
-        ) : (
-          <div className="flex flex-col w-full">
-            {/* Header with Payments title and Manage Payment Methods button */}
-            <div className="flex items-center justify-between px-0 py-3 border-b border-gray-100">
-              <h2 className="font-['Poppins'] font-medium text-[14px] leading-5" style={{ color: '#0D1B2A' }}>Payments</h2>
-              <BrandButton
-                variant="outline"
-                size="xs"
-                onClick={() => setShowPaymentMethods(true)}
-              >
-                Manage Payments
-              </BrandButton>
-            </div>
-            {/* Table - all payments chronologically */}
-            <div className="px-0">
-              {renderTable(allPayments)}
-            </div>
-          </div>
-        )}
+                  >
+                    <div className="w-5 h-5 md:w-6 md:h-6 rounded-full border-2 border-teal-600 flex items-center justify-center">
+                      <PlusIcon className="w-3.5 h-3.5 md:w-4 md:h-4" />
+                    </div>
+                    Add New Payment Method
+                  </Button>
+                )}
+
+                {showAddPaymentForm && (
+                  <div className="mt-4 min-h-[600px]">
+                    <AddPaymentMethodInline
+                      onSuccess={() => {
+                        setShowAddPaymentForm(false);
+                        if (window.refreshPaymentMethods) {
+                          window.refreshPaymentMethods();
+                        }
+                      }}
+                      onCancel={() => setShowAddPaymentForm(false)}
+                    />
+                  </div>
+                )}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+          
+          {/* Payment Schedule Accordion - open by default */}
+          <Accordion type="single" collapsible defaultValue="payment-schedule" className="border-b border-gray-100">
+            <AccordionItem value="payment-schedule" className="border-0">
+              <div className="flex items-center justify-between px-0 py-3">
+                <AccordionTrigger className="hover:no-underline font-['Poppins'] font-medium text-[14px] leading-5 w-auto p-0 gap-1.5" style={{ color: '#0D1B2A' }}>
+                  Payment Schedule
+                </AccordionTrigger>
+              </div>
+              <AccordionContent className="px-0 pb-4">
+                {renderTable(allPayments)}
+              </AccordionContent>
+            </AccordionItem>
+          </Accordion>
+        </div>
       </div>
 
       {selectedModification && (
