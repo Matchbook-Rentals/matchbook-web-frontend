@@ -177,21 +177,9 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
           className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
-          {(() => {
-            // Pre-compute state for each listing and sort by priority
-            const listingsWithState = listings.map(listing => ({
-              listing,
-              state: getListingState(listing.id, authUserState, guestFavoriteIds, sectionTripId)
-            }));
-
-            // Sort: matched first, then liked, then others
-            listingsWithState.sort((a, b) => {
-              const priorityA = a.state.badge === 'matched' ? 0 : a.state.initialFavorited ? 1 : 2;
-              const priorityB = b.state.badge === 'matched' ? 0 : b.state.initialFavorited ? 1 : 2;
-              return priorityA - priorityB;
-            });
-
-            return listingsWithState.map(({ listing, state }) => (
+          {listings.map(listing => {
+            const state = getListingState(listing.id, authUserState, guestFavoriteIds, sectionTripId);
+            return (
               <HomepageListingCard
                 key={listing.id}
                 listing={listing}
@@ -204,8 +192,8 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
                 onSignInPrompt={onSignInPrompt}
                 isSignedIn={isSignedIn}
               />
-            ));
-          })()}
+            );
+          })}
         </div>
       ) : (
         <div className="text-gray-500 text-sm">No listings available</div>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { ListingAndImages } from '@/types';
 import PopularListingsSection, { ListingSection } from './popular-listings-section';
 import {
@@ -56,8 +56,8 @@ export default function PopularListingsSectionWrapper({
   const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
   const [guestFavoriteIds, setGuestFavoriteIds] = useState<Set<string>>(new Set());
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authFavoriteIds, setAuthFavoriteIds] = useState<Set<string>>(
-    () => new Set(userState?.favoritedListingIds ?? [])
+  const authFavoriteIdsRef = useRef<Set<string>>(
+    new Set(userState?.favoritedListingIds ?? [])
   );
   const [recentTripId, setRecentTripId] = useState<string | null>(initialRecentTripId ?? null);
 
@@ -97,16 +97,12 @@ export default function PopularListingsSectionWrapper({
 
     if (!tripId) return;
 
-    // Optimistic UI update
-    setAuthFavoriteIds((prev) => {
-      const next = new Set(prev);
-      if (isFavorited) {
-        next.add(listingId);
-      } else {
-        next.delete(listingId);
-      }
-      return next;
-    });
+    // Update ref (no re-render — card manages its own UI state)
+    if (isFavorited) {
+      authFavoriteIdsRef.current.add(listingId);
+    } else {
+      authFavoriteIdsRef.current.delete(listingId);
+    }
 
     // Persist to DB
     if (isFavorited) {
@@ -269,6 +265,19 @@ export default function PopularListingsSectionWrapper({
       usedLocations.add(key);
     }
 
+    // Initial sort: matched first, then liked, then others (using RSC-provided state)
+    if (userState) {
+      for (const section of newSections) {
+        section.listings.sort((a, b) => {
+          const priorityA = userState.matchedListings?.some(m => m.listingId === a.id) ? 0 :
+                            userState.favoritedListingIds?.includes(a.id) ? 1 : 2;
+          const priorityB = userState.matchedListings?.some(m => m.listingId === b.id) ? 0 :
+                            userState.favoritedListingIds?.includes(b.id) ? 1 : 2;
+          return priorityA - priorityB;
+        });
+      }
+    }
+
     setSections(newSections);
     setIsLoading(false);
   }, [isSignedIn, userTripLocation, userLocation, geoPermissionDenied, popularAreas, recentTripId]);
@@ -343,7 +352,7 @@ export default function PopularListingsSectionWrapper({
         onSignInPrompt={isSignedIn ? undefined : handleGuestApplyPrompt}
         authUserState={isSignedIn ? {
           ...userState,
-          favoritedListingIds: Array.from(authFavoriteIds),
+          favoritedListingIds: Array.from(authFavoriteIdsRef.current),
         } : undefined}
         isSignedIn={isSignedIn}
       />

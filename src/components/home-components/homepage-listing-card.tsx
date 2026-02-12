@@ -27,6 +27,7 @@ interface HomepageListingCardProps {
   onSignInPrompt?: () => void;
   initialFavorited?: boolean;
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
+  onUnlike?: (listingId: string) => void;
   isSignedIn?: boolean;
 }
 
@@ -41,11 +42,15 @@ export default function HomepageListingCard({
   onSignInPrompt,
   initialFavorited,
   onFavorite,
+  onUnlike,
   isSignedIn,
 }: HomepageListingCardProps) {
   const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
   useEffect(() => { setIsFavorited(initialFavorited ?? false); }, [initialFavorited]);
+
+  // Derive effective badge from local favorite state (avoids parent re-render)
+  const effectiveBadge = badge === 'matched' ? 'matched' : isFavorited ? 'liked' : undefined;
   const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
   const [isHovered, setIsHovered] = useState(false);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
@@ -132,19 +137,25 @@ export default function HomepageListingCard({
     e.preventDefault();
     e.stopPropagation();
     // Prevent unfavoriting when matched or has pending application
-    if (badge === 'matched' || isApplied) return;
+    if (effectiveBadge === 'matched' || isApplied) return;
     // Enforce sign-in for liking
     if (!isSignedIn) {
       onSignInPrompt?.();
       return;
     }
     const newState = !isFavorited;
-    setIsFavorited(newState);
-    onFavorite?.(listing.id, newState);
+    
+    // Use onUnlike callback if provided and we're unfavoriting
+    if (!newState && onUnlike) {
+      onUnlike(listing.id);
+    } else {
+      setIsFavorited(newState);
+      onFavorite?.(listing.id, newState);
+    }
   };
 
   const renderMatchedBadge = () => {
-    if (badge !== 'matched') return null;
+    if (effectiveBadge !== 'matched') return null;
     return (
       <span className="absolute top-2 left-2 px-3 py-1 rounded-[6px] text-xs font-medium bg-white text-primaryBrand">
         Matched
@@ -168,7 +179,7 @@ export default function HomepageListingCard({
   };
 
   const renderActionButton = () => {
-    if (badge === 'matched') {
+    if (effectiveBadge === 'matched') {
       const hasHandler = matchId && onBookNow;
       return (
         <button
@@ -179,7 +190,7 @@ export default function HomepageListingCard({
         </button>
       );
     }
-    if (badge === 'liked') {
+    if (effectiveBadge === 'liked') {
       const canApply = !!tripId;
       const hasSignInPrompt = !canApply && onSignInPrompt;
       const isDisabled = isApplied || (!canApply && !hasSignInPrompt);
