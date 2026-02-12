@@ -6,24 +6,27 @@ import { SectionEmptyState } from './section-empty-state';
 import { SectionHeader } from './section-header';
 import { useToast } from '@/components/ui/use-toast';
 import { optimisticRemoveFavorite, optimisticFavorite } from '@/app/actions/favorites';
+import { getMoreFavorites } from '@/app/actions/renter-dashboard';
 import { Button } from '@/components/ui/button';
 import type { DashboardFavorite } from '@/app/actions/renter-dashboard';
 
 interface FavoritesSectionProps {
   favorites: DashboardFavorite[];
+  hasMoreFavorites: boolean;
 }
 
-const FAVORITES_PER_LOAD = 12;
-
-export const FavoritesSection = ({ favorites }: FavoritesSectionProps) => {
-  const [displayedCount, setDisplayedCount] = useState(FAVORITES_PER_LOAD);
+export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites: initialHasMore }: FavoritesSectionProps) => {
+  const [allFavorites, setAllFavorites] = useState<DashboardFavorite[]>(initialFavorites);
+  const [hasMore, setHasMore] = useState(initialHasMore);
+  const [isLoading, setIsLoading] = useState(false);
   const [gridColumns, setGridColumns] = useState(2);
   const gridRef = useRef<HTMLDivElement>(null);
+  const loadingRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
   const [hiddenFavoriteIds, setHiddenFavoriteIds] = useState<Set<string>>(new Set());
 
   // Filter out hidden favorites (for optimistic UI after unlike)
-  const visibleFavorites = favorites.filter((fav) => !hiddenFavoriteIds.has(fav.id));
+  const visibleFavorites = allFavorites.filter((fav) => !hiddenFavoriteIds.has(fav.id));
 
   // Transform favorites to listing format for HomepageListingCard
   const favoriteListings = visibleFavorites
@@ -39,14 +42,9 @@ export const FavoritesSection = ({ favorites }: FavoritesSectionProps) => {
       })) || [],
     }));
 
-  // Reset displayed count when favorites change
-  useEffect(() => {
-    setDisplayedCount(FAVORITES_PER_LOAD);
-  }, [visibleFavorites.length]);
-
   // Handle unlike with undo toast
   const handleUnlike = useCallback(async (listingId: string) => {
-    const favorite = favorites.find((fav) => fav.listingId === listingId);
+    const favorite = allFavorites.find((fav) => fav.listingId === listingId);
     if (!favorite) return;
 
     // Optimistic UI - hide the favorite immediately
@@ -110,9 +108,9 @@ export const FavoritesSection = ({ favorites }: FavoritesSectionProps) => {
         </Button>
       ),
     });
-  }, [favorites, toast]);
+  }, [allFavorites, toast]);
 
-  // Track grid columns for trigger calculation
+  // Track grid columns for responsive layout
   useEffect(() => {
     const updateGridColumns = () => {
       const width = window.innerWidth;
@@ -127,35 +125,54 @@ export const FavoritesSection = ({ favorites }: FavoritesSectionProps) => {
     return () => window.removeEventListener('resize', updateGridColumns);
   }, []);
 
-  const loadMore = useCallback(() => {
-    setDisplayedCount((prev) => Math.min(prev + FAVORITES_PER_LOAD, visibleFavorites.length));
-  }, [visibleFavorites.length]);
+  // Load more favorites from server
+  const loadMoreFavorites = useCallback(async () => {
+    if (isLoading || !hasMore) return;
 
-  const displayedFavorites = visibleFavorites.slice(0, displayedCount);
-  const hasMore = displayedCount < visibleFavorites.length;
+    setIsLoading(true);
+    try {
+      const lastFavorite = allFavorites[allFavorites.length - 1];
+      if (!lastFavorite) return;
 
-  // IntersectionObserver to trigger loading more
+      const result = await getMoreFavorites(lastFavorite.createdAt);
+      
+      setAllFavorites((prev) => [...prev, ...result.favorites]);
+      setHasMore(result.hasMore);
+    } catch (error) {
+      console.error('Failed to load more favorites:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load more favorites',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }, [allFavorites, hasMore, isLoading, toast]);
+
+  // IntersectionObserver for infinite scroll
   useEffect(() => {
-    if (!hasMore) return;
-
-    const triggerIndex = Math.max(0, displayedFavorites.length - gridColumns * 2);
-    const triggerElement = gridRef.current?.children[triggerIndex] as HTMLElement | undefined;
-    if (!triggerElement) return;
+    if (!hasMore || isLoading) return;
 
     const observer = new IntersectionObserver(
       (entries) => {
-        if (entries[0]?.isIntersecting) loadMore();
+        if (entries[0]?.isIntersecting) {
+          loadMoreFavorites();
+        }
       },
-      { root: null, rootMargin: '200px', threshold: 0.1 }
+      { root: null, rootMargin: '400px', threshold: 0.1 }
     );
 
-    observer.observe(triggerElement);
+    if (loadingRef.current) {
+      observer.observe(loadingRef.current);
+    }
+
     return () => observer.disconnect();
-  }, [displayedFavorites.length, gridColumns, hasMore, loadMore]);
+  }, [hasMore, isLoading, loadMoreFavorites]);
 
   if (visibleFavorites.length === 0) return (
     <section className="mb-8">
-      <SectionHeader title="Favorites" count={visibleFavorites.length} />
+      <SectionHeader title="Favorites" />
       <SectionEmptyState
         imageSrc="/empty-states/no-favorites.png"
         title="No favorites yet"
@@ -166,9 +183,9 @@ export const FavoritesSection = ({ favorites }: FavoritesSectionProps) => {
 
   return (
     <section className="mb-8 overflow-x-hidden">
-      <SectionHeader title="Favorites" count={visibleFavorites.length} />
+      <SectionHeader title="Favorites" />
       <div ref={gridRef} className="flex flex-wrap gap-6">
-        {displayedFavorites.map((fav, index) => (
+        {visibleFavorites.map((fav, index) => (
           <HomepageListingCard
             key={fav.id}
             listing={favoriteListings[index] as any}
@@ -181,6 +198,15 @@ export const FavoritesSection = ({ favorites }: FavoritesSectionProps) => {
           />
         ))}
       </div>
+
+      {/* Loading indicator and infinite scroll trigger */}
+      {(hasMore || isLoading) && (
+        <div ref={loadingRef} className="flex justify-center items-center py-8">
+          {isLoading && (
+            <div className="text-sm text-gray-500">Loading more favorites...</div>
+          )}
+        </div>
+      )}
     </section>
   );
 };

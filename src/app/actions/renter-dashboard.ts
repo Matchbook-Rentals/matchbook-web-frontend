@@ -47,6 +47,7 @@ export interface DashboardFavorite {
   listingId: string;
   listing: DashboardListing;
   isApplied: boolean;
+  createdAt: Date;
 }
 
 export interface DashboardBooking {
@@ -106,6 +107,132 @@ export interface RenterDashboardData {
   matches: DashboardMatch[];
   applications: DashboardApplication[];
   favorites: DashboardFavorite[];
+  hasMoreFavorites: boolean;
+}
+
+export async function getMoreFavorites(
+  cursor: Date,
+  limit: number = 20
+): Promise<{ favorites: DashboardFavorite[]; hasMore: boolean }> {
+  const { userId } = auth();
+  if (!userId) {
+    throw new Error('Unauthorized');
+  }
+
+  // Fetch favorites created before the cursor date
+  const favoritesRaw = await prisma.favorite.findMany({
+    where: {
+      trip: { userId },
+      listingId: { not: null },
+      createdAt: { lt: cursor },
+    },
+    select: {
+      id: true,
+      tripId: true,
+      listingId: true,
+      createdAt: true,
+    },
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+  });
+
+  // Get all matches to filter them out
+  const matchesRaw = await prisma.match.findMany({
+    where: {
+      trip: { userId },
+    },
+    select: {
+      listingId: true,
+    },
+  });
+
+  const matchedListingIds = new Set(
+    matchesRaw.map((match) => match.listingId)
+  );
+
+  // Filter out favorites that have been upgraded to matches
+  const activeFavorites = favoritesRaw.filter(
+    (fav) => fav.listingId !== null && !matchedListingIds.has(fav.listingId as string)
+  );
+
+  const favoriteListingIds = activeFavorites.map((fav) => fav.listingId as string);
+
+  // Fetch all housing requests to check which favorites have applications
+  const allHousingRequests = await prisma.housingRequest.findMany({
+    where: {
+      trip: { userId },
+      listingId: { in: favoriteListingIds },
+    },
+    select: {
+      listingId: true,
+    },
+  });
+
+  const listingsWithApplications = new Set(
+    allHousingRequests.map((req) => req.listingId)
+  );
+
+  // Fetch listing data for all favorites in one query
+  let favoriteListingsMap: Map<string, DashboardListing> = new Map();
+  if (favoriteListingIds.length > 0) {
+    const favoriteListings = await prisma.listing.findMany({
+      where: { id: { in: favoriteListingIds } },
+      include: {
+        listingImages: true,
+        monthlyPricing: true,
+      },
+    });
+
+    favoriteListingsMap = new Map(
+      favoriteListings.map((listing) => [
+        listing.id,
+        {
+          id: listing.id,
+          title: listing.title,
+          category: listing.category,
+          roomCount: listing.roomCount,
+          bathroomCount: listing.bathroomCount,
+          streetAddress1: listing.streetAddress1,
+          city: listing.city,
+          state: listing.state,
+          postalCode: listing.postalCode,
+          shortestLeasePrice: listing.shortestLeasePrice,
+          listingImages: listing.listingImages.map((img) => ({
+            id: img.id,
+            url: img.url,
+          })),
+          monthlyPricing: listing.monthlyPricing.map((p) => ({
+            price: p.price,
+          })),
+        },
+      ])
+    );
+  }
+
+  // Transform favorite data
+  const favorites: DashboardFavorite[] = activeFavorites
+    .map((fav) => {
+      const listing = favoriteListingsMap.get(fav.listingId as string);
+      
+      if (!listing) return null;
+
+      return {
+        id: fav.id,
+        tripId: fav.tripId as string,
+        listingId: fav.listingId as string,
+        isApplied: listingsWithApplications.has(fav.listingId as string),
+        listing,
+        createdAt: fav.createdAt,
+      };
+    })
+    .filter((fav): fav is DashboardFavorite => fav !== null);
+
+  const hasMore = favoritesRaw.length >= limit;
+
+  return {
+    favorites,
+    hasMore,
+  };
 }
 
 export async function getRenterDashboardData(): Promise<RenterDashboardData> {
@@ -169,8 +296,8 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
     // Applications: Fetch all pending housing requests without matches
     getUserHousingRequests(),
 
-    // Favorites: Fetch ALL favorites across ALL trips (not limited to recent trips)
-    // This ensures we show all favorited listings, not just those from the 10 most recent trips
+    // Favorites: Fetch the 20 most recent favorites for initial load
+    // Additional favorites will be loaded via infinite scroll on the client
     prisma.favorite.findMany({
       where: {
         trip: { userId },
@@ -180,8 +307,10 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
         id: true,
         tripId: true,
         listingId: true,
+        createdAt: true,
       },
       orderBy: { createdAt: 'desc' },
+      take: 20,
     }),
   ]);
 
@@ -358,9 +487,14 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
         listingId: fav.listingId as string,
         isApplied: listingsWithApplications.has(fav.listingId as string),
         listing,
+        createdAt: fav.createdAt,
       };
     })
     .filter((fav): fav is DashboardFavorite => fav !== null);
+
+  // Check if there are more favorites beyond the initial 20
+  // We check against favoritesRaw (before filtering matches) to get accurate count
+  const hasMoreFavorites = favoritesRaw.length >= 20;
 
   return {
     user: user
@@ -376,5 +510,6 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
     matches,
     applications,
     favorites,
+    hasMoreFavorites,
   };
 }
