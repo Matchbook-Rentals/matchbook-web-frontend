@@ -60,35 +60,36 @@ export const RecentSearchesSection = ({ searches }: RecentSearchesSectionProps) 
   return (
     <section className="mb-8 overflow-x-hidden">
       <div className="max-w-[400px]">
-        <div className="flex items-center gap-2 mb-4">
-          <h2 className="font-poppins font-semibold text-[#484a54] text-sm">
-            Recent Searches
-          </h2>
-          {searches.length > 1 && (
-            <div className="flex items-center gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => api?.scrollPrev()}
-                disabled={!canScrollPrev}
-                className="h-7 w-7 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
-              >
-                <ChevronLeft className="h-4 w-4" />
-                <span className="sr-only">Previous searches</span>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => api?.scrollNext()}
-                disabled={!canScrollNext}
-                className="h-7 w-7 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
-              >
-                <ChevronRightIcon className="h-4 w-4" />
-                <span className="sr-only">Next searches</span>
-              </Button>
-            </div>
-          )}
-        </div>
+        <SectionHeader 
+          title="Recent Searches"
+          inlineActions
+          actions={
+            searches.length > 1 ? (
+              <div className="flex items-center gap-1">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => api?.scrollPrev()}
+                  disabled={!canScrollPrev}
+                  className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                >
+                  <ChevronLeft className="h-3.5 w-3.5" />
+                  <span className="sr-only">Previous searches</span>
+                </Button>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => api?.scrollNext()}
+                  disabled={!canScrollNext}
+                  className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                >
+                  <ChevronRightIcon className="h-3.5 w-3.5" />
+                  <span className="sr-only">Next searches</span>
+                </Button>
+              </div>
+            ) : undefined
+          }
+        />
 
         <Carousel
           setApi={setApi}
