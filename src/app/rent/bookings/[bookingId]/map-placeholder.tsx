@@ -21,13 +21,16 @@ export default function MapPlaceholder({ latitude, longitude }: MapPlaceholderPr
       style: 'https://tiles.openfreemap.org/styles/bright',
       center: [longitude, latitude],
       zoom: 14,
-      scrollZoom: false,
-      dragPan: false,
+      scrollZoom: true,
+      dragPan: true,
+      dragRotate: true,
+      doubleClickZoom: true,
+      touchZoomRotate: true,
     });
 
     mapRef.current = map;
 
-    new maplibregl.Marker().setLngLat([longitude, latitude]).addTo(map);
+    new maplibregl.Marker({ color: '#095859' }).setLngLat([longitude, latitude]).addTo(map);
 
     return () => {
       if (mapRef.current) {

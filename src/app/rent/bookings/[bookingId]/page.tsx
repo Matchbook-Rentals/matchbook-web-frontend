@@ -309,10 +309,12 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
 
       <div className="px-6 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PropertyDetailsSection {...propertyData} />
-        <MapPlaceholder
-          latitude={booking.listing.latitude}
-          longitude={booking.listing.longitude}
-        />
+        <div className="hidden lg:block">
+          <MapPlaceholder
+            latitude={booking.listing.latitude}
+            longitude={booking.listing.longitude}
+          />
+        </div>
       </div>
 
       <div className="px-6 py-8">
