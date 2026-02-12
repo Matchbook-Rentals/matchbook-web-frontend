@@ -59,10 +59,12 @@ export const RecentSearchesSection = ({ searches }: RecentSearchesSectionProps) 
 
   return (
     <section className="mb-8 overflow-x-hidden">
-      <SectionHeader 
-        title="Recent Searches" 
-        actions={
-          searches.length > 1 ? (
+      <div className="max-w-[400px]">
+        <div className="flex items-center gap-2 mb-4">
+          <h2 className="font-poppins font-semibold text-[#484a54] text-sm">
+            Recent Searches
+          </h2>
+          {searches.length > 1 && (
             <div className="flex items-center gap-1">
               <Button
                 variant="outline"
@@ -85,34 +87,32 @@ export const RecentSearchesSection = ({ searches }: RecentSearchesSectionProps) 
                 <span className="sr-only">Next searches</span>
               </Button>
             </div>
-          ) : undefined
-        }
-      />
+          )}
+        </div>
 
-      <Carousel
-        setApi={setApi}
-        opts={{
-          align: 'start',
-          loop: false,
-          slidesToScroll: 1,
-        }}
-        className="w-full"
-        keyboardControls={false}
-      >
-        <CarouselContent className="-ml-3">
-          {mobileSlides.map((slideTrips, idx) => (
-            <CarouselItem key={idx} className="pl-3 basis-full">
-              <div className="flex flex-col gap-3">
-                {slideTrips.map((trip) => (
-                  <div key={trip.id} className="max-w-[400px]">
-                    <SearchCard trip={trip} compact />
-                  </div>
-                ))}
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+        <Carousel
+          setApi={setApi}
+          opts={{
+            align: 'start',
+            loop: false,
+            slidesToScroll: 1,
+          }}
+          className="w-full"
+          keyboardControls={false}
+        >
+          <CarouselContent className="-ml-3">
+            {mobileSlides.map((slideTrips, idx) => (
+              <CarouselItem key={idx} className="pl-3 basis-full">
+                <div className="flex flex-col gap-2">
+                  {slideTrips.map((trip) => (
+                    <SearchCard key={trip.id} trip={trip} compact />
+                  ))}
+                </div>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </div>
     </section>
   );
 };
