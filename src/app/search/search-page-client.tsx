@@ -645,15 +645,25 @@ export default function SearchPageClient({
     showListings
       .filter(l => typeof l.latitude === 'number' && typeof l.longitude === 'number' && !isNaN(l.latitude) && !isNaN(l.longitude))
       .map(listing => {
-        const calculatedPrice = calculateRent({ listing, trip: mockTrip } as any) || listing.price || 0;
+        const hasDates = Boolean(mockTrip?.startDate && mockTrip?.endDate);
+        const prices = listing.monthlyPricing?.map((p: any) => p.price) || [];
+        const minPrice = prices.length ? Math.min(...prices) : (listing.shortestLeasePrice || 0);
+        const maxPrice = prices.length ? Math.max(...prices) : minPrice;
+        const displayPrice = hasDates
+          ? (calculateRent({ listing, trip: mockTrip } as any) || minPrice)
+          : minPrice;
+        const priceDisplay = hasDates || minPrice === maxPrice
+          ? `$${displayPrice.toLocaleString()}`
+          : `$${minPrice.toLocaleString()}-$${maxPrice.toLocaleString()}`;
         return {
           title: listing.title || '',
           lat: listing.latitude,
           lng: listing.longitude,
           listing: {
             ...listing,
-            price: listing.price || calculatedPrice,
-            calculatedPrice,
+            price: displayPrice,
+            calculatedPrice: displayPrice,
+            priceDisplay,
             isLiked: favIds.has(listing.id),
             isDisliked: dislikedIds.has(listing.id),
           },

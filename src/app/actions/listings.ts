@@ -1593,7 +1593,7 @@ export const getListingsNearLocation = async (
     // Fetch full listings with images
     const listings = await prisma.listing.findMany({
       where: { id: { in: listingIds } },
-      include: { listingImages: { orderBy: { rank: 'asc' } } }
+      include: { listingImages: { orderBy: { rank: 'asc' } }, monthlyPricing: true }
     });
 
     // Create distance map for sorting

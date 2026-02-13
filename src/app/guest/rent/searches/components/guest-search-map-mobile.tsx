@@ -218,10 +218,10 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
       }
       // If disliked (and not selected, not liked), it will use zIndexValue '0'
 
-      const price = markerData.listing.calculatedPrice || markerData.listing.price;
-      const formattedPrice = (price !== null && price !== undefined)
-        ? `$${price.toLocaleString()}`
-        : 'N/A';
+      const formattedPrice = markerData.listing.priceDisplay
+        || ((markerData.listing.calculatedPrice || markerData.listing.price) != null
+          ? `$${(markerData.listing.calculatedPrice || markerData.listing.price).toLocaleString()}`
+          : 'N/A');
 
       el.style.cssText = `
         padding: 6px 10px; border-radius: 16px; background-color: ${bgColor};
@@ -359,8 +359,10 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
         el.style.border = `1px solid ${currentColors.border}`;
         el.style.zIndex = zIndexValue;
 
-        const price = correspondingMarkerData.listing.calculatedPrice || correspondingMarkerData.listing.price;
-        const formattedPrice = (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
+        const formattedPrice = correspondingMarkerData.listing.priceDisplay
+          || ((correspondingMarkerData.listing.calculatedPrice || correspondingMarkerData.listing.price) != null
+            ? `$${(correspondingMarkerData.listing.calculatedPrice || correspondingMarkerData.listing.price).toLocaleString()}`
+            : 'N/A');
         const heartSVGMarkup = `
           <svg style="position: absolute; top: ${markerStyles.HEART_ICON.priceBubblePosition.top}; right: ${markerStyles.HEART_ICON.priceBubblePosition.right};
                     width: ${markerStyles.HEART_ICON.size}; height: ${markerStyles.HEART_ICON.size}; fill: ${markerStyles.HEART_ICON.color};

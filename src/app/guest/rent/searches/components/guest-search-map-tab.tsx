@@ -287,8 +287,16 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
                !isNaN(listing.longitude);
       })
       .map((listing) => {
-        const originalPrice = listing.shortestLeasePrice || listing.price || 0;
-        const calculatedPrice = mockTrip ? calculateRent({ listing, trip: mockTrip }) : (listing.price || originalPrice);
+        const hasDates = Boolean(mockTrip?.startDate && mockTrip?.endDate);
+        const prices = listing.monthlyPricing?.map((p: any) => p.price) || [];
+        const minPrice = prices.length ? Math.min(...prices) : (listing.shortestLeasePrice || 0);
+        const maxPrice = prices.length ? Math.max(...prices) : minPrice;
+        const displayPrice = hasDates
+          ? (calculateRent({ listing, trip: mockTrip }) || minPrice)
+          : minPrice;
+        const priceDisplay = hasDates || minPrice === maxPrice
+          ? `$${displayPrice.toLocaleString()}`
+          : `$${minPrice.toLocaleString()}-$${maxPrice.toLocaleString()}`;
 
         return {
           title: listing.title || '',
@@ -296,8 +304,9 @@ const GuestMapView: React.FC<GuestMapViewProps> = ({ setIsFilterOpen }) => {
           lng: listing.longitude,
           listing: {
             ...listing,
-            price: listing.price || calculatedPrice,
-            calculatedPrice,
+            price: displayPrice,
+            calculatedPrice: displayPrice,
+            priceDisplay,
             isLiked: favIds.has(listing.id),
             isDisliked: dislikedIds.has(listing.id),
           },

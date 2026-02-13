@@ -333,8 +333,8 @@ export const useMapMarkerManager = ({
   };
 
   const updatePriceBubbleContent = (element: HTMLElement, markerData: any) => {
-    const price = markerData.listing.calculatedPrice || markerData.listing.price;
-    const formattedPrice = formatPrice(price);
+    const formattedPrice = markerData.listing.priceDisplay
+      || formatPrice(markerData.listing.calculatedPrice || markerData.listing.price);
     
     if (markerData.listing.isLiked) {
       updatePriceBubbleWithHeart(element, formattedPrice);

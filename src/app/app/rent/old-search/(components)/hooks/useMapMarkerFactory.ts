@@ -188,6 +188,10 @@ export const useMapMarkerFactory = ({
     return marker.listing.calculatedPrice || marker.listing.price || null;
   }, []);
 
+  const extractPriceDisplay = useCallback((marker: any): string | null => {
+    return marker.listing.priceDisplay || null;
+  }, []);
+
   // ============================================
   // Heart Icon HTML Creation
   // ============================================
@@ -402,8 +406,7 @@ export const useMapMarkerFactory = ({
     markElementAsCreating(element);
 
     const colors = getMarkerColors(marker, isHovered);
-    const price = extractPrice(marker);
-    const formattedPrice = formatPrice(price);
+    const formattedPrice = extractPriceDisplay(marker) || formatPrice(extractPrice(marker));
     const content = createPriceBubbleContent(marker, formattedPrice);
     
     element.innerHTML = content;
