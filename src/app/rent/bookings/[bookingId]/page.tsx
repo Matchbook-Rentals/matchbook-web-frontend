@@ -3,8 +3,7 @@ import { redirect } from "next/navigation";
 import prisma from "@/lib/prismadb";
 import stripe from "@/lib/stripe";
 import { getPaymentTypeLabel } from "@/lib/payment-display-helpers";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { BrandButton } from "@/components/ui/brandButton";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
 import { TablessPaymentsTable } from "@/app/newnew/demo/tabless-payments-table";
@@ -13,6 +12,9 @@ import RenterNavbar from "@/components/renter-navbar";
 interface BookingDetailsPageProps {
   params: {
     bookingId: string;
+  };
+  searchParams: {
+    from?: string;
   };
 }
 
@@ -59,7 +61,7 @@ function getPaymentStatus(rentPayment: RentPayment): string {
   return "Scheduled";
 }
 
-export default async function BookingDetailsPage({ params }: BookingDetailsPageProps) {
+export default async function BookingDetailsPage({ params, searchParams }: BookingDetailsPageProps) {
   const { userId } = await auth();
   if (!userId) {
     redirect("/sign-in");
@@ -289,6 +291,8 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
     imageUrl: user.imageUrl || '',
   } : null;
 
+  const backUrl = searchParams.from || '/rent/dashboard';
+
   return (
     <>
       <RenterNavbar
@@ -298,15 +302,14 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
       />
       <div className="max-w-[1280px] mx-auto">
         <div className="px-6">
-        <Link href="/rent/dashboard">
-          <Button
+          <BrandButton
             variant="outline"
-            className="border-teal-600 text-teal-600 hover:bg-teal-50"
+            href={backUrl}
+            className="min-w-0 w-auto px-4"
           >
             Back
-          </Button>
-        </Link>
-      </div>
+          </BrandButton>
+        </div>
 
       <div className="px-6 py-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
         <PropertyDetailsSection {...propertyData} />
