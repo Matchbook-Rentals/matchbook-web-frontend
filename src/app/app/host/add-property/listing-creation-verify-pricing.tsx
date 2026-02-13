@@ -12,7 +12,7 @@ import {
 import { ListingCreationCounter } from "./listing-creation-counter";
 import { MonthlyPricing } from "./listing-creation-pricing";
 import { styles } from "./styles";
-import { createNumberChangeHandler, formatNumberWithCommas, removeCommasFromNumber } from "@/lib/number-validation";
+import { validateAndCapNumber, formatNumberWithCommas, removeCommasFromNumber } from "@/lib/number-validation";
 
 interface ListingCreationVerifyPricingProps {
   shortestStay: number;
@@ -35,6 +35,9 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
   onLongestStayChange,
   onMonthlyPricingChange
 }) => {
+  // Track which month's input is focused to avoid comma-formatting during typing
+  // (comma reformatting mid-keystroke causes cursor jumps on older Safari)
+  const [focusedMonth, setFocusedMonth] = React.useState<number | null>(null);
 
   // Handlers for increasing/decreasing stay lengths
   const increaseShortestStay = () => {
@@ -62,15 +65,19 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
   };
 
 
-  // Update a specific month's pricing
-  const updateMonthPricing = (months: number, displayPrice: string) => {
-    // Store the raw number without commas in state
-    const rawPrice = removeCommasFromNumber(displayPrice);
-    const updated = monthlyPricing.map(p => 
-      p.months === months ? { ...p, price: rawPrice } : p
+  // Update a specific month's pricing with raw digits (no commas)
+  const updateMonthPricing = (months: number, rawValue: string) => {
+    const rawPrice = removeCommasFromNumber(rawValue);
+    const validated = validateAndCapNumber(rawPrice, false, 10000000, false);
+    const updated = monthlyPricing.map(p =>
+      p.months === months ? { ...p, price: validated } : p
     );
     onMonthlyPricingChange(updated);
   };
+
+  // Show raw digits when focused (avoids cursor jumps), commas when blurred
+  const displayPrice = (pricing: MonthlyPricing) =>
+    focusedMonth === pricing.months ? pricing.price : formatNumberWithCommas(pricing.price);
 
   // Update a specific month's utilities included status
   const updateMonthUtilities = (months: number, utilitiesIncluded: boolean) => {
@@ -190,9 +197,11 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                         pattern="[0-9,]*"
                         className="pl-7 pr-8 text-base"
                         placeholder="0"
-                        value={formatNumberWithCommas(pricing.price)}
+                        value={displayPrice(pricing)}
                         tabIndex={2 + pricing.months}
-                        onChange={createNumberChangeHandler((value) => updateMonthPricing(pricing.months, value), false, 10000000, true)}
+                        onFocus={() => setFocusedMonth(pricing.months)}
+                        onBlur={() => setFocusedMonth(null)}
+                        onChange={(e) => updateMonthPricing(pricing.months, e.target.value)}
                       />
                     </div>
                   </TableCell>
@@ -231,9 +240,11 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                           pattern="[0-9,]*"
                           className="pl-6 pr-8 text-base"
                           placeholder="0"
-                          value={formatNumberWithCommas(leftPricing.price)}
+                          value={focusedMonth === leftPricing.months ? leftPricing.price : formatNumberWithCommas(leftPricing.price)}
                           tabIndex={2 + leftPricing.months}
-                          onChange={createNumberChangeHandler((value) => updateMonthPricing(leftPricing.months, value), false, 10000000, true)}
+                          onFocus={() => setFocusedMonth(leftPricing.months)}
+                          onBlur={() => setFocusedMonth(null)}
+                          onChange={(e) => updateMonthPricing(leftPricing.months, e.target.value)}
                         />
                       </div>
                     </TableCell>
@@ -263,9 +274,11 @@ const ListingCreationVerifyPricing: React.FC<ListingCreationVerifyPricingProps> 
                               pattern="[0-9,]*"
                               className="pl-6 pr-8 text-base"
                               placeholder="0"
-                              value={formatNumberWithCommas(rightPricing.price)}
+                              value={focusedMonth === rightPricing.months ? rightPricing.price : formatNumberWithCommas(rightPricing.price)}
                               tabIndex={2 + rightPricing.months}
-                              onChange={createNumberChangeHandler((value) => updateMonthPricing(rightPricing.months, value), false, 10000000, true)}
+                              onFocus={() => setFocusedMonth(rightPricing.months)}
+                              onBlur={() => setFocusedMonth(null)}
+                              onChange={(e) => updateMonthPricing(rightPricing.months, e.target.value)}
                             />
                           </div>
                         </TableCell>

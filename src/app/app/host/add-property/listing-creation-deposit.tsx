@@ -1,6 +1,6 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
-import { createNumberChangeHandler, formatNumberWithCommas } from "@/lib/number-validation";
+import { validateAndCapNumber, formatNumberWithCommas } from "@/lib/number-validation";
 
 interface ListingCreationDepositProps {
   deposit: string;
@@ -23,6 +23,17 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
   questionTextStyles,
   questionSubTextStyles,
 }) => {
+  // Track focused field to avoid comma-formatting during typing
+  // (reformatting mid-keystroke causes cursor jumps on older Safari)
+  const [focusedField, setFocusedField] = React.useState<string | null>(null);
+
+  const handleChange = (onChange: (value: string) => void) => (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value.replace(/[^0-9]/g, '');
+    onChange(validateAndCapNumber(raw, false, 10000000, false));
+  };
+
+  const displayValue = (field: string, value: string) =>
+    focusedField === field ? value : formatNumberWithCommas(value);
   return (
     <div className="relative w-full md:max-w-[886px]">
       <div className="w-full">
@@ -42,8 +53,10 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                 <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                 <Input
                   className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
-                  value={formatNumberWithCommas(deposit)}
-                  onChange={createNumberChangeHandler(onDepositChange, false, 10000000, true)}
+                  value={displayValue('deposit', deposit)}
+                  onChange={handleChange(onDepositChange)}
+                  onFocus={() => setFocusedField('deposit')}
+                  onBlur={() => setFocusedField(null)}
                   placeholder="0"
                   type="text"
                   inputMode="numeric"
@@ -69,8 +82,10 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-lg">$</span>
                   <Input
                     className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-lg"
-                    value={formatNumberWithCommas(petDeposit)}
-                    onChange={createNumberChangeHandler(onPetDepositChange, false, 10000000, true)}
+                    value={displayValue('petDeposit', petDeposit)}
+                    onChange={handleChange(onPetDepositChange)}
+                    onFocus={() => setFocusedField('petDeposit')}
+                    onBlur={() => setFocusedField(null)}
                     placeholder="0"
                     type="text"
                     inputMode="numeric"
@@ -93,8 +108,10 @@ const ListingCreationDeposit: React.FC<ListingCreationDepositProps> = ({
                   <span className="absolute inset-y-0 right-3 flex items-center text-gray-500 text-lg">/mo</span>
                   <Input
                     className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 pr-12 text-lg"
-                    value={formatNumberWithCommas(petRent)}
-                    onChange={createNumberChangeHandler(onPetRentChange, false, 10000000, true)}
+                    value={displayValue('petRent', petRent)}
+                    onChange={handleChange(onPetRentChange)}
+                    onFocus={() => setFocusedField('petRent')}
+                    onBlur={() => setFocusedField(null)}
                     placeholder="0"
                     type="text"
                     inputMode="numeric"

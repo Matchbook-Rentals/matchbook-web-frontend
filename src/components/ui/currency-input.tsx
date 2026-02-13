@@ -20,10 +20,13 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   className,
   labelClassName
 }) => {
+  // Track focus to defer comma formatting until blur
+  // (reformatting mid-keystroke causes cursor jumps on older Safari)
+  const [isFocused, setIsFocused] = React.useState(false);
+
   // Format initial value if it exists
   React.useEffect(() => {
     if (value && value !== '$') {
-      // If there's a decimal, only take what's before it
       const beforeDecimal = value.split('.')[0];
       const numericValue = beforeDecimal.replace(/[^\d]/g, '');
       if (numericValue) {
@@ -44,23 +47,42 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
     // If the input starts with '$', remove it for processing
     const valueToProcess = inputValue.startsWith('$') ? inputValue.slice(1) : inputValue;
 
-    // Remove any non-digits
+    // Remove any non-digits (including commas — raw digits only while typing)
     const numericValue = valueToProcess.replace(/[^\d]/g, '');
 
-    // Allow empty string or numbers only
-    if (numericValue === '' || /^\d*$/.test(numericValue)) {
-      // Format directly from the numeric string
-      const formattedValue = numericValue
-        ? parseInt(numericValue).toLocaleString('en-US')
-        : '';
+    // Store raw digits with $ prefix (no commas during typing)
+    onChange(`$${numericValue}`);
+  };
 
-      // Always add '$' prefix
-      onChange(`$${formattedValue}`);
+  const handleFocus = () => setIsFocused(true);
+
+  const handleBlur = () => {
+    setIsFocused(false);
+    // Format with commas on blur
+    if (value && value !== '$') {
+      const numericValue = value.replace(/[^\d]/g, '');
+      if (numericValue) {
+        const formattedValue = parseInt(numericValue).toLocaleString('en-US');
+        onChange(`$${formattedValue}`);
+      }
     }
   };
 
-  // Display value will be empty if it's just "$", showing placeholder instead
-  const displayValue = value === '$' ? '' : value;
+  // Show raw digits when focused, formatted when blurred
+  const getDisplayValue = () => {
+    if (!value || value === '$') return '';
+    if (isFocused) {
+      const raw = value.replace(/[^\d]/g, '');
+      return raw ? `$${raw}` : '';
+    }
+    const numericValue = value.replace(/[^\d]/g, '');
+    if (numericValue) {
+      return `$${parseInt(numericValue).toLocaleString('en-US')}`;
+    }
+    return '';
+  };
+
+  const displayValue = getDisplayValue();
 
   return (
     <div className="relative flex flex-col">
@@ -78,6 +100,8 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
         type="text"
         value={displayValue}
         onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
         className={cn(
           "w-[200px] bg-background p-3 font-montserrat-light rounded-lg border border-gray-300",
           className

@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { BrandCheckbox } from '@/app/brandCheckbox';
 import { ListingCreationCounter } from '@/app/app/host/add-property/listing-creation-counter';
 import { PencilIcon } from 'lucide-react';
-import { createNumberChangeHandler, createNumberBlurHandler } from '@/lib/number-validation';
+import { validateAndCapNumber, formatNumberWithCommas } from '@/lib/number-validation';
 
 interface LeaseTermPricing {
   months: number;
@@ -59,6 +59,20 @@ export function PricingSection({
   updateLeaseTermPrice,
   updateLeaseTermUtilities,
 }: PricingSectionProps) {
+  // Track focused field to avoid comma-formatting during typing
+  // (reformatting mid-keystroke causes cursor jumps on older Safari)
+  const [focusedField, setFocusedField] = React.useState<string | null>(null);
+
+  const handleDepositChange = (field: string, updateFn: (field: string, value: any) => void) =>
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const raw = e.target.value.replace(/[^0-9]/g, '');
+      const validated = validateAndCapNumber(raw, false, 10000000, false);
+      updateFn(field, parseInt(validated) || null);
+    };
+
+  const depositDisplay = (field: string, value: any) =>
+    focusedField === field ? (value?.toString() || '') : formatNumberWithCommas(value?.toString() || '');
+
   return (
     <Card className="w-full shadow-[0px_0px_5px_#00000029] rounded-xl">
       <CardContent className="flex flex-col gap-8 p-6">
@@ -77,9 +91,10 @@ export function PricingSection({
                 <label className="text-sm font-medium text-gray-700">Security Deposit</label>
                 <Input
                   type="text"
-                  value={formData.depositSize || ''}
-                  onChange={createNumberChangeHandler((value) => updateFormData('depositSize', parseInt(value.replace(/,/g, '')) || null), false, 10000000, true)}
-                  onBlur={createNumberBlurHandler(formData.depositSize?.toString() || '', (value) => updateFormData('depositSize', parseInt(value.replace(/,/g, '')) || null), false, undefined, 10000000, true)}
+                  value={depositDisplay('depositSize', formData.depositSize)}
+                  onChange={handleDepositChange('depositSize', updateFormData)}
+                  onFocus={() => setFocusedField('depositSize')}
+                  onBlur={() => setFocusedField(null)}
                   className="mt-1"
                   placeholder="Security deposit amount"
                 />
@@ -90,9 +105,10 @@ export function PricingSection({
                 <label className="text-sm font-medium text-gray-700">Pet Deposit</label>
                 <Input
                   type="text"
-                  value={formData.petDeposit || ''}
-                  onChange={createNumberChangeHandler((value) => updateFormData('petDeposit', parseInt(value.replace(/,/g, '')) || null), false, 10000000, true)}
-                  onBlur={createNumberBlurHandler(formData.petDeposit?.toString() || '', (value) => updateFormData('petDeposit', parseInt(value.replace(/,/g, '')) || null), false, undefined, 10000000, true)}
+                  value={depositDisplay('petDeposit', formData.petDeposit)}
+                  onChange={handleDepositChange('petDeposit', updateFormData)}
+                  onFocus={() => setFocusedField('petDeposit')}
+                  onBlur={() => setFocusedField(null)}
                   className="mt-1"
                   placeholder="Pet security deposit"
                 />
@@ -102,9 +118,10 @@ export function PricingSection({
                 <label className="text-sm font-medium text-gray-700">Pet Rent (Per Pet)</label>
                 <Input
                   type="text"
-                  value={formData.petRent || ''}
-                  onChange={createNumberChangeHandler((value) => updateFormData('petRent', parseInt(value.replace(/,/g, '')) || null), false, 10000000, true)}
-                  onBlur={createNumberBlurHandler(formData.petRent?.toString() || '', (value) => updateFormData('petRent', parseInt(value.replace(/,/g, '')) || null), false, undefined, 10000000, true)}
+                  value={depositDisplay('petRent', formData.petRent)}
+                  onChange={handleDepositChange('petRent', updateFormData)}
+                  onFocus={() => setFocusedField('petRent')}
+                  onBlur={() => setFocusedField(null)}
                   className="mt-1"
                   placeholder="Monthly pet rent per pet"
                 />
@@ -204,11 +221,16 @@ export function PricingSection({
                           <Input
                             className="pl-7 text-xs"
                             placeholder="0.00"
-                            value={term.price}
+                            value={focusedField === `lease-${term.months}` ? term.price : formatNumberWithCommas(term.price)}
                             tabIndex={100 + (term.months * 2 - 1)}
                             type="text"
-                            onChange={createNumberChangeHandler((value) => updateLeaseTermPrice(term.months, value.replace(/,/g, '')), false, 10000000, true)}
-                            onBlur={createNumberBlurHandler(term.price || '', (value) => updateLeaseTermPrice(term.months, value.replace(/,/g, '')), false, undefined, 10000000, true)}
+                            onFocus={() => setFocusedField(`lease-${term.months}`)}
+                            onBlur={() => setFocusedField(null)}
+                            onChange={(e) => {
+                              const raw = e.target.value.replace(/[^0-9]/g, '');
+                              const validated = validateAndCapNumber(raw, false, 10000000, false);
+                              updateLeaseTermPrice(term.months, validated);
+                            }}
                           />
                         </div>
                       </div>
