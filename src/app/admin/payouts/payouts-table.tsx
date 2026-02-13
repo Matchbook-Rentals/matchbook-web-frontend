@@ -186,21 +186,21 @@ export default function PayoutsTable({
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Users Pending Payout</div>
           <div className="text-2xl font-bold text-yellow-600">{stats.totalPendingUsers}</div>
         </div>
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Total Pending Amount</div>
           <div className="text-2xl font-bold text-yellow-600">
             {formatCurrency(stats.totalPendingAmount)}
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Users Paid</div>
           <div className="text-2xl font-bold text-green-600">{stats.totalPaidUsers}</div>
         </div>
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Total Paid Amount</div>
           <div className="text-2xl font-bold text-green-600">
             {formatCurrency(stats.totalPaidAmount)}

@@ -1192,7 +1192,7 @@ export default function NotificationTestPage() {
                     {(previewMode === 'light' || previewMode === 'both') && (
                       <div className="flex flex-col">
                         <div className="text-sm font-medium mb-2 text-center">Light Mode</div>
-                        <div className="border rounded-lg bg-white overflow-hidden" style={{ colorScheme: 'light' }}>
+                        <div className="border rounded-lg bg-background overflow-hidden" style={{ colorScheme: 'light' }}>
                           <iframe
                             srcDoc={getLightModeHtml(previewHtml)}
                             className="w-full h-[600px]"
@@ -1283,7 +1283,7 @@ export default function NotificationTestPage() {
             {(previewMode === 'light' || previewMode === 'both') && (
               <div className="flex flex-col h-full">
                 <div className="text-sm font-medium mb-2 text-center">Light Mode</div>
-                <div className="border rounded-lg bg-white overflow-hidden flex-1" style={{ colorScheme: 'light' }}>
+                <div className="border rounded-lg bg-background overflow-hidden flex-1" style={{ colorScheme: 'light' }}>
                   <iframe
                     srcDoc={getLightModeHtml(previewHtml)}
                     className="w-full h-full"

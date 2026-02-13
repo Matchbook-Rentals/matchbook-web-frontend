@@ -128,21 +128,21 @@ export default function ReferralsTable({
     <div className="space-y-6">
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Total Referrals</div>
           <div className="text-2xl font-bold">{stats.totalReferrals}</div>
         </div>
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Pending</div>
           <div className="text-2xl font-bold">{stats.pendingReferrals}</div>
         </div>
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Qualified</div>
           <div className="text-2xl font-bold text-green-600">
             {stats.qualifiedReferrals}
           </div>
         </div>
-        <div className="bg-white p-4 rounded-lg border">
+        <div className="bg-background p-4 rounded-lg border">
           <div className="text-sm text-gray-500">Total Value</div>
           <div className="text-2xl font-bold">
             {formatCurrency(stats.pendingPayoutAmount)}

@@ -75,7 +75,7 @@ export function LocationChangesSection({ locationChanges }: LocationChangesSecti
         
         <div className="space-y-4">
           {locationChanges.map((change) => (
-            <div key={change.id} className="bg-white border border-orange-200 rounded-lg p-4">
+            <div key={change.id} className="bg-background border border-orange-200 rounded-lg p-4">
               <div className="flex items-start justify-between mb-3">
                 <div>
                   <div className="font-medium text-sm">

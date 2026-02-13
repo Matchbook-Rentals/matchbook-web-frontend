@@ -135,7 +135,7 @@ export function UserCard({ user }: UserCardProps) {
               alt={`${user.firstName || 'User'}'s profile`}
               className="w-16 h-16 rounded-full object-cover border-2 border-gray-100"
             />
-            <div className="absolute -bottom-1 -right-1 rounded-full p-1 bg-white">
+            <div className="absolute -bottom-1 -right-1 rounded-full p-1 bg-background">
               {getRoleIcon(userRole)}
             </div>
           </div>
