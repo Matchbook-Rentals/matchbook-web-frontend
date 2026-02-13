@@ -187,7 +187,7 @@ export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites
               />
             ) : (
               <>
-                <div ref={gridRef} className="flex flex-wrap gap-6">
+                <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                   {visibleFavorites.map((fav, index) => (
                     <HomepageListingCard
                       key={fav.id}

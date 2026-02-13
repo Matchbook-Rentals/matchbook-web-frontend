@@ -112,7 +112,7 @@ export const MatchesSection = ({ matches }: MatchesSectionProps) => {
                   <CarouselContent className="-ml-6">
                     {matchSlides.map((slideMatches, idx) => (
                       <CarouselItem key={idx} className="pl-6 basis-full">
-                        <div className="flex flex-wrap gap-6">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                           {slideMatches.map((match, matchIdx) => {
                             const globalIndex = idx * cardsPerSlide + matchIdx;
                             return (
