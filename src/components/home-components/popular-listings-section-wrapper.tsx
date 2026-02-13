@@ -310,12 +310,12 @@ export default function PopularListingsSectionWrapper({
                   <div className="w-9 h-9 bg-gray-100 rounded-full" />
                 </div>
               </div>
-              {/* Responsive card grid - matches HomepageListingCard widths exactly */}
+              {/* Responsive card grid - matches Embla carousel structure */}
               <div className="flex gap-6 overflow-hidden">
                 {[1, 2, 3, 4, 5, 6].map((j) => (
                   <div 
                     key={j} 
-                    className="flex-shrink-0 w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-19.2px)]"
+                    className="flex-shrink-0 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5"
                   >
                     {/* Image skeleton */}
                     <div className="aspect-[4/3] bg-gray-200 rounded-xl" />

@@ -4,11 +4,17 @@ import { ListingAndImages } from '@/types';
 import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
 import { ChevronLeft, ChevronRight, ArrowRight, Loader2 } from 'lucide-react';
-import { useRef, useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { createGuestSession } from '@/app/actions/guest-session-db';
 import { GuestSessionService } from '@/utils/guest-session';
 import { HomepageUserState } from '@/app/actions/homepage-user-state';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
 
 export interface ListingSection {
   title: string;
@@ -46,8 +52,6 @@ interface ListingRowProps {
   isSignedIn?: boolean;
 }
 
-const SCROLL_AMOUNT = 608;
-
 const getListingState = (
   listingId: string,
   authUserState?: Partial<HomepageUserState>,
@@ -81,41 +85,53 @@ const getListingState = (
 };
 
 function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading, authUserState, sectionTripId, isSignedIn }: ListingRowProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
-  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [canScrollRight, setCanScrollRight] = useState(false);
 
-  const updateScrollState = useCallback(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
+  // Calculate how many slides are visible based on viewport
+  const getSlidesToScroll = () => {
+    if (typeof window === 'undefined') return 1;
+    const width = window.innerWidth;
+    if (width >= 1024) return 5; // lg breakpoint - 5 cards visible
+    if (width >= 768) return 4;  // md breakpoint - 4 cards visible
+    if (width >= 640) return 3;  // sm breakpoint - 3 cards visible
+    return 2; // mobile - 2 cards visible
+  };
 
-    const { scrollLeft, scrollWidth, clientWidth } = container;
-    setCanScrollLeft(scrollLeft > 0);
-    setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 1);
-  }, []);
-
+  // Update button states when carousel changes
   useEffect(() => {
-    const container = scrollContainerRef.current;
-    if (!container) return;
+    if (!carouselApi) return;
 
-    updateScrollState();
-    container.addEventListener('scroll', updateScrollState);
-    window.addEventListener('resize', updateScrollState);
+    const updateButtonStates = () => {
+      setCanScrollLeft(carouselApi.canScrollPrev());
+      setCanScrollRight(carouselApi.canScrollNext());
+    };
+
+    updateButtonStates();
+    carouselApi.on('select', updateButtonStates);
+    carouselApi.on('reInit', updateButtonStates);
 
     return () => {
-      container.removeEventListener('scroll', updateScrollState);
-      window.removeEventListener('resize', updateScrollState);
+      carouselApi.off('select', updateButtonStates);
     };
-  }, [updateScrollState, listings]);
+  }, [carouselApi]);
 
   const scrollLeft = () => {
-    if (!scrollContainerRef.current) return;
-    scrollContainerRef.current.scrollBy({ left: -SCROLL_AMOUNT, behavior: 'smooth' });
+    if (!carouselApi) return;
+    const slidesToScroll = getSlidesToScroll();
+    const targetIndex = Math.max(0, carouselApi.selectedScrollSnap() - slidesToScroll);
+    carouselApi.scrollTo(targetIndex);
   };
 
   const scrollRight = () => {
-    if (!scrollContainerRef.current) return;
-    scrollContainerRef.current.scrollBy({ left: SCROLL_AMOUNT, behavior: 'smooth' });
+    if (!carouselApi) return;
+    const slidesToScroll = getSlidesToScroll();
+    const targetIndex = Math.min(
+      carouselApi.scrollSnapList().length - 1,
+      carouselApi.selectedScrollSnap() + slidesToScroll
+    );
+    carouselApi.scrollTo(targetIndex);
   };
 
   const hasListings = listings.length > 0;
@@ -172,29 +188,37 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
       </div>
 
       {hasListings ? (
-        <div
-          ref={scrollContainerRef}
-          className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        <Carousel
+          opts={{
+            align: "start",
+            slidesToScroll: 1,
+            skipSnaps: false,
+          }}
+          setApi={setCarouselApi}
+          className="w-full"
+          keyboardControls={false}
         >
-          {listings.map(listing => {
-            const state = getListingState(listing.id, authUserState, guestFavoriteIds, sectionTripId);
-            return (
-              <HomepageListingCard
-                key={listing.id}
-                listing={listing}
-                badge={state.badge}
-                initialFavorited={state.initialFavorited}
-                isApplied={state.isApplied}
-                tripId={state.tripId}
-                matchId={state.matchId}
-                onFavorite={onFavorite}
-                onSignInPrompt={onSignInPrompt}
-                isSignedIn={isSignedIn}
-              />
-            );
-          })}
-        </div>
+          <CarouselContent className="-ml-6">
+            {listings.map(listing => {
+              const state = getListingState(listing.id, authUserState, guestFavoriteIds, sectionTripId);
+              return (
+                <CarouselItem key={listing.id} className="pl-6 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
+                  <HomepageListingCard
+                    listing={listing}
+                    badge={state.badge}
+                    initialFavorited={state.initialFavorited}
+                    isApplied={state.isApplied}
+                    tripId={state.tripId}
+                    matchId={state.matchId}
+                    onFavorite={onFavorite}
+                    onSignInPrompt={onSignInPrompt}
+                    isSignedIn={isSignedIn}
+                  />
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
       ) : (
         <div className="text-gray-500 text-sm">No listings available</div>
       )}

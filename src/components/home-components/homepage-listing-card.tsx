@@ -224,7 +224,7 @@ export default function HomepageListingCard({
   return (
     <Link
       href={listingUrl}
-      className="@container block group flex-shrink-0 w-[calc(50%-12px)] sm:w-[calc(33.333%-16px)] md:w-[calc(25%-18px)] lg:w-[calc(20%-19.2px)]"
+      className="@container block group w-full"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
