@@ -51,23 +51,22 @@ export const RecentSearchesSection = ({ searches, defaultOpen = false }: RecentS
 
   return (
     <section className="mb-8 overflow-x-hidden">
-      <div className="max-w-[400px]">
-        <Accordion type="single" collapsible defaultValue={defaultOpen ? "recent-searches" : undefined}>
-          <AccordionItem value="recent-searches" className="border-b-0">
-            <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
-              <span className="font-poppins font-semibold text-[#484a54] text-sm">
-                Recent Searches
-              </span>
-            </AccordionTrigger>
-            <AccordionContent>
-              {searches.length === 0 ? (
-                <SectionEmptyState
-                  imageSrc="/empty-states/no-searches.png"
-                  title="No recent searches"
-                />
-              ) : (
-                <>
-                  <Carousel
+      <Accordion type="single" collapsible defaultValue={defaultOpen ? "recent-searches" : undefined}>
+        <AccordionItem value="recent-searches" className="border-b-0">
+          <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
+            <span className="font-poppins font-semibold text-[#484a54] text-sm">
+              Recent Searches
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            {searches.length === 0 ? (
+              <SectionEmptyState
+                imageSrc="/empty-states/no-searches.png"
+                title="No recent searches"
+              />
+            ) : (
+              <div className="max-w-[400px]">
+                <Carousel
                     setApi={setApi}
                     opts={{
                       align: 'start',
@@ -114,12 +113,11 @@ export const RecentSearchesSection = ({ searches, defaultOpen = false }: RecentS
                       </Button>
                     </div>
                   )}
-                </>
+                </div>
               )}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
     </section>
   );
 };

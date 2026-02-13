@@ -55,23 +55,22 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
 
   return (
     <section className="mb-8 overflow-x-hidden">
-      <div className="max-w-[600px]">
-        <Accordion type="single" collapsible>
-          <AccordionItem value="bookings" className="border-b-0">
-            <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
-              <span className="font-poppins font-semibold text-[#484a54] text-sm">
-                Bookings
-              </span>
-            </AccordionTrigger>
-            <AccordionContent>
-              {bookings.length === 0 ? (
-                <SectionEmptyState
-                  imageSrc="/empty-states/no-bookings.png"
-                  title="No bookings yet"
-                />
-              ) : (
-                <>
-                  <Carousel
+      <Accordion type="single" collapsible>
+        <AccordionItem value="bookings" className="border-b-0">
+          <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
+            <span className="font-poppins font-semibold text-[#484a54] text-sm">
+              Bookings
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            {bookings.length === 0 ? (
+              <SectionEmptyState
+                imageSrc="/empty-states/no-bookings.png"
+                title="No bookings yet"
+              />
+            ) : (
+              <div className="max-w-[600px]">
+                <Carousel
                     setApi={setApi}
                     opts={{
                       align: 'start',
@@ -170,12 +169,11 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
                       </Button>
                     </div>
                   )}
-                </>
+                </div>
               )}
             </AccordionContent>
           </AccordionItem>
         </Accordion>
-      </div>
     </section>
   );
 };
