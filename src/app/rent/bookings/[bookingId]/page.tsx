@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
-import { TablelessPaymentsTable } from "@/app/newnew/demo/tableless-payments-table";
+import { TablessPaymentsTable } from "@/app/newnew/demo/tabless-payments-table";
 import RenterNavbar from "@/components/renter-navbar";
 
 interface BookingDetailsPageProps {
@@ -318,7 +318,7 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
       </div>
 
       <div className="px-6 py-8">
-        <TablelessPaymentsTable
+        <TablessPaymentsTable
           paymentsData={paymentsData}
           hostName={hostName}
           hostAvatar={host.imageUrl || "/image-35.png"}

@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
-import { TablelessPaymentsTable } from "./tableless-payments-table";
+import { TablessPaymentsTable } from "./tabless-payments-table";
 import RenterNavbar from "@/components/renter-navbar";
 import prisma from "@/lib/prismadb";
 import { auth } from "@clerk/nextjs/server";
@@ -261,7 +261,7 @@ export default async function StaticDemoPage() {
 
         {/* Payments Section */}
         <div className="px-6 py-8">
-          <TablelessPaymentsTable
+          <TablessPaymentsTable
             paymentsData={samplePaymentsData}
             hostName="Daniel Resner"
             hostAvatar="/avatar-5.png"
