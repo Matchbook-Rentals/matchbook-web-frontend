@@ -380,7 +380,7 @@ export default function SearchResultsNavbar({
       <div className="flex items-center flex-1 min-w-0">
         {/* WHERE trigger */}
         <button
-          className="flex flex-col flex-1 min-w-0 md:border-r md:border-gray-300 text-left md:pr-5"
+          className="flex flex-col flex-1 min-w-0 md:border-r md:border-gray-300 text-left md:pr-3 lg:pr-5"
           onClick={handleWhereClick}
         >
           {/* Mobile: single-line pill text */}
@@ -389,8 +389,8 @@ export default function SearchResultsNavbar({
             {search.isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
           </span>
           {/* Desktop: two-line Where / Choose Location */}
-          <span className="hidden md:inline text-xs font-medium leading-tight text-gray-600">Where</span>
-          <span className={`hidden md:flex text-xs truncate leading-tight items-center gap-1.5 ${search.locationDisplayValue ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
+          <span className="hidden md:inline text-[11px] lg:text-xs font-medium leading-tight text-gray-600">Where</span>
+          <span className={`hidden md:flex text-[11px] lg:text-xs truncate leading-tight items-center gap-1.5 ${search.locationDisplayValue ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
             {search.locationDisplayValue || 'Choose Location'}
             {search.isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0" />}
           </span>
@@ -398,22 +398,22 @@ export default function SearchResultsNavbar({
 
         {/* WHEN trigger */}
         <button
-          className="hidden md:flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left px-5"
+          className="hidden md:flex flex-col flex-1 min-w-0 border-r border-gray-300 text-left px-3 lg:px-5"
           onClick={() => search.togglePopover('when')}
         >
-          <span className="text-xs font-medium leading-tight text-gray-600">When</span>
-          <span className={`text-xs truncate leading-tight ${dateDisplay ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
+          <span className="text-[11px] lg:text-xs font-medium leading-tight text-gray-600">When</span>
+          <span className={`text-[11px] lg:text-xs truncate leading-tight ${dateDisplay ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
             {dateDisplay || 'Add Dates'}
           </span>
         </button>
 
         {/* WHO trigger */}
         <button
-          className="hidden md:flex flex-col flex-1 min-w-0 text-left pl-5"
+          className="hidden md:flex flex-col flex-1 min-w-0 text-left pl-3 lg:pl-5"
           onClick={() => search.togglePopover('who')}
         >
-          <span className="text-xs font-medium leading-tight text-gray-600">Who</span>
-          <span className={`text-xs truncate leading-tight ${guestDisplay ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
+          <span className="text-[11px] lg:text-xs font-medium leading-tight text-gray-600">Who</span>
+          <span className={`text-[11px] lg:text-xs truncate leading-tight ${guestDisplay ? 'text-gray-800 font-medium' : 'text-gray-400'}`}>
             {guestDisplay || 'Add Renters'}
           </span>
         </button>
@@ -421,14 +421,14 @@ export default function SearchResultsNavbar({
 
       <Button
         size="icon"
-        className="hidden md:flex w-10 h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-3"
+        className="hidden md:flex w-9 h-9 lg:w-10 lg:h-10 bg-primaryBrand hover:bg-primaryBrand/90 rounded-full flex-shrink-0 ml-2 lg:ml-3"
         onClick={handleSubmit}
         disabled={isSubmitting || search.isGeocoding}
       >
         {isSubmitting || search.isGeocoding ? (
-          <ImSpinner8 className="animate-spin w-4 h-4" />
+          <ImSpinner8 className="animate-spin w-3.5 h-3.5 lg:w-4 lg:h-4" />
         ) : (
-          <SearchIcon className="w-4 h-4" />
+          <SearchIcon className="w-3.5 h-3.5 lg:w-4 lg:h-4" />
         )}
       </Button>
     </>
@@ -438,13 +438,39 @@ export default function SearchResultsNavbar({
     <>
     <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
       {/* Header row */}
-      <header className="relative z-30 flex items-center justify-between px-6 h-[76px]">
+      <header className="relative z-30 flex items-center gap-4 px-4 sm:px-6 h-[76px]">
+        {/* Logo */}
         <Link href="/" className="flex-shrink-0">
-          <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
+          <img className="w-[160px] md:w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
           <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
         </Link>
 
-        <div className="flex items-center gap-6 flex-shrink-0">
+        {/* Desktop: Compact search bar in header (when not expanded) */}
+        <motion.div
+          className="hidden md:flex flex-1 items-center justify-center min-w-0"
+          initial={false}
+          animate={{ 
+            opacity: isExpanded ? 0 : 1,
+            pointerEvents: isExpanded ? 'none' : 'auto'
+          }}
+          transition={{ duration: 0.2 }}
+        >
+          <motion.div
+            className="flex items-center w-full h-[50px] bg-background rounded-full"
+            initial={false}
+            animate={{
+              maxWidth: 700,
+              paddingLeft: 20,
+              paddingRight: 8,
+              boxShadow: '0px 4px 10px rgba(0,0,0,0.12)',
+            }}
+          >
+            {searchBarContent()}
+          </motion.div>
+        </motion.div>
+
+        {/* User Menu */}
+        <div className="flex items-center gap-4 md:gap-6 flex-shrink-0">
           <UserMenu
             color="white"
             mode="header"
@@ -457,9 +483,9 @@ export default function SearchResultsNavbar({
       </header>
 
       {/* Mobile: static search bar row below header */}
-      <div className="md:hidden flex items-center justify-center w-full px-6 pb-4 pt-1">
+      <div className="md:hidden flex items-center justify-center w-full px-4 sm:px-6 pb-4 pt-1">
         <div
-          className="flex items-center w-full h-[50px] pl-6 pr-3 py-2 bg-background rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)]"
+          className="flex items-center w-full max-w-full h-[50px] pl-4 sm:pl-6 pr-3 py-2 bg-background rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)]"
           onClick={handleWhereClick}
         >
           {searchBarContent()}
@@ -468,30 +494,32 @@ export default function SearchResultsNavbar({
 
       {/* Desktop: Height spacer — pushes content below navbar down when expanded */}
       <motion.div
-        className="hidden md:block"
+        className="hidden md:block flex-shrink-0"
         initial={false}
         animate={{ height: isExpanded ? 86 : 0 }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       />
 
-      {/* Desktop: Search bar — absolutely positioned, animates between header center and below header */}
+      {/* Desktop: Expanded search bar — absolutely positioned below header when expanded */}
       <motion.div
-        className="hidden md:flex absolute inset-x-0 z-50 flex-col items-center px-6 pointer-events-none"
+        className="hidden md:flex absolute inset-x-0 z-50 flex-col items-center px-4 lg:px-6 pointer-events-none"
         initial={false}
-        animate={{ top: isExpanded ? 88 : 13 }}
+        animate={{ 
+          top: 88,
+          opacity: isExpanded ? 1 : 0,
+          pointerEvents: isExpanded ? 'auto' : 'none'
+        }}
         transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
       >
         {/* Search bar */}
         <motion.div
-          className="flex items-center w-full h-[50px] bg-background rounded-full pointer-events-auto"
+          className="flex items-center w-full h-[50px] bg-background rounded-full pointer-events-auto mx-auto"
           initial={false}
           animate={{
-            maxWidth: isExpanded ? 860 : 700,
+            maxWidth: 860,
             paddingLeft: 24,
-            paddingRight: isExpanded ? 12 : 8,
-            boxShadow: isExpanded
-              ? '0px 6px 12px rgba(0,0,0,0.15)'
-              : '0px 4px 10px rgba(0,0,0,0.12)',
+            paddingRight: 12,
+            boxShadow: '0px 6px 12px rgba(0,0,0,0.15)',
           }}
           transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
         >
@@ -499,7 +527,7 @@ export default function SearchResultsNavbar({
         </motion.div>
 
         {/* Animated dropdown popover */}
-        <div className="w-full max-w-[860px] mt-3 pointer-events-auto">
+        <div className="w-full max-w-[860px] mt-3 pointer-events-auto mx-auto px-2 lg:px-0">
           <DesktopSearchPopover
             activePopover={search.activePopover}
             search={search}
