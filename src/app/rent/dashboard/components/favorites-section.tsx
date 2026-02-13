@@ -176,7 +176,6 @@ export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites
       <SectionEmptyState
         imageSrc="/empty-states/no-favorites.png"
         title="No favorites yet"
-        subtitle="Save listings you love to find them later"
       />
     </section>
   );

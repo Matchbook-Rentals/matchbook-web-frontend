@@ -51,7 +51,6 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
       <SectionEmptyState
         imageSrc="/empty-states/no-bookings.png"
         title="No bookings yet"
-        subtitle="Your confirmed bookings will appear here"
       />
     </section>
   );

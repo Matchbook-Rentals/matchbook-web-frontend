@@ -27,7 +27,6 @@ export const ApplicationsSection = ({ applications }: ApplicationsSectionProps) 
       <SectionEmptyState
         imageSrc="/empty-states/no-applications.png"
         title="No applications"
-        subtitle="Apply to listings you're interested in"
       />
     </section>
   );

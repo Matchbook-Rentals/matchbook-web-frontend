@@ -67,6 +67,7 @@ export default async function RenterDashboardPage({
       matches: [],
       applications: [],
       favorites: [],
+      hasMoreFavorites: false,
     };
   } else {
     // Default: load normal dashboard data

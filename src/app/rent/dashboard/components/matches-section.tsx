@@ -64,7 +64,6 @@ export const MatchesSection = ({ matches }: MatchesSectionProps) => {
       <SectionEmptyState
         imageSrc="/empty-states/no-matches.png"
         title="No matches yet"
-        subtitle="Apply to listings to get matched with hosts"
       />
     </section>
   );

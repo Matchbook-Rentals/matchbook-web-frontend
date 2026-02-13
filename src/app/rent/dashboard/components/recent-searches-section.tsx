@@ -46,7 +46,6 @@ export const RecentSearchesSection = ({ searches }: RecentSearchesSectionProps) 
       <SectionEmptyState
         imageSrc="/empty-states/no-searches.png"
         title="No recent searches"
-        subtitle="Start exploring rentals to see your searches here"
       />
     </section>
   );
