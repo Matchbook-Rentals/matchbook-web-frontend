@@ -279,6 +279,7 @@ export default async function BookingDetailsPage({ params }: BookingDetailsPageP
     matchId: booking.matchId,
     leaseDocumentId,
     listingId: booking.listing.id,
+    hostId: host.id,
   };
 
   const navbarUser = user ? {

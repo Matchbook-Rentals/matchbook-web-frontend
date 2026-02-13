@@ -5,6 +5,7 @@ import { Copy, Package, Calendar, Home, MapPin, FileText } from "lucide-react";
 import { useState } from "react";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
+import BookingDateModificationModal from "@/components/BookingDateModificationModal";
 
 interface PropertyDetailsSectionProps {
   title: string;
@@ -19,6 +20,7 @@ interface PropertyDetailsSectionProps {
   matchId?: string;
   leaseDocumentId?: string | null;
   listingId?: string;
+  hostId?: string;
 }
 
 export default function PropertyDetailsSection({
@@ -34,9 +36,11 @@ export default function PropertyDetailsSection({
   matchId,
   leaseDocumentId,
   listingId,
+  hostId,
 }: PropertyDetailsSectionProps) {
   const router = useRouter();
   const [copiedAddress, setCopiedAddress] = useState(false);
+  const [modifyDatesOpen, setModifyDatesOpen] = useState(false);
 
   const handleCopyAddress = async () => {
     try {
@@ -83,9 +87,7 @@ export default function PropertyDetailsSection({
   };
 
   const handleModifyDates = () => {
-    if (bookingId) {
-      router.push(`/app/rent/booking/${bookingId}/modify-dates`);
-    }
+    setModifyDatesOpen(true);
   };
 
   return (
@@ -180,6 +182,20 @@ export default function PropertyDetailsSection({
           <span className="text-gray-900 text-sm">View Lease</span>
         </button>
       </div>
+
+      {bookingId && hostId && (
+        <BookingDateModificationModal
+          isOpen={modifyDatesOpen}
+          onOpenChange={setModifyDatesOpen}
+          booking={{
+            id: bookingId,
+            startDate,
+            endDate,
+            listing: { title },
+          }}
+          recipientId={hostId}
+        />
+      )}
     </div>
   );
 }
