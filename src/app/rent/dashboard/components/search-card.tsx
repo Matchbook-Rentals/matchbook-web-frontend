@@ -12,8 +12,8 @@ interface SearchCardProps {
 
 export const SearchCard = ({ trip, compact = false }: SearchCardProps) => (
   <Link
-    href={`/guest/rent/searches/${trip.id}`}
-    className="flex w-fit h-[52px] items-center gap-3 px-3 hover:bg-gray-50 bg-inherit rounded-[10px] transition-colors group"
+    href={`/search?tripId=${trip.id}`}
+    className="flex w-fit h-[52px] items-center gap-3 pl-0 pr-3 hover:bg-gray-50 bg-inherit rounded-[10px] transition-colors group"
   >
     <div className="flex w-8 h-8 items-center justify-center shrink-0 rounded-[10px] border border-[#EAECF0] bg-background shadow-[0_1px_2px_0_rgba(16,24,40,0.05)]">
       <Home size={20} className="text-gray-600" />

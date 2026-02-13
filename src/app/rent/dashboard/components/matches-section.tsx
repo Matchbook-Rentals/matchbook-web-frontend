@@ -10,9 +10,9 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { SectionEmptyState } from './section-empty-state';
-import { SectionHeader } from './section-header';
 import type { DashboardMatch } from '@/app/actions/renter-dashboard';
 
 interface MatchesSectionProps {
@@ -58,16 +58,6 @@ export const MatchesSection = ({ matches }: MatchesSectionProps) => {
     });
   }, [api]);
 
-  if (matches.length === 0) return (
-    <section className="mb-8">
-      <SectionHeader title="Your Matches" />
-      <SectionEmptyState
-        imageSrc="/empty-states/no-matches.png"
-        title="No matches yet"
-      />
-    </section>
-  );
-
   const handleBookNow = (matchId: string) => {
     router.push(`/app/rent/match/${matchId}/lease-signing`);
   };
@@ -94,70 +84,84 @@ export const MatchesSection = ({ matches }: MatchesSectionProps) => {
 
   return (
     <section className="mb-8 overflow-x-hidden">
-      <SectionHeader 
-        title="Your Matches"
-        inlineActions
-        actions={
-          showNavigation ? (
-            <div className="flex items-center gap-1">
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => api?.scrollPrev()}
-                disabled={!canScrollPrev}
-                className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
-              >
-                <ChevronLeft className="h-3.5 w-3.5" />
-                <span className="sr-only">Previous matches</span>
-              </Button>
-              <Button
-                variant="outline"
-                size="icon"
-                onClick={() => api?.scrollNext()}
-                disabled={!canScrollNext}
-                className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
-              >
-                <ChevronRight className="h-3.5 w-3.5" />
-                <span className="sr-only">Next matches</span>
-              </Button>
-            </div>
-          ) : undefined
-        }
-      />
+      <Accordion type="single" collapsible defaultValue="matches">
+        <AccordionItem value="matches" className="border-b-0">
+          <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
+            <span className="font-poppins font-semibold text-[#484a54] text-sm">
+              Your Matches
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            {matches.length === 0 ? (
+              <SectionEmptyState
+                imageSrc="/empty-states/no-matches.png"
+                title="No matches yet"
+              />
+            ) : (
+              <>
+                <Carousel
+                  setApi={setApi}
+                  opts={{
+                    align: 'start',
+                    loop: false,
+                    slidesToScroll: 1,
+                  }}
+                  className="w-full"
+                  keyboardControls={false}
+                >
+                  <CarouselContent className="-ml-6">
+                    {matchSlides.map((slideMatches, idx) => (
+                      <CarouselItem key={idx} className="pl-6 basis-full">
+                        <div className="flex flex-wrap gap-6">
+                          {slideMatches.map((match, matchIdx) => {
+                            const globalIndex = idx * cardsPerSlide + matchIdx;
+                            return (
+                              <HomepageListingCard
+                                key={match.id}
+                                listing={matchListings[globalIndex] as any}
+                                badge="matched"
+                                matchId={match.id}
+                                tripId={match.tripId}
+                                onBookNow={handleBookNow}
+                                initialFavorited={true}
+                              />
+                            );
+                          })}
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
 
-      <Carousel
-        setApi={setApi}
-        opts={{
-          align: 'start',
-          loop: false,
-          slidesToScroll: 1,
-        }}
-        className="w-full"
-        keyboardControls={false}
-      >
-        <CarouselContent className="-ml-6">
-          {matchSlides.map((slideMatches, idx) => (
-            <CarouselItem key={idx} className="pl-6 basis-full">
-              <div className="flex flex-wrap gap-6">
-                {slideMatches.map((match, matchIdx) => {
-                  const globalIndex = idx * cardsPerSlide + matchIdx;
-                  return (
-                    <HomepageListingCard
-                      key={match.id}
-                      listing={matchListings[globalIndex] as any}
-                      badge="matched"
-                      matchId={match.id}
-                      tripId={match.tripId}
-                      onBookNow={handleBookNow}
-                      initialFavorited={true}
-                    />
-                  );
-                })}
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+                {showNavigation && (
+                  <div className="flex items-center gap-1 mt-4 ml-[2px]">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => api?.scrollPrev()}
+                      disabled={!canScrollPrev}
+                      className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                      <span className="sr-only">Previous matches</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => api?.scrollNext()}
+                      disabled={!canScrollNext}
+                      className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                    >
+                      <ChevronRight className="h-3.5 w-3.5" />
+                      <span className="sr-only">Next matches</span>
+                    </Button>
+                  </div>
+                )}
+              </>
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </section>
   );
 };

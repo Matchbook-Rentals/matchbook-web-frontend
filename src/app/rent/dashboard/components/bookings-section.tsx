@@ -12,8 +12,8 @@ import {
   CarouselContent,
   CarouselItem,
 } from '@/components/ui/carousel';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { SectionEmptyState } from './section-empty-state';
-import { SectionHeader } from './section-header';
 import { formatDateRange, formatOccupants } from '../lib/dashboard-helpers';
 import type { DashboardBooking } from '@/app/actions/renter-dashboard';
 
@@ -45,130 +45,136 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
     });
   }, [api]);
 
-  if (bookings.length === 0) return (
-    <section className="mb-8">
-      <SectionHeader title="Bookings" />
-      <SectionEmptyState
-        imageSrc="/empty-states/no-bookings.png"
-        title="No bookings yet"
-      />
-    </section>
-  );
-
   // Group bookings into pairs (showing 2 stacked vertically per slide)
   const bookingSlides = [];
   for (let i = 0; i < bookings.length; i += 2) {
     bookingSlides.push(bookings.slice(i, i + 2));
   }
 
+  const showNavigation = bookings.length > 2;
+
   return (
     <section className="mb-8 overflow-x-hidden">
       <div className="max-w-[600px]">
-        <SectionHeader 
-          title="Bookings"
-          inlineActions
-          actions={
-            bookings.length > 2 ? (
-              <div className="flex items-center gap-1">
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => api?.scrollPrev()}
-                  disabled={!canScrollPrev}
-                  className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
-                >
-                  <ChevronLeft className="h-3.5 w-3.5" />
-                  <span className="sr-only">Previous bookings</span>
-                </Button>
-                <Button
-                  variant="outline"
-                  size="icon"
-                  onClick={() => api?.scrollNext()}
-                  disabled={!canScrollNext}
-                  className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
-                >
-                  <ChevronRight className="h-3.5 w-3.5" />
-                  <span className="sr-only">Next bookings</span>
-                </Button>
-              </div>
-            ) : undefined
-          }
-        />
-
-        <Carousel
-          setApi={setApi}
-          opts={{
-            align: 'start',
-            loop: false,
-            slidesToScroll: 1,
-          }}
-          className="w-full"
-          keyboardControls={false}
-        >
-          <CarouselContent className="-ml-3">
-            {bookingSlides.map((slideBookings, idx) => (
-              <CarouselItem key={idx} className="pl-3 basis-full">
-                <div className="flex flex-col gap-4">
-                  {slideBookings.map((booking) => (
-                    <Card
-                      key={booking.id}
-                      className="w-full bg-white rounded-[15px] border-0 shadow-none"
-                    >
-                      <CardContent className="p-0 h-full">
-                        <div className="flex flex-col sm:flex-row items-stretch h-full overflow-hidden">
-                          <div className="relative flex-shrink-0 w-full sm:w-[207px] h-[200px] sm:h-auto">
-                            <Image
-                              src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
-                              alt={booking.listing?.title || 'Property'}
-                              fill
-                              className="object-cover sm:rounded-l-xl rounded-t-xl sm:rounded-tr-none"
-                            />
-                          </div>
-
-                          <div className="flex flex-col flex-1 sm:pl-6 sm:pr-3 p-4 sm:p-0 min-w-0 justify-between">
-                            <div className="flex flex-col gap-2 min-w-0">
-                              <h3 className="font-poppins font-medium text-[#373940] text-base truncate">
-                                {booking.listing?.title || 'Untitled Property'}
-                              </h3>
-                              <p className="font-poppins font-normal text-[#777b8b] text-xs">
-                                {formatDateRange(booking.startDate, booking.endDate)}
-                              </p>
-                              <p className="font-poppins font-normal text-[#777b8b] text-xs">
-                                {booking.listing?.locationString || 'Location not available'}
-                              </p>
-                              {booking.trip && (
-                                <p className="font-poppins font-normal text-[#777b8b] text-xs">
-                                  {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
-                                </p>
-                              )}
-                            </div>
-                            <div className="flex flex-wrap items-center gap-3 pt-2">
-                              <Button
-                                variant="outline"
-                                className="h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold text-[11px]"
-                                asChild
+        <Accordion type="single" collapsible defaultValue="bookings">
+          <AccordionItem value="bookings" className="border-b-0">
+            <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
+              <span className="font-poppins font-semibold text-[#484a54] text-sm">
+                Bookings
+              </span>
+            </AccordionTrigger>
+            <AccordionContent>
+              {bookings.length === 0 ? (
+                <SectionEmptyState
+                  imageSrc="/empty-states/no-bookings.png"
+                  title="No bookings yet"
+                />
+              ) : (
+                <>
+                  <Carousel
+                    setApi={setApi}
+                    opts={{
+                      align: 'start',
+                      loop: false,
+                      slidesToScroll: 1,
+                    }}
+                    className="w-full"
+                    keyboardControls={false}
+                  >
+                    <CarouselContent className="-ml-3">
+                      {bookingSlides.map((slideBookings, idx) => (
+                        <CarouselItem key={idx} className="pl-3 basis-full">
+                          <div className="flex flex-col gap-4">
+                            {slideBookings.map((booking) => (
+                              <Card
+                                key={booking.id}
+                                className="w-full bg-white rounded-[15px] border-0 shadow-none"
                               >
-                                <Link href={`/rent/bookings/${booking.id}`}>View Details</Link>
-                              </Button>
-                              {booking.listing?.userId && (
-                                <Button
-                                  className="h-[29px] px-3.5 py-2.5 rounded-lg bg-[#3c8787] hover:bg-[#3c8787]/90 text-white font-poppins font-semibold text-[11px]"
-                                  asChild
-                                >
-                                  <Link href={`/app/rent/messages?userId=${booking.listing.userId}`}>Message Host</Link>
-                                </Button>
-                              )}
-                            </div>
+                                <CardContent className="p-0 h-full">
+                                  <div className="flex flex-col sm:flex-row items-stretch h-full overflow-hidden">
+                                    <div className="relative flex-shrink-0 w-full sm:w-[207px] h-[200px] sm:h-auto">
+                                      <Image
+                                        src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
+                                        alt={booking.listing?.title || 'Property'}
+                                        fill
+                                        className="object-cover sm:rounded-l-xl rounded-t-xl sm:rounded-tr-none"
+                                      />
+                                    </div>
+
+                                    <div className="flex flex-col flex-1 sm:pl-6 sm:pr-3 p-4 sm:p-0 min-w-0 justify-between">
+                                      <div className="flex flex-col gap-2 min-w-0">
+                                        <h3 className="font-poppins font-medium text-[#373940] text-base truncate">
+                                          {booking.listing?.title || 'Untitled Property'}
+                                        </h3>
+                                        <p className="font-poppins font-normal text-[#777b8b] text-xs">
+                                          {formatDateRange(booking.startDate, booking.endDate)}
+                                        </p>
+                                        <p className="font-poppins font-normal text-[#777b8b] text-xs">
+                                          {booking.listing?.locationString || 'Location not available'}
+                                        </p>
+                                        {booking.trip && (
+                                          <p className="font-poppins font-normal text-[#777b8b] text-xs">
+                                            {formatOccupants(booking.trip.numAdults, booking.trip.numChildren, booking.trip.numPets)}
+                                          </p>
+                                        )}
+                                      </div>
+                                      <div className="flex flex-wrap items-center gap-3 pt-2">
+                                        <Button
+                                          variant="outline"
+                                          className="h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold text-[11px]"
+                                          asChild
+                                        >
+                                          <Link href={`/rent/bookings/${booking.id}`}>View Details</Link>
+                                        </Button>
+                                        {booking.listing?.userId && (
+                                          <Button
+                                            className="h-[29px] px-3.5 py-2.5 rounded-lg bg-[#3c8787] hover:bg-[#3c8787]/90 text-white font-poppins font-semibold text-[11px]"
+                                            asChild
+                                          >
+                                            <Link href={`/app/rent/messages?userId=${booking.listing.userId}`}>Message Host</Link>
+                                          </Button>
+                                        )}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </CardContent>
+                              </Card>
+                            ))}
                           </div>
-                        </div>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  </Carousel>
+
+                  {showNavigation && (
+                    <div className="flex items-center gap-1 mt-4 ml-[2px]">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => api?.scrollPrev()}
+                        disabled={!canScrollPrev}
+                        className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                      >
+                        <ChevronLeft className="h-3.5 w-3.5" />
+                        <span className="sr-only">Previous bookings</span>
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => api?.scrollNext()}
+                        disabled={!canScrollNext}
+                        className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                      >
+                        <ChevronRight className="h-3.5 w-3.5" />
+                        <span className="sr-only">Next bookings</span>
+                      </Button>
+                    </div>
+                  )}
+                </>
+              )}
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
       </div>
     </section>
   );

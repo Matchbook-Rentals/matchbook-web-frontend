@@ -2,8 +2,8 @@
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { SectionEmptyState } from './section-empty-state';
-import { SectionHeader } from './section-header';
 import { useToast } from '@/components/ui/use-toast';
 import { optimisticRemoveFavorite, optimisticFavorite } from '@/app/actions/favorites';
 import { getMoreFavorites } from '@/app/actions/renter-dashboard';
@@ -135,7 +135,7 @@ export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites
       if (!lastFavorite) return;
 
       const result = await getMoreFavorites(lastFavorite.createdAt);
-      
+
       setAllFavorites((prev) => [...prev, ...result.favorites]);
       setHasMore(result.hasMore);
     } catch (error) {
@@ -170,42 +170,51 @@ export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites
     return () => observer.disconnect();
   }, [hasMore, isLoading, loadMoreFavorites]);
 
-  if (visibleFavorites.length === 0) return (
-    <section className="mb-8">
-      <SectionHeader title="Favorites" />
-      <SectionEmptyState
-        imageSrc="/empty-states/no-favorites.png"
-        title="No favorites yet"
-      />
-    </section>
-  );
-
   return (
     <section className="mb-8 overflow-x-hidden">
-      <SectionHeader title="Favorites" />
-      <div ref={gridRef} className="flex flex-wrap gap-6">
-        {visibleFavorites.map((fav, index) => (
-          <HomepageListingCard
-            key={fav.id}
-            listing={favoriteListings[index] as any}
-            badge="liked"
-            tripId={fav.tripId}
-            isApplied={fav.isApplied}
-            initialFavorited={true}
-            onUnlike={handleUnlike}
-            isSignedIn={true}
-          />
-        ))}
-      </div>
+      <Accordion type="single" collapsible defaultValue="favorites">
+        <AccordionItem value="favorites" className="border-b-0">
+          <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
+            <span className="font-poppins font-semibold text-[#484a54] text-sm">
+              Favorites
+            </span>
+          </AccordionTrigger>
+          <AccordionContent>
+            {visibleFavorites.length === 0 ? (
+              <SectionEmptyState
+                imageSrc="/empty-states/no-favorites.png"
+                title="No favorites yet"
+              />
+            ) : (
+              <>
+                <div ref={gridRef} className="flex flex-wrap gap-6">
+                  {visibleFavorites.map((fav, index) => (
+                    <HomepageListingCard
+                      key={fav.id}
+                      listing={favoriteListings[index] as any}
+                      badge="liked"
+                      tripId={fav.tripId}
+                      isApplied={fav.isApplied}
+                      initialFavorited={true}
+                      onUnlike={handleUnlike}
+                      isSignedIn={true}
+                    />
+                  ))}
+                </div>
 
-      {/* Loading indicator and infinite scroll trigger */}
-      {(hasMore || isLoading) && (
-        <div ref={loadingRef} className="flex justify-center items-center py-8">
-          {isLoading && (
-            <div className="text-sm text-gray-500">Loading more favorites...</div>
-          )}
-        </div>
-      )}
+                {/* Loading indicator and infinite scroll trigger */}
+                {(hasMore || isLoading) && (
+                  <div ref={loadingRef} className="flex justify-center items-center py-8">
+                    {isLoading && (
+                      <div className="text-sm text-gray-500">Loading more favorites...</div>
+                    )}
+                  </div>
+                )}
+              </>
+            )}
+          </AccordionContent>
+        </AccordionItem>
+      </Accordion>
     </section>
   );
 };
