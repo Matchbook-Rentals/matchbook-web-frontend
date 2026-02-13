@@ -56,7 +56,7 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
   return (
     <section className="mb-8 overflow-x-hidden">
       <div className="max-w-[600px]">
-        <Accordion type="single" collapsible defaultValue="bookings">
+        <Accordion type="single" collapsible>
           <AccordionItem value="bookings" className="border-b-0">
             <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
               <span className="font-poppins font-semibold text-[#484a54] text-sm">

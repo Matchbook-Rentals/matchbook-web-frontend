@@ -17,9 +17,10 @@ import type { DashboardMatch } from '@/app/actions/renter-dashboard';
 
 interface MatchesSectionProps {
   matches: DashboardMatch[];
+  defaultOpen?: boolean;
 }
 
-export const MatchesSection = ({ matches }: MatchesSectionProps) => {
+export const MatchesSection = ({ matches, defaultOpen = false }: MatchesSectionProps) => {
   const router = useRouter();
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -84,7 +85,7 @@ export const MatchesSection = ({ matches }: MatchesSectionProps) => {
 
   return (
     <section className="mb-8 overflow-x-hidden">
-      <Accordion type="single" collapsible defaultValue="matches">
+      <Accordion type="single" collapsible defaultValue={defaultOpen ? "matches" : undefined}>
         <AccordionItem value="matches" className="border-b-0">
           <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
             <span className="font-poppins font-semibold text-[#484a54] text-sm">

@@ -13,9 +13,10 @@ import type { DashboardFavorite } from '@/app/actions/renter-dashboard';
 interface FavoritesSectionProps {
   favorites: DashboardFavorite[];
   hasMoreFavorites: boolean;
+  defaultOpen?: boolean;
 }
 
-export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites: initialHasMore }: FavoritesSectionProps) => {
+export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites: initialHasMore, defaultOpen = false }: FavoritesSectionProps) => {
   const [allFavorites, setAllFavorites] = useState<DashboardFavorite[]>(initialFavorites);
   const [hasMore, setHasMore] = useState(initialHasMore);
   const [isLoading, setIsLoading] = useState(false);
@@ -172,7 +173,7 @@ export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites
 
   return (
     <section className="mb-8 overflow-x-hidden">
-      <Accordion type="single" collapsible defaultValue="favorites">
+      <Accordion type="single" collapsible defaultValue={defaultOpen ? "favorites" : undefined}>
         <AccordionItem value="favorites" className="border-b-0">
           <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
             <span className="font-poppins font-semibold text-[#484a54] text-sm">

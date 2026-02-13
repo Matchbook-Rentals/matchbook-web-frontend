@@ -16,7 +16,7 @@ const PLACEHOLDER_IMAGE = '/stock_interior.webp';
 export const ApplicationsSection = ({ applications }: ApplicationsSectionProps) => {
   return (
     <section className="mb-8 overflow-x-hidden">
-      <Accordion type="single" collapsible defaultValue="applications">
+      <Accordion type="single" collapsible>
         <AccordionItem value="applications" className="border-b-0">
           <div className="flex items-center justify-between">
             <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1 flex-1">

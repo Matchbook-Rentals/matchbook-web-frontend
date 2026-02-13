@@ -16,9 +16,10 @@ import type { DashboardTrip } from '@/app/actions/renter-dashboard';
 
 interface RecentSearchesSectionProps {
   searches: DashboardTrip[];
+  defaultOpen?: boolean;
 }
 
-export const RecentSearchesSection = ({ searches }: RecentSearchesSectionProps) => {
+export const RecentSearchesSection = ({ searches, defaultOpen = false }: RecentSearchesSectionProps) => {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
@@ -51,7 +52,7 @@ export const RecentSearchesSection = ({ searches }: RecentSearchesSectionProps) 
   return (
     <section className="mb-8 overflow-x-hidden">
       <div className="max-w-[400px]">
-        <Accordion type="single" collapsible defaultValue="recent-searches">
+        <Accordion type="single" collapsible defaultValue={defaultOpen ? "recent-searches" : undefined}>
           <AccordionItem value="recent-searches" className="border-b-0">
             <AccordionTrigger className="py-1 mb-4 hover:no-underline justify-start gap-1">
               <span className="font-poppins font-semibold text-[#484a54] text-sm">
