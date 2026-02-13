@@ -4,6 +4,7 @@ import prisma from "@/lib/prismadb";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { Trip, Booking, Application } from "@prisma/client";
 import RenterDashboardClient from './renter-dashboard-client';
+import { getDemoData } from './lib/demo-data';
 
 interface SearchParams {
   mode?: string;
@@ -22,9 +23,13 @@ export default async function RenterDashboardPage({
   let data;
 
   if (mode === 'demo' && isAdmin && userId) {
-    // Load demo data - use normal dashboard data but mark as demo mode
-    // This ensures all data has proper structure
-    data = await getRenterDashboardData();
+    // Load hardcoded sample data so QA can see every section populated
+    data = getDemoData(
+      userId,
+      user?.firstName ?? null,
+      user?.lastName ?? null,
+      user?.imageUrl ?? '',
+    );
   } else if (mode === 'empty' && isAdmin && userId) {
     // Log user data for debugging, but show empty states
     const allTrips = await prisma.trip.findMany({
