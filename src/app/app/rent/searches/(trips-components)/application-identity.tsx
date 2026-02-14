@@ -298,7 +298,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
       }));
 
   return (
-    <Card className={`${isMobile ? '' : 'h-[534px]'} w-full px-0 py-6 rounded-xl border-none shadow-none`}>
+    <Card className="w-full px-0 rounded-xl border-none shadow-none">
       <CardContent className="p-0 flex flex-col gap-8 h-full">
         <div className="flex flex-col items-start gap-5 w-full">
           <h2 className="[font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-normal">
@@ -340,7 +340,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                       }
                     }}
                   >
-                    <SelectTrigger className={`h-12 px-3 py-2 bg-white rounded-lg border shadow-shadows-shadow-xs ${error?.idType ? 'border-red-500' : 'border-[#d0d5dd]'}`}>
+                    <SelectTrigger className={`h-12 px-3 py-2 bg-background rounded-lg border shadow-shadows-shadow-xs ${error?.idType ? 'border-red-500' : 'border-[#d0d5dd]'}`}>
                       <SelectValue
                         placeholder="Select ID Type"
                         className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
@@ -393,7 +393,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                     }
                   }}
                   placeholder="Enter ID Number"
-                  className={`${inputClassName || `${isMobile ? 'py-3' : 'h-12'} px-3 ${isMobile ? '' : 'py-2'} bg-white rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${error?.idNumber ? 'border-red-500' : ''}`}
+                  className={`${inputClassName || `${isMobile ? 'py-3' : 'h-12'} px-3 ${isMobile ? '' : 'py-2'} bg-background rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${error?.idNumber ? 'border-red-500' : ''}`}
                 />
                 {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
               </div>
@@ -445,7 +445,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                   }}
                   className="uploadthing-custom w-full"
                   appearance={{
-                    button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col h-[140px] gap-[35px] px-[100px] py-[21px]'} box-border items-center justify-center w-full bg-white rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
+                    button: `flex ${isMobile ? 'flex-row gap-3 px-4 py-4' : 'flex-col h-[140px] gap-[35px] px-[100px] py-[21px]'} box-border items-center justify-center w-full bg-background rounded-xl border border-dashed border-[#036e49] cursor-pointer hover:bg-gray-50 transition-colors text-inherit`,
                     allowedContent: "hidden",
                   }}
                   onUploadBegin={(name) => {
