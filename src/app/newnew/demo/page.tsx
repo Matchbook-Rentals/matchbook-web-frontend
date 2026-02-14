@@ -18,7 +18,7 @@ function formatAddress(listing: any): string {
 
 export default async function StaticDemoPage() {
   // Get current user for navbar
-  const { userId } = auth();
+  const { userId } = await auth();
   const user = userId ? await prisma.user.findUnique({
     where: { id: userId },
     select: {
