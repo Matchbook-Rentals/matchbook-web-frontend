@@ -90,13 +90,13 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
                                 className="w-full bg-white rounded-[15px] border-0 shadow-none"
                               >
                                 <CardContent className="p-0 h-full">
-                                  <div className="flex flex-col sm:flex-row items-stretch h-full overflow-hidden">
-                                    <div className="relative flex-shrink-0 w-full sm:w-[207px] h-[200px] sm:h-auto">
+                                  <div className="flex flex-col sm:flex-row items-stretch h-full overflow-hidden rounded-[15px]">
+                                    <div className="relative flex-shrink-0 w-full sm:w-[207px] h-[200px] sm:h-auto overflow-hidden rounded-[15px]">
                                       <Image
                                         src={booking.listing?.listingImages?.[0]?.url || booking.listing?.imageSrc || PLACEHOLDER_IMAGE}
                                         alt={booking.listing?.title || 'Property'}
                                         fill
-                                        className="object-cover sm:rounded-l-xl rounded-t-xl sm:rounded-tr-none"
+                                        className="object-cover"
                                       />
                                     </div>
 
