@@ -8,7 +8,7 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Card, CardContent } from '@/components/ui/card';
 import ShareButton from '@/components/ui/share-button';
-import { usePathname, useParams } from 'next/navigation';
+
 
 interface PublicListingDetailsViewProps {
   listing: ListingAndImages;
@@ -28,7 +28,7 @@ interface PublicListingDetailsViewProps {
   onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
 }
 
-const baseUrl = process.env.NEXT_PUBLIC_URL || "";
+const baseUrl = process.env.NEXT_PUBLIC_URL || "https://matchbookrentals.com";
 
 export default function PublicListingDetailsView({
   listing,
@@ -44,8 +44,6 @@ export default function PublicListingDetailsView({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
-  const pathname = usePathname();
-  const { tripId } = useParams();
 
   // Set up the map
   React.useEffect(() => {
@@ -83,9 +81,9 @@ export default function PublicListingDetailsView({
               {listing.title || "Your Home Away From Home"}
             </h1>
             <ShareButton
-              title={`${listing.title} on Matchbook`}
-              text={`Check out this listing on Matchbook: ${pathname}`}
-              url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+              title={`${listing.title} on MatchBook`}
+              text={`Check out this listing on MatchBook!`}
+              url={`${baseUrl}/search/listing/${listing.id}`}
             />
           </div>
           
@@ -95,9 +93,9 @@ export default function PublicListingDetailsView({
               {listing.title || "Your Home Away From Home"}
             </h2>
             <ShareButton
-              title={`${listing.title} on Matchbook`}
-              text={`Check out this listing on Matchbook: ${pathname}`}
-              url={`${baseUrl}/guest/trips/${tripId}/listing/${listing.id}`}
+              title={`${listing.title} on MatchBook`}
+              text={`Check out this listing on MatchBook!`}
+              url={`${baseUrl}/search/listing/${listing.id}`}
             />
           </div>
         </div>
