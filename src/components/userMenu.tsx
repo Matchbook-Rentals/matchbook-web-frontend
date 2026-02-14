@@ -158,9 +158,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   ] : [
     // Renter side menu items - open to all users
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'searches', label: 'Searches', href: '/app/rent/searches', section: 1 },
-    { id: 'application', label: 'Applications', href: '/app/rent/applications', section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', section: 1 },
+    { id: 'renter-dashboard', label: 'Dashboard', href: '/rent/dashboard', section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', section: 2 },
     {
       id: 'switch-mode',
@@ -173,7 +171,6 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'verification', label: 'MatchBook Renter Verification', href: '/verification', section: 4 },
     { id: 'refer-host', label: 'Refer a Host - Earn $50', href: '/refer-host', section: 4 },
     { id: 'new-search', label: 'New Search', href: '/newnew', adminOnlyVisible: true, section: 4 },
-    { id: 'renter-dashboard', label: 'Renter Dashboard', href: '/rent/dashboard', adminOnlyVisible: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ];
 
