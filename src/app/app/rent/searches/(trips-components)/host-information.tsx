@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useTransition } from 'react';
+import React, { useState, useTransition, useEffect, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Star as StarIcon, ChevronDown } from 'lucide-react';
@@ -31,6 +31,9 @@ interface HostInformationProps {
   listingState?: { hasApplied: boolean; isMatched: boolean } | null;
   onApplyClick?: () => void;
   onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
+  requestOpenDates?: number;
+  requestApply?: number;
+  onMobileStateChange?: (state: { hasDates: boolean; startDate: Date | null; endDate: Date | null; guests: { adults: number; children: number; pets: number } }) => void;
 }
 
 const HostInformation: React.FC<HostInformationProps> = ({
@@ -41,6 +44,9 @@ const HostInformation: React.FC<HostInformationProps> = ({
   listingState = null,
   onApplyClick,
   onDatesSelected,
+  requestOpenDates = 0,
+  requestApply = 0,
+  onMobileStateChange,
 }) => {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -58,6 +64,36 @@ const HostInformation: React.FC<HostInformationProps> = ({
     pets: tripContext?.numPets ?? 0,
   });
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  // Report trip state to parent
+  const hasDates = !!(popoverStart && popoverEnd);
+  useEffect(() => {
+    onMobileStateChange?.({ hasDates, startDate: popoverStart, endDate: popoverEnd, guests });
+  }, [hasDates, popoverStart, popoverEnd, guests, onMobileStateChange]);
+
+  // External trigger: open dates popover + scroll into view
+  useEffect(() => {
+    if (requestOpenDates > 0) {
+      cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => setShowDatesPopover(true), 400);
+    }
+  }, [requestOpenDates]);
+
+  // External trigger: apply from footer
+  useEffect(() => {
+    if (requestApply > 0) {
+      if (hasDates && guests.adults > 0) {
+        handleApplyClick();
+      } else if (hasDates) {
+        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => handleRentersOpen(true), 400);
+      } else {
+        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => setShowDatesPopover(true), 400);
+      }
+    }
+  }, [requestApply]);
 
   const host = listing.user;
 
@@ -89,7 +125,6 @@ const HostInformation: React.FC<HostInformationProps> = ({
   const handleClearDates = () => { setPopoverStart(null); setPopoverEnd(null); };
   const handleClearRenters = () => setGuests({ adults: 0, children: 0, pets: 0 });
 
-  const hasDates = !!(popoverStart && popoverEnd);
   const hasRenterInfo = guests.adults > 0;
   const totalRenters = guests.adults + guests.children;
 
@@ -131,7 +166,7 @@ const HostInformation: React.FC<HostInformationProps> = ({
   const isApplyButtonDisabled = hasApplied || isMatched || isPending;
 
   return (
-    <Card className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
+    <Card ref={cardRef} className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
       <CardContent className="flex flex-col items-start gap-5 py-4 px-0">
         {/* Trip details: dates + renters + apply */}
         <div className="flex flex-col gap-2 w-full">

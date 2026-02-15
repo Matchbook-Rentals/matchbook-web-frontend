@@ -1,5 +1,5 @@
 'use client'
-import React, { useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
 import { ListingAndImages } from '@/types';
 import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
@@ -8,6 +8,8 @@ import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Card, CardContent } from '@/components/ui/card';
 import ShareButton from '@/components/ui/share-button';
+import { BrandButton } from '@/components/ui/brandButton';
+import { format } from 'date-fns';
 
 
 interface PublicListingDetailsViewProps {
@@ -44,6 +46,29 @@ export default function PublicListingDetailsView({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
+
+  // Mobile footer state
+  const [mobileState, setMobileState] = useState<{
+    hasDates: boolean;
+    startDate: Date | null;
+    endDate: Date | null;
+    guests: { adults: number; children: number; pets: number };
+  }>({ hasDates: false, startDate: null, endDate: null, guests: { adults: 0, children: 0, pets: 0 } });
+  const [requestOpenDates, setRequestOpenDates] = useState(0);
+  const [requestApply, setRequestApply] = useState(0);
+  const handleMobileStateChange = useCallback((state: typeof mobileState) => {
+    setMobileState(state);
+  }, []);
+
+  // Price range for footer
+  const getPriceRange = () => {
+    if (!listing.monthlyPricing || listing.monthlyPricing.length === 0) {
+      return { min: listing.price || 0, max: listing.price || 0, hasRange: false };
+    }
+    const prices = listing.monthlyPricing.map(p => p.price);
+    return { min: Math.min(...prices), max: Math.max(...prices), hasRange: Math.min(...prices) !== Math.max(...prices) };
+  };
+  const priceRange = getPriceRange();
 
   // Set up the map
   React.useEffect(() => {
@@ -112,6 +137,9 @@ export default function PublicListingDetailsView({
               listingState={listingState}
               onApplyClick={onApplyClick}
               onDatesSelected={onDatesSelected}
+              requestOpenDates={requestOpenDates}
+              requestApply={requestApply}
+              onMobileStateChange={handleMobileStateChange}
             />
 
             <Card className="border-none shadow-none rounded-xl mt-5">
@@ -185,6 +213,61 @@ export default function PublicListingDetailsView({
           </div>
         </div>
       </div>
+
+      {/* Mobile sticky footer */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 px-4 py-3 lg:hidden">
+        <div className="flex items-center justify-between gap-5">
+          <div className="flex-1 flex flex-col gap-1">
+            {/* Price row */}
+            <div className="flex items-center gap-6">
+              <div className="flex items-baseline gap-1">
+                <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
+                  {priceRange.hasRange
+                    ? `$${priceRange.min.toLocaleString()}– ${priceRange.max.toLocaleString()}`
+                    : `$${priceRange.min.toLocaleString()}`
+                  }
+                </span>
+                <span className="font-normal text-[#5d606d] text-xs font-['Poppins']">Per Month</span>
+              </div>
+              {listing.depositSize && (
+                <div className="flex items-baseline gap-1">
+                  <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
+                    ${listing.depositSize.toLocaleString()}
+                  </span>
+                  <span className="font-normal text-[#5d606d] text-xs font-['Poppins']">Deposit</span>
+                </div>
+              )}
+            </div>
+            {/* Dates row */}
+            {mobileState.startDate && mobileState.endDate && (
+              <div className="text-[#373940] text-[11px] font-normal font-['Poppins'] leading-normal">
+                {format(mobileState.startDate, 'd MMM yy')} – {format(mobileState.endDate, 'd MMM yyyy')}
+              </div>
+            )}
+            {/* Guests row */}
+            {mobileState.guests.adults > 0 && (
+              <div className="text-[#373940] text-[11px] font-normal font-['Poppins'] leading-normal">
+                {mobileState.guests.adults} Adult{mobileState.guests.adults !== 1 ? 's' : ''}
+                {mobileState.guests.children > 0 && `, ${mobileState.guests.children} Kid${mobileState.guests.children !== 1 ? 's' : ''}`}
+                {mobileState.guests.pets > 0 && `, ${mobileState.guests.pets} Pet${mobileState.guests.pets !== 1 ? 's' : ''}`}
+              </div>
+            )}
+          </div>
+          <BrandButton
+            size="lg"
+            className="min-w-[160px] font-semibold"
+            onClick={() => {
+              if (mobileState.hasDates) {
+                setRequestApply(prev => prev + 1);
+              } else {
+                setRequestOpenDates(prev => prev + 1);
+              }
+            }}
+          >
+            {mobileState.hasDates ? 'Apply Now' : 'Check Availability'}
+          </BrandButton>
+        </div>
+      </footer>
     </>
   );
 }

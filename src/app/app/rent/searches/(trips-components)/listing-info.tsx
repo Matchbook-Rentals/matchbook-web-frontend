@@ -28,6 +28,9 @@ interface ListingDescriptionProps {
   listingState?: { hasApplied: boolean; isMatched: boolean } | null;
   onApplyClick?: () => void;
   onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
+  requestOpenDates?: number;
+  requestApply?: number;
+  onMobileStateChange?: (state: { hasDates: boolean; startDate: Date | null; endDate: Date | null; guests: { adults: number; children: number; pets: number } }) => void;
 }
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({
@@ -41,6 +44,9 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({
   listingState,
   onApplyClick,
   onDatesSelected,
+  requestOpenDates,
+  requestApply,
+  onMobileStateChange,
 }) => {
   const calculatedPrice = trip ? calculateRent({ listing, trip }) : calculatedPriceProp;
 
@@ -68,6 +74,9 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({
         listingState={listingState}
         onApplyClick={onApplyClick}
         onDatesSelected={onDatesSelected}
+        requestOpenDates={requestOpenDates}
+        requestApply={requestApply}
+        onMobileStateChange={onMobileStateChange}
       />
 
       {isFlexible && (
