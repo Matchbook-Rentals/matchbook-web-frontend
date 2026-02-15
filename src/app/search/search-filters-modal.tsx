@@ -10,6 +10,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ChevronUp, Minus, Plus, Wifi } from 'lucide-react';
+import { Slider } from '@/components/ui/slider';
 import {
   UpdatedSingleFamilyIcon,
   UpdatedApartmentIcon,
@@ -451,6 +452,10 @@ export default function SearchFiltersModal({
 // Sub-components
 // ---------------------------------------------------------------------------
 
+const PRICE_SLIDER_MIN = 0;
+const PRICE_SLIDER_MAX = 10000;
+const PRICE_SLIDER_STEP = 50;
+
 function PriceRangeInputs({ minPrice, maxPrice, onMinChange, onMaxChange }: {
   minPrice: number | null;
   maxPrice: number | null;
@@ -462,35 +467,57 @@ function PriceRangeInputs({ minPrice, maxPrice, onMinChange, onMaxChange }: {
     return isNaN(num) ? null : num;
   };
 
+  const sliderValue = [
+    minPrice ?? PRICE_SLIDER_MIN,
+    maxPrice ?? PRICE_SLIDER_MAX,
+  ];
+
+  const handleSliderChange = (values: number[]) => {
+    onMinChange(values[0] === PRICE_SLIDER_MIN ? null : values[0]);
+    onMaxChange(values[1] === PRICE_SLIDER_MAX ? null : values[1]);
+  };
+
   return (
-    <div className="flex items-center gap-3">
-      <div className="flex-1">
-        <label className="text-xs text-gray-500 mb-1 block">Min Price</label>
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="No min"
-            value={minPrice ?? ''}
-            onChange={e => onMinChange(parsePrice(e.target.value))}
-            className="w-full pl-7 pr-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#3c8787]"
-          />
+    <div className="space-y-4">
+      <Slider
+        value={sliderValue}
+        min={PRICE_SLIDER_MIN}
+        max={PRICE_SLIDER_MAX}
+        step={PRICE_SLIDER_STEP}
+        onValueChange={handleSliderChange}
+        className="w-full"
+        rangeClassName="bg-[#5C9B9B]"
+        thumbClassName="border-[#5C9B9B] focus-visible:ring-[#5C9B9B]/30"
+      />
+      <div className="flex items-center gap-3">
+        <div className="flex-1">
+          <label className="text-xs text-gray-500 mb-1 block">Min Price</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="No min"
+              value={minPrice ?? ''}
+              onChange={e => onMinChange(parsePrice(e.target.value))}
+              className="w-full pl-7 pr-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primaryBrand"
+            />
+          </div>
         </div>
-      </div>
-      <span className="text-gray-400 pt-5">—</span>
-      <div className="flex-1">
-        <label className="text-xs text-gray-500 mb-1 block">Max Price</label>
-        <div className="relative">
-          <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="No max"
-            value={maxPrice ?? ''}
-            onChange={e => onMaxChange(parsePrice(e.target.value))}
-            className="w-full pl-7 pr-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-[#3c8787]"
-          />
+        <span className="text-gray-400 pt-5">—</span>
+        <div className="flex-1">
+          <label className="text-xs text-gray-500 mb-1 block">Max Price</label>
+          <div className="relative">
+            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm">$</span>
+            <input
+              type="text"
+              inputMode="numeric"
+              placeholder="No max"
+              value={maxPrice ?? ''}
+              onChange={e => onMaxChange(parsePrice(e.target.value))}
+              className="w-full pl-7 pr-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-primaryBrand"
+            />
+          </div>
         </div>
       </div>
     </div>
