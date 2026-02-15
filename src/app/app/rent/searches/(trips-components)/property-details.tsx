@@ -10,7 +10,7 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ listing }) => {
   return (
     <>
       {/* Desktop Property Details */}
-      <div className="flex flex-wrap w-full max-w-[424px] items-center justify-between gap-[24px_24px] relative hidden lg:flex">
+      <div className="flex flex-wrap w-full items-center justify-between gap-[24px_24px] relative hidden lg:flex">
         <div className="inline-flex items-center gap-2 relative flex-[0_0_auto]">
           <MapPin className="w-5 h-5 text-[#5d606d]" />
           <span className="relative w-fit mt-[-1.00px] font-['Poppins',Helvetica] font-normal text-[#5d606d] text-sm tracking-[0]">
