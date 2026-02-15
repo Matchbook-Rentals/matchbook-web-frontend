@@ -1,10 +1,10 @@
 'use client';
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from '@/components/ui/tooltip';
-import { add, Duration, endOfMonth, format, differenceInCalendarDays } from 'date-fns';
+import { add, Duration, endOfMonth, differenceInCalendarDays } from 'date-fns';
 import { motion, AnimatePresence } from 'framer-motion';
 
 // ─── Types ─────────────────────────────────────────────────────────
@@ -71,6 +71,41 @@ const formatDuration = (duration: Duration): string => {
   return parts.join(', ');
 };
 
+// ─── Date Input Helpers ─────────────────────────────────────────────
+
+/** Strip non-digits, cap at 6 chars, auto-insert slashes → MM/DD/YY */
+const formatShortDateInput = (raw: string): string => {
+  const digits = raw.replace(/\D/g, '').slice(0, 6);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+};
+
+/** Parse MM/DD/YY → Date. Returns null if incomplete, invalid, or date rollover. */
+const parseShortDate = (formatted: string): Date | null => {
+  const digits = formatted.replace(/\D/g, '');
+  if (digits.length !== 6) return null;
+  const mm = parseInt(digits.slice(0, 2), 10);
+  const dd = parseInt(digits.slice(2, 4), 10);
+  const yy = parseInt(digits.slice(4, 6), 10);
+  if (mm < 1 || mm > 12 || dd < 1 || dd > 31) return null;
+  const fullYear = 2000 + yy;
+  const date = new Date(fullYear, mm - 1, dd);
+  // Detect rollover (e.g. Feb 30 → Mar 2)
+  if (date.getMonth() !== mm - 1 || date.getDate() !== dd) return null;
+  date.setHours(0, 0, 0, 0);
+  return date;
+};
+
+/** Convert Date → MM/DD/YY display string */
+const toShortDisplay = (date: Date | null): string => {
+  if (!date) return '';
+  const mm = String(date.getMonth() + 1).padStart(2, '0');
+  const dd = String(date.getDate()).padStart(2, '0');
+  const yy = String(date.getFullYear() % 100).padStart(2, '0');
+  return `${mm}/${dd}/${yy}`;
+};
+
 // ─── Main Component ────────────────────────────────────────────────
 
 export default function SearchDateRange({
@@ -87,6 +122,16 @@ export default function SearchDateRange({
   const [leftMonth, setLeftMonth] = useState(() => (start ? start.getMonth() : today.getMonth()));
   const [leftYear, setLeftYear] = useState(() => (start ? start.getFullYear() : today.getFullYear()));
   const [flexibility, setFlexibility] = useState<FlexibilityValue>('exact');
+
+  // ── Text Input State ──────────────────────────────────────────────
+  const [startInputRaw, setStartInputRaw] = useState(() => toShortDisplay(start));
+  const [endInputRaw, setEndInputRaw] = useState(() => toShortDisplay(end));
+  const [startError, setStartError] = useState<string | null>(null);
+  const [endError, setEndError] = useState<string | null>(null);
+
+  // Sync text inputs when props change externally (calendar clicks)
+  useEffect(() => { setStartInputRaw(toShortDisplay(start)); setStartError(null); }, [start]);
+  useEffect(() => { setEndInputRaw(toShortDisplay(end)); setEndError(null); }, [end]);
 
   const rightMonth = leftMonth === 11 ? 0 : leftMonth + 1;
   const rightYear = leftMonth === 11 ? leftYear + 1 : leftYear;
@@ -178,11 +223,6 @@ export default function SearchDateRange({
 
   const daysSelected = start && end ? differenceInCalendarDays(end, start) : 0;
 
-  const toDateInputValue = (date: Date | null): string =>
-    date ? format(date, 'yyyy-MM-dd') : '';
-
-  const todayStr = format(today, 'yyyy-MM-dd');
-
   const isRangeValid = (s: Date, e: Date): boolean => {
     if (e <= s) return false;
     if (minimumDateRange && normalizeDate(add(s, minimumDateRange)) > e) return false;
@@ -195,13 +235,14 @@ export default function SearchDateRange({
     return true;
   };
 
-  const handleDateInput = (value: string, field: 'start' | 'end') => {
-    if (!value) {
-      if (field === 'start') handleChange(null, end);
-      else handleChange(start, null);
-      return;
-    }
-    const date = normalizeDate(new Date(value + 'T00:00:00'));
+  // ── Text Input Handlers ───────────────────────────────────────────
+
+  const applyParsedDate = (date: Date, field: 'start' | 'end') => {
+    // Set the display value directly — don't rely on useEffect round-trip
+    const display = toShortDisplay(date);
+    if (field === 'start') setStartInputRaw(display);
+    else setEndInputRaw(display);
+
     setLeftMonth(date.getMonth());
     setLeftYear(date.getFullYear());
     if (field === 'start') {
@@ -210,6 +251,100 @@ export default function SearchDateRange({
     } else {
       const keepStart = start && isRangeValid(normalizeDate(start), date);
       handleChange(keepStart ? start : null, date);
+    }
+  };
+
+  const validateDate = (formatted: string, field: 'start' | 'end'): string | null => {
+    const digits = formatted.replace(/\D/g, '');
+    if (digits.length < 6) return null; // still typing
+    const parsed = parseShortDate(formatted);
+    if (!parsed) return 'Invalid date';
+    if (parsed < today) return 'Date must be in the future';
+    if (field === 'end' && start && normalizeDate(parsed) <= normalizeDate(start)) {
+      return 'Must be after move-in date';
+    }
+    if (field === 'start' && end && normalizeDate(parsed) >= normalizeDate(end)) {
+      return 'Must be before move-out date';
+    }
+    return null;
+  };
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>, field: 'start' | 'end') => {
+    const formatted = formatShortDateInput(e.target.value);
+    if (field === 'start') { setStartInputRaw(formatted); setStartError(null); }
+    else { setEndInputRaw(formatted); setEndError(null); }
+
+    const parsed = parseShortDate(formatted);
+    if (!parsed || parsed < today) {
+      // If input is cleared, set to null
+      if (formatted === '') {
+        if (field === 'start') handleChange(null, end);
+        else handleChange(start, null);
+      }
+      return;
+    }
+
+    // Check ordering
+    const error = validateDate(formatted, field);
+    if (error) {
+      if (field === 'start') setStartError(error);
+      else setEndError(error);
+      return;
+    }
+
+    applyParsedDate(parsed, field);
+  };
+
+  const handleTextBlur = (e: React.FocusEvent<HTMLInputElement>, field: 'start' | 'end') => {
+    const raw = e.currentTarget.value;
+    if (raw === '') {
+      if (field === 'start') { setStartError(null); handleChange(null, end); }
+      else { setEndError(null); handleChange(start, null); }
+      return;
+    }
+    const error = validateDate(raw, field);
+    if (!error) {
+      const parsed = parseShortDate(raw)!;
+      if (field === 'start') setStartError(null);
+      else setEndError(null);
+      applyParsedDate(parsed, field);
+    } else {
+      if (field === 'start') setStartError(error);
+      else setEndError(error);
+    }
+  };
+
+  const handleTextKeyDown = (e: React.KeyboardEvent<HTMLInputElement>, field: 'start' | 'end') => {
+    const input = e.currentTarget;
+    const pos = input.selectionStart ?? 0;
+    // Smart backspace: if cursor is right after a slash, skip over it
+    if (e.key === 'Backspace' && (pos === 3 || pos === 6)) {
+      e.preventDefault();
+      const raw = field === 'start' ? startInputRaw : endInputRaw;
+      // Remove the digit before the slash
+      const digits = raw.replace(/\D/g, '');
+      const digitIndex = pos === 3 ? 1 : 3; // which digit to remove (0-indexed)
+      const newDigits = digits.slice(0, digitIndex) + digits.slice(digitIndex + 1);
+      const formatted = formatShortDateInput(newDigits);
+      if (field === 'start') setStartInputRaw(formatted);
+      else setEndInputRaw(formatted);
+      // Set cursor position after React re-render
+      requestAnimationFrame(() => {
+        input.setSelectionRange(pos - 1, pos - 1);
+      });
+    }
+  };
+
+  const handleTextPaste = (e: React.ClipboardEvent<HTMLInputElement>, field: 'start' | 'end') => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData('text');
+    const formatted = formatShortDateInput(pasted);
+    if (field === 'start') setStartInputRaw(formatted);
+    else setEndInputRaw(formatted);
+
+    const parsed = parseShortDate(formatted);
+    if (parsed && parsed >= today) {
+      applyParsedDate(parsed, field);
     }
   };
 
@@ -446,23 +581,32 @@ export default function SearchDateRange({
         <div className="flex flex-col items-start gap-1.5 flex-1">
           <label className="font-medium text-[#344054] text-sm">Move in</label>
           <input
-            type="date"
-            value={toDateInputValue(start)}
-            min={todayStr}
-            max={end ? toDateInputValue(end) : undefined}
-            className="h-12 w-full bg-background rounded-lg border border-[#d0d5dd] px-3 text-base text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054] [&::-webkit-calendar-picker-indicator]:!hidden"
-            onChange={(e) => handleDateInput(e.target.value, 'start')}
+            type="text"
+            inputMode="numeric"
+            placeholder="mm/dd/yy"
+            value={startInputRaw}
+            className={`h-12 w-full bg-background rounded-lg border px-3 text-base text-[#344054] outline-none focus:ring-2 ${startError ? 'border-red-500 focus:ring-red-300 focus:border-red-500' : 'border-[#d0d5dd] focus:ring-[#3c8787] focus:border-[#3c8787]'}`}
+            onChange={(e) => handleTextChange(e, 'start')}
+            onBlur={(e) => handleTextBlur(e, 'start')}
+            onKeyDown={(e) => handleTextKeyDown(e, 'start')}
+            onPaste={(e) => handleTextPaste(e, 'start')}
           />
+          {startError && <span className="text-red-500 text-xs">{startError}</span>}
         </div>
         <div className="flex flex-col items-start gap-1.5 flex-1">
           <label className="font-medium text-[#344054] text-sm">Move out</label>
           <input
-            type="date"
-            value={toDateInputValue(end)}
-            min={start ? toDateInputValue(start) : todayStr}
-            className="h-12 w-full bg-background rounded-lg border border-[#d0d5dd] px-3 text-base text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054] [&::-webkit-calendar-picker-indicator]:!hidden"
-            onChange={(e) => handleDateInput(e.target.value, 'end')}
+            type="text"
+            inputMode="numeric"
+            placeholder="mm/dd/yy"
+            value={endInputRaw}
+            className={`h-12 w-full bg-background rounded-lg border px-3 text-base text-[#344054] outline-none focus:ring-2 ${endError ? 'border-red-500 focus:ring-red-300 focus:border-red-500' : 'border-[#d0d5dd] focus:ring-[#3c8787] focus:border-[#3c8787]'}`}
+            onChange={(e) => handleTextChange(e, 'end')}
+            onBlur={(e) => handleTextBlur(e, 'end')}
+            onKeyDown={(e) => handleTextKeyDown(e, 'end')}
+            onPaste={(e) => handleTextPaste(e, 'end')}
           />
+          {endError && <span className="text-red-500 text-xs">{endError}</span>}
         </div>
       </div>
 
