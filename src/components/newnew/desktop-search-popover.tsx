@@ -7,6 +7,7 @@ import HeroLocationSuggest from '@/components/home-components/HeroLocationSugges
 import SearchDateRange from '@/components/newnew/search-date-range';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 import { ImSpinner8 } from 'react-icons/im';
+import { useWindowSize } from '@/hooks/useWindowSize';
 import type { ActivePopover } from '@/hooks/useSearchBarPopovers';
 import type { useSearchBarPopovers } from '@/hooks/useSearchBarPopovers';
 import type { RecentSearch, SuggestedLocationItem } from './search-navbar';
@@ -16,6 +17,7 @@ import type { RecentSearch, SuggestedLocationItem } from './search-navbar';
 const PANEL_CONFIG = {
   where: { width: 402, align: 0 },
   when: { width: 860, align: 0.5 },
+  whenSingle: { width: 420, align: 0.5 },
   who: { width: 320, align: 1 },
 } as const;
 
@@ -32,11 +34,12 @@ interface DesktopSearchPopoverProps {
   recentSearches: RecentSearch[];
   suggestedLocations: SuggestedLocationItem[];
   containerWidth?: number;
+  singleMonth?: boolean;
 }
 
 // ─── Helpers ─────────────────────────────────────────────────────────
 
-const computePanelLeft = (panel: 'where' | 'when' | 'who', containerWidth: number) =>
+const computePanelLeft = (panel: keyof typeof PANEL_CONFIG, containerWidth: number) =>
   PANEL_CONFIG[panel].align * (containerWidth - PANEL_CONFIG[panel].width);
 
 // ─── Panel Sub-Components ────────────────────────────────────────────
@@ -152,15 +155,17 @@ const SuggestedLocationsList = ({
 
 interface WhenPanelProps {
   search: ReturnType<typeof useSearchBarPopovers>;
+  singleMonth?: boolean;
 }
 
-const WhenPanel = ({ search }: WhenPanelProps) => (
+const WhenPanel = ({ search, singleMonth }: WhenPanelProps) => (
   <SearchDateRange
     start={search.dateRange.start}
     end={search.dateRange.end}
     handleChange={search.handleDateChange}
     minimumDateRange={{ months: 1 }}
     maximumDateRange={{ months: 12 }}
+    singleMonth={singleMonth}
   />
 );
 
@@ -180,9 +185,15 @@ export default function DesktopSearchPopover({
   recentSearches,
   suggestedLocations,
   containerWidth = 860,
+  singleMonth: singleMonthProp = false,
 }: DesktopSearchPopoverProps) {
   const contentRef = useRef<HTMLDivElement>(null);
   const [measuredHeight, setMeasuredHeight] = useState(0);
+  const { width: windowWidth } = useWindowSize();
+
+  // Force single calendar on sub-lg screens (<1024px) or when prop is set
+  const isSubLg = windowWidth !== undefined && windowWidth < 1024;
+  const singleMonth = singleMonthProp || isSubLg;
 
   const measureHeight = useCallback(() => {
     if (!contentRef.current) return;
@@ -204,10 +215,10 @@ export default function DesktopSearchPopover({
     return () => observer.disconnect();
   }, [measureHeight]);
 
-  const panelKey = activePopover as 'where' | 'when' | 'who';
+  const panelConfigKey = activePopover === 'when' && singleMonth ? 'whenSingle' : activePopover as keyof typeof PANEL_CONFIG;
 
-  const panelWidth = activePopover ? PANEL_CONFIG[panelKey].width : 0;
-  const panelLeft = activePopover ? computePanelLeft(panelKey, containerWidth) : 0;
+  const panelWidth = activePopover ? PANEL_CONFIG[panelConfigKey].width : 0;
+  const panelLeft = activePopover ? computePanelLeft(panelConfigKey, containerWidth) : 0;
 
   return (
     <AnimatePresence>
@@ -244,7 +255,7 @@ export default function DesktopSearchPopover({
                     suggestedLocations={suggestedLocations}
                   />
                 )}
-                {activePopover === 'when' && <WhenPanel search={search} />}
+                {activePopover === 'when' && <WhenPanel search={search} singleMonth={singleMonth} />}
                 {activePopover === 'who' && <WhoPanel search={search} />}
               </motion.div>
             </AnimatePresence>

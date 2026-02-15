@@ -260,10 +260,10 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                 </PopoverTrigger>
                 <PopoverContent
                   className="w-auto p-4 shadow-xl"
-                  side="bottom"
+                  side="left"
                   align="start"
-                  alignOffset={isLargeScreen ? -450 : -150}
-                  sideOffset={-100}
+                  sideOffset={8}
+                  collisionPadding={16}
                 >
                   <div className="flex flex-col gap-3">
                     <SearchDateRange
