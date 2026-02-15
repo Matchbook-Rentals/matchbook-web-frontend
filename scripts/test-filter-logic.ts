@@ -134,7 +134,27 @@ const TEST_CASES: TestCase[] = [
     manualCheck: (l) => (l as any).dishwasher === true && (l as any).fridge === true,
   },
   {
-    name: '19. Combined: furnished apt, $500-$2000, 2+ bed, wifi',
+    name: '19. Utilities not included',
+    filters: buildFilters({ utilities: ['utilitiesNotIncluded'] }),
+    manualCheck: (l) => l.utilitiesIncluded === false,
+  },
+  {
+    name: '20. Location: waterfront',
+    filters: buildFilters({ location: ['waterfront'] }),
+    manualCheck: (l) => (l as any).waterfront === true,
+  },
+  {
+    name: '21. Location: cityView + waterView',
+    filters: buildFilters({ location: ['cityView', 'waterView'] }),
+    manualCheck: (l) => (l as any).cityView === true && (l as any).waterView === true,
+  },
+  {
+    name: '22. Price: min $1000 only (range overlap)',
+    filters: buildFilters({ minPrice: 1000 }),
+    manualCheck: (l) => (l.calculatedPriceMax ?? 0) >= 1000,
+  },
+  {
+    name: '23. Combined: furnished apt, $500-$2000, 2+ bed, wifi (range overlap)',
     filters: buildFilters({
       propertyTypes: ['apartment'],
       furnished: true,
@@ -152,7 +172,7 @@ const TEST_CASES: TestCase[] = [
       (l as any).wifi === true,
   },
   {
-    name: '20. Default filters (should pass everything)',
+    name: '24. Default filters (should pass everything)',
     filters: { ...DEFAULT_FILTER_OPTIONS },
     manualCheck: () => true, // defaults are maximally inclusive, all should pass
   },

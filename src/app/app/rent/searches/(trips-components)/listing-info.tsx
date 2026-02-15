@@ -15,10 +15,34 @@ interface ListingDescriptionProps {
   showFullAmenities?: boolean;
   isFlexible?: boolean;
   trip?: any;
+  isAuthenticated?: boolean;
+  tripContext?: {
+    tripId?: string;
+    startDate: Date;
+    endDate: Date;
+    numAdults?: number;
+    numChildren?: number;
+    numPets?: number;
+  } | null;
+  calculatedPrice?: number | null;
+  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
+  onApplyClick?: () => void;
+  onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
 }
 
-const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFullAmenities = false, isFlexible = false, trip }) => {
-  const calculatedPrice = trip ? calculateRent({ listing, trip }) : undefined;
+const ListingDescription: React.FC<ListingDescriptionProps> = ({
+  listing,
+  showFullAmenities = false,
+  isFlexible = false,
+  trip,
+  isAuthenticated,
+  tripContext,
+  calculatedPrice: calculatedPriceProp,
+  listingState,
+  onApplyClick,
+  onDatesSelected,
+}) => {
+  const calculatedPrice = trip ? calculateRent({ listing, trip }) : calculatedPriceProp;
 
   return (
     <div className='w-full'>
@@ -34,6 +58,17 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
           <PropertyDetails listing={listing} />
         </CardContent>
       </Card>
+
+      {/* Host info + trip details - mobile only, right after property details */}
+      <HostInformation
+        listing={listing}
+        isAuthenticated={isAuthenticated}
+        tripContext={tripContext}
+        calculatedPrice={calculatedPrice}
+        listingState={listingState}
+        onApplyClick={onApplyClick}
+        onDatesSelected={onDatesSelected}
+      />
 
       {isFlexible && (
         <p className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px] sm:text-[24px] font-normal`}>
@@ -55,16 +90,12 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({ listing, showFu
       <div className="mt-5">
         <DescriptionSection listing={listing} />
       </div>
-      
+
       <div className="mt-5">
-        <AmenitiesSection 
+        <AmenitiesSection
           listing={listing}
           showFullAmenities={showFullAmenities}
         />
-      </div>
-
-      <div className="mt-5">
-        <HostInformation listing={listing} />
       </div>
 
     </div>

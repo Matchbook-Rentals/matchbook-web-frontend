@@ -104,7 +104,15 @@ export default function PublicListingDetailsView({
 
         <div className="flex justify-between gap-x-8 lg:gap-x-16 relative">
           <div className="w-full lg:w-full">
-            <ListingDescription listing={listing} />
+            <ListingDescription
+              listing={listing}
+              isAuthenticated={isAuthenticated}
+              tripContext={tripContext}
+              calculatedPrice={calculatedPrice}
+              listingState={listingState}
+              onApplyClick={onApplyClick}
+              onDatesSelected={onDatesSelected}
+            />
 
             <Card className="border-none shadow-none rounded-xl mt-5">
               <CardContent className="flex flex-col items-start gap-[18px] p-5">
