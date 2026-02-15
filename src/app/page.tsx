@@ -10,6 +10,7 @@ import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 import { getPopularListingAreas } from "@/app/actions/listings";
 import { getHomepageUserState, HomepageUserState } from "@/app/actions/homepage-user-state";
+import { getIpLocation } from "@/lib/ip-geolocation";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Monthly Rentals',
@@ -31,10 +32,20 @@ const serializeUser = (user: any) => {
 };
 
 const HomePage = async () => {
-  const [user, popularAreas] = await Promise.all([
+  const [user, popularAreas, ipLocation] = await Promise.all([
     currentUser(),
-    getPopularListingAreas(5)
+    getPopularListingAreas(5),
+    getIpLocation()
   ]);
+
+  // Log IP location info for debugging
+  console.log('[HomePage] IP Location:', ipLocation ? {
+    lat: ipLocation.lat,
+    lng: ipLocation.lng,
+    city: ipLocation.city,
+    region: ipLocation.region,
+    country: ipLocation.country
+  } : 'No IP location available');
 
   const userObject = serializeUser(user);
 
@@ -125,6 +136,7 @@ const HomePage = async () => {
           popularAreas={popularAreas}
           userState={userState}
           recentTripId={recentTripId}
+          ipLocation={ipLocation}
         />
         <div className="h-[40px]" />
         <Footer />

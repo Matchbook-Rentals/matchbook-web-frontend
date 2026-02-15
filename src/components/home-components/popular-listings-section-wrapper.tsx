@@ -7,13 +7,11 @@ import {
   getListingsByLocation,
   getListingsNearLocation,
 } from '@/app/actions/listings';
-import { createGuestSession } from '@/app/actions/guest-session-db';
-import { guestOptimisticFavorite, guestOptimisticRemoveFavorite, pullGuestFavoritesFromDb } from '@/app/actions/guest-favorites';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { createTrip } from '@/app/actions/trips';
-import { GuestSessionService } from '@/utils/guest-session';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
 import { HomepageUserState } from '@/app/actions/homepage-user-state';
+import { IpLocation } from '@/lib/ip-geolocation';
 
 interface UserTripLocation {
   city: string | null;
@@ -38,6 +36,7 @@ interface PopularListingsSectionWrapperProps {
   popularAreas: PopularArea[];
   userState?: HomepageUserState | null;
   recentTripId?: string | null;
+  ipLocation?: IpLocation | null;
 }
 
 const LISTINGS_PER_ROW = 12;
@@ -48,13 +47,10 @@ export default function PopularListingsSectionWrapper({
   popularAreas,
   userState,
   recentTripId: initialRecentTripId,
+  ipLocation,
 }: PopularListingsSectionWrapperProps) {
   const [sections, setSections] = useState<ListingSection[]>([]);
-  const [userLocation, setUserLocation] = useState<{ lat: number; lng: number } | null>(null);
-  const [geoPermissionDenied, setGeoPermissionDenied] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  const [guestSessionId, setGuestSessionId] = useState<string | null>(null);
-  const [guestFavoriteIds, setGuestFavoriteIds] = useState<Set<string>>(new Set());
   const [showAuthModal, setShowAuthModal] = useState(false);
   const authFavoriteIdsRef = useRef<Set<string>>(
     new Set(userState?.favoritedListingIds ?? [])
@@ -112,27 +108,13 @@ export default function PopularListingsSectionWrapper({
     }
   }, [isSignedIn, recentTripId]);
 
-  // Get browser geolocation on mount
-  useEffect(() => {
-    if (typeof navigator !== 'undefined' && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
-        },
-        () => {
-          setGeoPermissionDenied(true);
-        },
-        { timeout: 5000 }
-      );
-    } else {
-      setGeoPermissionDenied(true);
-    }
-  }, []);
-
   const buildSections = useCallback(async () => {
     setIsLoading(true);
     const newSections: ListingSection[] = [];
     const usedLocations = new Set<string>();
+
+    // Convert IP location to the format expected by buildSections
+    const userLocation = ipLocation ? { lat: ipLocation.lat, lng: ipLocation.lng } : null;
 
     const makeLocationKey = (city: string | null, state: string | null) =>
       `${city?.toLowerCase() || ''}-${state?.toLowerCase() || ''}`;
@@ -187,7 +169,7 @@ export default function PopularListingsSectionWrapper({
       usedLocations.add(makeLocationKey(firstArea.city, firstArea.state));
     }
 
-    // Row 2: Near me (uses geolocation) or fallback
+    // Row 2: Near me (only if we have IP location data) or another popular area
     if (userLocation) {
       const listings = await getListingsNearLocation(
         userLocation.lat,
@@ -200,10 +182,10 @@ export default function PopularListingsSectionWrapper({
           listings,
           center: userLocation,
           locationString: 'Near me',
-          // No city/state for geolocation-based rows
+          // No city/state for IP-based rows
         });
       } else {
-        // No listings nearby, use a popular area
+        // No listings near IP location, use a popular area instead
         const fallbackArea = popularAreas.find(
           (a) => !usedLocations.has(makeLocationKey(a.city, a.state))
         );
@@ -214,7 +196,7 @@ export default function PopularListingsSectionWrapper({
             LISTINGS_PER_ROW
           );
           newSections.push({
-            title: 'Monthly rentals near you',
+            title: `Explore monthly rentals in ${fallbackArea.city}`,
             listings: fallbackListings,
             center: { lat: fallbackArea.avgLat, lng: fallbackArea.avgLng },
             locationString: `${fallbackArea.city}, ${fallbackArea.state}`,
@@ -224,8 +206,8 @@ export default function PopularListingsSectionWrapper({
           usedLocations.add(makeLocationKey(fallbackArea.city, fallbackArea.state));
         }
       }
-    } else if (geoPermissionDenied) {
-      // Geolocation denied - use a popular area as fallback
+    } else {
+      // No IP location available - just show another popular area (not "near you")
       const fallbackArea = popularAreas.find(
         (a) => !usedLocations.has(makeLocationKey(a.city, a.state))
       );
@@ -236,7 +218,7 @@ export default function PopularListingsSectionWrapper({
           LISTINGS_PER_ROW
         );
         newSections.push({
-          title: 'Monthly rentals near you',
+          title: `Explore monthly rentals in ${fallbackArea.city}`,
           listings,
           center: { lat: fallbackArea.avgLat, lng: fallbackArea.avgLng },
           locationString: `${fallbackArea.city}, ${fallbackArea.state}`,
@@ -280,16 +262,12 @@ export default function PopularListingsSectionWrapper({
 
     setSections(newSections);
     setIsLoading(false);
-  }, [isSignedIn, userTripLocation, userLocation, geoPermissionDenied, popularAreas, recentTripId]);
+  }, [isSignedIn, userTripLocation, ipLocation, popularAreas, recentTripId, userState]);
 
-  // Build sections when dependencies change
+  // Build sections on mount and when dependencies change
   useEffect(() => {
-    // Wait for geolocation to resolve (success or denied) before building
-    const geoResolved = userLocation !== null || geoPermissionDenied;
-    if (geoResolved) {
-      buildSections();
-    }
-  }, [buildSections, userLocation, geoPermissionDenied]);
+    buildSections();
+  }, [buildSections]);
 
   // Show loading state while building sections
   if (isLoading && sections.length === 0) {

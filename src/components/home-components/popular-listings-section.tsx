@@ -3,11 +3,9 @@
 import { ListingAndImages } from '@/types';
 import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
-import { ChevronLeft, ChevronRight, ArrowRight, Loader2 } from 'lucide-react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
-import { createGuestSession } from '@/app/actions/guest-session-db';
-import { GuestSessionService } from '@/utils/guest-session';
+import Link from 'next/link';
 import { HomepageUserState } from '@/app/actions/homepage-user-state';
 import {
   Carousel,
@@ -45,8 +43,7 @@ interface ListingRowProps {
   guestFavoriteIds?: Set<string>;
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
   onSignInPrompt?: () => void;
-  onExploreClick?: () => void;
-  isExploreLoading?: boolean;
+  exploreHref?: string;
   authUserState?: Partial<HomepageUserState>;
   sectionTripId?: string;
   isSignedIn?: boolean;
@@ -84,7 +81,7 @@ const getListingState = (
   };
 };
 
-function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, onExploreClick, isExploreLoading, authUserState, sectionTripId, isSignedIn }: ListingRowProps) {
+function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, exploreHref, authUserState, sectionTripId, isSignedIn }: ListingRowProps) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -141,18 +138,13 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h3 className="text-[#404040] text-lg font-medium">{title}</h3>
-          {onExploreClick ? (
-            <button
-              onClick={onExploreClick}
-              disabled={isExploreLoading}
-              className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors disabled:opacity-50"
+          {exploreHref ? (
+            <Link
+              href={exploreHref}
+              className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors"
             >
-              {isExploreLoading ? (
-                <Loader2 className="w-4 h-4 text-primaryBrand animate-spin" />
-              ) : (
-                <ArrowRight className="w-4 h-4 text-primaryBrand" />
-              )}
-            </button>
+              <ArrowRight className="w-4 h-4 text-primaryBrand" />
+            </Link>
           ) : (
             <div className="p-1 rounded-full bg-primaryBrand/10">
               <ArrowRight className="w-4 h-4 text-primaryBrand" />
@@ -226,39 +218,12 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
   );
 }
 
-const hasExploreTarget = (section: ListingSection): boolean =>
-  section.center !== undefined;
+const buildExploreHref = (section: ListingSection): string | undefined => {
+  if (!section.center) return undefined;
+  return `/search?lat=${section.center.lat}&lng=${section.center.lng}`;
+};
 
 export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt, authUserState, isSignedIn }: PopularListingsSectionProps) {
-  const router = useRouter();
-  const [loadingIndex, setLoadingIndex] = useState<number | null>(null);
-
-  const handleExploreClick = async (section: ListingSection, index: number) => {
-    if (!section.center) return;
-    setLoadingIndex(index);
-    try {
-      const result = await createGuestSession({
-        locationString: section.locationString || `${section.city}, ${section.state}`,
-        latitude: section.center.lat,
-        longitude: section.center.lng,
-        city: section.city,
-        state: section.state,
-      });
-      if (!result.success || !result.sessionId) return;
-
-      GuestSessionService.storeSession(
-        GuestSessionService.createGuestSessionData({
-          locationString: section.locationString || `${section.city}, ${section.state}`,
-          latitude: section.center.lat,
-          longitude: section.center.lng,
-        }, result.sessionId)
-      );
-
-      router.push(`/search?sessionId=${result.sessionId}`);
-    } finally {
-      setLoadingIndex(null);
-    }
-  };
 
   const hasSections = sections.length > 0;
 
@@ -281,8 +246,7 @@ export default function PopularListingsSection({ sections, guestFavoriteIds, onF
             guestFavoriteIds={guestFavoriteIds}
             onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.sectionTripId, section.center, section.locationString) : undefined}
             onSignInPrompt={onSignInPrompt}
-            onExploreClick={hasExploreTarget(section) ? () => handleExploreClick(section, index) : undefined}
-            isExploreLoading={loadingIndex === index}
+            exploreHref={buildExploreHref(section)}
             authUserState={authUserState}
             sectionTripId={section.sectionTripId}
             isSignedIn={isSignedIn}
