@@ -567,11 +567,31 @@ export default function SearchPageClient({
   const isWithinBounds = (lat: number, lng: number, bounds: MapBounds) =>
     lat >= bounds.south && lat <= bounds.north && lng >= bounds.west && lng <= bounds.east;
 
+  const hasDates = Boolean(localTripData?.startDate && localTripData?.endDate);
+  const filterTrip = useMemo(() => hasDates ? {
+    latitude: currentMapCenter.lat,
+    longitude: currentMapCenter.lng,
+    searchRadius: PREFETCH_RADIUS_MILES,
+    startDate: new Date(localTripData!.startDate!),
+    endDate: new Date(localTripData!.endDate!),
+  } : null, [hasDates, currentMapCenter, localTripData]);
+
   const showListings = useMemo(() =>
     allListings
       .filter(l => !visibleBounds || isWithinBounds(l.latitude, l.longitude, visibleBounds))
-      .filter(l => matchesFilters({ ...l, calculatedPrice: l.price }, filters, false, null)),
-    [allListings, filters, visibleBounds]
+      .filter(l => {
+        if (hasDates && filterTrip) {
+          // Dates set: use single calculated price for the specific duration
+          const calcPrice = calculateRent({ listing: l, trip: filterTrip } as any) || l.price || 0;
+          return matchesFilters({ ...l, calculatedPrice: calcPrice }, filters, false, null);
+        }
+        // No dates: use price range overlap
+        const prices = l.monthlyPricing?.map((p: any) => p.price) || [];
+        const minP = prices.length ? Math.min(...prices) : (l.shortestLeasePrice || 0);
+        const maxP = prices.length ? Math.max(...prices) : minP;
+        return matchesFilters({ ...l, calculatedPrice: l.price, calculatedPriceMin: minP, calculatedPriceMax: maxP }, filters, false, null);
+      }),
+    [allListings, filters, visibleBounds, hasDates, filterTrip]
   );
 
   const likedListings = useMemo(() => listings.filter(l => favIds.has(l.id)), [listings, favIds]);

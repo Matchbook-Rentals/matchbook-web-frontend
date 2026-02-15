@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useMemo, ReactNode } from 'react';
 import { ListingAndImages } from '@/types';
 import { FilterOptions, matchesFilters } from '@/lib/listing-filters';
+import { calculateRent } from '@/lib/calculate-rent';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import BrandModal from '@/components/BrandModal';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -62,6 +63,7 @@ interface SearchFiltersModalProps {
   onApplyFilters: (filters: FilterOptions) => void;
   listings: ListingAndImages[];
   totalCount: number;
+  tripData?: { startDate?: string | null; endDate?: string | null; [key: string]: any } | null;
 }
 
 interface PillOption {
@@ -256,6 +258,7 @@ export default function SearchFiltersModal({
   filters,
   onApplyFilters,
   listings,
+  tripData,
 }: SearchFiltersModalProps) {
   const [localFilters, setLocalFilters] = useState<FilterOptions>(filters);
 
@@ -265,7 +268,12 @@ export default function SearchFiltersModal({
   }, [isOpen, filters]);
 
   const filteredCount = useMemo(
-    () => listings.filter(l => matchesFilters({ ...l, calculatedPrice: l.price }, localFilters, false, null)).length,
+    () => listings.filter(l => {
+      const prices = l.monthlyPricing?.map((p: any) => p.price) || [];
+      const minP = prices.length ? Math.min(...prices) : (l.shortestLeasePrice || 0);
+      const maxP = prices.length ? Math.max(...prices) : minP;
+      return matchesFilters({ ...l, calculatedPrice: l.price, calculatedPriceMin: minP, calculatedPriceMax: maxP }, localFilters, false, null);
+    }).length,
     [listings, localFilters],
   );
 

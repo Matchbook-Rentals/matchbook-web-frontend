@@ -47,9 +47,14 @@ const GuestFilterOptionsDialog: React.FC<GuestFilterOptionsDialogProps> = ({
 
     // Filter listings based on localFilters using same logic as context
     const filteredCount = listings.filter(listing => {
+      const prices = listing.monthlyPricing?.map((p: any) => p.price) || [];
+      const minP = prices.length ? Math.min(...prices) : (listing.shortestLeasePrice || 0);
+      const maxP = prices.length ? Math.max(...prices) : minP;
       const listingWithPrice = {
         ...listing,
-        calculatedPrice: listing.price // For guests, use simple price
+        calculatedPrice: listing.price,
+        calculatedPriceMin: minP,
+        calculatedPriceMax: maxP,
       };
       return matchesFilters(listingWithPrice, localFilters, false, session);
     }).length;
