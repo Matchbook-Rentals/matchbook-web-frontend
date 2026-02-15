@@ -2,7 +2,9 @@
 import React, { useState, useTransition } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Star as StarIcon, CheckCircle, ChevronDown } from 'lucide-react';
+import { Star as StarIcon, ChevronDown } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { VerifiedIcon } from '@/components/icons-v3';
 import { ListingAndImages } from '@/types';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import SearchDateRange from '@/components/newnew/search-date-range';
@@ -130,43 +132,7 @@ const HostInformation: React.FC<HostInformationProps> = ({
 
   return (
     <Card className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
-      <CardContent className="flex flex-col items-start gap-5 p-4">
-        {/* Host information */}
-        <div className="flex items-center gap-3 w-full">
-          <Avatar className="w-[59px] h-[59px] rounded-xl">
-            <AvatarImage
-              src={host?.imageUrl || ''}
-              alt={`${host?.firstName || 'Host'} profile`}
-            />
-            <AvatarFallback className="rounded-xl bg-secondaryBrand text-white font-medium text-xl md:text-2xl lg:text-3xl">
-              {(host?.firstName?.charAt(0) + host?.lastName?.charAt(0)) || 'H'}
-            </AvatarFallback>
-          </Avatar>
-
-          <div className="flex flex-col gap-0.5">
-            <div className="font-medium text-[#373940] text-sm">
-              Hosted by {host?.firstName || 'Host'}
-            </div>
-
-            <div className="flex items-center gap-1 h-8">
-              <StarIcon className="w-5 h-5 fill-[#FFD700] text-[#FFD700]" />
-              <span className="text-[#717680] text-sm">
-                Be {host?.firstName || 'Host'}&apos;s first booking
-              </span>
-            </div>
-          </div>
-        </div>
-
-        {/* Verified badge */}
-        {listing.user?.verifiedAt && (
-          <div className="flex items-center gap-1">
-            <CheckCircle className="w-4 h-4 text-[#717680]" />
-            <span className="font-normal text-[#717680] text-xs">
-              Verified
-            </span>
-          </div>
-        )}
-
+      <CardContent className="flex flex-col items-start gap-5 py-4 px-0">
         {/* Trip details: dates + renters + apply */}
         <div className="flex flex-col gap-2 w-full">
           <div className="w-full border border-gray-300 rounded-xl">
@@ -292,16 +258,54 @@ const HostInformation: React.FC<HostInformationProps> = ({
               {error}
             </div>
           )}
-
-          <BrandButton
-            variant="ghost"
-            className="w-full min-w-0 text-[#3c8787] font-medium hover:bg-[#3c8787]/10"
-            onClick={handleMessageHost}
-            disabled={isPending}
-          >
-            Message Host
-          </BrandButton>
         </div>
+
+        {/* Verified badge */}
+        <Badge
+          variant="outline"
+          className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
+        >
+          <VerifiedIcon className="w-[21px] h-[21px]" />
+          <span className="font-normal text-xs text-[#0B6E6E] font-['Poppins'] leading-normal">
+            Verified Host
+          </span>
+        </Badge>
+
+        {/* Host information */}
+        <div className="flex items-center gap-3 w-full pb-6">
+          <Avatar className="w-[59px] h-[59px] rounded-xl">
+            <AvatarImage
+              src={host?.imageUrl || ''}
+              alt={`${host?.firstName || 'Host'} profile`}
+            />
+            <AvatarFallback className="rounded-xl bg-secondaryBrand text-white font-medium text-xl md:text-2xl lg:text-3xl">
+              {(host?.firstName?.charAt(0) + host?.lastName?.charAt(0)) || 'H'}
+            </AvatarFallback>
+          </Avatar>
+
+          <div className="flex flex-col gap-0.5">
+            <div className="font-medium text-[#373940] text-sm">
+              Hosted by {host?.firstName || 'Host'}
+            </div>
+
+            <div className="flex items-center gap-1 h-8">
+              <StarIcon className="w-5 h-5 fill-[#FFD700] text-[#FFD700]" />
+              <span className="text-[#717680] text-sm">
+                Be {host?.firstName || 'Host'}&apos;s first booking
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <BrandButton
+          variant="outline"
+          size="lg"
+          className="w-full min-w-0 text-[#3c8787] font-medium"
+          onClick={handleMessageHost}
+          disabled={isPending}
+        >
+          Message Host
+        </BrandButton>
 
         <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
       </CardContent>
