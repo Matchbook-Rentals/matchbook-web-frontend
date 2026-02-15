@@ -18,6 +18,7 @@ import { format } from 'date-fns';
 import { ChevronDown } from 'lucide-react';
 import { VerifiedIcon } from '@/components/icons-v3';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
+import GuestAuthModal from '@/components/guest-auth-modal';
 
 interface PublicListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -61,6 +62,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
     pets: tripContext?.numPets ?? 0,
   });
   const [isLargeScreen, setIsLargeScreen] = useState(false);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   useEffect(() => {
     const checkScreenSize = () => setIsLargeScreen(window.innerWidth >= 1024);
@@ -72,6 +74,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   const host = listing.user;
 
   const handleApplyClick = () => {
+    if (!isAuthenticated) { setShowAuthModal(true); return; }
     if (onApplyClick) {
       if (onDatesSelected && popoverStart && popoverEnd) {
         onDatesSelected(popoverStart, popoverEnd, guests);
@@ -87,7 +90,13 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
     setPopoverEnd(end);
   };
 
-  const handleDatesConfirm = () => setShowDatesPopover(false);
+  const handleDatesConfirm = () => { setShowDatesPopover(false); handleRentersOpen(true); };
+  const handleRentersOpen = (open: boolean) => {
+    setShowRentersPopover(open);
+    if (open && guests.adults === 0) {
+      setGuests(prev => ({ ...prev, adults: 1 }));
+    }
+  };
   const handleRentersConfirm = () => setShowRentersPopover(false);
   const handleClearDates = () => { setPopoverStart(null); setPopoverEnd(null); };
   const handleClearRenters = () => setGuests({ adults: 0, children: 0, pets: 0 });
@@ -114,11 +123,6 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
 
   const priceRange = getPriceRange();
 
-  const handleGetStarted = () => {
-    const redirectPath = window.location.pathname + window.location.search;
-    window.location.href = '/sign-up?redirect=' + encodeURIComponent(redirectPath);
-  };
-
   const handleApplyNow = () => {
     setError(null);
     startTransition(async () => {
@@ -139,6 +143,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   };
 
   const handleMessageHost = () => {
+    if (!isAuthenticated) { setShowAuthModal(true); return; }
     if (!host?.id) return;
 
     startTransition(async () => {
@@ -233,18 +238,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
         )}
 
         {/* CTA Buttons */}
-        {!isAuthenticated ? (
-          // Not signed in: Show "Get Started" button
-          <BrandButton
-            variant="outline"
-            className="w-full min-w-0 mt-1 border-[#3c8787] text-[#3c8787] font-semibold hover:bg-[#3c8787] hover:text-white transition-colors"
-            onClick={handleGetStarted}
-          >
-            Get Started
-          </BrandButton>
-        ) : (
-          // Signed in: always show form + conditional Apply
-          <div className="flex flex-col gap-2 w-full mt-1">
+        <div className="flex flex-col gap-2 w-full mt-1">
             <div className="w-full border border-gray-300 rounded-xl">
               {/* Dates Section */}
               <Popover open={showDatesPopover} onOpenChange={setShowDatesPopover}>
@@ -301,7 +295,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
               </Popover>
 
               {/* Renters Section */}
-              <Popover open={showRentersPopover} onOpenChange={setShowRentersPopover}>
+              <Popover open={showRentersPopover} onOpenChange={handleRentersOpen}>
                 <PopoverTrigger asChild>
                   <div className="flex items-center justify-between px-4 py-3 border-t border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors rounded-b-xl">
                     <div>
@@ -373,8 +367,8 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
               Message Host
             </BrandButton>
           </div>
-        )}
 
+        <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
       </CardContent>
     </Card>
   );

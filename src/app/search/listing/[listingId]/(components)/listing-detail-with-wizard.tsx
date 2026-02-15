@@ -87,7 +87,6 @@ export default function ListingDetailWithWizard({
     : initialListingState;
 
   const handleApplyClick = () => {
-    if (!isAuthenticated) return;
     scrollToTopAndTransition('application');
   };
 
@@ -131,7 +130,7 @@ export default function ListingDetailWithWizard({
             tripContext={effectiveTripContext}
             calculatedPrice={effectivePrice()}
             listingState={effectiveListingState}
-            onApplyClick={isAuthenticated ? handleApplyClick : undefined}
+            onApplyClick={handleApplyClick}
             onDatesSelected={handleDatesSelected}
           />
         </motion.div>
