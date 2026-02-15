@@ -14,6 +14,7 @@ interface SearchPageProps {
   searchParams: Promise<{
     lat?: string;
     lng?: string;
+    location?: string;
     tripId?: string;
     sessionId?: string;
   }>;
@@ -137,7 +138,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
     hasLocationParams = !isNaN(parsedLat) && !isNaN(parsedLng);
     lat = hasLocationParams ? parsedLat : OGDEN_UT.lat;
     lng = hasLocationParams ? parsedLng : OGDEN_UT.lng;
-    locationString = hasLocationParams ? 'this area' : `${OGDEN_UT.city}, ${OGDEN_UT.state}`;
+    locationString = params.location || (hasLocationParams ? 'this area' : `${OGDEN_UT.city}, ${OGDEN_UT.state}`);
   }
 
   const PREFETCH_RADIUS_MILES = 25;

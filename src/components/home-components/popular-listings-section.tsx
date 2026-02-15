@@ -220,7 +220,14 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
 
 const buildExploreHref = (section: ListingSection): string | undefined => {
   if (!section.center) return undefined;
-  return `/search?lat=${section.center.lat}&lng=${section.center.lng}`;
+  const params = new URLSearchParams({
+    lat: section.center.lat.toString(),
+    lng: section.center.lng.toString(),
+  });
+  if (section.locationString) {
+    params.set('location', section.locationString);
+  }
+  return `/search?${params.toString()}`;
 };
 
 export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt, authUserState, isSignedIn }: PopularListingsSectionProps) {
