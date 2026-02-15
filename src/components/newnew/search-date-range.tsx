@@ -450,7 +450,7 @@ export default function SearchDateRange({
             value={toDateInputValue(start)}
             min={todayStr}
             max={end ? toDateInputValue(end) : undefined}
-            className="h-12 w-full bg-background rounded-lg border border-[#d0d5dd] px-3 text-base text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054]"
+            className="h-12 w-full bg-background rounded-lg border border-[#d0d5dd] px-3 text-base text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054] [&::-webkit-calendar-picker-indicator]:!hidden"
             onChange={(e) => handleDateInput(e.target.value, 'start')}
           />
         </div>
@@ -460,7 +460,7 @@ export default function SearchDateRange({
             type="date"
             value={toDateInputValue(end)}
             min={start ? toDateInputValue(start) : todayStr}
-            className="h-12 w-full bg-background rounded-lg border border-[#d0d5dd] px-3 text-base text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054]"
+            className="h-12 w-full bg-background rounded-lg border border-[#d0d5dd] px-3 text-base text-[#344054] outline-none focus:ring-2 focus:ring-[#3c8787] focus:border-[#3c8787] [&::-webkit-datetime-edit-year-field]:text-[#344054] [&::-webkit-datetime-edit-month-field]:text-[#344054] [&::-webkit-datetime-edit-day-field]:text-[#344054] [&::-webkit-calendar-picker-indicator]:!hidden"
             onChange={(e) => handleDateInput(e.target.value, 'end')}
           />
         </div>
