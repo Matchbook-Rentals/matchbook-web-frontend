@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { BrandButton } from "@/components/ui/brandButton";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
 import { TablessPaymentsTable } from "./tabless-payments-table";
@@ -242,12 +242,9 @@ export default async function StaticDemoPage() {
       <div className="max-w-[1280px] mx-auto">
         {/* Header with Back Button */}
         <div className="px-6 mt-4">
-          <Button
-            variant="outline"
-            className="border-teal-600 text-teal-600 hover:bg-teal-50"
-          >
+          <BrandButton variant="outline">
             Back
-          </Button>
+          </BrandButton>
         </div>
 
         {/* Main Content Grid */}
