@@ -18,3 +18,4 @@
 ### Git
 - Never include `Co-Authored-By` or any Claude/AI signature in commit messages
 - Never run `npm run build` unless explicitly told to
+- Never use `git add` then `git commit` separately — other agents may have files staged. Always use `git commit -m "message" file1 file2` to commit only your own files.
