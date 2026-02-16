@@ -186,7 +186,14 @@ export default function SearchListingCard({ listing, status, className, style, d
     const url = tripId
       ? `/search/listing/${listing.id}?tripId=${tripId}`
       : `/search/listing/${listing.id}`;
-    window.open(url, '_blank');
+
+    // On mobile, navigate in the same tab for a smoother experience
+    const isMobile = window.innerWidth < 768;
+    if (isMobile) {
+      router.push(url);
+    } else {
+      window.open(url, '_blank');
+    }
   };
 
   return (

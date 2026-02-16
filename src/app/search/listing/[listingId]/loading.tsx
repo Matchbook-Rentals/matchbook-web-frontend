@@ -8,8 +8,8 @@ import { PAGE_MARGIN } from '@/constants/styles';
 export default function ListingDetailLoading() {
   return (
     <>
-      {/* Navbar */}
-      <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10 mb-4 md:mb-6 lg:mb-8">
+      {/* Navbar - hidden on mobile to match real navbar */}
+      <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10 mb-4 md:mb-6 lg:mb-8 hidden md:block">
         <header className="relative z-30 flex items-center justify-between px-6 h-[76px]">
           <Link href="/" className="flex-shrink-0">
             <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />

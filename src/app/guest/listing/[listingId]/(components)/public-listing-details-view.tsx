@@ -1,5 +1,6 @@
 'use client'
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
 import { ListingAndImages } from '@/types';
 import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
@@ -9,6 +10,9 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { Card, CardContent } from '@/components/ui/card';
 import ShareButton from '@/components/ui/share-button';
 import { BrandButton } from '@/components/ui/brandButton';
+import { ArrowLeft } from 'lucide-react';
+import { calculateRent } from '@/lib/calculate-rent';
+import { Trip } from '@prisma/client';
 import { format } from 'date-fns';
 
 
@@ -42,6 +46,7 @@ export default function PublicListingDetailsView({
   onApplyClick,
   onDatesSelected,
 }: PublicListingDetailsViewProps) {
+  const router = useRouter();
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -69,6 +74,16 @@ export default function PublicListingDetailsView({
     return { min: Math.min(...prices), max: Math.max(...prices), hasRange: Math.min(...prices) !== Math.max(...prices) };
   };
   const priceRange = getPriceRange();
+
+  // Compute exact price locally when mobile dates are selected
+  const mobileCalculatedPrice = useMemo(() => {
+    if (mobileState.hasDates && mobileState.startDate && mobileState.endDate) {
+      const mockTrip = { startDate: mobileState.startDate, endDate: mobileState.endDate } as Trip;
+      const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
+      return calculateRent({ listing: listingWithPricing, trip: mockTrip });
+    }
+    return calculatedPrice ?? null;
+  }, [mobileState.hasDates, mobileState.startDate, mobileState.endDate, listing, calculatedPrice]);
 
   // Set up the map
   React.useEffect(() => {
@@ -125,7 +140,16 @@ export default function PublicListingDetailsView({
           </div>
         </div>
 
-        <ListingImageCarousel listingImages={listing.listingImages || []} maxHeight={420} />
+        <div className="relative">
+          {/* Mobile back button - overlaid on image carousel */}
+          <button
+            onClick={() => router.back()}
+            className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-700" />
+          </button>
+          <ListingImageCarousel listingImages={listing.listingImages || []} maxHeight={420} />
+        </div>
 
         <div className="flex justify-between gap-x-8 lg:gap-x-16 relative">
           <div className="w-full lg:w-full">
@@ -217,24 +241,26 @@ export default function PublicListingDetailsView({
       {/* Mobile sticky footer */}
       <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 px-4 py-3 lg:hidden">
         <div className="flex items-center justify-between gap-5">
-          <div className="flex-1 flex flex-col gap-1">
+          <div className="flex-1 min-w-0 flex flex-col gap-1">
             {/* Price row */}
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-x-[10px] sm:gap-x-4 md:gap-x-6 gap-y-0 flex-wrap">
               <div className="flex items-baseline gap-1">
                 <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
-                  {priceRange.hasRange
-                    ? `$${priceRange.min.toLocaleString()}– ${priceRange.max.toLocaleString()}`
-                    : `$${priceRange.min.toLocaleString()}`
+                  {mobileState.hasDates && mobileCalculatedPrice != null
+                    ? `$${mobileCalculatedPrice.toLocaleString()}`
+                    : priceRange.hasRange
+                      ? `$${priceRange.min.toLocaleString()}– ${priceRange.max.toLocaleString()}`
+                      : `$${priceRange.min.toLocaleString()}`
                   }
                 </span>
-                <span className="font-normal text-[#5d606d] text-xs font-['Poppins']">Per Month</span>
+                <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Per Month</span>
               </div>
               {listing.depositSize && (
                 <div className="flex items-baseline gap-1">
                   <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
                     ${listing.depositSize.toLocaleString()}
                   </span>
-                  <span className="font-normal text-[#5d606d] text-xs font-['Poppins']">Deposit</span>
+                  <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Deposit</span>
                 </div>
               )}
             </div>
@@ -255,7 +281,7 @@ export default function PublicListingDetailsView({
           </div>
           <BrandButton
             size="lg"
-            className="min-w-[160px] font-semibold"
+            className="shrink-0 font-semibold"
             onClick={() => {
               if (mobileState.hasDates) {
                 setRequestApply(prev => prev + 1);
