@@ -193,14 +193,17 @@ export default function HomepageListingCard({
     if (effectiveBadge === 'liked') {
       const canApply = !!tripId;
       const hasSignInPrompt = !canApply && onSignInPrompt;
-      const isDisabled = isApplied || (!canApply && !hasSignInPrompt);
       const buttonText = isApplied ? 'Applied' : 'Apply Now';
 
       const handleClick = canApply
         ? handleApplyClick
         : hasSignInPrompt
           ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); onSignInPrompt(); }
-          : undefined;
+          : isSignedIn && !isApplied
+            ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); router.push(`/search/listing/${listing.id}`); }
+            : undefined;
+
+      const isDisabled = isApplied || !handleClick;
 
       return (
         <button
