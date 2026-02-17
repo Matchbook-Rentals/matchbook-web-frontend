@@ -179,7 +179,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
                 name="firstName"
                 value={personalInfo.firstName}
                 onChange={handleInputChange}
-                className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
+                className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                 placeholder={formFields[0].placeholder}
               />
               {(fieldErrors['personalInfo.firstName'] || error?.firstName) && 
@@ -200,7 +200,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
               name="lastName"
               value={personalInfo.lastName}
               onChange={handleInputChange}
-              className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
+              className={inputClassName || "flex h-12 items-center gap-2 px-3 py-2 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400"}
               placeholder={formFields[1].placeholder}
             />
             {(fieldErrors['personalInfo.lastName'] || error?.lastName) && 
@@ -223,7 +223,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
                 value={personalInfo.middleName || ''}
                 onChange={handleInputChange}
                 disabled={personalInfo.noMiddleName}
-                className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
+                className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                 placeholder={formFields[2].placeholder}
               />
               {(fieldErrors['personalInfo.middleName'] || error?.middleName) && 

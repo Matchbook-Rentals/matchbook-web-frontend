@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import { cn } from '@/lib/utils';
 import { ListingAndImages } from '@/types';
 import { PersonalInfo } from '@/app/app/rent/searches/(trips-components)/application-personal-info';
@@ -27,7 +28,7 @@ import { TripContextDisplay } from '@/app/app/rent/searches/(trips-components)/t
 const INPUT_CLASS_NAME = `
   flex h-12 items-center gap-2 px-3 py-2
   relative self-stretch w-full
-  bg-background rounded-lg border border-solid border-[#d0d5dd]
+  bg-input-background rounded-lg border border-solid border-[#d0d5dd]
   shadow-shadows-shadow-xs
   text-gray-900
   placeholder:text-gray-400
@@ -281,6 +282,21 @@ export default function ApplicationWizard({
     <div className="w-full max-w-3xl mx-auto pb-24">
       <SaveStatusIndicator />
 
+      {/* Header Section */}
+      <div className="flex items-center gap-4 w-full mb-10">
+        <BrandButton
+          variant="ghost"
+          size="sm"
+          onClick={onBack}
+          className="text-primaryBrand min-w-0 pl-0"
+        >
+          Back
+        </BrandButton>
+        <h1 className="font-['Poppins'] text-[28px] font-medium text-[#373940]">
+          Your Application
+        </h1>
+      </div>
+
       {/* Trip Context Display */}
       <div className="mb-10">
         <TripContextDisplay
@@ -328,15 +344,7 @@ export default function ApplicationWizard({
 
       {/* Sticky footer */}
       <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 p-4 z-20">
-        <div className="max-w-3xl mx-auto flex justify-between items-center">
-          <Button
-            variant="outline"
-            onClick={onBack}
-            disabled={isSubmitting}
-          >
-            Back to Listing
-          </Button>
-
+        <div className="max-w-3xl mx-auto flex justify-end items-center">
           <Button
             onClick={handleSubmit}
             disabled={isSubmitting}

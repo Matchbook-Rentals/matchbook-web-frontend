@@ -340,7 +340,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                       }
                     }}
                   >
-                    <SelectTrigger className={`h-12 px-3 py-2 bg-background rounded-lg border shadow-shadows-shadow-xs ${error?.idType ? 'border-red-500' : 'border-[#d0d5dd]'}`}>
+                    <SelectTrigger className={`h-12 px-3 py-2 bg-input-background rounded-lg border shadow-shadows-shadow-xs ${error?.idType ? 'border-red-500' : 'border-[#d0d5dd]'}`}>
                       <SelectValue
                         placeholder="Select ID Type"
                         className="font-text-label-medium-regular font-[number:var(--text-label-medium-regular-font-weight)] text-[#667085] text-[length:var(--text-label-medium-regular-font-size)] tracking-[var(--text-label-medium-regular-letter-spacing)] leading-[var(--text-label-medium-regular-line-height)] [font-style:var(--text-label-medium-regular-font-style)]"
@@ -393,7 +393,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                     }
                   }}
                   placeholder="Enter ID Number"
-                  className={`${inputClassName || `${isMobile ? 'py-3' : 'h-12'} px-3 ${isMobile ? '' : 'py-2'} bg-background rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${error?.idNumber ? 'border-red-500' : ''}`}
+                  className={`${inputClassName || `${isMobile ? 'py-3' : 'h-12'} px-3 ${isMobile ? '' : 'py-2'} bg-input-background rounded-lg border shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${error?.idNumber ? 'border-red-500' : ''}`}
                 />
                 {error?.idNumber && <p className="mt-1 text-red-500 text-sm">{error.idNumber}</p>}
               </div>

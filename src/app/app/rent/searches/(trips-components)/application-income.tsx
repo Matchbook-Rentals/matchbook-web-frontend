@@ -314,7 +314,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                       value={item.source}
                       onChange={(e) => handleInputChange(index, 'source', e.target.value)}
                       placeholder="Enter your Income Source"
-                      className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-background rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${fieldErrors[`incomes.${index}.source`] || error?.source?.[index] ? "border-red-500" : ""}`}
+                      className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${fieldErrors[`incomes.${index}.source`] || error?.source?.[index] ? "border-red-500" : ""}`}
                     />
                     {(fieldErrors[`incomes.${index}.source`] || error?.source?.[index]) && (
                       <p className="mt-1 text-red-500 text-sm">{fieldErrors[`incomes.${index}.source`] || error.source?.[index]}</p>
@@ -336,7 +336,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                     value={formatCurrency(item.monthlyAmount)}
                     onChange={(e) => handleMonthlyAmountChange(index, e.target.value)}
                     placeholder="Enter Monthly Amount"
-                    className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-background rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
+                    className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index] ? "border-red-500" : ""}`}
                   />
                   {(fieldErrors[`incomes.${index}.monthlyAmount`] || error?.monthlyAmount?.[index]) && (
                     <p className="mt-1 text-red-500 text-sm">{fieldErrors[`incomes.${index}.monthlyAmount`] || error.monthlyAmount?.[index]}</p>

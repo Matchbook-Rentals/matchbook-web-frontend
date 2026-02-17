@@ -68,7 +68,7 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
             value={formatDate(startDate)}
             onChange={(e) => handleDateChange(e.target.value, onStartDateChange)}
             placeholder="MM/DD/YYYY"
-            className="flex h-12 items-center gap-2 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900"
+            className="flex h-12 items-center gap-2 px-3 py-2 bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900"
           />
         </div>
 
@@ -81,7 +81,7 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
             value={formatDate(endDate)}
             onChange={(e) => handleDateChange(e.target.value, onEndDateChange)}
             placeholder="MM/DD/YYYY"
-            className="flex h-12 items-center gap-2 px-3 py-2 bg-white rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900"
+            className="flex h-12 items-center gap-2 px-3 py-2 bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900"
           />
         </div>
       </div>

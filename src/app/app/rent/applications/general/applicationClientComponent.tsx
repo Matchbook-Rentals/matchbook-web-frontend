@@ -554,30 +554,22 @@ export default function ApplicationClientComponent({
 
 
   return (
-    <div className='bg-gray-50 mx-auto max-w-[1200px]'>
+    <>
+    <div className='bg-background mx-auto max-w-3xl'>
       <div className="flex flex-col w-full  items-start justify-center gap-4 p-4">
         {/* Header Section */}
-        <div className="flex flex-col sm:flex-row sm:items-start gap-4 sm:gap-6 py-0 w-full">
+        <div className="flex items-center gap-4 w-full">
           <BrandButton
-            variant="outline"
+            variant="ghost"
+            size="sm"
             onClick={handleBack}
-            className="flex items-center justify-center w-[77px] h-[44px] rounded-lg border border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white"
+            className="text-primaryBrand min-w-0 pl-0"
           >
-            <div className="[font-family:'Poppins',Helvetica] font-semibold text-base tracking-[0] leading-6 whitespace-nowrap">
-              Back
-            </div>
+            Back
           </BrandButton>
-
-          <div className="flex-1">
-            <div className="flex flex-col items-start gap-2">
-              <h1 className="[font-family:'Poppins',Helvetica] font-medium text-[#020202] text-2xl tracking-[0] leading-[28.8px]">
-                General Application
-              </h1>
-              <p className="[font-family:'Poppins',Helvetica] font-normal text-[#727A90] text-base tracking-[0] leading-6">
-                This application will be used when you apply to new listings
-              </p>
-            </div>
-          </div>
+          <h1 className="font-['Poppins'] text-[28px] font-medium text-[#373940]">
+            Your Application
+          </h1>
         </div>
 
         {/* Loading Overlay */}
@@ -593,7 +585,7 @@ export default function ApplicationClientComponent({
         {/* Personal Information Section */}
         <section data-section="personal-info" className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto]">
           <Card className="flex flex-col items-center justify-center gap-8 relative self-stretch w-full flex-[0_0_auto] rounded-2xl border-none shadow-none">
-            <CardContent className="flex flex-col items-start gap-8 px-0 py-6 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+            <CardContent className="flex flex-col items-start gap-8 px-0 py-6 relative self-stretch w-full flex-[0_0_auto] bg-background rounded-xl">
               <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
                 <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-3800 text-xl tracking-[-0.40px] leading-[normal]">
                   Personal Information
@@ -605,14 +597,14 @@ export default function ApplicationClientComponent({
         </section>
 
         {/* Identification Section */}
-        <section data-section="identification" className="flex flex-col items-start gap-8 p-0 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+        <section data-section="identification" className="flex flex-col items-start gap-8 p-0 relative self-stretch w-full flex-[0_0_auto] bg-background rounded-xl">
           <div className="flex flex-col items-start gap-5 relative self-stretch w-full  flex-[0_0_auto]">
             <Identification isMobile={isMobile} />
           </div>
         </section>
 
         {/* Income Section */}
-        <section data-section="income" className="flex flex-col items-start gap-8 relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+        <section data-section="income" className="flex flex-col items-start gap-8 relative self-stretch w-full flex-[0_0_auto] bg-background rounded-xl">
           <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
             <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
               Income
@@ -622,7 +614,7 @@ export default function ApplicationClientComponent({
         </section>
 
         {/* Residential History Section */}
-        <section data-section="residential-history" className="flex flex-col items-start gap-8  relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+        <section data-section="residential-history" className="flex flex-col items-start gap-8  relative self-stretch w-full flex-[0_0_auto] bg-background rounded-xl">
           <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
             <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
               Residential History
@@ -632,7 +624,7 @@ export default function ApplicationClientComponent({
         </section>
 
         {/* Questionnaire Section */}
-        <section data-section="questionnaire" className="flex flex-col items-start gap-8  relative self-stretch w-full flex-[0_0_auto] bg-neutral-50 rounded-xl">
+        <section data-section="questionnaire" className="flex flex-col items-start gap-8  relative self-stretch w-full flex-[0_0_auto] bg-background rounded-xl">
           <div className="flex flex-col items-start gap-5 relative self-stretch w-full flex-[0_0_auto]">
             <h2 className="relative self-stretch mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-gray-800 text-xl tracking-[-0.40px] leading-[normal]">
               Questionnaire
@@ -826,9 +818,11 @@ export default function ApplicationClientComponent({
         )}
       </div>
 
+      </div>
+
       {/* Footer Controls */}
-      <div className="sticky bottom-0 bg-gray-50 border-t border-gray-200 shadow-lg">
-        <div className="max-w-[1200px] mx-auto px-4 py-4">
+      <div className="sticky bottom-0 bg-background border-t border-gray-200 shadow-lg">
+        <div className="max-w-3xl mx-auto px-4 py-4">
           <div className="flex justify-end">
             <BrandButton
               onClick={handleSubmit}
@@ -840,6 +834,6 @@ export default function ApplicationClientComponent({
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
