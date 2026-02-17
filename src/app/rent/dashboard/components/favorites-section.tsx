@@ -1,30 +1,34 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import HomepageListingCard from '@/components/home-components/homepage-listing-card';
+import { useState, useEffect, useCallback } from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import {
+  type CarouselApi,
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from '@/components/ui/carousel';
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
+import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { SectionEmptyState } from './section-empty-state';
 import { useToast } from '@/components/ui/use-toast';
 import { optimisticRemoveFavorite, optimisticFavorite } from '@/app/actions/favorites';
-import { getMoreFavorites } from '@/app/actions/renter-dashboard';
-import { Button } from '@/components/ui/button';
 import type { DashboardFavorite } from '@/app/actions/renter-dashboard';
 
 interface FavoritesSectionProps {
   favorites: DashboardFavorite[];
-  hasMoreFavorites: boolean;
   defaultOpen?: boolean;
 }
 
-export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites: initialHasMore, defaultOpen = false }: FavoritesSectionProps) => {
+export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = false }: FavoritesSectionProps) => {
   const [allFavorites, setAllFavorites] = useState<DashboardFavorite[]>(initialFavorites);
-  const [hasMore, setHasMore] = useState(initialHasMore);
-  const [isLoading, setIsLoading] = useState(false);
-  const [gridColumns, setGridColumns] = useState(2);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const loadingRef = useRef<HTMLDivElement>(null);
-  const { toast } = useToast();
   const [hiddenFavoriteIds, setHiddenFavoriteIds] = useState<Set<string>>(new Set());
+  const [api, setApi] = useState<CarouselApi>();
+  const [canScrollPrev, setCanScrollPrev] = useState(false);
+  const [canScrollNext, setCanScrollNext] = useState(false);
+  const [cardsPerSlide, setCardsPerSlide] = useState(2);
+  const { toast } = useToast();
 
   // Filter out hidden favorites (for optimistic UI after unlike)
   const visibleFavorites = allFavorites.filter((fav) => !hiddenFavoriteIds.has(fav.id));
@@ -111,65 +115,45 @@ export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites
     });
   }, [allFavorites, toast]);
 
-  // Track grid columns for responsive layout
+  // Determine cards per slide based on screen size
   useEffect(() => {
-    const updateGridColumns = () => {
+    const updateCardsPerSlide = () => {
       const width = window.innerWidth;
-      if (width >= 1024) setGridColumns(5);
-      else if (width >= 768) setGridColumns(4);
-      else if (width >= 640) setGridColumns(3);
-      else setGridColumns(2);
+      if (width >= 1024) setCardsPerSlide(5);
+      else if (width >= 768) setCardsPerSlide(4);
+      else if (width >= 640) setCardsPerSlide(3);
+      else setCardsPerSlide(2);
     };
 
-    updateGridColumns();
-    window.addEventListener('resize', updateGridColumns);
-    return () => window.removeEventListener('resize', updateGridColumns);
+    updateCardsPerSlide();
+    window.addEventListener('resize', updateCardsPerSlide);
+    return () => window.removeEventListener('resize', updateCardsPerSlide);
   }, []);
 
-  // Load more favorites from server
-  const loadMoreFavorites = useCallback(async () => {
-    if (isLoading || !hasMore) return;
-
-    setIsLoading(true);
-    try {
-      const lastFavorite = allFavorites[allFavorites.length - 1];
-      if (!lastFavorite) return;
-
-      const result = await getMoreFavorites(lastFavorite.createdAt);
-
-      setAllFavorites((prev) => [...prev, ...result.favorites]);
-      setHasMore(result.hasMore);
-    } catch (error) {
-      console.error('Failed to load more favorites:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load more favorites',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  }, [allFavorites, hasMore, isLoading, toast]);
-
-  // IntersectionObserver for infinite scroll
   useEffect(() => {
-    if (!hasMore || isLoading) return;
+    if (!api) return;
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          loadMoreFavorites();
-        }
-      },
-      { root: null, rootMargin: '400px', threshold: 0.1 }
-    );
+    setCanScrollPrev(api.canScrollPrev());
+    setCanScrollNext(api.canScrollNext());
 
-    if (loadingRef.current) {
-      observer.observe(loadingRef.current);
-    }
+    api.on('select', () => {
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+    });
 
-    return () => observer.disconnect();
-  }, [hasMore, isLoading, loadMoreFavorites]);
+    api.on('reInit', () => {
+      setCanScrollPrev(api.canScrollPrev());
+      setCanScrollNext(api.canScrollNext());
+    });
+  }, [api]);
+
+  // Group favorites into slides based on screen size
+  const favoriteSlides = [];
+  for (let i = 0; i < visibleFavorites.length; i += cardsPerSlide) {
+    favoriteSlides.push(visibleFavorites.slice(i, i + cardsPerSlide));
+  }
+
+  const showNavigation = visibleFavorites.length > cardsPerSlide;
 
   return (
     <section className="mb-8 overflow-x-hidden">
@@ -188,27 +172,63 @@ export const FavoritesSection = ({ favorites: initialFavorites, hasMoreFavorites
               />
             ) : (
               <>
-                <div ref={gridRef} className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                  {visibleFavorites.map((fav, index) => (
-                    <HomepageListingCard
-                      key={fav.id}
-                      listing={favoriteListings[index] as any}
-                      badge="liked"
-                      tripId={fav.tripId}
-                      isApplied={fav.isApplied}
-                      initialFavorited={true}
-                      onUnlike={handleUnlike}
-                      isSignedIn={true}
-                    />
-                  ))}
-                </div>
+                <Carousel
+                  setApi={setApi}
+                  opts={{
+                    align: 'start',
+                    loop: false,
+                    slidesToScroll: 1,
+                  }}
+                  className="w-full"
+                  keyboardControls={false}
+                >
+                  <CarouselContent className="-ml-6">
+                    {favoriteSlides.map((slideFavorites, idx) => (
+                      <CarouselItem key={idx} className="pl-6 basis-full">
+                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                          {slideFavorites.map((fav, favIdx) => {
+                            const globalIndex = idx * cardsPerSlide + favIdx;
+                            return (
+                              <HomepageListingCard
+                                key={fav.id}
+                                listing={favoriteListings[globalIndex] as any}
+                                badge="liked"
+                                tripId={fav.tripId}
+                                isApplied={fav.isApplied}
+                                initialFavorited={true}
+                                onUnlike={handleUnlike}
+                                isSignedIn={true}
+                              />
+                            );
+                          })}
+                        </div>
+                      </CarouselItem>
+                    ))}
+                  </CarouselContent>
+                </Carousel>
 
-                {/* Loading indicator and infinite scroll trigger */}
-                {(hasMore || isLoading) && (
-                  <div ref={loadingRef} className="flex justify-center items-center py-8">
-                    {isLoading && (
-                      <div className="text-sm text-gray-500">Loading more favorites...</div>
-                    )}
+                {showNavigation && (
+                  <div className="flex items-center gap-1 mt-4 ml-[2px]">
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => api?.scrollPrev()}
+                      disabled={!canScrollPrev}
+                      className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                    >
+                      <ChevronLeft className="h-3.5 w-3.5" />
+                      <span className="sr-only">Previous favorites</span>
+                    </Button>
+                    <Button
+                      variant="outline"
+                      size="icon"
+                      onClick={() => api?.scrollNext()}
+                      disabled={!canScrollNext}
+                      className="h-6 w-6 rounded-md border border-[#3c8787] bg-background text-[#3c8787] hover:bg-[#3c8787] hover:text-white disabled:opacity-40 disabled:hover:bg-background disabled:hover:text-[#3c8787] transition-all duration-300 p-0"
+                    >
+                      <ChevronRight className="h-3.5 w-3.5" />
+                      <span className="sr-only">Next favorites</span>
+                    </Button>
                   </div>
                 )}
               </>

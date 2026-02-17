@@ -361,6 +361,5 @@ export function getDemoData(userId: string, firstName: string | null, lastName: 
     matches: demoMatches,
     applications: demoApplications,
     favorites: demoFavorites,
-    hasMoreFavorites: false,
   };
 }
