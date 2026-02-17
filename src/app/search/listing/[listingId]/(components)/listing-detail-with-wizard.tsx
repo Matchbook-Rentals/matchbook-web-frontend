@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ListingAndImages } from '@/types';
 import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view';
@@ -40,18 +40,10 @@ export default function ListingDetailWithWizard({
   userApplication,
   shouldAutoApply,
 }: ListingDetailWithWizardProps) {
-  const [wizardState, setWizardState] = useState<WizardState>('listing');
+  const [wizardState, setWizardState] = useState<WizardState>(shouldAutoApply ? 'application' : 'listing');
   const [collectedDates, setCollectedDates] = useState<{ start: Date; end: Date } | null>(null);
   const [collectedGuests, setCollectedGuests] = useState<{ adults: number; children: number; pets: number } | null>(null);
   const [hasAppliedLocal, setHasAppliedLocal] = useState(false);
-  const hasTriedAutoApply = useRef(false);
-
-  // Auto-apply effect: show application wizard on mount if shouldAutoApply is true
-  useEffect(() => {
-    if (hasTriedAutoApply.current || !shouldAutoApply) return;
-    hasTriedAutoApply.current = true;
-    setWizardState('application');
-  }, [shouldAutoApply]);
 
   const effectiveTripContext = collectedDates
     ? {
@@ -139,7 +131,7 @@ export default function ListingDetailWithWizard({
       {wizardState === 'application' && effectiveTripContext && (
         <motion.div
           key="application"
-          initial={{ x: '100%', opacity: 0 }}
+          initial={shouldAutoApply ? false : { x: '100%', opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: '100%', opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
