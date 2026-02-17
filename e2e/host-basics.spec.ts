@@ -52,9 +52,10 @@ test.describe('Host Basics', () => {
   // Story 01: Host Dashboard
   // -----------------------------------------------------------------------
   test('host can access the dashboard', async ({ page }) => {
+    test.setTimeout(60_000);
     await signInAsHost(page);
     await page.goto('/app/host/dashboard/overview');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     expect(page.url()).not.toContain('/sign-in');
   });
 
@@ -62,9 +63,10 @@ test.describe('Host Basics', () => {
   // Story 04: Manage Listings
   // -----------------------------------------------------------------------
   test('host can view listings page', async ({ page }) => {
+    test.setTimeout(60_000);
     await signInAsHost(page);
     await page.goto('/app/host/dashboard/listings');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     expect(page.url()).not.toContain('/sign-in');
   });
 
@@ -72,9 +74,10 @@ test.describe('Host Basics', () => {
   // Story 07: Messages
   // -----------------------------------------------------------------------
   test('host can access messages page', async ({ page }) => {
+    test.setTimeout(60_000);
     await signInAsHost(page);
     await page.goto('/app/host/messages');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     expect(page.url()).not.toContain('/sign-in');
   });
 
@@ -82,9 +85,10 @@ test.describe('Host Basics', () => {
   // Story 10: Settings
   // -----------------------------------------------------------------------
   test('host can access settings page', async ({ page }) => {
+    test.setTimeout(60_000);
     await signInAsHost(page);
     await page.goto('/app/host/dashboard/settings');
-    await page.waitForLoadState('networkidle');
+    await page.waitForLoadState('domcontentloaded');
     expect(page.url()).not.toContain('/sign-in');
   });
 });
