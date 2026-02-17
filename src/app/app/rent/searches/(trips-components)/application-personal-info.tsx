@@ -164,7 +164,7 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
   ];
 
   return (
-    <>
+    <div className="flex flex-col gap-y-6">
       <div className={`flex ${isMobile ? 'flex-col gap-3' : 'items-start gap-5'} relative self-stretch w-full flex-[0_0_auto]`}>
         <div className="flex flex-col items-start gap-1.5 relative flex-1 grow">
           <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
@@ -268,6 +268,6 @@ export const PersonalInfo: React.FC<PersonalInfoProps> = ({ inputClassName, isMo
         <div className="flex-1 grow"></div>
       </div>
 
-    </>
+    </div>
   );
 };
