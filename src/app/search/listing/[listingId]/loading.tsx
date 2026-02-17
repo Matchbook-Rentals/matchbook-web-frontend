@@ -1,11 +1,113 @@
 'use client';
 
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import { Skeleton } from '@/components/ui/skeleton';
 import UserMenu from '@/components/userMenu';
 import { PAGE_MARGIN } from '@/constants/styles';
 
-export default function ListingDetailLoading() {
+function ApplicationSkeleton() {
+  return (
+    <>
+      {/* Navbar */}
+      <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10 mb-4 md:mb-6 lg:mb-8 hidden md:block">
+        <header className="relative z-30 flex items-center justify-between px-6 h-[76px]">
+          <Link href="/" className="flex-shrink-0">
+            <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
+            <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
+          </Link>
+          <div className="flex items-center gap-6 flex-shrink-0">
+            <UserMenu color="white" mode="header" />
+          </div>
+        </header>
+      </div>
+
+      <div className={`${PAGE_MARGIN} font-montserrat min-h-screen`}>
+        <div className="w-full max-w-3xl mx-auto pb-24">
+          {/* Trip context bar */}
+          <div className="mb-10">
+            <div className="flex flex-wrap items-center gap-4">
+              <Skeleton className="h-10 w-36 rounded-lg" />
+              <Skeleton className="h-10 w-36 rounded-lg" />
+              <Skeleton className="h-10 w-24 rounded-lg" />
+              <Skeleton className="h-10 w-24 rounded-lg" />
+              <Skeleton className="h-10 w-24 rounded-lg" />
+            </div>
+          </div>
+
+          <div className="space-y-10">
+            {/* Basic Information */}
+            <div>
+              <Skeleton className="h-7 w-48 rounded mb-4" />
+              <div className="space-y-4">
+                <div className="grid grid-cols-2 gap-4">
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                </div>
+                <Skeleton className="h-12 w-full rounded-lg" />
+                <div className="grid grid-cols-2 gap-4">
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                </div>
+              </div>
+              {/* Identification sub-section */}
+              <div className="mt-8 space-y-4">
+                <Skeleton className="h-12 w-full rounded-lg" />
+                <Skeleton className="h-12 w-full rounded-lg" />
+              </div>
+            </div>
+
+            {/* Residential History */}
+            <div>
+              <Skeleton className="h-7 w-52 rounded mb-1" />
+              <Skeleton className="h-4 w-80 rounded mb-4" />
+              <div className="space-y-4">
+                <Skeleton className="h-12 w-full rounded-lg" />
+                <div className="grid grid-cols-3 gap-4">
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                  <Skeleton className="h-12 w-full rounded-lg" />
+                </div>
+              </div>
+            </div>
+
+            {/* Income */}
+            <div>
+              <Skeleton className="h-7 w-24 rounded mb-4" />
+              <div className="space-y-4">
+                <Skeleton className="h-12 w-full rounded-lg" />
+                <Skeleton className="h-12 w-full rounded-lg" />
+              </div>
+            </div>
+
+            {/* Questionnaire */}
+            <div>
+              <Skeleton className="h-7 w-40 rounded mb-4" />
+              <div className="space-y-4">
+                <Skeleton className="h-12 w-full rounded-lg" />
+                <Skeleton className="h-12 w-full rounded-lg" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Sticky footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 p-4 z-20">
+        <div className="max-w-3xl mx-auto flex justify-between items-center">
+          <Skeleton className="h-10 w-32 rounded-lg" />
+          <Skeleton className="h-10 w-40 rounded-lg" />
+        </div>
+      </div>
+    </>
+  );
+}
+
+function ListingDetailSkeleton() {
   return (
     <>
       {/* Navbar - hidden on mobile to match real navbar */}
@@ -118,4 +220,15 @@ export default function ListingDetailLoading() {
       </div>
     </>
   );
+}
+
+export default function ListingDetailLoading() {
+  const searchParams = useSearchParams();
+  const isApplying = searchParams.get('isApplying') === 'true';
+
+  if (isApplying) {
+    return <ApplicationSkeleton />;
+  }
+
+  return <ListingDetailSkeleton />;
 }
