@@ -14,6 +14,15 @@ export const formatDateRange = (startDate: Date | null, endDate: Date | null): s
   return `${formatDate(startDate)} - ${formatDate(endDate)}`;
 };
 
+export const formatDateParts = (date: Date | null): { monthDay: string; year: string } | null => {
+  if (!date) return null;
+  const d = new Date(date);
+  const month = d.toLocaleDateString('en-US', { month: 'short' });
+  const day = d.getDate();
+  const year = d.getFullYear().toString().slice(-2);
+  return { monthDay: `${month} ${day}`, year };
+};
+
 export const formatOccupants = (numAdults: number, numChildren: number, numPets: number): string => {
   const parts: string[] = [];
   const totalRenters = numAdults + numChildren;
