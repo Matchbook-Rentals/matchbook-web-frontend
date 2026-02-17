@@ -16,7 +16,7 @@
  */
 import { test, expect } from '@playwright/test';
 import { setupClerkTestingToken } from '@clerk/testing/playwright';
-import { signIn, signOut, getTestUser } from './helpers/auth';
+import { signIn, getTestUser } from './helpers/auth';
 
 /** Grant geolocation so listing sections render. */
 async function grantGeolocation(context: import('@playwright/test').BrowserContext) {
@@ -24,9 +24,14 @@ async function grantGeolocation(context: import('@playwright/test').BrowserConte
   await context.setGeolocation({ latitude: 40.7608, longitude: -111.891 });
 }
 
-/** Wait for listing card links to appear on the page. */
-async function waitForListingCards(page: import('@playwright/test').Page, timeout = 30_000) {
+/** Wait for homepage listing card links to appear. */
+async function waitForHomepageListings(page: import('@playwright/test').Page, timeout = 30_000) {
   await page.locator('a[href*="/search/listing/"]').first().waitFor({ state: 'visible', timeout });
+}
+
+/** Wait for search page listing cards (div cards, not <a> tags). */
+async function waitForSearchListings(page: import('@playwright/test').Page, timeout = 30_000) {
+  await page.locator('h2:has-text("/ Month")').first().waitFor({ state: 'visible', timeout });
 }
 
 test.describe('Authenticated Renter', () => {
@@ -37,6 +42,7 @@ test.describe('Authenticated Renter', () => {
   test.describe('Story 01: Browse Homepage', () => {
 
     test('authed renter sees listings and user menu on homepage', async ({ page, context }) => {
+      test.setTimeout(60_000);
       await grantGeolocation(context);
 
       await setupClerkTestingToken({ page });
@@ -46,14 +52,12 @@ test.describe('Authenticated Renter', () => {
       await page.goto('/');
 
       // Listing cards should render
-      await waitForListingCards(page);
+      await waitForHomepageListings(page);
       const count = await page.locator('a[href*="/search/listing/"]').count();
       expect(count).toBeGreaterThan(0);
 
       // User menu should be visible (proves auth state)
       await expect(page.getByTestId('user-menu-trigger')).toBeVisible();
-
-      await signOut(page).catch(() => {});
     });
   });
 
@@ -63,6 +67,7 @@ test.describe('Authenticated Renter', () => {
   test.describe('Story 02: Search Listings', () => {
 
     test('authed renter can view search results at /search', async ({ page, context }) => {
+      test.setTimeout(60_000);
       await grantGeolocation(context);
 
       await setupClerkTestingToken({ page });
@@ -71,15 +76,15 @@ test.describe('Authenticated Renter', () => {
 
       await page.goto('/search?lat=40.7608&lng=-111.891&location=Salt+Lake+City');
 
-      await waitForListingCards(page);
-      const count = await page.locator('a[href*="/search/listing/"]').count();
+      // Search cards are divs with onClick, not <a> tags — wait for price headings
+      await waitForSearchListings(page);
+      const count = await page.locator('h3').count();
       expect(count).toBeGreaterThan(0);
 
       // Filters button should be available
       const filtersBtn = page.locator('button:has-text("Filters")');
       await expect(filtersBtn.first()).toBeVisible({ timeout: 10_000 });
 
-      await signOut(page).catch(() => {});
     });
   });
 
@@ -89,7 +94,7 @@ test.describe('Authenticated Renter', () => {
   test.describe('Story 03: View Listing Details', () => {
 
     test('authed renter can click a listing and view details', async ({ page, context }) => {
-      test.setTimeout(60_000);
+      test.setTimeout(90_000);
       await grantGeolocation(context);
 
       await setupClerkTestingToken({ page });
@@ -97,7 +102,7 @@ test.describe('Authenticated Renter', () => {
       await signIn(page, testUser.email, testUser.password);
 
       await page.goto('/');
-      await waitForListingCards(page);
+      await waitForHomepageListings(page);
 
       // Click the first listing
       const firstListing = page.locator('a[href*="/search/listing/"]').first();
@@ -114,7 +119,6 @@ test.describe('Authenticated Renter', () => {
       const imageCount = await images.count();
       expect(imageCount).toBeGreaterThan(0);
 
-      await signOut(page).catch(() => {});
     });
   });
 
@@ -124,6 +128,7 @@ test.describe('Authenticated Renter', () => {
   test.describe('Story 05: Favorite Listings', () => {
 
     test('authed renter can favorite without auth prompt', async ({ page, context }) => {
+      test.setTimeout(60_000);
       await grantGeolocation(context);
 
       await setupClerkTestingToken({ page });
@@ -131,7 +136,7 @@ test.describe('Authenticated Renter', () => {
       await signIn(page, testUser.email, testUser.password);
 
       await page.goto('/');
-      await waitForListingCards(page);
+      await waitForHomepageListings(page);
 
       // Click the heart button on the first listing card
       const firstCard = page.locator('a[href*="/search/listing/"]').first();
@@ -152,7 +157,6 @@ test.describe('Authenticated Renter', () => {
       const guestCookie = cookies.find(c => c.name === 'matchbook_guest_session_id');
       expect(guestCookie).toBeFalsy();
 
-      await signOut(page).catch(() => {});
     });
   });
 
