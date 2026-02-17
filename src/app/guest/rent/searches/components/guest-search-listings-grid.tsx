@@ -271,7 +271,7 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
   }, [columnCount, visibleListingIds, setVisibleListingIds]);
 
   // Only treat as selected if user explicitly clicked a marker AND we're showing one listing
-  const isSelectedListing = visibleListingIds?.length === 1 && selectedListingId !== null;
+  const isSelectedListing = visibleListingIds?.length === 1 && selectedListingId != null;
   const isSingleListing = isSelectedListing; // Only treat as single when explicitly selected
 
   const getEffectiveHeight = useCallback(() => {
@@ -311,13 +311,8 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
           >
             <div
               ref={gridRef}
-              className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 pl-4 justify-items-center ${
-                isSelectedListing ? 'md:justify-items-center' : 'justify-items-start'
-              } ${isSingleListing ? 'pb-0' : 'pb-12'}`}
+              className={`grid grid-cols-1 sm:grid-cols-2 pl-4 justify-items-start ${isSingleListing ? 'pb-0' : 'pb-12'}`}
               style={{
-                gridTemplateColumns: columnCount && !isSelectedListing
-                  ? `repeat(${columnCount}, 1fr)`
-                  : undefined,
                 gap: `${gridGap}px`
               }}
             >
