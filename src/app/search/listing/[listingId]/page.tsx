@@ -176,10 +176,8 @@ export default async function SearchListingPage({ params, searchParams }: Listin
   // Default location string for display
   const locationString = `${listing.city}, ${listing.state}`
 
-  // TODO: `isApplying` query param is still passed from homepage cards — re-enable
-  // auto-apply once the PM wants to support jumping straight into the application view.
-  // const shouldAutoApply = searchParams.isApplying === 'true' && !!user && !!tripContext;
-  const shouldAutoApply = false;
+  // To disable auto-apply, replace the line below with: const shouldAutoApply = false;
+  const shouldAutoApply = searchParams.isApplying === 'true' && !!user && !!tripContext;
 
   return (
     <>
