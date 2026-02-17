@@ -73,6 +73,18 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
 
   const host = listing.user;
 
+  const buildApplyRedirectUrl = () => {
+    const currentPath = window.location.pathname;
+    const params = new URLSearchParams();
+    if (popoverStart) params.set('startDate', popoverStart.toISOString());
+    if (popoverEnd) params.set('endDate', popoverEnd.toISOString());
+    if (guests.adults > 0) params.set('numAdults', String(guests.adults));
+    if (guests.children > 0) params.set('numChildren', String(guests.children));
+    if (guests.pets > 0) params.set('numPets', String(guests.pets));
+    params.set('isApplying', 'true');
+    return `${currentPath}?${params.toString()}`;
+  };
+
   const handleApplyClick = () => {
     if (!isAuthenticated) { setShowAuthModal(true); return; }
     if (onApplyClick) {
@@ -368,7 +380,11 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
             </BrandButton>
           </div>
 
-        <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
+        <GuestAuthModal
+          isOpen={showAuthModal}
+          onOpenChange={setShowAuthModal}
+          redirectUrl={popoverStart && popoverEnd ? buildApplyRedirectUrl() : undefined}
+        />
       </CardContent>
     </Card>
   );

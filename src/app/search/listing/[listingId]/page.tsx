@@ -21,6 +21,9 @@ interface ListingPageProps {
     startDate?: string
     endDate?: string
     isApplying?: string
+    numAdults?: string
+    numChildren?: string
+    numPets?: string
   }
 }
 
@@ -114,6 +117,11 @@ export default async function SearchListingPage({ params, searchParams }: Listin
   const startDate = startDateStr ? new Date(startDateStr) : undefined;
   const endDate = endDateStr ? new Date(endDateStr) : undefined;
 
+  // Parse guest counts from query params (used when redirecting back after login)
+  const queryNumAdults = searchParams.numAdults ? parseInt(searchParams.numAdults, 10) : undefined;
+  const queryNumChildren = searchParams.numChildren ? parseInt(searchParams.numChildren, 10) : undefined;
+  const queryNumPets = searchParams.numPets ? parseInt(searchParams.numPets, 10) : undefined;
+
   // Build trip context
   let tripContext: { tripId?: string; startDate: Date; endDate: Date; numAdults?: number; numChildren?: number; numPets?: number } | null = null;
   let calculatedPrice: number | null = null;
@@ -135,6 +143,11 @@ export default async function SearchListingPage({ params, searchParams }: Listin
         };
       }
     }
+
+    // Use query param guest counts as fallback (from pre-login redirect)
+    if (!guestCounts.numAdults && queryNumAdults) guestCounts.numAdults = queryNumAdults;
+    if (!guestCounts.numChildren && queryNumChildren) guestCounts.numChildren = queryNumChildren;
+    if (!guestCounts.numPets && queryNumPets) guestCounts.numPets = queryNumPets;
 
     tripContext = { tripId, startDate, endDate, ...guestCounts };
 

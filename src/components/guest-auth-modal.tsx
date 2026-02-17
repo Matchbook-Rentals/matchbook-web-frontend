@@ -7,20 +7,22 @@ import { BrandButton } from '@/components/ui/brandButton';
 interface GuestAuthModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  redirectUrl?: string;
 }
 
 export const GuestAuthModal: React.FC<GuestAuthModalProps> = ({
   isOpen,
-  onOpenChange
+  onOpenChange,
+  redirectUrl,
 }) => {
   const handleCancel = () => {
     onOpenChange(false);
   };
 
   const handleSignIn = () => {
-    const currentPath = window.location.pathname;
-    const redirectUrl = encodeURIComponent(currentPath);
-    window.location.href = `/sign-in?redirect_url=${redirectUrl}`;
+    const url = redirectUrl || window.location.pathname;
+    const encoded = encodeURIComponent(url);
+    window.location.href = `/sign-in?redirect_url=${encoded}`;
   };
 
   return (
