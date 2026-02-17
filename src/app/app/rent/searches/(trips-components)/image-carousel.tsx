@@ -391,14 +391,14 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
       </div>
 
       {/* Mobile Layout - Stacked */}
-      <div className="lg:hidden flex flex-col space-y-4 w-full">
-        {/* Main image with Show More button */}
+      <div className="lg:hidden flex flex-col w-full">
+        {/* Main image carousel */}
         <div className="w-full h-[30vh] relative" style={maxHeight ? { maxHeight: Math.round(maxHeight * 0.65) } : undefined}>
           <Carousel opts={{ loop: true }} setApi={setApi}>
             <CarouselContent>
               {mobileImages.map((image, index) => (
                   <CarouselItem key={image.id} className="w-full h-[30vh]" style={maxHeight ? { maxHeight: Math.round(maxHeight * 0.65) } : undefined}>
-                    <div className="relative w-full h-full overflow-hidden rounded-[5px]">
+                    <div className="relative w-full h-full overflow-hidden rounded-2xl">
                       {/* Thumbnail - loads fast, stretched */}
                       <Image
                         src={image.url}
@@ -426,17 +426,15 @@ const ListingImageCarousel: React.FC<ListingImageCarouselProps> = ({ listingImag
                   </CarouselItem>
               ))}
             </CarouselContent>
-            {/* Removed duplicate/stray elements below */}
-            <CarouselPrevious className="hidden sm:flex absolute -left-0 h-16 w-16 text-white bg-black/10 hover:bg-black/70 hover:text-white" />
-            <CarouselNext className="hidden sm:flex absolute -right-0 bottom-6 h-16 w-16 hover:bg-black/70 hover:text-white text-white bg-black/10" />
           </Carousel>
+          {/* Bottom-right: photo counter that opens "View All" modal */}
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
             <DialogTrigger className='' asChild>
-              <Button
-                className="absolute bottom-2 right-2 py-1 px-2 h-fit text-white border border-white bg-transparent hover:text-black hover:bg-white"
+              <button
+                className="absolute bottom-3 right-3 z-10 px-3 py-1.5 rounded-md bg-black/60 text-white text-xs font-medium backdrop-blur-sm hover:bg-black/70 transition-colors"
               >
-                <p className='text-[12px]'>View All</p>
-              </Button>
+                {activeImage + 1} / {mobileImages.length}
+              </button>
             </DialogTrigger>
             <DialogContent className="max-w-[95vw] max-h-[90vh] sm:max-h-[95vh] lg:max-w-[90vw] lg:max-h-[98vh] pt-6 pb-4 rounded-lg flex flex-col overflow-hidden">
               <DialogHeader>

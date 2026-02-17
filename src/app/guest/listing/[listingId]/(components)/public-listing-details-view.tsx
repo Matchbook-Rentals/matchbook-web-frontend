@@ -10,7 +10,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { Card, CardContent } from '@/components/ui/card';
 import ShareButton from '@/components/ui/share-button';
 import { BrandButton } from '@/components/ui/brandButton';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Heart, Share } from 'lucide-react';
 import { calculateRent } from '@/lib/calculate-rent';
 import { Trip } from '@prisma/client';
 import { format } from 'date-fns';
@@ -113,42 +113,60 @@ export default function PublicListingDetailsView({
   return (
     <>
       <div className="w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6">
-        {/* Title and Share Button - Above Image Carousel */}
-        <div className="mb-4">
-          {/* Desktop Title and Share Button */}
-          <div className="hidden lg:flex items-center justify-between">
-            <h1 className="font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
-              {listing.title || "Your Home Away From Home"}
-            </h1>
-            <ShareButton
-              title={`${listing.title} on MatchBook`}
-              text={`Check out this listing on MatchBook!`}
-              url={`${baseUrl}/search/listing/${listing.id}`}
-            />
-          </div>
-          
-          {/* Mobile Title and Share Button */}
-          <div className="flex lg:hidden items-center justify-between">
-            <h2 className="flex-1 font-medium text-[#404040] text-xl md:text-2xl tracking-[-2.00px] font-['Poppins',Helvetica]">
-              {listing.title || "Your Home Away From Home"}
-            </h2>
-            <ShareButton
-              title={`${listing.title} on MatchBook`}
-              text={`Check out this listing on MatchBook!`}
-              url={`${baseUrl}/search/listing/${listing.id}`}
-            />
-          </div>
+        {/* Desktop: Title and Share Button - Above Image Carousel */}
+        <div className="hidden lg:flex items-center justify-between mb-4">
+          <h1 className="font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
+            {listing.title || "Your Home Away From Home"}
+          </h1>
+          <ShareButton
+            title={`${listing.title} on MatchBook`}
+            text={`Check out this listing on MatchBook!`}
+            url={`${baseUrl}/search/listing/${listing.id}`}
+          />
         </div>
 
         <div className="relative">
-          {/* Mobile back button - overlaid on image carousel */}
+          {/* Mobile overlay buttons on image carousel */}
+          {/* Top-left: Back button */}
           <button
             onClick={() => router.back()}
-            className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md transition-colors"
+            className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
+          {/* Top-right: Share + Heart buttons */}
+          <div className="lg:hidden absolute top-3 right-3 z-10 flex items-center gap-2">
+            <button
+              onClick={() => {
+                const shareData = {
+                  title: `${listing.title} on MatchBook`,
+                  text: 'Check out this listing on MatchBook!',
+                  url: `${baseUrl}/search/listing/${listing.id}`,
+                };
+                if (navigator.share) {
+                  navigator.share(shareData).catch(() => {});
+                } else {
+                  navigator.clipboard.writeText(shareData.url || '');
+                }
+              }}
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+            >
+              <Share className="w-[18px] h-[18px] text-gray-700" />
+            </button>
+            <button
+              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+            >
+              <Heart className="w-[18px] h-[18px] text-gray-700" />
+            </button>
+          </div>
           <ListingImageCarousel listingImages={listing.listingImages || []} maxHeight={420} />
+        </div>
+
+        {/* Mobile: Title below image */}
+        <div className="lg:hidden mt-3">
+          <h2 className="font-medium text-[#404040] text-xl md:text-2xl tracking-[-2.00px] font-['Poppins',Helvetica]">
+            {listing.title || "Your Home Away From Home"}
+          </h2>
         </div>
 
         <div className="flex justify-between gap-x-8 lg:gap-x-16 relative">
