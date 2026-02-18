@@ -438,7 +438,7 @@ export default function SearchResultsNavbar({
     <>
     <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10">
       {/* Header row */}
-      <header className="relative z-30 flex items-center gap-4 px-4 sm:px-6 h-[76px]">
+      <header className="relative z-30 flex items-center justify-between md:justify-start gap-4 px-4 sm:px-6 h-[76px]">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0">
           <img className="w-[160px] md:w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
