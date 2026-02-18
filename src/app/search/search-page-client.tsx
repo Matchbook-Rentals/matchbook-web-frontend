@@ -576,9 +576,13 @@ export default function SearchPageClient({
     endDate: new Date(localTripData!.endDate!),
   } : null, [hasDates, currentMapCenter, localTripData]);
 
+  const boundsFilteredListings = useMemo(() =>
+    allListings.filter(l => !visibleBounds || isWithinBounds(l.latitude, l.longitude, visibleBounds)),
+    [allListings, visibleBounds]
+  );
+
   const showListings = useMemo(() =>
-    allListings
-      .filter(l => !visibleBounds || isWithinBounds(l.latitude, l.longitude, visibleBounds))
+    boundsFilteredListings
       .filter(l => {
         if (hasDates && filterTrip) {
           // Dates set: use single calculated price for the specific duration
@@ -591,7 +595,7 @@ export default function SearchPageClient({
         const maxP = prices.length ? Math.max(...prices) : minP;
         return matchesFilters({ ...l, calculatedPrice: l.price, calculatedPriceMin: minP, calculatedPriceMax: maxP }, filters, false, null);
       }),
-    [allListings, filters, visibleBounds, hasDates, filterTrip]
+    [boundsFilteredListings, filters, hasDates, filterTrip]
   );
 
   const likedListings = useMemo(() => listings.filter(l => favIds.has(l.id)), [listings, favIds]);
@@ -873,8 +877,8 @@ export default function SearchPageClient({
         onOpenChange={setIsFiltersOpen}
         filters={filters}
         onApplyFilters={setFilters}
-        listings={allListings}
-        totalCount={allListings.length}
+        listings={boundsFilteredListings}
+        totalCount={boundsFilteredListings.length}
       />
     </GuestTripContext.Provider>
   );
