@@ -429,12 +429,23 @@ export default function SearchPageClient({
   }, [isSignedIn]);
 
   const boundsAreClose = useCallback((a: MapBounds, b: MapBounds) => {
-    return (
+    const positionClose = (
       Math.abs(a.north - b.north) < BOUNDS_EPSILON &&
       Math.abs(a.south - b.south) < BOUNDS_EPSILON &&
       Math.abs(a.east - b.east) < BOUNDS_EPSILON &&
       Math.abs(a.west - b.west) < BOUNDS_EPSILON
     );
+    if (!positionClose) return false;
+
+    // Detect zoom changes by comparing viewport size
+    const aLatSpan = a.north - a.south;
+    const bLatSpan = b.north - b.south;
+    if (aLatSpan > 0 && bLatSpan > 0) {
+      const ratio = Math.max(aLatSpan / bLatSpan, bLatSpan / aLatSpan);
+      if (ratio > 1.1) return false;
+    }
+
+    return true;
   }, []);
 
   const handleBoundsChanged = useCallback((bounds: MapBounds) => {
