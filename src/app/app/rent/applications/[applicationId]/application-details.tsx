@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 import { calculateRent } from "@/lib/calculate-rent";
 import { SecureFileViewer } from "@/components/secure-file-viewer";
 import BrandModal from "@/components/BrandModal";
-import { getOrCreateListingConversation } from "@/app/actions/housing-requests";
 
 // Centralized styles matching prototype design
 const STYLES = {
@@ -206,20 +205,8 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
   };
 
   // Helper function to handle messaging host
-  const handleMessageHost = async () => {
-    if (!listing.user?.id) return;
-    
-    try {
-      const result = await getOrCreateListingConversation(listing.id, listing.user.id);
-      
-      if (result.success && result.conversationId) {
-        router.push(`/app/rent/messages?convo=${result.conversationId}`);
-      } else {
-        console.error('Failed to create conversation:', result.error);
-      }
-    } catch (error) {
-      console.error('Error messaging host:', error);
-    }
+  const handleMessageHost = () => {
+    router.push(`/app/rent/messages?listingId=${listing.id}`);
   };
 
   // Helper function to get questionnaire data

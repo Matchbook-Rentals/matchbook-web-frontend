@@ -125,12 +125,12 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
                                         >
                                           <Link href={booking.id.startsWith('demo-') ? '/newnew/demo' : `/rent/bookings/${booking.id}`}>View Details</Link>
                                         </Button>
-                                        {booking.listing?.userId && (
+                                        {booking.listingId && (
                                           <Button
                                             className="h-[29px] px-3.5 py-2.5 rounded-lg bg-[#3c8787] hover:bg-[#3c8787]/90 text-white font-poppins font-semibold text-[11px]"
                                             asChild
                                           >
-                                            <Link href={`/app/rent/messages?userId=${booking.listing.userId}`}>Message Host</Link>
+                                            <Link href={`/app/rent/messages?listingId=${booking.listingId}`}>Message Host</Link>
                                           </Button>
                                         )}
                                       </div>

@@ -22,13 +22,15 @@ interface MessagesPageClientProps {
   };
   initialIsMobile: boolean;
   isAdmin: boolean;
+  autoSelectConversationId?: string | null;
 }
 
 const MessagesPageClient: React.FC<MessagesPageClientProps> = ({
   conversations,
   user,
   initialIsMobile,
-  isAdmin
+  isAdmin,
+  autoSelectConversationId
 }) => {
   return (
     <>
@@ -36,6 +38,7 @@ const MessagesPageClient: React.FC<MessagesPageClientProps> = ({
         conversations={conversations}
         user={user}
         initialIsMobile={initialIsMobile}
+        autoSelectConversationId={autoSelectConversationId}
       />
       {isAdmin && (
         <WebSocketStatusIndicator userId={user.id} />

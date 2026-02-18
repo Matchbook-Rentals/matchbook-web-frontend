@@ -51,6 +51,7 @@ export const ApplicationsSection = ({ applications }: ApplicationsSectionProps) 
                       guests={formatOccupants(app.trip?.numAdults || 0, app.trip?.numChildren || 0, app.trip?.numPets || 0)}
                       imageUrl={app.listing?.listingImages?.[0]?.url || PLACEHOLDER_IMAGE}
                       applicationId={app.id}
+                      listingId={app.listingId}
                       userId={app.listing?.user?.id}
                     />
                   );

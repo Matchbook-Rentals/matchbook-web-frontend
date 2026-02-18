@@ -391,11 +391,13 @@ const clearTypingTimeout = (
 const MessageInterface = ({
   conversations: initialConversations,
   user,
-  initialIsMobile = false
+  initialIsMobile = false,
+  autoSelectConversationId = null
 }: {
   conversations: ExtendedConversation[],
   user: { id: string, imageUrl?: string | null, publicMetadata?: { role?: string } },
-  initialIsMobile?: boolean
+  initialIsMobile?: boolean,
+  autoSelectConversationId?: string | null
 }) => {
   const [allConversations, setAllConversations] = useState<ExtendedConversation[]>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
@@ -411,6 +413,7 @@ const MessageInterface = ({
   const typingTimeoutRef = useRef<Record<string, NodeJS.Timeout>>({});
   const isMobile = useMobileDetect(initialIsMobile);
   const selectedConversationIdRef = useRef<string | null>(null); // Ref for selected ID
+  const autoSelectReadReceiptSent = useRef(false); // Track if we've sent read receipts for auto-selected convo
   const searchParams = useSearchParams(); // Get search params
 
   const socketUrl = process.env.NEXT_PUBLIC_GO_SERVER_URL || 'http://localhost:8080';
@@ -522,31 +525,63 @@ const MessageInterface = ({
   }, [onMessageReceivedHandler]);
 
 
-  // Initialize conversations and set admin status
+  // Initialize conversations and auto-select target conversation
   useEffect(() => {
     if (user) {
       setAllConversations(initialConversations);
 
-      const convoIdFromQuery = searchParams.get('convo');
-      if (convoIdFromQuery) {
-        const conversationExists = initialConversations.some(conv => conv.id === convoIdFromQuery);
+      // Prefer autoSelectConversationId (from ?listingId=) over ?convo= query param
+      const targetConvoId = autoSelectConversationId || searchParams.get('convo');
+      if (targetConvoId) {
+        const conversationExists = initialConversations.some(conv => conv.id === targetConvoId);
         if (conversationExists) {
-          setTimeout(() => {
-            handleSelectConversation(convoIdFromQuery);
-            // The markMessagesAsReadByTimestamp was here, it's also in handleSelectConversation
-            // Let's ensure it's consistently handled.
-            // markMessagesAsReadByTimestamp(convoIdFromQuery, new Date()); // This is a server action
-
-            // The logic to update client state for read messages is in handleSelectConversation
-          }, 0);
+          // Set selection directly to avoid stale closure in handleSelectConversation
+          setSelectedConversationId(targetConvoId);
+          selectedConversationIdRef.current = targetConvoId;
+          if (isMobile) {
+            setSidebarVisible(false);
+          }
         } else {
-          console.warn(`Conversation ID "${convoIdFromQuery}" from query param not found in user's conversations.`);
+          console.warn(`Conversation ID "${targetConvoId}" not found in user's conversations.`);
         }
       }
     }
-    // The hook manages its own connection lifecycle and cleanup.
-    // No need for socketRef.current.disconnect() or clearing timeouts here related to socket.
-  }, [user, initialConversations, searchParams]); // handleSelectConversation is memoized or stable
+  }, [user, initialConversations, searchParams, autoSelectConversationId, isMobile]);
+
+  // Send read receipts for auto-selected conversation once allConversations is populated
+  useEffect(() => {
+    if (autoSelectReadReceiptSent.current) return;
+    if (!user || !selectedConversationId || allConversations.length === 0) return;
+
+    const conv = allConversations.find(c => c.id === selectedConversationId);
+    if (!conv) return;
+
+    autoSelectReadReceiptSent.current = true;
+
+    const unreadMessages = conv.messages.filter(m =>
+      m.senderId !== user.id && !m.isRead && m.id
+    );
+    if (unreadMessages.length > 0) {
+      const timestamp = new Date().toISOString();
+      const messageIds = unreadMessages.map(m => m.id).filter(Boolean);
+
+      setAllConversations(prev =>
+        updateMessagesReadTimestamp(prev, selectedConversationId, messageIds, timestamp)
+      );
+
+      const receiver = conv.participants.find(p => p.userId !== user.id);
+      if (webSocketManager.isConnected && receiver && messageIds.length > 0) {
+        webSocketManager.sendReadReceipt({
+          conversationId: selectedConversationId,
+          receiverId: receiver.userId,
+          senderId: user.id,
+          timestamp,
+          messageIds,
+        });
+      }
+      markMessagesAsReadByTimestamp(selectedConversationId, new Date(timestamp));
+    }
+  }, [user, selectedConversationId, allConversations, webSocketManager.isConnected, webSocketManager.sendReadReceipt]);
 
   // Handle conversation filtering with async logging
   useEffect(() => {

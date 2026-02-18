@@ -506,6 +506,47 @@ export async function findConversationBetweenUsers(listingId: string, otherUserI
   }
 }
 
+export async function findOrCreateConversationForListing(listingId: string): Promise<{ conversationId: string | null }> {
+  try {
+    const userId = await checkAuth();
+
+    // Look up the listing to get the host's userId
+    const listing = await prisma.listing.findUnique({
+      where: { id: listingId },
+      select: { userId: true }
+    });
+
+    if (!listing) {
+      console.error(`Listing not found for ID: ${listingId}`);
+      return { conversationId: null };
+    }
+
+    const hostId = listing.userId;
+
+    // Prevent creating conversations with oneself
+    if (userId === hostId) {
+      return { conversationId: null };
+    }
+
+    // Try to find existing conversation
+    const existing = await findConversationBetweenUsers(listingId, hostId);
+    if (existing.conversationId) {
+      return { conversationId: existing.conversationId };
+    }
+
+    // Create new conversation
+    const result = await createListingConversation(listingId, hostId);
+    if (result.success && result.conversationId) {
+      return { conversationId: result.conversationId };
+    }
+
+    return { conversationId: null };
+  } catch (error) {
+    console.error('Error in findOrCreateConversationForListing:', error);
+    return { conversationId: null };
+  }
+}
+
 export async function createListingConversation(
   listingId: string,
   otherUserId: string

@@ -12,6 +12,7 @@ interface RenterDashboardApplicationCardProps {
   guests: string;
   imageUrl: string;
   applicationId: string;
+  listingId?: string;
   userId?: string;
 }
 
@@ -23,6 +24,7 @@ export const RenterDashboardApplicationCard = ({
   guests,
   imageUrl,
   applicationId,
+  listingId,
   userId,
 }: RenterDashboardApplicationCardProps): JSX.Element => {
   return (
@@ -84,11 +86,11 @@ export const RenterDashboardApplicationCard = ({
                 </span>
               </BrandButton>
 
-              {userId && (
+              {listingId && (
                 <BrandButton
                   variant="outline"
                   size="sm"
-                  href={`/app/rent/messages?userId=${userId}`}
+                  href={`/app/rent/messages?listingId=${listingId}`}
                   className="!flex-1 sm:!flex-initial !max-w-[115px] sm:!w-[115px] !h-[29px] !px-2 sm:!px-3.5 !py-2.5 !min-w-0 rounded-lg border-[#3c8787] hover:bg-transparent"
                 >
                   <span className="[font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-[11px] leading-5">

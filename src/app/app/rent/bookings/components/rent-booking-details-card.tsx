@@ -9,8 +9,6 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
-import { findConversationBetweenUsers, createListingConversation } from "@/app/actions/conversations";
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
 
 interface Occupant {
@@ -143,45 +141,20 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
   bookingModifications,
 }) => {
   const router = useRouter();
-  const { user } = useUser();
-  const [messagingLoading, setMessagingLoading] = React.useState(false);
   const [isDateModificationModalOpen, setIsDateModificationModalOpen] = useState(false);
 
-  // Check if there are booking modifications or payment modifications  
+  // Check if there are booking modifications or payment modifications
   const hasBookingModifications = bookingModifications && bookingModifications.length > 0;
-  // Note: This component receives bookingModifications as a separate prop, so we need to check 
+  // Note: This component receives bookingModifications as a separate prop, so we need to check
   // if payment modifications exist on the rentPayments if they're available
   const hasModifications = hasBookingModifications; // For now, this component doesn't have access to rentPayments
 
-  const handleMessageHost = async () => {
-    if (!listingId || !hostUserId) {
-      console.error('Missing listingId or hostUserId for messaging');
+  const handleMessageHost = () => {
+    if (!listingId) {
       if (onSecondaryAction) onSecondaryAction();
       return;
     }
-
-    setMessagingLoading(true);
-    try {
-      // First check if conversation exists
-      const existing = await findConversationBetweenUsers(listingId, hostUserId);
-      
-      if (existing.conversationId) {
-        // Navigate to existing conversation
-        router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
-      } else {
-        // Create new conversation and navigate
-        const result = await createListingConversation(listingId, hostUserId);
-        if (result.success && result.conversationId) {
-          router.push(`/app/rent/messages?convoId=${result.conversationId}`);
-        } else {
-          console.error('Failed to create conversation:', result.error);
-        }
-      }
-    } catch (error) {
-      console.error('Error handling message host:', error);
-    } finally {
-      setMessagingLoading(false);
-    }
+    router.push(`/app/rent/messages?listingId=${listingId}`);
   };
 
   const filteredOccupants = occupants.filter(o => o.count > 0);
@@ -367,20 +340,13 @@ export const RentBookingDetailsCard: React.FC<RentBookingDetailsCardProps> = ({
                 )}
 
                 {secondaryButtonText && (
-                  <BrandButton 
+                  <BrandButton
                     variant="outline"
                     onClick={handleMessageHost}
-                    disabled={isLoading || messagingLoading}
+                    disabled={isLoading}
                     className="w-full md:w-auto whitespace-nowrap"
                   >
-                    {messagingLoading ? (
-                      <>
-                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
-                        Loading...
-                      </>
-                    ) : (
-                      secondaryButtonText
-                    )}
+                    {secondaryButtonText}
                   </BrandButton>
                 )}
 

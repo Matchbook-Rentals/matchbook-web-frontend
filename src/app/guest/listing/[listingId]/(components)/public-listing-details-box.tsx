@@ -10,7 +10,6 @@ import { BrandButton } from '@/components/ui/brandButton';
 
 import { useRouter } from 'next/navigation';
 import { applyToListingFromSearch } from '@/app/actions/housing-requests';
-import { getOrCreateListingConversation } from '@/app/actions/housing-requests';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import SearchDateRange from '@/components/newnew/search-date-range';
 import { Button } from '@/components/ui/button';
@@ -63,6 +62,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   });
   const [isLargeScreen, setIsLargeScreen] = useState(false);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authRedirectUrl, setAuthRedirectUrl] = useState<string | undefined>(undefined);
 
   useEffect(() => {
     const checkScreenSize = () => setIsLargeScreen(window.innerWidth >= 1024);
@@ -75,7 +75,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
 
   const buildApplyRedirectUrl = () => {
     const currentPath = window.location.pathname;
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(window.location.search);
     if (popoverStart) params.set('startDate', popoverStart.toISOString());
     if (popoverEnd) params.set('endDate', popoverEnd.toISOString());
     if (guests.adults > 0) params.set('numAdults', String(guests.adults));
@@ -86,7 +86,11 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   };
 
   const handleApplyClick = () => {
-    if (!isAuthenticated) { setShowAuthModal(true); return; }
+    if (!isAuthenticated) {
+      setAuthRedirectUrl(popoverStart && popoverEnd ? buildApplyRedirectUrl() : undefined);
+      setShowAuthModal(true);
+      return;
+    }
     if (onApplyClick) {
       if (onDatesSelected && popoverStart && popoverEnd) {
         onDatesSelected(popoverStart, popoverEnd, guests);
@@ -155,15 +159,12 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   };
 
   const handleMessageHost = () => {
-    if (!isAuthenticated) { setShowAuthModal(true); return; }
-    if (!host?.id) return;
-
-    startTransition(async () => {
-      const result = await getOrCreateListingConversation(listing.id, host.id);
-      if (result.success && result.conversationId) {
-        router.push(`/app/messages?conversationId=${result.conversationId}`);
-      }
-    });
+    if (!isAuthenticated) {
+      setAuthRedirectUrl(`/app/rent/messages?listingId=${listing.id}`);
+      setShowAuthModal(true);
+      return;
+    }
+    router.push(`/app/rent/messages?listingId=${listing.id}`);
   };
 
   const getApplyButtonText = () => {
@@ -383,7 +384,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
         <GuestAuthModal
           isOpen={showAuthModal}
           onOpenChange={setShowAuthModal}
-          redirectUrl={popoverStart && popoverEnd ? buildApplyRedirectUrl() : undefined}
+          redirectUrl={authRedirectUrl}
         />
       </CardContent>
     </Card>

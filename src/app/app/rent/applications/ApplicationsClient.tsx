@@ -9,7 +9,6 @@ import {
   UsersIcon,
 } from "lucide-react";
 import React, { useState, useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { Badge } from "@/components/ui/badge";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
@@ -21,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { getOrCreateListingConversation } from "@/app/actions/housing-requests";
 
 interface HousingRequestWithDetails {
   id: string;
@@ -402,31 +400,10 @@ const ApplicationActions = ({ application }: ApplicationCardProps) => (
 );
 
 const ApplicationButtons = ({ application }: ApplicationCardProps) => {
-  const router = useRouter();
-
-  const handleMessageHost = async () => {
-    if (!application.hostUserId) return;
-    
-    try {
-      const result = await getOrCreateListingConversation(
-        application.listingId, 
-        application.hostUserId
-      );
-      
-      if (result.success && result.conversationId) {
-        router.push(`/app/rent/messages?convo=${result.conversationId}`);
-      } else {
-        console.error('Failed to create conversation:', result.error);
-      }
-    } catch (error) {
-      console.error('Error messaging host:', error);
-    }
-  };
-
   return (
     <div className="flex flex-col md:flex-row items-start md:items-center md:justify-end gap-2 md:gap-3 w-full">
-      <BrandButton 
-        variant="outline" 
+      <BrandButton
+        variant="outline"
         size="sm"
         href={`/app/rent/applications/${application.id}`}
         className="w-full md:w-auto whitespace-nowrap"
@@ -434,11 +411,11 @@ const ApplicationButtons = ({ application }: ApplicationCardProps) => {
         View this application
       </BrandButton>
 
-      {application.showMessageHost && application.hostUserId && (
-        <BrandButton 
-          variant="outline" 
+      {application.showMessageHost && (
+        <BrandButton
+          variant="outline"
           size="sm"
-          onClick={handleMessageHost}
+          href={`/app/rent/messages?listingId=${application.listingId}`}
           className="w-full md:w-auto whitespace-nowrap"
         >
           Message Host
@@ -471,27 +448,6 @@ const ApplicationButtons = ({ application }: ApplicationCardProps) => {
 };
 
 const MobileApplicationButtons = ({ application }: ApplicationCardProps) => {
-  const router = useRouter();
-
-  const handleMessageHost = async () => {
-    if (!application.hostUserId) return;
-    
-    try {
-      const result = await getOrCreateListingConversation(
-        application.listingId, 
-        application.hostUserId
-      );
-      
-      if (result.success && result.conversationId) {
-        router.push(`/app/rent/messages?convo=${result.conversationId}`);
-      } else {
-        console.error('Failed to create conversation:', result.error);
-      }
-    } catch (error) {
-      console.error('Error messaging host:', error);
-    }
-  };
-
   return (
     <div className="flex flex-col gap-2 w-full">
       <BrandButton
@@ -501,11 +457,11 @@ const MobileApplicationButtons = ({ application }: ApplicationCardProps) => {
       >
         View this application
       </BrandButton>
-      
-      {application.showMessageHost && application.hostUserId && (
+
+      {application.showMessageHost && (
         <BrandButton
           variant="outline"
-          onClick={handleMessageHost}
+          href={`/app/rent/messages?listingId=${application.listingId}`}
           className="w-full"
         >
           Message Host
