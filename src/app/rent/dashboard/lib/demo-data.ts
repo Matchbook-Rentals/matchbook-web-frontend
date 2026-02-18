@@ -20,7 +20,7 @@ function makeListing(
   return {
     id,
     title,
-    category: opts?.category || 'Apartment',
+    category: opts?.category || 'apartment',
     roomCount: opts?.rooms ?? 2,
     bathroomCount: opts?.baths ?? 1,
     streetAddress1: '123 Main St',

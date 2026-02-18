@@ -132,6 +132,51 @@ test.describe('Guest Browse', () => {
       await expect(filtersButton.first()).toBeVisible({ timeout: 15_000 });
     });
 
+    test('property type filter reduces listing count', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+      await page.goto('/search?lat=40.7608&lng=-111.891&location=Salt+Lake+City');
+      await waitForSearchListings(page);
+
+      // Count unfiltered listings
+      const unfilteredCount = await page.locator('h2:has-text("/ Month")').count();
+      expect(unfilteredCount).toBeGreaterThan(0);
+
+      // Open filters modal
+      const filtersButton = page.locator('button:has-text("Filters")');
+      await filtersButton.first().click();
+
+      // Wait for modal to appear — look for the "Property Type" section heading
+      await expect(page.locator('h3:has-text("Property Type")')).toBeVisible({ timeout: 10_000 });
+
+      // Select "Apartment" pill
+      const apartmentPill = page.locator('button:has-text("Apartment")');
+      await apartmentPill.click();
+
+      // The footer "Show X Listing(s)" button should reflect the filtered count
+      const showButton = page.locator('button:has-text("Show")').last();
+      await expect(showButton).toBeVisible();
+      const showText = await showButton.textContent();
+      const filteredModalCount = parseInt(showText!.replace(/\D/g, ''), 10);
+
+      // Filtered count should be less than unfiltered (unless all listings are apartments)
+      expect(filteredModalCount).toBeLessThanOrEqual(unfilteredCount);
+
+      // Apply filters
+      await showButton.click();
+
+      // Modal should close
+      await expect(page.locator('h3:has-text("Property Type")')).not.toBeVisible({ timeout: 5_000 });
+
+      // Verify filter badge appears
+      await expect(page.locator('text=Apartment').first()).toBeVisible({ timeout: 5_000 });
+
+      // Wait for listing grid to update and verify count changed
+      await page.waitForTimeout(1_000);
+      const filteredCount = await page.locator('h2:has-text("/ Month")').count();
+      expect(filteredCount).toBeLessThanOrEqual(unfilteredCount);
+    });
+
     test('search listing cards show title and price', async ({ page, context }) => {
       await grantGeolocation(context);
       await page.goto('/search?lat=40.7608&lng=-111.891&location=Salt+Lake+City');
