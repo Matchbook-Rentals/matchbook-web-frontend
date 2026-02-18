@@ -200,7 +200,7 @@ export default async function SearchListingPage({ params, searchParams }: Listin
         isSignedIn={!!user?.id}
         hasListings={hasListings}
       />
-      <div className={`${PAGE_MARGIN} font-montserrat min-h-screen`}>
+      <div className={`${PAGE_MARGIN} font-montserrat min-h-screen pt-4 md:pt-0`}>
         <ListingDetailWithWizard
           listing={listing}
           locationString={locationString}
