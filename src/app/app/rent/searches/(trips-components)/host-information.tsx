@@ -6,15 +6,12 @@ import { Star as StarIcon, ChevronDown } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { VerifiedIcon } from '@/components/icons-v3';
 import { ListingAndImages } from '@/types';
-import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
-import SearchDateRange from '@/components/newnew/search-date-range';
-import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 import { BrandButton } from '@/components/ui/brandButton';
 import GuestAuthModal from '@/components/guest-auth-modal';
 import { useRouter } from 'next/navigation';
-import { applyToListingFromSearch, getOrCreateListingConversation } from '@/app/actions/housing-requests';
+import { applyToListingFromSearch } from '@/app/actions/housing-requests';
+import MobileAvailabilityOverlay from '@/components/newnew/mobile-availability-overlay';
 
 interface HostInformationProps {
   listing: ListingAndImages;
@@ -56,14 +53,14 @@ const HostInformation: React.FC<HostInformationProps> = ({
 
   const [popoverStart, setPopoverStart] = useState<Date | null>(tripContext?.startDate ?? null);
   const [popoverEnd, setPopoverEnd] = useState<Date | null>(tripContext?.endDate ?? null);
-  const [showDatesPopover, setShowDatesPopover] = useState(false);
-  const [showRentersPopover, setShowRentersPopover] = useState(false);
   const [guests, setGuests] = useState({
     adults: tripContext?.numAdults ?? 0,
     children: tripContext?.numChildren ?? 0,
     pets: tripContext?.numPets ?? 0,
   });
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authRedirectUrl, setAuthRedirectUrl] = useState<string | undefined>(undefined);
+  const [showOverlay, setShowOverlay] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
   // Report trip state to parent
@@ -72,11 +69,10 @@ const HostInformation: React.FC<HostInformationProps> = ({
     onMobileStateChange?.({ hasDates, startDate: popoverStart, endDate: popoverEnd, guests });
   }, [hasDates, popoverStart, popoverEnd, guests, onMobileStateChange]);
 
-  // External trigger: open dates popover + scroll into view
+  // External trigger: open dates overlay on mobile
   useEffect(() => {
     if (requestOpenDates > 0) {
-      cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      setTimeout(() => setShowDatesPopover(true), 400);
+      setShowOverlay(true);
     }
   }, [requestOpenDates]);
 
@@ -85,12 +81,8 @@ const HostInformation: React.FC<HostInformationProps> = ({
     if (requestApply > 0) {
       if (hasDates && guests.adults > 0) {
         handleApplyClick();
-      } else if (hasDates) {
-        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setTimeout(() => handleRentersOpen(true), 400);
       } else {
-        cardRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        setTimeout(() => setShowDatesPopover(true), 400);
+        setShowOverlay(true);
       }
     }
   }, [requestApply]);
@@ -98,7 +90,11 @@ const HostInformation: React.FC<HostInformationProps> = ({
   const host = listing.user;
 
   const handleApplyClick = () => {
-    if (!isAuthenticated) { setShowAuthModal(true); return; }
+    if (!isAuthenticated) {
+      setAuthRedirectUrl(undefined);
+      setShowAuthModal(true);
+      return;
+    }
     if (onApplyClick) {
       if (onDatesSelected && popoverStart && popoverEnd) {
         onDatesSelected(popoverStart, popoverEnd, guests);
@@ -113,17 +109,6 @@ const HostInformation: React.FC<HostInformationProps> = ({
     setPopoverStart(start);
     setPopoverEnd(end);
   };
-
-  const handleDatesConfirm = () => { setShowDatesPopover(false); handleRentersOpen(true); };
-  const handleRentersOpen = (open: boolean) => {
-    setShowRentersPopover(open);
-    if (open && guests.adults === 0) {
-      setGuests(prev => ({ ...prev, adults: 1 }));
-    }
-  };
-  const handleRentersConfirm = () => setShowRentersPopover(false);
-  const handleClearDates = () => { setPopoverStart(null); setPopoverEnd(null); };
-  const handleClearRenters = () => setGuests({ adults: 0, children: 0, pets: 0 });
 
   const hasRenterInfo = guests.adults > 0;
   const totalRenters = guests.adults + guests.children;
@@ -146,15 +131,12 @@ const HostInformation: React.FC<HostInformationProps> = ({
   };
 
   const handleMessageHost = () => {
-    if (!isAuthenticated) { setShowAuthModal(true); return; }
-    if (!host?.id) return;
-
-    startTransition(async () => {
-      const result = await getOrCreateListingConversation(listing.id, host.id);
-      if (result.success && result.conversationId) {
-        router.push(`/app/messages?conversationId=${result.conversationId}`);
-      }
-    });
+    if (!isAuthenticated) {
+      setAuthRedirectUrl(`/app/rent/messages?listingId=${listing.id}`);
+      setShowAuthModal(true);
+      return;
+    }
+    router.push(`/app/rent/messages?listingId=${listing.id}`);
   };
 
   const getApplyButtonText = () => {
@@ -168,108 +150,39 @@ const HostInformation: React.FC<HostInformationProps> = ({
   return (
     <Card ref={cardRef} className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
       <CardContent className="flex flex-col items-start gap-5 py-4 px-0">
-        {/* Trip details: dates + renters + apply */}
+        {/* Trip summary — taps open the overlay */}
         <div className="flex flex-col gap-2 w-full">
-          <div className="w-full border border-gray-300 rounded-xl">
-            {/* Dates Section */}
-            <Popover open={showDatesPopover} onOpenChange={setShowDatesPopover}>
-              <PopoverTrigger asChild>
-                <div className="flex divide-x divide-gray-300 cursor-pointer hover:bg-gray-50 transition-colors rounded-t-xl">
-                  <div className="flex-1 px-4 py-3">
-                    <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-In</div>
-                    <div className={`text-sm font-['Poppins'] ${popoverStart ? 'text-[#373940]' : 'text-gray-400'}`}>
-                      {popoverStart ? format(popoverStart, 'MMM d, yyyy') : 'Add Date'}
-                    </div>
-                  </div>
-                  <div className="flex-1 px-4 py-3">
-                    <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-Out</div>
-                    <div className={`text-sm font-['Poppins'] ${popoverEnd ? 'text-[#373940]' : 'text-gray-400'}`}>
-                      {popoverEnd ? format(popoverEnd, 'MMM d, yyyy') : 'Add Date'}
-                    </div>
-                  </div>
+          <button
+            type="button"
+            onClick={() => setShowOverlay(true)}
+            className="w-full border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors text-left"
+          >
+            <div className="flex divide-x divide-gray-300 rounded-t-xl">
+              <div className="flex-1 px-4 py-3">
+                <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-In</div>
+                <div className={`text-sm font-['Poppins'] ${popoverStart ? 'text-[#373940]' : 'text-gray-400'}`}>
+                  {popoverStart ? format(popoverStart, 'MMM d, yyyy') : 'Add Date'}
                 </div>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-4 shadow-xl"
-                side="bottom"
-                align="center"
-                sideOffset={4}
-              >
-                <div className="flex flex-col gap-3">
-                  <SearchDateRange
-                    start={popoverStart}
-                    end={popoverEnd}
-                    handleChange={handleDateChange}
-                    minimumDateRange={{ months: 1 }}
-                    singleMonth
-                    hideFlexibility
-                  />
-                  <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-200 mt-2">
-                    <button
-                      type="button"
-                      onClick={handleClearDates}
-                      className="text-sm font-medium text-[#2A7F7A] hover:text-[#236663] underline"
-                    >
-                      Clear dates
-                    </button>
-                    <Button
-                      onClick={handleDatesConfirm}
-                      disabled={!popoverStart || !popoverEnd}
-                      className="px-6 bg-[#2A7F7A] hover:bg-[#236663] text-white font-medium rounded-lg"
-                    >
-                      Done
-                    </Button>
-                  </div>
+              </div>
+              <div className="flex-1 px-4 py-3">
+                <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-Out</div>
+                <div className={`text-sm font-['Poppins'] ${popoverEnd ? 'text-[#373940]' : 'text-gray-400'}`}>
+                  {popoverEnd ? format(popoverEnd, 'MMM d, yyyy') : 'Add Date'}
                 </div>
-              </PopoverContent>
-            </Popover>
-
-            {/* Renters Section */}
-            <Popover open={showRentersPopover} onOpenChange={handleRentersOpen}>
-              <PopoverTrigger asChild>
-                <div className="flex items-center justify-between px-4 py-3 border-t border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors rounded-b-xl">
-                  <div>
-                    <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Renters</div>
-                    <div className={`text-sm font-['Poppins'] ${totalRenters > 0 ? 'text-[#373940]' : 'text-gray-400'}`}>
-                      {totalRenters === 0 && guests.pets === 0
-                        ? 'Add Renters'
-                        : `${totalRenters} renter${totalRenters !== 1 ? 's' : ''}${guests.pets > 0 ? `, ${guests.pets} pet${guests.pets !== 1 ? 's' : ''}` : ''}`}
-                    </div>
-                  </div>
-                  <ChevronDown className="w-5 h-5 text-gray-500" />
+              </div>
+            </div>
+            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-300 rounded-b-xl">
+              <div>
+                <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Renters</div>
+                <div className={`text-sm font-['Poppins'] ${totalRenters > 0 ? 'text-[#373940]' : 'text-gray-400'}`}>
+                  {totalRenters === 0 && guests.pets === 0
+                    ? 'Add Renters'
+                    : `${totalRenters} renter${totalRenters !== 1 ? 's' : ''}${guests.pets > 0 ? `, ${guests.pets} pet${guests.pets !== 1 ? 's' : ''}` : ''}`}
                 </div>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-auto p-4 shadow-xl"
-                side="bottom"
-                align="center"
-                sideOffset={4}
-              >
-                <div className="flex flex-col gap-3">
-                  <div className="min-w-[280px]">
-                    <h3 className="font-semibold text-[#373940] font-['Poppins'] mb-2">Who&apos;s coming?</h3>
-                    <GuestTypeCounter guests={guests} setGuests={setGuests} />
-                  </div>
-                  <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-200 mt-2">
-                    <button
-                      type="button"
-                      onClick={handleClearRenters}
-                      className="text-sm font-medium text-[#2A7F7A] hover:text-[#236663] underline"
-                    >
-                      Clear
-                    </button>
-                    <Button
-                      onClick={handleRentersConfirm}
-                      disabled={guests.adults < 1}
-                      className="px-6 bg-[#2A7F7A] hover:bg-[#236663] text-white font-medium rounded-lg"
-                    >
-                      Done
-                    </Button>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
+              </div>
+              <ChevronDown className="w-5 h-5 text-gray-500" />
+            </div>
+          </button>
 
           {/* Apply button - visible when both dates and renters are filled */}
           {hasDates && hasRenterInfo && (
@@ -342,7 +255,17 @@ const HostInformation: React.FC<HostInformationProps> = ({
           Message Host
         </BrandButton>
 
-        <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
+        <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} redirectUrl={authRedirectUrl} />
+
+        <MobileAvailabilityOverlay
+          isOpen={showOverlay}
+          onClose={() => setShowOverlay(false)}
+          dateRange={{ start: popoverStart, end: popoverEnd }}
+          onDateChange={handleDateChange}
+          guests={guests}
+          setGuests={setGuests}
+          onConfirm={() => setShowOverlay(false)}
+        />
       </CardContent>
     </Card>
   );
