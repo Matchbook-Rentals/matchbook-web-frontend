@@ -792,7 +792,7 @@ export default function SearchPageClient({
             {isClient && !isDesktopView && (
               <Button
                 onClick={() => setIsSlideMapOpen(true)}
-                className="fixed w-16 h-16 p-0 rounded-full bg-secondaryBrand text-background z-50 flex items-center justify-center overflow-visible"
+                className="fixed w-16 h-16 p-0 rounded-full bg-secondaryBrand text-background z-[49] flex items-center justify-center overflow-visible"
                 style={{ bottom: '4dvh', right: '1rem' }}
               >
                 <Map className="w-8 h-8" strokeWidth={2} style={{ width: '32px', height: '32px' }} />
