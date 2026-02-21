@@ -72,11 +72,13 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
       approvalStatus: 'approved',
       markedActiveByUser: true
     },
-    include: { 
-      listingImages: true, 
-      bedrooms: true, 
-      user: true, 
-      monthlyPricing: true 
+    include: {
+      listingImages: true,
+      bedrooms: true,
+      user: true,
+      monthlyPricing: true,
+      unavailablePeriods: true,
+      bookings: { where: { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } } },
     },
   }) as ListingAndImages | null
 

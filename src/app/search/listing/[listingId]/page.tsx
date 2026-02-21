@@ -87,7 +87,9 @@ export default async function SearchListingPage({ params, searchParams }: Listin
       listingImages: true,
       bedrooms: true,
       user: true,
-      monthlyPricing: true
+      monthlyPricing: true,
+      unavailablePeriods: true,
+      bookings: { where: { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } } },
     },
   }) as ListingAndImages | null
 
@@ -186,6 +188,16 @@ export default async function SearchListingPage({ params, searchParams }: Listin
     userApplication = appResult.success ? appResult.application : null;
   }
 
+  // Check if listing is favorited for this trip
+  let isFavorited = false;
+  if (user && tripContext?.tripId) {
+    const existingFavorite = await prisma.favorite.findFirst({
+      where: { tripId: tripContext.tripId, listingId: params.listingId },
+      select: { id: true },
+    });
+    isFavorited = !!existingFavorite;
+  }
+
   // Default location string for display
   const locationString = `${listing.city}, ${listing.state}`
 
@@ -210,6 +222,7 @@ export default async function SearchListingPage({ params, searchParams }: Listin
           listingState={listingState}
           userApplication={userApplication}
           shouldAutoApply={shouldAutoApply}
+          isFavorited={isFavorited}
         />
       </div>
     </>

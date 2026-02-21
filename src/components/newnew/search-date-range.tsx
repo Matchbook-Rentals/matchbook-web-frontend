@@ -17,6 +17,7 @@ interface SearchDateRangeProps {
   maximumDateRange?: Duration | null;
   singleMonth?: boolean;
   hideFlexibility?: boolean;
+  unavailablePeriods?: Array<{ startDate: Date; endDate: Date }>;
 }
 
 type FlexibilityValue = 'exact' | 1 | 2 | 3 | 7;
@@ -116,6 +117,7 @@ export default function SearchDateRange({
   maximumDateRange,
   singleMonth = false,
   hideFlexibility = false,
+  unavailablePeriods,
 }: SearchDateRangeProps) {
   const today = normalizeDate(new Date());
 
@@ -167,6 +169,14 @@ export default function SearchDateRange({
   const getDisabledReason = (date: Date): string | null => {
     const d = normalizeDate(date);
     if (d < today) return 'Trips cannot begin in the past.';
+
+    if (unavailablePeriods) {
+      for (const period of unavailablePeriods) {
+        const pStart = normalizeDate(period.startDate);
+        const pEnd = normalizeDate(period.endDate);
+        if (d >= pStart && d <= pEnd) return 'This date is unavailable';
+      }
+    }
 
     if (start && !end) {
       const s = normalizeDate(start);

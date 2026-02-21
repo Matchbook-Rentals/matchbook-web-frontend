@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useTransition, useEffect } from 'react';
+import React, { useState, useTransition, useEffect, useMemo } from 'react';
 import { ListingAndImages } from '@/types';
 import { StarIcon } from '@/components/icons';
 import { Card, CardContent } from '@/components/ui/card';
@@ -70,6 +70,23 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
     window.addEventListener('resize', checkScreenSize);
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
+
+  const unavailablePeriods = useMemo(() => {
+    const periods: Array<{ startDate: Date; endDate: Date }> = [];
+    if (listing.unavailablePeriods) {
+      for (const p of listing.unavailablePeriods) {
+        periods.push({ startDate: new Date(p.startDate), endDate: new Date(p.endDate) });
+      }
+    }
+    if (listing.bookings) {
+      for (const b of listing.bookings) {
+        if (b.startDate && b.endDate) {
+          periods.push({ startDate: new Date(b.startDate), endDate: new Date(b.endDate) });
+        }
+      }
+    }
+    return periods;
+  }, [listing.unavailablePeriods, listing.bookings]);
 
   const host = listing.user;
 
@@ -286,6 +303,7 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                       minimumDateRange={{ months: 1 }}
                       singleMonth={!isLargeScreen}
                       hideFlexibility
+                      unavailablePeriods={unavailablePeriods}
                     />
                     <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-200 mt-2">
                       <button

@@ -1,5 +1,5 @@
 'use client'
-import React, { useState, useTransition, useEffect, useRef } from 'react';
+import React, { useState, useTransition, useEffect, useRef, useMemo } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { Star as StarIcon, ChevronDown } from 'lucide-react';
@@ -12,6 +12,8 @@ import GuestAuthModal from '@/components/guest-auth-modal';
 import { useRouter } from 'next/navigation';
 import { applyToListingFromSearch } from '@/app/actions/housing-requests';
 import MobileAvailabilityOverlay from '@/components/newnew/mobile-availability-overlay';
+
+type UnavailablePeriod = { startDate: Date; endDate: Date };
 
 interface HostInformationProps {
   listing: ListingAndImages;
@@ -86,6 +88,23 @@ const HostInformation: React.FC<HostInformationProps> = ({
       }
     }
   }, [requestApply]);
+
+  const unavailablePeriods = useMemo<UnavailablePeriod[]>(() => {
+    const periods: UnavailablePeriod[] = [];
+    if (listing.unavailablePeriods) {
+      for (const p of listing.unavailablePeriods) {
+        periods.push({ startDate: new Date(p.startDate), endDate: new Date(p.endDate) });
+      }
+    }
+    if (listing.bookings) {
+      for (const b of listing.bookings) {
+        if (b.startDate && b.endDate) {
+          periods.push({ startDate: new Date(b.startDate), endDate: new Date(b.endDate) });
+        }
+      }
+    }
+    return periods;
+  }, [listing.unavailablePeriods, listing.bookings]);
 
   const host = listing.user;
 
@@ -265,6 +284,7 @@ const HostInformation: React.FC<HostInformationProps> = ({
           guests={guests}
           setGuests={setGuests}
           onConfirm={() => setShowOverlay(false)}
+          unavailablePeriods={unavailablePeriods}
         />
       </CardContent>
     </Card>

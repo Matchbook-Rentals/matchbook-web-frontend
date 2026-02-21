@@ -19,6 +19,7 @@ interface MobileAvailabilityOverlayProps {
   guests: { adults: number; children: number; pets: number };
   setGuests: React.Dispatch<React.SetStateAction<{ adults: number; children: number; pets: number }>>;
   onConfirm: () => void;
+  unavailablePeriods?: Array<{ startDate: Date; endDate: Date }>;
 }
 
 export default function MobileAvailabilityOverlay({
@@ -29,6 +30,7 @@ export default function MobileAvailabilityOverlay({
   guests,
   setGuests,
   onConfirm,
+  unavailablePeriods,
 }: MobileAvailabilityOverlayProps) {
   const [activeSection, setActiveSection] = useState<ActiveSection>('when');
 
@@ -98,6 +100,7 @@ export default function MobileAvailabilityOverlay({
                 minimumDateRange={{ months: 1 }}
                 singleMonth
                 hideFlexibility
+                unavailablePeriods={unavailablePeriods}
               />
             </AccordionCard>
 
