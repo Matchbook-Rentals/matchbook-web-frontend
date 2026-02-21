@@ -7,6 +7,7 @@ import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import UserMenu from '@/components/userMenu';
 import DesktopSearchPopover from '@/components/newnew/desktop-search-popover';
+
 import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
 import { getHostListingsCount } from '@/app/actions/listings';
 import { createTrip, editTrip } from '@/app/actions/trips';
@@ -32,15 +33,6 @@ interface UserObject {
   publicMetadata?: Record<string, any>;
 }
 
-export interface TripDataChange {
-  startDate?: string | null;
-  endDate?: string | null;
-  numAdults?: number;
-  numChildren?: number;
-  numPets?: number;
-  needsRefetch?: boolean;
-}
-
 interface SearchResultsNavbarProps {
   userId: string | null;
   user: UserObject | null;
@@ -50,8 +42,9 @@ interface SearchResultsNavbarProps {
   sessionId?: string;
   currentCenter?: { lat: number; lng: number };
   tripData?: TripData | null;
-  onSearchUpdate?: (newTripId?: string, newSessionId?: string) => void; // kept for potential future use
-  onTripDataChange?: (changes: TripDataChange) => void;
+  onSearchUpdate?: (newTripId?: string, newSessionId?: string) => void;
+  onSaveDates?: (start: Date | null, end: Date | null) => Promise<{ success: boolean; error?: string }>;
+  onSaveGuests?: (adults: number, children: number, pets: number) => Promise<{ success: boolean; error?: string }>;
   recentSearches?: RecentSearch[];
   suggestedLocations?: SuggestedLocationItem[];
 }
@@ -78,7 +71,8 @@ export default function SearchResultsNavbar({
   currentCenter,
   tripData,
   onSearchUpdate,
-  onTripDataChange,
+  onSaveDates,
+  onSaveGuests,
   recentSearches = [],
   suggestedLocations = [],
 }: SearchResultsNavbarProps) {
@@ -131,31 +125,14 @@ export default function SearchResultsNavbar({
 
     if (!hasBothDates && !isClearingDates) return;
     if (isClearingDates && !hadDatesInitially.current) return;
-
-    const shouldRefetch = hadDatesInitially.current;
+    if (!onSaveDates) return;
 
     setIsSavingDates(true);
 
     try {
-      if (isClerkSignedIn && tripId) {
-        const response = await editTrip(tripId, {
-          startDate: dates.start ?? null,
-          endDate: dates.end ?? null,
-        });
-        if (!response.success) {
-          toast({ variant: 'destructive', description: response.error || 'Failed to save dates' });
-          return;
-        }
-      } else if (sessionId) {
-        const response = await updateGuestSession(sessionId, {
-          startDate: dates.start ?? null,
-          endDate: dates.end ?? null,
-        });
-        if (!response.success) {
-          toast({ variant: 'destructive', description: response.error || 'Failed to save dates' });
-          return;
-        }
-      } else {
+      const result = await onSaveDates(dates.start ?? null, dates.end ?? null);
+      if (!result.success) {
+        toast({ variant: 'destructive', description: result.error || 'Failed to save dates' });
         return;
       }
 
@@ -164,12 +141,6 @@ export default function SearchResultsNavbar({
         end: dates.end?.toISOString() ?? null,
       };
       hadDatesInitially.current = hasBothDates ? true : false;
-
-      onTripDataChange?.({
-        startDate: dates.start?.toISOString() ?? null,
-        endDate: dates.end?.toISOString() ?? null,
-        needsRefetch: shouldRefetch,
-      });
     } catch {
       toast({ variant: 'destructive', description: 'Failed to save dates' });
     } finally {
@@ -182,42 +153,18 @@ export default function SearchResultsNavbar({
     const guestValues = search.guests;
     if (!haveGuestsChanged(guestValues)) return;
     if (isSavingGuests) return;
+    if (!onSaveGuests) return;
 
     setIsSavingGuests(true);
 
     try {
-      if (isClerkSignedIn && tripId) {
-        const response = await editTrip(tripId, {
-          numAdults: guestValues.adults,
-          numChildren: guestValues.children,
-          numPets: guestValues.pets,
-        });
-        if (!response.success) {
-          toast({ variant: 'destructive', description: response.error || 'Failed to save guests' });
-          return;
-        }
-      } else if (sessionId) {
-        const response = await updateGuestSession(sessionId, {
-          numAdults: guestValues.adults,
-          numChildren: guestValues.children,
-          numPets: guestValues.pets,
-        });
-        if (!response.success) {
-          toast({ variant: 'destructive', description: response.error || 'Failed to save guests' });
-          return;
-        }
-      } else {
+      const result = await onSaveGuests(guestValues.adults, guestValues.children, guestValues.pets);
+      if (!result.success) {
+        toast({ variant: 'destructive', description: result.error || 'Failed to save guests' });
         return;
       }
 
       initialGuests.current = { ...guestValues };
-
-      onTripDataChange?.({
-        numAdults: guestValues.adults,
-        numChildren: guestValues.children,
-        numPets: guestValues.pets,
-        needsRefetch: false,
-      });
     } catch {
       toast({ variant: 'destructive', description: 'Failed to save guests' });
     } finally {

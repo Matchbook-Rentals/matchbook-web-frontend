@@ -1,8 +1,8 @@
 import { redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
 import { getListingsNearLocation, getPopularListingAreas } from '@/app/actions/listings';
-import { getTripById, createTripFromGuestSession, getAllUserTrips } from '@/app/actions/trips';
-import { getGuestSession } from '@/app/actions/guest-session-db';
+import { getTripById, createTripFromGuestSession, getAllUserTrips, createTrip } from '@/app/actions/trips';
+import { getGuestSession, createGuestSession } from '@/app/actions/guest-session-db';
 import { convertGuestSessionToTrip } from '@/app/actions/guest-to-trip';
 import SearchPageClient from './search-page-client';
 import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
@@ -132,13 +132,35 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       locationString = `${OGDEN_UT.city}, ${OGDEN_UT.state}`;
     }
   } else {
-    // No trip/session — use lat/lng URL params or Ogden default
+    // No trip/session — parse location from URL params or use Ogden default
     const parsedLat = parseFloat(params.lat || '');
     const parsedLng = parseFloat(params.lng || '');
     hasLocationParams = !isNaN(parsedLat) && !isNaN(parsedLng);
     lat = hasLocationParams ? parsedLat : OGDEN_UT.lat;
     lng = hasLocationParams ? parsedLng : OGDEN_UT.lng;
     locationString = params.location || (hasLocationParams ? 'this area' : `${OGDEN_UT.city}, ${OGDEN_UT.state}`);
+
+    // Auto-create a trip (authed) or guest session (guest) so date/guest
+    // changes can be persisted and price updates work.
+    if (user?.id) {
+      const result = await createTrip({
+        locationString,
+        latitude: lat,
+        longitude: lng,
+      });
+      if (result.success && result.trip) {
+        redirect(`/search?tripId=${result.trip.id}`);
+      }
+    } else {
+      const result = await createGuestSession({
+        locationString,
+        latitude: lat,
+        longitude: lng,
+      });
+      if (result.success && result.sessionId) {
+        redirect(`/search?sessionId=${result.sessionId}`);
+      }
+    }
   }
 
   const PREFETCH_RADIUS_MILES = 25;

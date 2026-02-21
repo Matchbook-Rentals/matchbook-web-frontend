@@ -13,7 +13,7 @@ import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-
 import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
 import GuestSearchMapMobile from '@/app/guest/rent/searches/components/guest-search-map-mobile';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
-import SearchResultsNavbar, { TripDataChange } from '@/components/newnew/search-results-navbar';
+import SearchResultsNavbar from '@/components/newnew/search-results-navbar';
 import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
 import { calculateRent } from '@/lib/calculate-rent';
@@ -22,7 +22,8 @@ import { Button } from '@/components/ui/button';
 import { Map, XIcon } from 'lucide-react';
 import { UpdatedFilterIcon } from '@/components/icons';
 import { motion, AnimatePresence } from 'framer-motion';
-import { createTrip } from '@/app/actions/trips';
+import { createTrip, editTrip } from '@/app/actions/trips';
+import { updateGuestSession } from '@/app/actions/guest-session-db';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
@@ -530,31 +531,64 @@ export default function SearchPageClient({
     }
   }, [currentMapCenter]);
 
-  // Handle trip data changes from navbar (dates/guests on blur)
-  const handleTripDataChange = useCallback((changes: TripDataChange) => {
+  // Save dates — persists to trip/session, updates local state, triggers refetch
+  const saveDates = useCallback(async (start: Date | null, end: Date | null): Promise<{ success: boolean; error?: string }> => {
+    // Persist to DB
+    let result: { success: boolean; error?: string };
+    if (currentTripId) {
+      result = await editTrip(currentTripId, { startDate: start, endDate: end });
+    } else if (currentSessionId) {
+      result = await updateGuestSession(currentSessionId, { startDate: start, endDate: end });
+    } else {
+      return { success: false, error: 'No trip or session' };
+    }
+
+    if (!result.success) return result;
+
+    // Update local state
+    const startISO = start?.toISOString() ?? null;
+    const endISO = end?.toISOString() ?? null;
     setLocalTripData(prev => {
-      if (!prev) return null;
-      return {
-        ...prev,
-        ...(changes.startDate !== undefined && { startDate: changes.startDate }),
-        ...(changes.endDate !== undefined && { endDate: changes.endDate }),
-        ...(changes.numAdults !== undefined && { numAdults: changes.numAdults }),
-        ...(changes.numChildren !== undefined && { numChildren: changes.numChildren }),
-        ...(changes.numPets !== undefined && { numPets: changes.numPets }),
+      const base: TripData = prev ?? {
+        startDate: null, endDate: null, numAdults: 0,
+        numChildren: 0, numPets: 0, locationString,
       };
+      return { ...base, startDate: startISO, endDate: endISO };
     });
 
-    // If dates changed and need refetch
-    if (changes.needsRefetch) {
-      if (changes.startDate && changes.endDate) {
-        // Dates were set/changed - fetch with date filtering
-        refetchListingsWithDates(changes.startDate, changes.endDate);
-      } else if (changes.startDate === null && changes.endDate === null) {
-        // Dates were cleared - fetch without date filtering
-        refetchListingsWithoutDates();
-      }
+    // Refetch listings with/without date filtering
+    if (start && end) {
+      refetchListingsWithDates(startISO!, endISO!);
+    } else if (!start && !end) {
+      refetchListingsWithoutDates();
     }
-  }, [refetchListingsWithDates, refetchListingsWithoutDates]);
+
+    return { success: true };
+  }, [currentTripId, currentSessionId, locationString, refetchListingsWithDates, refetchListingsWithoutDates]);
+
+  // Save guests — persists to trip/session, updates local state
+  const saveGuests = useCallback(async (adults: number, children: number, pets: number): Promise<{ success: boolean; error?: string }> => {
+    let result: { success: boolean; error?: string };
+    if (currentTripId) {
+      result = await editTrip(currentTripId, { numAdults: adults, numChildren: children, numPets: pets });
+    } else if (currentSessionId) {
+      result = await updateGuestSession(currentSessionId, { numAdults: adults, numChildren: children, numPets: pets });
+    } else {
+      return { success: false, error: 'No trip or session' };
+    }
+
+    if (!result.success) return result;
+
+    setLocalTripData(prev => {
+      const base: TripData = prev ?? {
+        startDate: null, endDate: null, numAdults: 0,
+        numChildren: 0, numPets: 0, locationString,
+      };
+      return { ...base, numAdults: adults, numChildren: children, numPets: pets };
+    });
+
+    return { success: true };
+  }, [currentTripId, currentSessionId, locationString]);
 
   // Build the GuestTripContext shim
   const shimSession: GuestSession = useMemo(() => ({
@@ -563,12 +597,18 @@ export default function SearchPageClient({
       location: locationString,
       lat: currentMapCenter.lat,
       lng: currentMapCenter.lng,
-      guests: { adults: 1, children: 0, pets: 0 },
+      startDate: localTripData?.startDate ? new Date(localTripData.startDate) : undefined,
+      endDate: localTripData?.endDate ? new Date(localTripData.endDate) : undefined,
+      guests: {
+        adults: localTripData?.numAdults ?? 1,
+        children: localTripData?.numChildren ?? 0,
+        pets: localTripData?.numPets ?? 0,
+      },
     },
     pendingActions: [],
     createdAt: Date.now(),
     expiresAt: Date.now() + 86400000,
-  }), [currentMapCenter, locationString]);
+  }), [currentMapCenter, locationString, localTripData]);
 
   const allListings = useMemo(() =>
     listings.map(l => ({ ...l, isActuallyAvailable: true })),
@@ -723,7 +763,8 @@ export default function SearchPageClient({
           currentCenter={currentMapCenter}
           tripData={localTripData}
           onSearchUpdate={handleSearchUpdate}
-          onTripDataChange={handleTripDataChange}
+          onSaveDates={saveDates}
+          onSaveGuests={saveGuests}
           recentSearches={recentSearches}
           suggestedLocations={suggestedLocations}
         />
