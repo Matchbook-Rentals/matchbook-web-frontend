@@ -31,6 +31,7 @@ interface ListingDescriptionProps {
   requestOpenDates?: number;
   requestApply?: number;
   onMobileStateChange?: (state: { hasDates: boolean; startDate: Date | null; endDate: Date | null; guests: { adults: number; children: number; pets: number } }) => void;
+  hideHostInfo?: boolean;
 }
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({
@@ -47,6 +48,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({
   requestOpenDates,
   requestApply,
   onMobileStateChange,
+  hideHostInfo = false,
 }) => {
   const calculatedPrice = trip ? calculateRent({ listing, trip }) : calculatedPriceProp;
 
@@ -58,26 +60,27 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({
         </CardContent>
       </Card>
 
-      <Card className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
+      <Card className="border-none bg-transparent rounded-none mt-5 lg:hidden">
         <CardContent className="p-0">
-          <PricingInfo listing={listing} calculatedPrice={calculatedPrice} />
           <PropertyDetails listing={listing} />
         </CardContent>
       </Card>
 
       {/* Host info + trip details - mobile only, right after property details */}
-      <HostInformation
-        listing={listing}
-        isAuthenticated={isAuthenticated}
-        tripContext={tripContext}
-        calculatedPrice={calculatedPrice}
-        listingState={listingState}
-        onApplyClick={onApplyClick}
-        onDatesSelected={onDatesSelected}
-        requestOpenDates={requestOpenDates}
-        requestApply={requestApply}
-        onMobileStateChange={onMobileStateChange}
-      />
+      {!hideHostInfo && (
+        <HostInformation
+          listing={listing}
+          isAuthenticated={isAuthenticated}
+          tripContext={tripContext}
+          calculatedPrice={calculatedPrice}
+          listingState={listingState}
+          onApplyClick={onApplyClick}
+          onDatesSelected={onDatesSelected}
+          requestOpenDates={requestOpenDates}
+          requestApply={requestApply}
+          onMobileStateChange={onMobileStateChange}
+        />
+      )}
 
       {isFlexible && (
         <p className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px] sm:text-[24px] font-normal`}>
