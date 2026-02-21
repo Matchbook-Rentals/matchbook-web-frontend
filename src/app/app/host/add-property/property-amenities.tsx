@@ -1,3 +1,4 @@
+// TODO: upgrade amenity icons to icons v3
 "use client";
 import React, { useState, Dispatch, SetStateAction } from "react";
 import { CheckboxDemo } from "../../preferences/custom-checkbox";
