@@ -46,6 +46,7 @@ interface SearchPageClientProps {
   isSignedIn: boolean;
   userId: string | null;
   user: UserObject | null;
+  hasListings?: boolean;
   tripId?: string;
   sessionId?: string;
   tripData?: TripData | null;
@@ -217,6 +218,7 @@ const BOUNDS_EPSILON = 0.001;
 
 export default function SearchPageClient({
   listings: initialListings, center, locationString, isSignedIn, userId, user,
+  hasListings,
   tripId: initialTripId, sessionId: initialSessionId, tripData, hasLocationParams,
   recentSearches = [], suggestedLocations = [],
   initialFavoriteIds = [], initialDislikeIds = [],
@@ -757,6 +759,7 @@ export default function SearchPageClient({
           userId={userId}
           user={user}
           isSignedIn={isSignedIn}
+          hasListings={hasListings}
           locationString={locationString}
           tripId={currentTripId}
           sessionId={currentSessionId}

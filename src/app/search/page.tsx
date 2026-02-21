@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation';
 import { currentUser } from '@clerk/nextjs/server';
-import { getListingsNearLocation, getPopularListingAreas } from '@/app/actions/listings';
+import { getListingsNearLocation, getPopularListingAreas, getHostListingsCountForUser } from '@/app/actions/listings';
 import { getTripById, createTripFromGuestSession, getAllUserTrips, createTrip } from '@/app/actions/trips';
 import { getGuestSession, createGuestSession } from '@/app/actions/guest-session-db';
 import { convertGuestSessionToTrip } from '@/app/actions/guest-to-trip';
@@ -165,10 +165,12 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
 
   const PREFETCH_RADIUS_MILES = 25;
   const PREFETCH_COUNT = 100;
-  const [listings, popularAreas] = await Promise.all([
+  const [listings, popularAreas, hostListingsCount] = await Promise.all([
     getListingsNearLocation(lat, lng, PREFETCH_COUNT, PREFETCH_RADIUS_MILES),
     getPopularListingAreas(5),
+    user?.id ? getHostListingsCountForUser(user.id) : Promise.resolve(0),
   ]);
+  const hasListings = hostListingsCount > 0;
 
   // Build recent searches from user's trips
   let recentSearches: RecentSearch[] = [];
@@ -209,6 +211,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       isSignedIn={!!user?.id}
       userId={user?.id || null}
       user={userObject}
+      hasListings={hasListings}
       tripId={tripId}
       sessionId={sessionId}
       tripData={tripData}

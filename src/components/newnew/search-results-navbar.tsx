@@ -9,7 +9,6 @@ import UserMenu from '@/components/userMenu';
 import DesktopSearchPopover from '@/components/newnew/desktop-search-popover';
 
 import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
-import { getHostListingsCount } from '@/app/actions/listings';
 import { createTrip, editTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { updateGuestSession } from '@/app/actions/guest-session-db';
@@ -37,6 +36,7 @@ interface SearchResultsNavbarProps {
   userId: string | null;
   user: UserObject | null;
   isSignedIn: boolean;
+  hasListings?: boolean;
   locationString: string;
   tripId?: string;
   sessionId?: string;
@@ -65,6 +65,7 @@ export default function SearchResultsNavbar({
   userId,
   user,
   isSignedIn,
+  hasListings: hasListingsProp,
   locationString,
   tripId,
   sessionId,
@@ -76,7 +77,7 @@ export default function SearchResultsNavbar({
   recentSearches = [],
   suggestedLocations = [],
 }: SearchResultsNavbarProps) {
-  const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
+  const hasListings = hasListingsProp;
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSavingDates, setIsSavingDates] = useState(false);
@@ -196,20 +197,6 @@ export default function SearchResultsNavbar({
       return 0;
     },
   });
-
-  useEffect(() => {
-    async function checkUserListings() {
-      if (isSignedIn && userId) {
-        try {
-          const count = await getHostListingsCount();
-          setHasListings(count > 0);
-        } catch {
-          setHasListings(undefined);
-        }
-      }
-    }
-    checkUserListings();
-  }, [isSignedIn, userId]);
 
   // Collapse bar back to header when no popover is active
   useEffect(() => {

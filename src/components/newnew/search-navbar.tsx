@@ -1,13 +1,12 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { SearchIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import UserMenu from '@/components/userMenu';
 import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
 import DesktopSearchPopover from '@/components/newnew/desktop-search-popover';
-import { getHostListingsCount } from '@/app/actions/listings';
 import { createTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { GuestSessionService } from '@/utils/guest-session';
@@ -42,12 +41,13 @@ interface SearchNavbarProps {
   userId: string | null;
   user: UserObject | null;
   isSignedIn: boolean;
+  hasListings?: boolean;
   recentSearches?: RecentSearch[];
   suggestedLocations?: SuggestedLocationItem[];
 }
 
-export default function SearchNavbar({ userId, user, isSignedIn, recentSearches = [], suggestedLocations = [] }: SearchNavbarProps) {
-  const [hasListings, setHasListings] = useState<boolean | undefined>(undefined);
+export default function SearchNavbar({ userId, user, isSignedIn, hasListings: hasListingsProp, recentSearches = [], suggestedLocations = [] }: SearchNavbarProps) {
+  const hasListings = hasListingsProp;
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isMobileOverlayOpen, setIsMobileOverlayOpen] = useState(false);
 
@@ -57,20 +57,6 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
 
   const { isSignedIn: isClerkSignedIn } = useAuth();
   const { toast } = useToast();
-
-  useEffect(() => {
-    async function checkUserListings() {
-      if (isSignedIn && userId) {
-        try {
-          const count = await getHostListingsCount();
-          setHasListings(count > 0);
-        } catch {
-          setHasListings(undefined);
-        }
-      }
-    }
-    checkUserListings();
-  }, [isSignedIn, userId]);
 
   const handleWhereClick = (e: React.MouseEvent) => {
     if (window.innerWidth < 768) {

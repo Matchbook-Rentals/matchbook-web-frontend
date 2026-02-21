@@ -11,7 +11,7 @@ import { cookies } from "next/headers";
 import { currentUser } from "@clerk/nextjs/server";
 import { getAllUserTrips } from "@/app/actions/trips";
 import { RecentSearch } from "@/components/newnew/search-navbar";
-import { getPopularListingAreas } from "@/app/actions/listings";
+import { getPopularListingAreas, getHostListingsCountForUser } from "@/app/actions/listings";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 
 export const metadata: Metadata = {
@@ -44,6 +44,7 @@ const HowItWorksPage = async () => {
   ]);
 
   const userObject = serializeUser(user);
+  const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
   let recentSearches: RecentSearch[] = [];
   if (user?.id) {
@@ -77,6 +78,7 @@ const HowItWorksPage = async () => {
           userId={user?.id || null}
           user={userObject}
           isSignedIn={!!user?.id}
+          hasListings={hasListings}
           recentSearches={recentSearches}
           suggestedLocations={popularAreas.map((area) => ({
             title: `Monthly Rentals in ${area.city}, ${area.state}`,

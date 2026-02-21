@@ -8,7 +8,7 @@ import { getMostRecentTrip, getAllUserTrips } from "@/app/actions/trips";
 import { getGuestSessionLocation } from "@/app/actions/guest-session-db";
 import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
-import { getPopularListingAreas } from "@/app/actions/listings";
+import { getPopularListingAreas, getHostListingsCountForUser } from "@/app/actions/listings";
 import { getHomepageUserState, HomepageUserState } from "@/app/actions/homepage-user-state";
 import { getIpLocation } from "@/lib/ip-geolocation";
 
@@ -78,12 +78,16 @@ const HomePage = async () => {
   let recentTripId: string | null = null;
   let userState: HomepageUserState | null = null;
 
+  let hasListings = false;
+
   if (user?.id) {
-    const [recentTrip, fetchedUserState] = await Promise.all([
+    const [recentTrip, fetchedUserState, hostListingsCount] = await Promise.all([
       getMostRecentTrip(),
-      getHomepageUserState()
+      getHomepageUserState(),
+      getHostListingsCountForUser(user.id)
     ]);
 
+    hasListings = hostListingsCount > 0;
     userState = fetchedUserState;
     recentTripId = recentTrip?.id || null;
 
@@ -124,6 +128,7 @@ const HomePage = async () => {
           userId={user?.id || null}
           user={userObject}
           isSignedIn={!!user?.id}
+          hasListings={hasListings}
           recentSearches={recentSearches}
           suggestedLocations={popularAreas.map((area) => ({
             title: `Monthly Rentals in ${area.city}, ${area.state}`,
