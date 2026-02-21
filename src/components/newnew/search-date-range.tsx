@@ -269,12 +269,35 @@ export default function SearchDateRange({
     if (digits.length < 6) return null; // still typing
     const parsed = parseShortDate(formatted);
     if (!parsed) return 'Invalid date';
-    if (parsed < today) return 'Date must be in the future';
-    if (field === 'end' && start && normalizeDate(parsed) <= normalizeDate(start)) {
-      return 'Must be after move-in date';
+    const normalizedParsed = normalizeDate(parsed);
+    if (normalizedParsed < today) return 'Date must be in the future';
+    if (field === 'end' && start) {
+      const s = normalizeDate(start);
+      if (normalizedParsed <= s) return 'Must be after move-in date';
+      if (minimumDateRange) {
+        const minEnd = normalizeDate(add(s, minimumDateRange));
+        if (normalizedParsed < minEnd) return `Must be at least ${formatDuration(minimumDateRange)} after move-in`;
+      }
+      if (maximumDateRange) {
+        const maxEnd = maximumDateRange.days === null || maximumDateRange.days === undefined
+          ? normalizeDate(endOfMonth(add(s, { years: maximumDateRange.years, months: maximumDateRange.months, weeks: maximumDateRange.weeks })))
+          : normalizeDate(add(s, maximumDateRange));
+        if (normalizedParsed > maxEnd) return `Must be within ${formatDuration(maximumDateRange)} of move-in`;
+      }
     }
-    if (field === 'start' && end && normalizeDate(parsed) >= normalizeDate(end)) {
-      return 'Must be before move-out date';
+    if (field === 'start' && end) {
+      const e = normalizeDate(end);
+      if (normalizedParsed >= e) return 'Must be before move-out date';
+      if (minimumDateRange) {
+        const minEnd = normalizeDate(add(normalizedParsed, minimumDateRange));
+        if (e < minEnd) return `Must be at least ${formatDuration(minimumDateRange)} before move-out`;
+      }
+      if (maximumDateRange) {
+        const maxEnd = maximumDateRange.days === null || maximumDateRange.days === undefined
+          ? normalizeDate(endOfMonth(add(normalizedParsed, { years: maximumDateRange.years, months: maximumDateRange.months, weeks: maximumDateRange.weeks })))
+          : normalizeDate(add(normalizedParsed, maximumDateRange));
+        if (e > maxEnd) return `Must be within ${formatDuration(maximumDateRange)} of move-out`;
+      }
     }
     return null;
   };
@@ -349,8 +372,15 @@ export default function SearchDateRange({
     e.preventDefault();
     const pasted = e.clipboardData.getData('text');
     const formatted = formatShortDateInput(pasted);
-    if (field === 'start') setStartInputRaw(formatted);
-    else setEndInputRaw(formatted);
+    if (field === 'start') { setStartInputRaw(formatted); setStartError(null); }
+    else { setEndInputRaw(formatted); setEndError(null); }
+
+    const error = validateDate(formatted, field);
+    if (error) {
+      if (field === 'start') setStartError(error);
+      else setEndError(error);
+      return;
+    }
 
     const parsed = parseShortDate(formatted);
     if (parsed && parsed >= today) {
