@@ -28,6 +28,7 @@ interface ListingDetailWithWizardProps {
   listingState: { hasApplied: boolean; isMatched: boolean } | null;
   userApplication: any;
   shouldAutoApply?: boolean;
+  isFavorited?: boolean;
 }
 
 export default function ListingDetailWithWizard({
@@ -39,6 +40,7 @@ export default function ListingDetailWithWizard({
   listingState: initialListingState,
   userApplication,
   shouldAutoApply,
+  isFavorited,
 }: ListingDetailWithWizardProps) {
   const [wizardState, setWizardState] = useState<WizardState>(shouldAutoApply ? 'application' : 'listing');
   const [collectedDates, setCollectedDates] = useState<{ start: Date; end: Date } | null>(null);
@@ -124,6 +126,7 @@ export default function ListingDetailWithWizard({
             listingState={effectiveListingState}
             onApplyClick={handleApplyClick}
             onDatesSelected={handleDatesSelected}
+            isFavorited={isFavorited}
           />
         </motion.div>
       )}

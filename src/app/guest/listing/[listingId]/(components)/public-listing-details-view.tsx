@@ -14,6 +14,8 @@ import { ArrowLeft, Heart, Share } from 'lucide-react';
 import { calculateRent } from '@/lib/calculate-rent';
 import { Trip } from '@prisma/client';
 import { format } from 'date-fns';
+import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
+import { getOrCreateTripForListing } from '@/app/actions/trips';
 
 
 interface PublicListingDetailsViewProps {
@@ -32,6 +34,7 @@ interface PublicListingDetailsViewProps {
   listingState?: { hasApplied: boolean; isMatched: boolean } | null;
   onApplyClick?: () => void;
   onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
+  isFavorited?: boolean;
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_URL || "https://matchbookrentals.com";
@@ -45,6 +48,7 @@ export default function PublicListingDetailsView({
   listingState = null,
   onApplyClick,
   onDatesSelected,
+  isFavorited: initialIsFavorited = false,
 }: PublicListingDetailsViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -53,6 +57,34 @@ export default function PublicListingDetailsView({
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
+
+  // Favorite state
+  const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
+  const [resolvedTripId, setResolvedTripId] = useState<string | null>(tripContext?.tripId ?? null);
+  const handleFavoriteClick = useCallback(async () => {
+    if (!isAuthenticated) return;
+    const newState = !isFavorited;
+    setIsFavorited(newState);
+
+    let tripId = resolvedTripId;
+    if (!tripId) {
+      const tripResult = await getOrCreateTripForListing(listing.id);
+      if (!tripResult.success || !tripResult.trip) {
+        setIsFavorited(!newState);
+        return;
+      }
+      tripId = tripResult.trip.id;
+      setResolvedTripId(tripId);
+    }
+
+    if (newState) {
+      const result = await optimisticFavorite(tripId, listing.id);
+      if (!result.success) setIsFavorited(false);
+    } else {
+      const result = await optimisticRemoveFavorite(tripId, listing.id);
+      if (!result.success) setIsFavorited(true);
+    }
+  }, [isFavorited, isAuthenticated, resolvedTripId, listing.id]);
 
   // Mobile footer state
   const [mobileState, setMobileState] = useState<{
@@ -132,7 +164,7 @@ export default function PublicListingDetailsView({
           {/* Top-left: Back button */}
           <button
             onClick={() => fromUrl ? router.replace(fromUrl) : router.back()}
-            className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+            className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
           </button>
@@ -151,14 +183,15 @@ export default function PublicListingDetailsView({
                   navigator.clipboard.writeText(shareData.url || '');
                 }
               }}
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+              className="w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
             >
               <Share className="w-[18px] h-[18px] text-gray-700" />
             </button>
             <button
-              className="w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+              onClick={handleFavoriteClick}
+              className="w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
             >
-              <Heart className="w-[18px] h-[18px] text-gray-700" />
+              <Heart className={`w-[18px] h-[18px] ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
             </button>
           </div>
           <ListingImageCarousel listingImages={listing.listingImages || []} maxHeight={420} />
