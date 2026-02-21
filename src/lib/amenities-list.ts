@@ -2,6 +2,7 @@ import { Dumbbell } from 'lucide-react';
 import * as AmenitiesIcons from '@/components/icons/amenities';
 import { Wifi as WifiIcon } from 'lucide-react';
 import NotAvailableIcon from '@/lib/icons/not-available';
+import { OvenStoveIcon, RefrigeratorIcon, KitchenEssentialsIcon } from '@/components/icons-v3/amenities';
 
 const amenities = [
   // Basics
@@ -109,6 +110,11 @@ export const iconAmenities = [
   // Kitchen
   { code: 'garbageDisposal', label: 'Garbage Disposal', icon: AmenitiesIcons.UpdatedGarbageDisposalIcon, category: 'kitchen' },
   { code: 'dishwasher', label: 'Dishwasher', icon: AmenitiesIcons.UpdatedDishwasherIcon, category: 'kitchen' },
+  { code: 'fridge', label: 'Refrigerator', icon: RefrigeratorIcon, category: 'kitchen' },
+  { code: 'oven', label: 'Oven', icon: OvenStoveIcon, category: 'kitchen' },
+  { code: 'stove', label: 'Stove', icon: OvenStoveIcon, category: 'kitchen' },
+  { code: 'kitchenEssentials', label: 'Kitchen Essentials', icon: KitchenEssentialsIcon, category: 'kitchen' },
+  { code: 'microwave', label: 'Microwave', icon: KitchenEssentialsIcon, category: 'kitchen' },
 
   // Laundry
   { code: 'washerInUnit', label: 'In Unit', icon: AmenitiesIcons.WasherIcon, category: 'laundry' },
