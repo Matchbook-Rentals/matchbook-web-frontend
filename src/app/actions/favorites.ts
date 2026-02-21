@@ -101,16 +101,13 @@ export const optimisticRemoveFavorite = async (
   tripId: string,
   listingId: string,
 ): Promise<{ success: boolean, error?: string }> => {
-  console.log('Starting optimisticRemoveFavorite with:', { tripId, listingId });
   try {
-    const result = await prisma.favorite.deleteMany({
+    await prisma.favorite.deleteMany({
       where: {
         tripId,
         listingId
       }
     });
-
-    console.log('Delete operation result:', result);
     revalidatePath('/favorites');
     revalidateTag(`trip-${tripId}`);
     revalidateTag('user-trips');
