@@ -16,6 +16,73 @@ import {
 const PLACEHOLDER_IMAGE = '/stock_interior.webp';
 const TITLE_MAX_LENGTH = 30;
 
+function MatchedBadge({ badge }: { badge?: 'matched' | 'liked' }) {
+  if (badge !== 'matched') return null;
+  return (
+    <span className="absolute top-2 left-2 px-3 py-1 rounded-[6px] text-xs font-medium bg-white text-primaryBrand">
+      Matched
+    </span>
+  );
+}
+
+function MatchedActionButton({ matchId, onBookNow }: { matchId?: string; onBookNow?: (matchId: string) => void }) {
+  const handleClick = matchId && onBookNow
+    ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); onBookNow(matchId); }
+    : undefined;
+
+  return (
+    <button
+      onClick={handleClick}
+      className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center bg-secondaryBrand text-white hover:bg-primaryBrand transition-colors cursor-pointer"
+    >
+      Book Now
+    </button>
+  );
+}
+
+function LikedActionButton({
+  listingId,
+  tripId,
+  isApplied,
+  isSignedIn,
+  onSignInPrompt,
+}: {
+  listingId: string;
+  tripId?: string;
+  isApplied?: boolean;
+  isSignedIn?: boolean;
+  onSignInPrompt?: () => void;
+}) {
+  const router = useRouter();
+  const canApply = !!tripId;
+  const hasSignInPrompt = !canApply && onSignInPrompt;
+  const buttonText = isApplied ? 'Applied' : 'Apply Now';
+
+  const handleClick = canApply
+    ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); if (!isApplied) router.push(`/search/listing/${listingId}?tripId=${tripId}&isApplying=true`); }
+    : hasSignInPrompt
+      ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); onSignInPrompt!(); }
+      : isSignedIn && !isApplied
+        ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); router.push(`/search/listing/${listingId}`); }
+        : undefined;
+
+  const isDisabled = isApplied || !handleClick;
+
+  return (
+    <button
+      onClick={handleClick}
+      disabled={isDisabled}
+      className={`absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center transition-colors ${
+        isApplied
+          ? 'bg-gray-400 text-white cursor-default'
+          : 'bg-secondaryBrand text-white hover:bg-primaryBrand cursor-pointer'
+      }`}
+    >
+      {buttonText}
+    </button>
+  );
+}
+
 interface HomepageListingCardProps {
   listing: ListingAndImages;
   badge?: 'matched' | 'liked';
@@ -154,69 +221,19 @@ export default function HomepageListingCard({
     }
   };
 
-  const renderMatchedBadge = () => {
-    if (effectiveBadge !== 'matched') return null;
-    return (
-      <span className="absolute top-2 left-2 px-3 py-1 rounded-[6px] text-xs font-medium bg-white text-primaryBrand">
-        Matched
-      </span>
-    );
-  };
-
-  const handleApplyClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (!tripId || isApplied) return;
-    router.push(`/search/listing/${listing.id}?tripId=${tripId}&isApplying=true`);
-  };
-
-  const handleBookNowClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-    if (matchId && onBookNow) {
-      onBookNow(matchId);
-    }
-  };
-
   const renderActionButton = () => {
     if (effectiveBadge === 'matched') {
-      const hasHandler = matchId && onBookNow;
-      return (
-        <button
-          onClick={hasHandler ? handleBookNowClick : undefined}
-          className="absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center bg-secondaryBrand text-white hover:bg-primaryBrand transition-colors cursor-pointer"
-        >
-          Book Now
-        </button>
-      );
+      return <MatchedActionButton matchId={matchId} onBookNow={onBookNow} />;
     }
     if (effectiveBadge === 'liked') {
-      const canApply = !!tripId;
-      const hasSignInPrompt = !canApply && onSignInPrompt;
-      const buttonText = isApplied ? 'Applied' : 'Apply Now';
-
-      const handleClick = canApply
-        ? handleApplyClick
-        : hasSignInPrompt
-          ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); onSignInPrompt(); }
-          : isSignedIn && !isApplied
-            ? (e: React.MouseEvent) => { e.preventDefault(); e.stopPropagation(); router.push(`/search/listing/${listing.id}`); }
-            : undefined;
-
-      const isDisabled = isApplied || !handleClick;
-
       return (
-        <button
-          onClick={handleClick}
-          disabled={isDisabled}
-          className={`absolute bottom-3 left-1/2 -translate-x-1/2 w-[90%] py-2 rounded-[8px] text-xs font-semibold text-center transition-colors ${
-            isApplied
-              ? 'bg-gray-400 text-white cursor-default'
-              : 'bg-secondaryBrand text-white hover:bg-primaryBrand cursor-pointer'
-          }`}
-        >
-          {buttonText}
-        </button>
+        <LikedActionButton
+          listingId={listing.id}
+          tripId={tripId}
+          isApplied={isApplied}
+          isSignedIn={isSignedIn}
+          onSignInPrompt={onSignInPrompt}
+        />
       );
     }
     return null;
@@ -316,7 +333,7 @@ export default function HomepageListingCard({
             </div>
           )}
 
-          {renderMatchedBadge()}
+          <MatchedBadge badge={effectiveBadge} />
           {renderActionButton()}
           <button
             onClick={handleFavoriteClick}

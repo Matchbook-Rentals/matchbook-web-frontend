@@ -7,6 +7,7 @@ import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { HomepageUserState } from '@/app/actions/homepage-user-state';
+import { useHomepageListingsContext } from '@/contexts/homepage-listings-context';
 import {
   Carousel,
   CarouselContent,
@@ -27,11 +28,6 @@ export interface ListingSection {
 
 interface PopularListingsSectionProps {
   sections: ListingSection[];
-  guestFavoriteIds?: Set<string>;
-  onFavorite?: (listingId: string, isFavorited: boolean, sectionTripId?: string, center?: { lat: number; lng: number }, locationString?: string) => void;
-  onSignInPrompt?: () => void;
-  authUserState?: Partial<HomepageUserState>;
-  isSignedIn?: boolean;
 }
 
 type BadgeType = 'matched' | 'liked';
@@ -40,13 +36,10 @@ interface ListingRowProps {
   title: string;
   listings: ListingAndImages[];
   showBadges?: boolean;
-  guestFavoriteIds?: Set<string>;
-  onFavorite?: (listingId: string, isFavorited: boolean) => void;
-  onSignInPrompt?: () => void;
   exploreHref?: string;
-  authUserState?: Partial<HomepageUserState>;
   sectionTripId?: string;
-  isSignedIn?: boolean;
+  sectionCenter?: { lat: number; lng: number };
+  sectionLocationString?: string;
 }
 
 const getListingState = (
@@ -81,7 +74,8 @@ const getListingState = (
   };
 };
 
-function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds, onFavorite, onSignInPrompt, exploreHref, authUserState, sectionTripId, isSignedIn }: ListingRowProps) {
+function ListingRow({ title, listings = [], showBadges = false, exploreHref, sectionTripId, sectionCenter, sectionLocationString }: ListingRowProps) {
+  const { state, actions } = useHomepageListingsContext();
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
@@ -130,6 +124,10 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
     );
     carouselApi.scrollTo(targetIndex);
   };
+
+  const handleFavorite = actions.onFavorite
+    ? (listingId: string, isFavorited: boolean) => actions.onFavorite!(listingId, isFavorited, sectionTripId, sectionCenter, sectionLocationString)
+    : undefined;
 
   const hasListings = listings.length > 0;
 
@@ -192,19 +190,19 @@ function ListingRow({ title, listings = [], showBadges = false, guestFavoriteIds
         >
           <CarouselContent className="-ml-6">
             {listings.map(listing => {
-              const state = getListingState(listing.id, authUserState, guestFavoriteIds, sectionTripId);
+              const listingState = getListingState(listing.id, state.authUserState, state.guestFavoriteIds, sectionTripId);
               return (
                 <CarouselItem key={listing.id} className="pl-6 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
                   <HomepageListingCard
                     listing={listing}
-                    badge={state.badge}
-                    initialFavorited={state.initialFavorited}
-                    isApplied={state.isApplied}
-                    tripId={state.tripId}
-                    matchId={state.matchId}
-                    onFavorite={onFavorite}
-                    onSignInPrompt={onSignInPrompt}
-                    isSignedIn={isSignedIn}
+                    badge={listingState.badge}
+                    initialFavorited={listingState.initialFavorited}
+                    isApplied={listingState.isApplied}
+                    tripId={listingState.tripId}
+                    matchId={listingState.matchId}
+                    onFavorite={handleFavorite}
+                    onSignInPrompt={actions.onSignInPrompt}
+                    isSignedIn={state.isSignedIn}
                   />
                 </CarouselItem>
               );
@@ -230,7 +228,7 @@ const buildExploreHref = (section: ListingSection): string | undefined => {
   return `/search?${params.toString()}`;
 };
 
-export default function PopularListingsSection({ sections, guestFavoriteIds, onFavorite, onSignInPrompt, authUserState, isSignedIn }: PopularListingsSectionProps) {
+export default function PopularListingsSection({ sections }: PopularListingsSectionProps) {
 
   const hasSections = sections.length > 0;
 
@@ -250,13 +248,10 @@ export default function PopularListingsSection({ sections, guestFavoriteIds, onF
             title={section.title}
             listings={section.listings}
             showBadges={section.showBadges}
-            guestFavoriteIds={guestFavoriteIds}
-            onFavorite={onFavorite ? (listingId, isFavorited) => onFavorite(listingId, isFavorited, section.sectionTripId, section.center, section.locationString) : undefined}
-            onSignInPrompt={onSignInPrompt}
             exploreHref={buildExploreHref(section)}
-            authUserState={authUserState}
             sectionTripId={section.sectionTripId}
-            isSignedIn={isSignedIn}
+            sectionCenter={section.center}
+            sectionLocationString={section.locationString}
           />
           ))
         ) : (

@@ -14,6 +14,7 @@ import { RecentSearch, SuggestedLocationItem } from './search-navbar';
 import { Clock, Building2 } from 'lucide-react';
 import { buildSearchUrl } from '@/app/search/search-page-client';
 import { formatDateDisplay, formatGuestDisplay } from '@/lib/search-display-utils';
+import { useSearchBarPopovers } from '@/hooks/useSearchBarPopovers';
 
 type ActiveSection = 'where' | 'when' | 'who' | null;
 
@@ -22,21 +23,7 @@ interface MobileSearchOverlayProps {
   onClose: () => void;
   onSubmit: () => void;
   isSubmitting: boolean;
-  isGeocoding: boolean;
-  // Location
-  selectedLocation: SuggestedLocation | null;
-  locationDisplayValue: string;
-  setLocationDisplayValue: (value: string) => void;
-  onLocationSelect: (location: SuggestedLocation | null) => void;
-  onGeocodingStateChange: (isGeocoding: boolean) => void;
-  onSuggestedLocationClick: (title: string) => void;
-  // Dates
-  dateRange: { start: Date | null; end: Date | null };
-  onDateChange: (start: Date | null, end: Date | null) => void;
-  // Guests
-  guests: { adults: number; children: number; pets: number };
-  setGuests: React.Dispatch<React.SetStateAction<{ adults: number; children: number; pets: number }>>;
-  // Lists
+  search: ReturnType<typeof useSearchBarPopovers>;
   recentSearches: RecentSearch[];
   suggestedLocations: SuggestedLocationItem[];
 }
@@ -46,17 +33,7 @@ export default function MobileSearchOverlay({
   onClose,
   onSubmit,
   isSubmitting,
-  isGeocoding,
-  selectedLocation,
-  locationDisplayValue,
-  setLocationDisplayValue,
-  onLocationSelect,
-  onGeocodingStateChange,
-  onSuggestedLocationClick,
-  dateRange,
-  onDateChange,
-  guests,
-  setGuests,
+  search,
   recentSearches,
   suggestedLocations,
 }: MobileSearchOverlayProps) {
@@ -84,14 +61,14 @@ export default function MobileSearchOverlay({
   }, [isOpen]);
 
   const handleLocationSelected = (location: SuggestedLocation | null) => {
-    onLocationSelect(location);
+    search.handleLocationSelect(location);
     if (location?.lat && location?.lng) {
       setActiveSection('when');
     }
   };
 
   const handleSuggestedClick = (title: string) => {
-    onSuggestedLocationClick(title);
+    search.handleSuggestedLocationClick(title);
     setActiveSection('when');
   };
 
@@ -102,23 +79,23 @@ export default function MobileSearchOverlay({
   };
 
   const handleDateRangeChange = (start: Date | null, end: Date | null) => {
-    onDateChange(start, end);
+    search.handleDateChange(start, end);
     if (start && end) {
       setActiveSection('who');
-      setGuests(prev => prev.adults >= 1 ? prev : { ...prev, adults: 1 });
+      search.setGuests(prev => prev.adults >= 1 ? prev : { ...prev, adults: 1 });
     }
   };
 
   const handleClearAll = () => {
-    onLocationSelect(null);
-    setLocationDisplayValue('');
-    onDateChange(null, null);
-    setGuests({ adults: 1, children: 0, pets: 0 });
+    search.handleLocationSelect(null);
+    search.setLocationDisplayValue('');
+    search.handleDateChange(null, null);
+    search.setGuests({ adults: 1, children: 0, pets: 0 });
     setActiveSection('where');
   };
 
-  const dateSummary = formatDateDisplay(dateRange) || 'Add dates';
-  const guestSummary = formatGuestDisplay(guests) || 'Add renters';
+  const dateSummary = formatDateDisplay(search.dateRange) || 'Add dates';
+  const guestSummary = formatGuestDisplay(search.guests) || 'Add renters';
 
   const handleSearchClick = () => {
     onSubmit();
@@ -149,7 +126,7 @@ export default function MobileSearchOverlay({
             <AccordionCard
               icon={<MapPin className="w-4 h-4" />}
               title="Where"
-              summary={locationDisplayValue || 'Choose location'}
+              summary={search.locationDisplayValue || 'Choose location'}
               isExpanded={activeSection === 'where'}
               onToggle={() => setActiveSection(activeSection === 'where' ? null : 'where')}
             >
@@ -158,13 +135,13 @@ export default function MobileSearchOverlay({
                   hasAccess={true}
                   onLocationSelect={handleLocationSelected}
                   onInputChange={(value) => setIsTypingLocation(value.length > 0)}
-                  onGeocodingStateChange={onGeocodingStateChange}
+                  onGeocodingStateChange={search.setIsGeocoding}
                   showLocationIcon={true}
-                  setDisplayValue={setLocationDisplayValue}
+                  setDisplayValue={search.setLocationDisplayValue}
                   contentClassName="p-0"
                   autoFocus={false}
                   placeholder={
-                    selectedLocation?.description
+                    search.selectedLocation?.description
                       ? 'Wrong place? Begin typing and select another'
                       : 'Enter an address or city'
                   }
@@ -178,24 +155,24 @@ export default function MobileSearchOverlay({
                         <h3 className="font-normal text-[#0d1b2a] text-xs leading-5 px-1">
                           Recent Searches
                         </h3>
-                        {recentSearches.slice(0, 3).map((search, index) => (
+                        {recentSearches.slice(0, 3).map((recentSearch, index) => (
                           <button
                             key={`recent-mobile-${index}`}
                             className="flex flex-col gap-1 p-3 rounded-xl hover:bg-gray-50 transition-colors text-left"
-                            onClick={() => handleRecentSearchClick(search.tripId)}
-                            disabled={loadingRecentSearchId === search.tripId}
+                            onClick={() => handleRecentSearchClick(recentSearch.tripId)}
+                            disabled={loadingRecentSearchId === recentSearch.tripId}
                           >
                             <div className="flex items-center gap-2">
-                              {loadingRecentSearchId === search.tripId ? (
+                              {loadingRecentSearchId === recentSearch.tripId ? (
                                 <ImSpinner8 className="w-4 h-4 text-gray-500 animate-spin" />
                               ) : (
                                 <Clock className="w-4 h-4 text-gray-500" />
                               )}
                               <span className="font-medium text-[#0d1b2a] text-sm">
-                                {search.location}
+                                {recentSearch.location}
                               </span>
                             </div>
-                            <span className="ml-6 text-xs text-gray-400">{search.details}</span>
+                            <span className="ml-6 text-xs text-gray-400">{recentSearch.details}</span>
                           </button>
                         ))}
                       </div>
@@ -243,8 +220,8 @@ export default function MobileSearchOverlay({
               onToggle={() => setActiveSection(activeSection === 'when' ? null : 'when')}
             >
               <SearchDateRange
-                start={dateRange.start}
-                end={dateRange.end}
+                start={search.dateRange.start}
+                end={search.dateRange.end}
                 handleChange={handleDateRangeChange}
                 minimumDateRange={{ months: 1 }}
                 maximumDateRange={{ months: 12 }}
@@ -262,11 +239,11 @@ export default function MobileSearchOverlay({
                 const opening = activeSection !== 'who';
                 setActiveSection(opening ? 'who' : null);
                 if (opening) {
-                  setGuests(prev => prev.adults >= 1 ? prev : { ...prev, adults: 1 });
+                  search.setGuests(prev => prev.adults >= 1 ? prev : { ...prev, adults: 1 });
                 }
               }}
             >
-              <GuestTypeCounter guests={guests} setGuests={setGuests} />
+              <GuestTypeCounter guests={search.guests} setGuests={search.setGuests} />
             </AccordionCard>
           </div>
 
@@ -275,10 +252,10 @@ export default function MobileSearchOverlay({
             <Button
               className="bg-primaryBrand hover:bg-primaryBrand/90 text-white px-6 py-2 rounded-lg flex items-center gap-2"
               onClick={handleSearchClick}
-              disabled={isSubmitting || isGeocoding}
+              disabled={isSubmitting || search.isGeocoding}
             >
               Search
-              {isSubmitting || isGeocoding ? (
+              {isSubmitting || search.isGeocoding ? (
                 <ImSpinner8 className="animate-spin w-4 h-4" />
               ) : (
                 <SearchIcon className="w-4 h-4" />
@@ -290,4 +267,3 @@ export default function MobileSearchOverlay({
     </AnimatePresence>
   );
 }
-

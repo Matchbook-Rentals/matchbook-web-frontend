@@ -12,6 +12,7 @@ import { createTrip } from '@/app/actions/trips';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
 import { HomepageUserState } from '@/app/actions/homepage-user-state';
 import { IpLocation } from '@/lib/ip-geolocation';
+import { HomepageListingsProvider } from '@/contexts/homepage-listings-context';
 
 interface UserTripLocation {
   city: string | null;
@@ -323,17 +324,22 @@ export default function PopularListingsSectionWrapper({
 
   return (
     <>
-      <PopularListingsSection
-        sections={sections}
-        guestFavoriteIds={isSignedIn ? undefined : new Set()} // Empty set for guests
-        onFavorite={isSignedIn ? handleAuthFavorite : handleGuestFavorite}
-        onSignInPrompt={isSignedIn ? undefined : handleGuestApplyPrompt}
-        authUserState={isSignedIn ? {
-          ...userState,
-          favoritedListingIds: Array.from(authFavoriteIdsRef.current),
-        } : undefined}
-        isSignedIn={isSignedIn}
-      />
+      <HomepageListingsProvider
+        state={{
+          isSignedIn,
+          authUserState: isSignedIn ? {
+            ...userState,
+            favoritedListingIds: Array.from(authFavoriteIdsRef.current),
+          } : undefined,
+          guestFavoriteIds: isSignedIn ? undefined : new Set(),
+        }}
+        actions={{
+          onFavorite: isSignedIn ? handleAuthFavorite : handleGuestFavorite,
+          onSignInPrompt: isSignedIn ? undefined : handleGuestApplyPrompt,
+        }}
+      >
+        <PopularListingsSection sections={sections} />
+      </HomepageListingsProvider>
       <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
     </>
   );

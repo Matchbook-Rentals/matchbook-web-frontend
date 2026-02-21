@@ -261,17 +261,7 @@ export default function SearchNavbar({ userId, user, isSignedIn, recentSearches 
         handleSubmit();
       }}
       isSubmitting={isSubmitting}
-      isGeocoding={search.isGeocoding}
-      selectedLocation={search.selectedLocation}
-      locationDisplayValue={search.locationDisplayValue}
-      setLocationDisplayValue={search.setLocationDisplayValue}
-      onLocationSelect={search.handleLocationSelect}
-      onGeocodingStateChange={search.setIsGeocoding}
-      onSuggestedLocationClick={search.handleSuggestedLocationClick}
-      dateRange={search.dateRange}
-      onDateChange={search.handleDateChange}
-      guests={search.guests}
-      setGuests={search.setGuests}
+      search={search}
       recentSearches={recentSearches}
       suggestedLocations={suggestedLocations}
     />
