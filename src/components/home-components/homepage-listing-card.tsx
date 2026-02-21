@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import {
   Carousel,
   CarouselContent,
@@ -114,11 +114,15 @@ export default function HomepageListingCard({
 }: HomepageListingCardProps) {
   const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
-  useEffect(() => { setIsFavorited(initialFavorited ?? false); }, [initialFavorited]);
+  const prevInitialFavorited = useRef(initialFavorited);
+  if (prevInitialFavorited.current !== initialFavorited) {
+    prevInitialFavorited.current = initialFavorited;
+    setIsFavorited(initialFavorited ?? false);
+  }
 
   // Derive effective badge from local favorite state (avoids parent re-render)
   const effectiveBadge = badge === 'matched' ? 'matched' : isFavorited ? 'liked' : undefined;
-  const [failedImages, setFailedImages] = useState<Set<number>>(new Set());
+  const [failedImages, setFailedImages] = useState<Set<number>>(() => new Set());
   const [isHovered, setIsHovered] = useState(false);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [currentSlide, setCurrentSlide] = useState(0);
