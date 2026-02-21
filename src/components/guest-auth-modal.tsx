@@ -20,7 +20,7 @@ export const GuestAuthModal: React.FC<GuestAuthModalProps> = ({
   };
 
   const handleSignIn = () => {
-    const url = redirectUrl || window.location.pathname;
+    const url = redirectUrl || (window.location.pathname + window.location.search);
     const encoded = encodeURIComponent(url);
     window.location.href = `/sign-in?redirect_url=${encoded}`;
   };

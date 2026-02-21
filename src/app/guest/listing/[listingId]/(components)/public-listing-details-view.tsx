@@ -1,6 +1,6 @@
 'use client'
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
 import { ListingAndImages } from '@/types';
 import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
@@ -47,6 +47,8 @@ export default function PublicListingDetailsView({
   onDatesSelected,
 }: PublicListingDetailsViewProps) {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromUrl = searchParams.get('from');
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -129,7 +131,7 @@ export default function PublicListingDetailsView({
           {/* Mobile overlay buttons on image carousel */}
           {/* Top-left: Back button */}
           <button
-            onClick={() => router.back()}
+            onClick={() => fromUrl ? router.replace(fromUrl) : router.back()}
             className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />

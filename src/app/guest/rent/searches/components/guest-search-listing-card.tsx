@@ -183,9 +183,10 @@ export default function SearchListingCard({ listing, status, className, style, d
       return;
     }
 
+    const fromParam = encodeURIComponent(window.location.pathname + window.location.search);
     const url = tripId
-      ? `/search/listing/${listing.id}?tripId=${tripId}`
-      : `/search/listing/${listing.id}`;
+      ? `/search/listing/${listing.id}?tripId=${tripId}&from=${fromParam}`
+      : `/search/listing/${listing.id}?from=${fromParam}`;
 
     // On mobile, navigate in the same tab for a smoother experience
     const isMobile = window.innerWidth < 768;
