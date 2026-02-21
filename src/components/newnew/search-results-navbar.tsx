@@ -9,6 +9,7 @@ import UserMenu from '@/components/userMenu';
 import DesktopSearchPopover from '@/components/newnew/desktop-search-popover';
 
 import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
+import { UpdatedFilterIcon } from '@/components/icons';
 import { createTrip, editTrip } from '@/app/actions/trips';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { updateGuestSession } from '@/app/actions/guest-session-db';
@@ -45,6 +46,7 @@ interface SearchResultsNavbarProps {
   onSearchUpdate?: (newTripId?: string, newSessionId?: string) => void;
   onSaveDates?: (start: Date | null, end: Date | null) => Promise<{ success: boolean; error?: string }>;
   onSaveGuests?: (adults: number, children: number, pets: number) => Promise<{ success: boolean; error?: string }>;
+  onFiltersClick?: () => void;
   recentSearches?: RecentSearch[];
   suggestedLocations?: SuggestedLocationItem[];
 }
@@ -74,6 +76,7 @@ export default function SearchResultsNavbar({
   onSearchUpdate,
   onSaveDates,
   onSaveGuests,
+  onFiltersClick,
   recentSearches = [],
   suggestedLocations = [],
 }: SearchResultsNavbarProps) {
@@ -416,14 +419,33 @@ export default function SearchResultsNavbar({
         </div>
       </header>
 
-      {/* Mobile: static search bar row below header */}
-      <div className="md:hidden flex items-center justify-center w-full px-4 sm:px-6 pb-4 pt-1">
-        <div
-          className="flex items-center w-full max-w-full h-[50px] pl-4 sm:pl-6 pr-3 py-2 bg-background rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)]"
+      {/* Mobile: search pill + filter button row below header */}
+      <div className="md:hidden flex items-center w-full px-4 sm:px-6 pb-4 pt-1 gap-2">
+        <button
+          className="flex items-center justify-center flex-1 min-w-0 h-[50px] px-3 py-2 bg-background rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)] text-center"
           onClick={handleWhereClick}
         >
-          {searchBarContent()}
-        </div>
+          <div className="flex flex-col items-center min-w-0 flex-1">
+            <span className="text-sm font-semibold text-gray-900 truncate">
+              {search.locationDisplayValue || 'Begin Your Search'}
+            </span>
+            {(dateDisplay || guestDisplay) && (
+              <span className="text-xs text-gray-500 truncate">
+                {[dateDisplay, guestDisplay].filter(Boolean).join(' · ')}
+              </span>
+            )}
+          </div>
+          {search.isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0 ml-2" />}
+        </button>
+        {onFiltersClick && (
+          <button
+            className="flex items-center justify-center w-[50px] h-[50px] rounded-xl border border-gray-300 bg-background shadow-[0px_4px_10px_rgba(0,0,0,0.12)] flex-shrink-0"
+            onClick={onFiltersClick}
+            aria-label="Open filters"
+          >
+            <UpdatedFilterIcon className="w-5 h-5 text-primaryBrand" />
+          </button>
+        )}
       </div>
 
       {/* Desktop: Height spacer — pushes content below navbar down when expanded */}

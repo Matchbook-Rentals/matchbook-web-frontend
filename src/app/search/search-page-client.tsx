@@ -131,7 +131,7 @@ function SearchFilterBar({ onFiltersClick, filters, onRemoveFilter, onSetAllFilt
   const activeFilters = getActiveFilters(filters);
 
   return (
-    <div className="flex w-full min-h-[51px] items-center justify-between px-3 py-2 flex-shrink-0">
+    <div className="hidden md:flex w-full min-h-[51px] items-center justify-between px-3 py-2 flex-shrink-0">
       <div className="hidden md:flex flex-wrap items-center gap-2 flex-1">
         {activeFilters.map((filter) => (
           <Badge
@@ -770,6 +770,7 @@ export default function SearchPageClient({
           onSaveGuests={saveGuests}
           recentSearches={recentSearches}
           suggestedLocations={suggestedLocations}
+          onFiltersClick={() => setIsFiltersOpen(true)}
         />
 
         {/* Main content */}
