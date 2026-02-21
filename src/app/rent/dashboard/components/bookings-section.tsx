@@ -123,7 +123,7 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
                                           className="h-[29px] px-3.5 py-2.5 rounded-lg border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787]/10 font-poppins font-semibold text-[11px]"
                                           asChild
                                         >
-                                          <Link href={booking.id.startsWith('demo-') ? '/newnew/demo' : `/rent/bookings/${booking.id}`}>View Details</Link>
+                                          <Link href={`/rent/bookings/${booking.id}`}>View Details</Link>
                                         </Button>
                                         {booking.listingId && (
                                           <Button

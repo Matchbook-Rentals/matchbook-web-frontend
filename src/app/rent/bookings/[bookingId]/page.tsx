@@ -6,7 +6,7 @@ import { getPaymentTypeLabel } from "@/lib/payment-display-helpers";
 import { BrandButton } from "@/components/ui/brandButton";
 import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
-import { TablessPaymentsTable } from "@/app/newnew/demo/tabless-payments-table";
+import { TablessPaymentsTable } from "@/components/tabless-payments-table";
 import RenterNavbar from "@/components/renter-navbar";
 
 interface BookingDetailsPageProps {
