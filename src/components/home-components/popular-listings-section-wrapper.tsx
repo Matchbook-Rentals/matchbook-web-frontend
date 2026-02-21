@@ -114,138 +114,114 @@ export default function PopularListingsSectionWrapper({
     const newSections: ListingSection[] = [];
     const usedLocations = new Set<string>();
 
-    // Convert IP location to the format expected by buildSections
     const userLocation = ipLocation ? { lat: ipLocation.lat, lng: ipLocation.lng } : null;
 
     const makeLocationKey = (city: string | null, state: string | null) =>
       `${city?.toLowerCase() || ''}-${state?.toLowerCase() || ''}`;
 
-    // Row 1: User's trip location OR generic popular
-    if (isSignedIn && userTripLocation && (userTripLocation.city || userTripLocation.latitude)) {
-      let listings: ListingAndImages[] = [];
+    // --- Determine Row 1 source synchronously and mark it used ---
+    const hasUserTrip = isSignedIn && userTripLocation && (userTripLocation.city || userTripLocation.latitude);
+    if (hasUserTrip) {
+      usedLocations.add(makeLocationKey(userTripLocation!.city, userTripLocation!.state));
+    } else if (popularAreas.length > 0) {
+      usedLocations.add(makeLocationKey(popularAreas[0].city, popularAreas[0].state));
+    }
 
-      if (userTripLocation.city) {
-        // Use city/state search
-        listings = await getListingsByLocation(
-          userTripLocation.city,
-          userTripLocation.state,
-          LISTINGS_PER_ROW
-        );
-      } else if (userTripLocation.latitude && userTripLocation.longitude) {
-        // Fall back to lat/lng search
-        listings = await getListingsNearLocation(
-          userTripLocation.latitude,
-          userTripLocation.longitude,
-          LISTINGS_PER_ROW
-        );
+    // --- Pre-select candidate popular areas for rows 2-4 ---
+    // We pick up to 3: one may be used as Row 2 fallback, the rest for Rows 3-4
+    const candidateAreas = popularAreas.filter(
+      (a) => !usedLocations.has(makeLocationKey(a.city, a.state))
+    ).slice(0, 3);
+
+    // --- Fire all fetches in parallel ---
+    const row1Fetch = (): Promise<ListingAndImages[]> => {
+      if (hasUserTrip) {
+        if (userTripLocation!.city) {
+          return getListingsByLocation(userTripLocation!.city, userTripLocation!.state, LISTINGS_PER_ROW);
+        }
+        if (userTripLocation!.latitude && userTripLocation!.longitude) {
+          return getListingsNearLocation(userTripLocation!.latitude, userTripLocation!.longitude, LISTINGS_PER_ROW);
+        }
+      } else if (popularAreas.length > 0) {
+        return getListingsByLocation(popularAreas[0].city, popularAreas[0].state, LISTINGS_PER_ROW);
       }
+      return Promise.resolve([]);
+    };
 
-      const displayName = userTripLocation.locationString || userTripLocation.city || 'your area';
-      const tripCenter = userTripLocation.latitude && userTripLocation.longitude
-        ? { lat: userTripLocation.latitude, lng: userTripLocation.longitude }
+    const [row1Listings, nearMeListings, ...candidateListings] = await Promise.all([
+      row1Fetch(),
+      userLocation
+        ? getListingsNearLocation(userLocation.lat, userLocation.lng, LISTINGS_PER_ROW)
+        : Promise.resolve(null),
+      ...candidateAreas.map(area =>
+        getListingsByLocation(area.city, area.state, LISTINGS_PER_ROW)
+      ),
+    ]);
+
+    // --- Assemble Row 1 ---
+    if (hasUserTrip) {
+      const displayName = userTripLocation!.locationString || userTripLocation!.city || 'your area';
+      const tripCenter = userTripLocation!.latitude && userTripLocation!.longitude
+        ? { lat: userTripLocation!.latitude, lng: userTripLocation!.longitude }
         : undefined;
       newSections.push({
         title: `Your recent search in ${displayName}`,
-        listings,
+        listings: row1Listings,
         showBadges: true,
         center: tripCenter,
         locationString: displayName,
-        city: userTripLocation.city || undefined,
-        state: userTripLocation.state || undefined,
+        city: userTripLocation!.city || undefined,
+        state: userTripLocation!.state || undefined,
         sectionTripId: recentTripId || undefined,
       });
-      usedLocations.add(makeLocationKey(userTripLocation.city, userTripLocation.state));
     } else if (popularAreas.length > 0) {
       const firstArea = popularAreas[0];
-      const listings = await getListingsByLocation(firstArea.city, firstArea.state, LISTINGS_PER_ROW);
       newSections.push({
         title: `Explore monthly rentals in ${firstArea.city}`,
-        listings,
+        listings: row1Listings,
         showBadges: false,
         center: { lat: firstArea.avgLat, lng: firstArea.avgLng },
         locationString: `${firstArea.city}, ${firstArea.state}`,
         city: firstArea.city,
         state: firstArea.state,
       });
-      usedLocations.add(makeLocationKey(firstArea.city, firstArea.state));
     }
 
-    // Row 2: Near me (only if we have IP location data) or another popular area
-    if (userLocation) {
-      const listings = await getListingsNearLocation(
-        userLocation.lat,
-        userLocation.lng,
-        LISTINGS_PER_ROW
-      );
-      if (listings.length > 0) {
-        newSections.push({
-          title: 'Monthly rentals near me',
-          listings,
-          center: userLocation,
-          locationString: 'Near me',
-          // No city/state for IP-based rows
-        });
-      } else {
-        // No listings near IP location, use a popular area instead
-        const fallbackArea = popularAreas.find(
-          (a) => !usedLocations.has(makeLocationKey(a.city, a.state))
-        );
-        if (fallbackArea) {
-          const fallbackListings = await getListingsByLocation(
-            fallbackArea.city,
-            fallbackArea.state,
-            LISTINGS_PER_ROW
-          );
-          newSections.push({
-            title: `Explore monthly rentals in ${fallbackArea.city}`,
-            listings: fallbackListings,
-            center: { lat: fallbackArea.avgLat, lng: fallbackArea.avgLng },
-            locationString: `${fallbackArea.city}, ${fallbackArea.state}`,
-            city: fallbackArea.city,
-            state: fallbackArea.state,
-          });
-          usedLocations.add(makeLocationKey(fallbackArea.city, fallbackArea.state));
-        }
-      }
-    } else {
-      // No IP location available - just show another popular area (not "near you")
-      const fallbackArea = popularAreas.find(
-        (a) => !usedLocations.has(makeLocationKey(a.city, a.state))
-      );
-      if (fallbackArea) {
-        const listings = await getListingsByLocation(
-          fallbackArea.city,
-          fallbackArea.state,
-          LISTINGS_PER_ROW
-        );
-        newSections.push({
-          title: `Explore monthly rentals in ${fallbackArea.city}`,
-          listings,
-          center: { lat: fallbackArea.avgLat, lng: fallbackArea.avgLng },
-          locationString: `${fallbackArea.city}, ${fallbackArea.state}`,
-          city: fallbackArea.city,
-          state: fallbackArea.state,
-        });
-        usedLocations.add(makeLocationKey(fallbackArea.city, fallbackArea.state));
-      }
+    // --- Assemble Row 2 ---
+    let candidateStartIndex = 0;
+    if (userLocation && nearMeListings && nearMeListings.length > 0) {
+      newSections.push({
+        title: 'Monthly rentals near me',
+        listings: nearMeListings,
+        center: userLocation,
+        locationString: 'Near me',
+      });
+    } else if (candidateAreas.length > 0) {
+      // "Near me" returned empty or no IP — use first candidate popular area
+      const fallbackArea = candidateAreas[0];
+      newSections.push({
+        title: `Explore monthly rentals in ${fallbackArea.city}`,
+        listings: candidateListings[0],
+        center: { lat: fallbackArea.avgLat, lng: fallbackArea.avgLng },
+        locationString: `${fallbackArea.city}, ${fallbackArea.state}`,
+        city: fallbackArea.city,
+        state: fallbackArea.state,
+      });
+      usedLocations.add(makeLocationKey(fallbackArea.city, fallbackArea.state));
+      candidateStartIndex = 1;
     }
 
-    // Rows 3-4: Popular areas (skip used locations)
-    for (const area of popularAreas) {
-      if (newSections.length >= 4) break;
-      const key = makeLocationKey(area.city, area.state);
-      if (usedLocations.has(key)) continue;
-
-      const listings = await getListingsByLocation(area.city, area.state, LISTINGS_PER_ROW);
+    // --- Assemble Rows 3-4 from remaining candidates ---
+    for (let i = candidateStartIndex; i < candidateAreas.length && newSections.length < 4; i++) {
+      const area = candidateAreas[i];
       newSections.push({
         title: `Explore monthly rentals in ${area.city}`,
-        listings,
+        listings: candidateListings[i],
         center: { lat: area.avgLat, lng: area.avgLng },
         locationString: `${area.city}, ${area.state}`,
         city: area.city,
         state: area.state,
       });
-      usedLocations.add(key);
     }
 
     // Initial sort: matched first, then liked, then others (using RSC-provided state)
