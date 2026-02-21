@@ -195,11 +195,7 @@ function ListingRow({ title, listings = [], showBadges = false, exploreHref, sec
                 <CarouselItem key={listing.id} className="pl-6 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
                   <HomepageListingCard
                     listing={listing}
-                    badge={listingState.badge}
                     initialFavorited={listingState.initialFavorited}
-                    isApplied={listingState.isApplied}
-                    tripId={listingState.tripId}
-                    matchId={listingState.matchId}
                     onFavorite={handleFavorite}
                     onSignInPrompt={actions.onSignInPrompt}
                     isSignedIn={state.isSignedIn}

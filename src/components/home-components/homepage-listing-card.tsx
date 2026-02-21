@@ -226,10 +226,10 @@ export default function HomepageListingCard({
   };
 
   const renderActionButton = () => {
-    if (effectiveBadge === 'matched') {
+    if (effectiveBadge === 'matched' && onBookNow) {
       return <MatchedActionButton matchId={matchId} onBookNow={onBookNow} />;
     }
-    if (effectiveBadge === 'liked') {
+    if (effectiveBadge === 'liked' && (tripId || isApplied)) {
       return (
         <LikedActionButton
           listingId={listing.id}
