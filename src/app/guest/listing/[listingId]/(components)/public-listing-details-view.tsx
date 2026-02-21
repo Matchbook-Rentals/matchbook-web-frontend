@@ -292,7 +292,7 @@ export default function PublicListingDetailsView({
       </div>
 
       {/* Mobile sticky footer */}
-      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 px-4 pt-3 pb-[env(safe-area-inset-bottom,12px)] lg:hidden">
+      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200 px-4 py-4 pb-[max(env(safe-area-inset-bottom),16px)] lg:hidden">
         <div className="flex items-center justify-between gap-5">
           <div className="flex-1 min-w-0 flex flex-col gap-1">
             {/* Price row */}
