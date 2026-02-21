@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
 import { ListingAndImages } from '@/types';
@@ -11,29 +11,16 @@ import { Card, CardContent } from '@/components/ui/card';
 import ShareButton from '@/components/ui/share-button';
 import { BrandButton } from '@/components/ui/brandButton';
 import { ArrowLeft, Heart, Share } from 'lucide-react';
-import { calculateRent } from '@/lib/calculate-rent';
-import { Trip } from '@prisma/client';
 import { format } from 'date-fns';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { getOrCreateTripForListing } from '@/app/actions/trips';
+import { useRenterListingActionBox } from './renter-listing-action-box-context';
 
 
 interface PublicListingDetailsViewProps {
   listing: ListingAndImages;
   locationString: string;
   isAuthenticated?: boolean;
-  tripContext?: {
-    tripId?: string;
-    startDate: Date;
-    endDate: Date;
-    numAdults?: number;
-    numChildren?: number;
-    numPets?: number;
-  } | null;
-  calculatedPrice?: number | null;
-  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
-  onApplyClick?: () => void;
-  onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
   isFavorited?: boolean;
 }
 
@@ -43,11 +30,6 @@ export default function PublicListingDetailsView({
   listing,
   locationString,
   isAuthenticated = false,
-  tripContext = null,
-  calculatedPrice = null,
-  listingState = null,
-  onApplyClick,
-  onDatesSelected,
   isFavorited: initialIsFavorited = false,
 }: PublicListingDetailsViewProps) {
   const router = useRouter();
@@ -58,9 +40,11 @@ export default function PublicListingDetailsView({
   const mapRef = useRef<maplibregl.Map | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
 
+  const { state, actions } = useRenterListingActionBox();
+
   // Favorite state
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
-  const [resolvedTripId, setResolvedTripId] = useState<string | null>(tripContext?.tripId ?? null);
+  const [resolvedTripId, setResolvedTripId] = useState<string | null>(null);
   const handleFavoriteClick = useCallback(async () => {
     if (!isAuthenticated) return;
     const newState = !isFavorited;
@@ -85,39 +69,6 @@ export default function PublicListingDetailsView({
       if (!result.success) setIsFavorited(true);
     }
   }, [isFavorited, isAuthenticated, resolvedTripId, listing.id]);
-
-  // Mobile footer state
-  const [mobileState, setMobileState] = useState<{
-    hasDates: boolean;
-    startDate: Date | null;
-    endDate: Date | null;
-    guests: { adults: number; children: number; pets: number };
-  }>({ hasDates: false, startDate: null, endDate: null, guests: { adults: 0, children: 0, pets: 0 } });
-  const [requestOpenDates, setRequestOpenDates] = useState(0);
-  const [requestApply, setRequestApply] = useState(0);
-  const handleMobileStateChange = useCallback((state: typeof mobileState) => {
-    setMobileState(state);
-  }, []);
-
-  // Price range for footer
-  const getPriceRange = () => {
-    if (!listing.monthlyPricing || listing.monthlyPricing.length === 0) {
-      return { min: listing.price || 0, max: listing.price || 0, hasRange: false };
-    }
-    const prices = listing.monthlyPricing.map(p => p.price);
-    return { min: Math.min(...prices), max: Math.max(...prices), hasRange: Math.min(...prices) !== Math.max(...prices) };
-  };
-  const priceRange = getPriceRange();
-
-  // Compute exact price locally when mobile dates are selected
-  const mobileCalculatedPrice = useMemo(() => {
-    if (mobileState.hasDates && mobileState.startDate && mobileState.endDate) {
-      const mockTrip = { startDate: mobileState.startDate, endDate: mobileState.endDate } as Trip;
-      const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
-      return calculateRent({ listing: listingWithPricing, trip: mockTrip });
-    }
-    return calculatedPrice ?? null;
-  }, [mobileState.hasDates, mobileState.startDate, mobileState.endDate, listing, calculatedPrice]);
 
   // Set up the map
   React.useEffect(() => {
@@ -209,14 +160,6 @@ export default function PublicListingDetailsView({
             <ListingDescription
               listing={listing}
               isAuthenticated={isAuthenticated}
-              tripContext={tripContext}
-              calculatedPrice={calculatedPrice}
-              listingState={listingState}
-              onApplyClick={onApplyClick}
-              onDatesSelected={onDatesSelected}
-              requestOpenDates={requestOpenDates}
-              requestApply={requestApply}
-              onMobileStateChange={handleMobileStateChange}
             />
 
             <Card className="border-none shadow-none rounded-xl mt-5">
@@ -232,15 +175,7 @@ export default function PublicListingDetailsView({
           <div
             className="w-1/2 mt-6 h-fit lg:w-full rounded-[12px] shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
           >
-            <PublicListingDetailsBox
-              listing={listing}
-              isAuthenticated={isAuthenticated}
-              tripContext={tripContext}
-              calculatedPrice={calculatedPrice}
-              listingState={listingState}
-              onApplyClick={onApplyClick}
-              onDatesSelected={onDatesSelected}
-            />
+            <PublicListingDetailsBox />
           </div>
         </div>
 
@@ -299,11 +234,11 @@ export default function PublicListingDetailsView({
             <div className="flex items-center gap-x-[10px] sm:gap-x-4 md:gap-x-6 gap-y-0 flex-wrap">
               <div className="flex items-baseline gap-1">
                 <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
-                  {mobileState.hasDates && mobileCalculatedPrice != null
-                    ? `$${mobileCalculatedPrice.toLocaleString()}`
-                    : priceRange.hasRange
-                      ? `$${priceRange.min.toLocaleString()}– ${priceRange.max.toLocaleString()}`
-                      : `$${priceRange.min.toLocaleString()}`
+                  {state.hasDates && state.calculatedPrice != null
+                    ? `$${state.calculatedPrice.toLocaleString()}`
+                    : state.priceRange.hasRange
+                      ? `$${state.priceRange.min.toLocaleString()}– ${state.priceRange.max.toLocaleString()}`
+                      : `$${state.priceRange.min.toLocaleString()}`
                   }
                 </span>
                 <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Per Month</span>
@@ -318,17 +253,17 @@ export default function PublicListingDetailsView({
               )}
             </div>
             {/* Dates row */}
-            {mobileState.startDate && mobileState.endDate && (
+            {state.startDate && state.endDate && (
               <div className="text-[#373940] text-[11px] font-normal font-['Poppins'] leading-normal">
-                {format(mobileState.startDate, 'd MMM yy')} – {format(mobileState.endDate, 'd MMM yyyy')}
+                {format(state.startDate, 'd MMM yy')} – {format(state.endDate, 'd MMM yyyy')}
               </div>
             )}
             {/* Guests row */}
-            {mobileState.guests.adults > 0 && (
+            {state.guests.adults > 0 && (
               <div className="text-[#373940] text-[11px] font-normal font-['Poppins'] leading-normal">
-                {mobileState.guests.adults} Adult{mobileState.guests.adults !== 1 ? 's' : ''}
-                {mobileState.guests.children > 0 && `, ${mobileState.guests.children} Kid${mobileState.guests.children !== 1 ? 's' : ''}`}
-                {mobileState.guests.pets > 0 && `, ${mobileState.guests.pets} Pet${mobileState.guests.pets !== 1 ? 's' : ''}`}
+                {state.guests.adults} Adult{state.guests.adults !== 1 ? 's' : ''}
+                {state.guests.children > 0 && `, ${state.guests.children} Kid${state.guests.children !== 1 ? 's' : ''}`}
+                {state.guests.pets > 0 && `, ${state.guests.pets} Pet${state.guests.pets !== 1 ? 's' : ''}`}
               </div>
             )}
           </div>
@@ -336,14 +271,14 @@ export default function PublicListingDetailsView({
             size="lg"
             className="shrink-0 font-semibold"
             onClick={() => {
-              if (mobileState.hasDates) {
-                setRequestApply(prev => prev + 1);
+              if (state.hasDates) {
+                actions.handleApplyClick();
               } else {
-                setRequestOpenDates(prev => prev + 1);
+                actions.openMobileOverlay();
               }
             }}
           >
-            {mobileState.hasDates ? 'Apply Now' : 'Check Availability'}
+            {state.hasDates ? 'Apply Now' : 'Check Availability'}
           </BrandButton>
         </div>
       </footer>

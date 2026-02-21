@@ -168,78 +168,9 @@ const HostInformation: React.FC<HostInformationProps> = ({
 
   return (
     <Card ref={cardRef} className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
-      <CardContent className="flex flex-col items-start gap-5 py-4 px-0">
-        {/* Trip summary — taps open the overlay */}
-        <div className="flex flex-col gap-2 w-full">
-          <button
-            type="button"
-            onClick={() => setShowOverlay(true)}
-            className="w-full border border-gray-300 rounded-xl hover:bg-gray-50 transition-colors text-left"
-          >
-            <div className="flex divide-x divide-gray-300 rounded-t-xl">
-              <div className="flex-1 px-4 py-3">
-                <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-In</div>
-                <div className={`text-sm font-['Poppins'] ${popoverStart ? 'text-[#373940]' : 'text-gray-400'}`}>
-                  {popoverStart ? format(popoverStart, 'MMM d, yyyy') : 'Add Date'}
-                </div>
-              </div>
-              <div className="flex-1 px-4 py-3">
-                <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-Out</div>
-                <div className={`text-sm font-['Poppins'] ${popoverEnd ? 'text-[#373940]' : 'text-gray-400'}`}>
-                  {popoverEnd ? format(popoverEnd, 'MMM d, yyyy') : 'Add Date'}
-                </div>
-              </div>
-            </div>
-            <div className="flex items-center justify-between px-4 py-3 border-t border-gray-300 rounded-b-xl">
-              <div>
-                <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Renters</div>
-                <div className={`text-sm font-['Poppins'] ${totalRenters > 0 ? 'text-[#373940]' : 'text-gray-400'}`}>
-                  {totalRenters === 0 && guests.pets === 0
-                    ? 'Add Renters'
-                    : `${totalRenters} renter${totalRenters !== 1 ? 's' : ''}${guests.pets > 0 ? `, ${guests.pets} pet${guests.pets !== 1 ? 's' : ''}` : ''}`}
-                </div>
-              </div>
-              <ChevronDown className="w-5 h-5 text-gray-500" />
-            </div>
-          </button>
-
-          {/* Apply button - visible when both dates and renters are filled */}
-          {hasDates && hasRenterInfo && (
-            <BrandButton
-              variant={hasApplied || isMatched ? "secondary" : "default"}
-              className={`w-full min-w-0 font-semibold transition-colors ${
-                hasApplied || isMatched
-                  ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
-                  : ''
-              }`}
-              onClick={handleApplyClick}
-              disabled={isApplyButtonDisabled}
-            >
-              {isPending ? 'Applying...' : getApplyButtonText()}
-            </BrandButton>
-          )}
-
-          {/* Error message */}
-          {error && (
-            <div className="text-red-500 text-sm font-['Poppins']">
-              {error}
-            </div>
-          )}
-        </div>
-
-        {/* Verified badge */}
-        <Badge
-          variant="outline"
-          className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
-        >
-          <VerifiedIcon className="w-[21px] h-[21px]" />
-          <span className="font-normal text-xs text-[#0B6E6E] font-['Poppins'] leading-normal">
-            Verified Host
-          </span>
-        </Badge>
-
+      <CardContent className="flex flex-col items-start gap-3 py-4 px-0">
         {/* Host information */}
-        <div className="flex items-center gap-3 w-full pb-6">
+        <div className="flex items-center gap-3 w-full pb-2">
           <Avatar className="w-[59px] h-[59px] rounded-xl">
             <AvatarImage
               src={host?.imageUrl || ''}
@@ -250,9 +181,21 @@ const HostInformation: React.FC<HostInformationProps> = ({
             </AvatarFallback>
           </Avatar>
 
-          <div className="flex flex-col gap-0.5">
-            <div className="font-medium text-[#373940] text-sm">
-              Hosted by {host?.firstName || 'Host'}
+          <div className="flex flex-col gap-0.5 flex-1">
+            <div className="flex items-center justify-between">
+              <div className="font-medium text-[#373940] text-sm">
+                Hosted by {host?.firstName || 'Host'}
+              </div>
+              {/* Verified badge - right aligned */}
+              <Badge
+                variant="outline"
+                className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
+              >
+                <VerifiedIcon className="w-[21px] h-[21px]" />
+                <span className="font-normal text-xs text-[#0B6E6E] font-['Poppins'] leading-normal">
+                  Verified Host
+                </span>
+              </Badge>
             </div>
 
             <div className="flex items-center gap-1 h-8">
