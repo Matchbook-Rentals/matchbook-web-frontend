@@ -18,6 +18,8 @@ import { ChevronDown } from 'lucide-react';
 import { VerifiedIcon } from '@/components/icons-v3';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 import GuestAuthModal from '@/components/guest-auth-modal';
+import { calculateRent } from '@/lib/calculate-rent';
+import { Trip } from '@prisma/client';
 
 interface PublicListingDetailsBoxProps {
   listing: ListingAndImages;
@@ -123,14 +125,25 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
     setPopoverEnd(end);
   };
 
-  const handleDatesConfirm = () => { setShowDatesPopover(false); handleRentersOpen(true); };
+  const handleDatesConfirm = () => {
+    setShowDatesPopover(false);
+    if (popoverStart && popoverEnd) {
+      onDatesSelected?.(popoverStart, popoverEnd, guests);
+    }
+    handleRentersOpen(true);
+  };
   const handleRentersOpen = (open: boolean) => {
     setShowRentersPopover(open);
     if (open && guests.adults === 0) {
       setGuests(prev => ({ ...prev, adults: 1 }));
     }
   };
-  const handleRentersConfirm = () => setShowRentersPopover(false);
+  const handleRentersConfirm = () => {
+    setShowRentersPopover(false);
+    if (popoverStart && popoverEnd) {
+      onDatesSelected?.(popoverStart, popoverEnd, guests);
+    }
+  };
   const handleClearDates = () => { setPopoverStart(null); setPopoverEnd(null); };
   const handleClearRenters = () => setGuests({ adults: 0, children: 0, pets: 0 });
 
@@ -155,6 +168,16 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   };
 
   const priceRange = getPriceRange();
+
+  // Compute price locally when dates are selected, no callback needed
+  const localCalculatedPrice = useMemo(() => {
+    if (popoverStart && popoverEnd) {
+      const mockTrip = { startDate: popoverStart, endDate: popoverEnd } as Trip;
+      const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
+      return calculateRent({ listing: listingWithPricing, trip: mockTrip });
+    }
+    return calculatedPrice;
+  }, [popoverStart, popoverEnd, listing, calculatedPrice]);
 
   const handleApplyNow = () => {
     setError(null);
@@ -240,8 +263,8 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
         <div className="flex justify-between w-full">
           <div className="flex flex-col gap-1">
             <div className="font-semibold text-[#373940] text-sm font-['Poppins']">
-              {calculatedPrice
-                ? `$${calculatedPrice.toLocaleString()}`
+              {localCalculatedPrice
+                ? `$${localCalculatedPrice.toLocaleString()}`
                 : priceRange.hasRange
                   ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()}`
                   : `$${priceRange.min.toLocaleString()}`
