@@ -44,7 +44,7 @@ export default function ListingDetailNavbar({
   }, [isSignedIn, userId]);
 
   return (
-    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10 mb-4 md:mb-6 lg:mb-8">
+    <div className="relative w-full bg-gradient-to-b from-white to-primaryBrand/10 mb-4 md:mb-6 lg:mb-8 hidden md:block">
       {/* Header row - matches SearchResultsNavbar styling */}
       <header className="relative z-30 flex items-center justify-between px-6 h-[76px]">
         <Link href="/" className="flex-shrink-0">
