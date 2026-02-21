@@ -422,18 +422,16 @@ export default function SearchResultsNavbar({
       {/* Mobile: search pill + filter button row below header */}
       <div className="md:hidden flex items-center w-full px-4 sm:px-6 pb-4 pt-1 gap-2">
         <button
-          className="flex items-center justify-center flex-1 min-w-0 h-[50px] px-3 py-2 bg-background rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)] text-center"
+          className="flex items-center justify-center flex-1 min-w-0 h-[50px] px-5 py-3 bg-background rounded-full shadow-[0px_4px_10px_rgba(0,0,0,0.12)] text-center"
           onClick={handleWhereClick}
         >
           <div className="flex flex-col items-center min-w-0 flex-1">
-            <span className="text-sm font-semibold text-gray-900 truncate">
+            <span className="text-xs font-medium text-[#384250] truncate font-poppins">
               {search.locationDisplayValue || 'Begin Your Search'}
             </span>
-            {(dateDisplay || guestDisplay) && (
-              <span className="text-xs text-gray-500 truncate">
-                {[dateDisplay, guestDisplay].filter(Boolean).join(' · ')}
-              </span>
-            )}
+            <span className="text-xs text-gray-500 truncate">
+              {[dateDisplay || 'No dates', guestDisplay || '1 Renter'].join(' · ')}
+            </span>
           </div>
           {search.isGeocoding && <ImSpinner8 className="animate-spin w-3 h-3 flex-shrink-0 ml-2" />}
         </button>
