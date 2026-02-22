@@ -4,6 +4,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
 import { ListingAndImages } from '@/types';
 import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
+import HostInformation from '@/app/app/rent/searches/(trips-components)/host-information';
 import PublicListingDetailsBox from './public-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -158,6 +159,9 @@ export default function PublicListingDetailsView({
         <div className="flex justify-between gap-x-8 lg:gap-x-16 relative">
           <div className="w-full lg:w-full">
             <ListingDescription
+              listing={listing}
+            />
+            <HostInformation
               listing={listing}
               isAuthenticated={isAuthenticated}
             />

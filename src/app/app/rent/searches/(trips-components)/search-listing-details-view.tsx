@@ -4,6 +4,7 @@ import ListingImageCarousel from './image-carousel';
 import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import ListingDescription from './listing-info';
+import HostInformation from './host-information';
 import ListingDetailsBoxWithState from './listing-details-box-with-state';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -136,6 +137,7 @@ function ListingDetailsView({
         />
         <div className='flex justify-between gap-x-8 relative'>
           <ListingDescription listing={listing} showFullAmenities={showFullAmenities} trip={state.trip} />
+          <HostInformation listing={listing} />
           <div
             className="w-1/2 mt-6 h-fit lg:w-full rounded-[12px] shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
           >

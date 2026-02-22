@@ -3,6 +3,7 @@ import React, { useRef, useState } from 'react';
 import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
 import { ListingAndImages } from '@/types';
 import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
+import HostInformation from '@/app/app/rent/searches/(trips-components)/host-information';
 import ListingDetailsBox from './listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -75,7 +76,10 @@ export default function ListingDetailsView({
       <div className="w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6">
         <ListingImageCarousel listingImages={listing.listingImages || []} />
         <div className="flex justify-between gap-x-8 relative">
-          <ListingDescription listing={listing} trip={trip} />
+          <div className="w-full lg:w-full">
+            <ListingDescription listing={listing} trip={trip} />
+            <HostInformation listing={listing} />
+          </div>
           <div className="w-1/2 h-fit lg:w-3/5 sticky top-[10%] hidden lg:block">
             <ListingDetailsBox listing={listing} calculatedPrice={calculatedPrice} />
           </div>

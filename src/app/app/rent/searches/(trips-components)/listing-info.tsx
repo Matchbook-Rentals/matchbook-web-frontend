@@ -2,10 +2,8 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { ListingAndImages } from '@/types';
 import PropertyDetails from './property-details';
-import PricingInfo from './pricing-info';
 import HighlightsSection from './highlights-section';
 import AmenitiesSection from './amenities-section';
-import HostInformation from './host-information';
 import DescriptionSection from './description-section';
 import { calculateRent } from '@/lib/calculate-rent';
 const sectionStyles = 'border-b pb-5 mt-5';
@@ -15,23 +13,6 @@ interface ListingDescriptionProps {
   showFullAmenities?: boolean;
   isFlexible?: boolean;
   trip?: any;
-  isAuthenticated?: boolean;
-  tripContext?: {
-    tripId?: string;
-    startDate: Date;
-    endDate: Date;
-    numAdults?: number;
-    numChildren?: number;
-    numPets?: number;
-  } | null;
-  calculatedPrice?: number | null;
-  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
-  onApplyClick?: () => void;
-  onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
-  requestOpenDates?: number;
-  requestApply?: number;
-  onMobileStateChange?: (state: { hasDates: boolean; startDate: Date | null; endDate: Date | null; guests: { adults: number; children: number; pets: number } }) => void;
-  hideHostInfo?: boolean;
 }
 
 const ListingDescription: React.FC<ListingDescriptionProps> = ({
@@ -39,18 +20,8 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({
   showFullAmenities = false,
   isFlexible = false,
   trip,
-  isAuthenticated,
-  tripContext,
-  calculatedPrice: calculatedPriceProp,
-  listingState,
-  onApplyClick,
-  onDatesSelected,
-  requestOpenDates,
-  requestApply,
-  onMobileStateChange,
-  hideHostInfo = false,
 }) => {
-  const calculatedPrice = trip ? calculateRent({ listing, trip }) : calculatedPriceProp;
+  const calculatedPrice = trip ? calculateRent({ listing, trip }) : null;
 
   return (
     <div className='w-full'>
@@ -65,22 +36,6 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({
           <PropertyDetails listing={listing} />
         </CardContent>
       </Card>
-
-      {/* Host info + trip details - mobile only, right after property details */}
-      {!hideHostInfo && (
-        <HostInformation
-          listing={listing}
-          isAuthenticated={isAuthenticated}
-          tripContext={tripContext}
-          calculatedPrice={calculatedPrice}
-          listingState={listingState}
-          onApplyClick={onApplyClick}
-          onDatesSelected={onDatesSelected}
-          requestOpenDates={requestOpenDates}
-          requestApply={requestApply}
-          onMobileStateChange={onMobileStateChange}
-        />
-      )}
 
       {isFlexible && (
         <p className={`flex justify-between ${sectionStyles} text-[#404040] text-[16px] sm:text-[24px] font-normal`}>

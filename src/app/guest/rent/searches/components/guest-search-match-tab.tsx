@@ -11,6 +11,7 @@ import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
+import HostInformation from '@/app/app/rent/searches/(trips-components)/host-information';
 import GuestListingDetailsBoxWithState from './guest-listing-details-box-with-state';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -278,6 +279,7 @@ const GuestSearchMatchTab: React.FC<GuestMatchViewTabProps> = ({ setIsFilterOpen
         <div className='flex justify-between gap-x-8 lg:gap-x-16 relative'>
           <div className='w-full lg:w-full'>
             <ListingDescription listing={displayListings[0]} isFlexible={!!isFlexible} trip={mockTrip}/>
+            <HostInformation listing={displayListings[0]} />
 
             <Card className="border-none shadow-none rounded-xl mt-5">
               <CardContent className="flex flex-col items-start gap-[18px] p-5">

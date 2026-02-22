@@ -1,153 +1,29 @@
 'use client'
-import React, { useState, useTransition, useEffect, useRef, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { Star as StarIcon, ChevronDown } from 'lucide-react';
+import { Star as StarIcon } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { VerifiedIcon } from '@/components/icons-v3';
 import { ListingAndImages } from '@/types';
-import { format } from 'date-fns';
 import { BrandButton } from '@/components/ui/brandButton';
 import GuestAuthModal from '@/components/guest-auth-modal';
 import { useRouter } from 'next/navigation';
-import { applyToListingFromSearch } from '@/app/actions/housing-requests';
-import MobileAvailabilityOverlay from '@/components/newnew/mobile-availability-overlay';
-
-type UnavailablePeriod = { startDate: Date; endDate: Date };
 
 interface HostInformationProps {
   listing: ListingAndImages;
   isAuthenticated?: boolean;
-  tripContext?: {
-    tripId?: string;
-    startDate: Date;
-    endDate: Date;
-    numAdults?: number;
-    numChildren?: number;
-    numPets?: number;
-  } | null;
-  calculatedPrice?: number | null;
-  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
-  onApplyClick?: () => void;
-  onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
-  requestOpenDates?: number;
-  requestApply?: number;
-  onMobileStateChange?: (state: { hasDates: boolean; startDate: Date | null; endDate: Date | null; guests: { adults: number; children: number; pets: number } }) => void;
 }
 
 const HostInformation: React.FC<HostInformationProps> = ({
   listing,
   isAuthenticated = false,
-  tripContext = null,
-  calculatedPrice = null,
-  listingState = null,
-  onApplyClick,
-  onDatesSelected,
-  requestOpenDates = 0,
-  requestApply = 0,
-  onMobileStateChange,
 }) => {
   const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [hasApplied, setHasApplied] = useState(listingState?.hasApplied ?? false);
-  const [isMatched, setIsMatched] = useState(listingState?.isMatched ?? false);
-  const [error, setError] = useState<string | null>(null);
-
-  const [popoverStart, setPopoverStart] = useState<Date | null>(tripContext?.startDate ?? null);
-  const [popoverEnd, setPopoverEnd] = useState<Date | null>(tripContext?.endDate ?? null);
-  const [guests, setGuests] = useState({
-    adults: tripContext?.numAdults ?? 0,
-    children: tripContext?.numChildren ?? 0,
-    pets: tripContext?.numPets ?? 0,
-  });
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authRedirectUrl, setAuthRedirectUrl] = useState<string | undefined>(undefined);
-  const [showOverlay, setShowOverlay] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
-
-  // Report trip state to parent
-  const hasDates = !!(popoverStart && popoverEnd);
-  useEffect(() => {
-    onMobileStateChange?.({ hasDates, startDate: popoverStart, endDate: popoverEnd, guests });
-  }, [hasDates, popoverStart, popoverEnd, guests, onMobileStateChange]);
-
-  // External trigger: open dates overlay on mobile
-  useEffect(() => {
-    if (requestOpenDates > 0) {
-      setShowOverlay(true);
-    }
-  }, [requestOpenDates]);
-
-  // External trigger: apply from footer
-  useEffect(() => {
-    if (requestApply > 0) {
-      if (hasDates && guests.adults > 0) {
-        handleApplyClick();
-      } else {
-        setShowOverlay(true);
-      }
-    }
-  }, [requestApply]);
-
-  const unavailablePeriods = useMemo<UnavailablePeriod[]>(() => {
-    const periods: UnavailablePeriod[] = [];
-    if (listing.unavailablePeriods) {
-      for (const p of listing.unavailablePeriods) {
-        periods.push({ startDate: new Date(p.startDate), endDate: new Date(p.endDate) });
-      }
-    }
-    if (listing.bookings) {
-      for (const b of listing.bookings) {
-        if (b.startDate && b.endDate) {
-          periods.push({ startDate: new Date(b.startDate), endDate: new Date(b.endDate) });
-        }
-      }
-    }
-    return periods;
-  }, [listing.unavailablePeriods, listing.bookings]);
 
   const host = listing.user;
-
-  const handleApplyClick = () => {
-    if (!isAuthenticated) {
-      setAuthRedirectUrl(undefined);
-      setShowAuthModal(true);
-      return;
-    }
-    if (onApplyClick) {
-      if (onDatesSelected && popoverStart && popoverEnd) {
-        onDatesSelected(popoverStart, popoverEnd, guests);
-      }
-      onApplyClick();
-      return;
-    }
-    handleApplyNow();
-  };
-
-  const handleDateChange = (start: Date | null, end: Date | null) => {
-    setPopoverStart(start);
-    setPopoverEnd(end);
-  };
-
-  const hasRenterInfo = guests.adults > 0;
-  const totalRenters = guests.adults + guests.children;
-
-  const handleApplyNow = () => {
-    setError(null);
-    startTransition(async () => {
-      const result = await applyToListingFromSearch(listing.id, {
-        tripId: tripContext?.tripId,
-        startDate: tripContext?.startDate,
-        endDate: tripContext?.endDate,
-      });
-
-      if (result.success) {
-        setHasApplied(true);
-      } else {
-        setError(result.error || 'Failed to apply');
-      }
-    });
-  };
 
   const handleMessageHost = () => {
     if (!isAuthenticated) {
@@ -158,16 +34,8 @@ const HostInformation: React.FC<HostInformationProps> = ({
     router.push(`/app/rent/messages?listingId=${listing.id}`);
   };
 
-  const getApplyButtonText = () => {
-    if (isMatched) return 'Matched';
-    if (hasApplied) return 'Applied';
-    return 'Apply Now';
-  };
-
-  const isApplyButtonDisabled = hasApplied || isMatched || isPending;
-
   return (
-    <Card ref={cardRef} className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
+    <Card className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
       <CardContent className="flex flex-col items-start gap-3 py-4 px-0">
         {/* Host information */}
         <div className="flex items-center gap-3 w-full pb-2">
@@ -212,23 +80,11 @@ const HostInformation: React.FC<HostInformationProps> = ({
           size="lg"
           className="w-full min-w-0 text-[#3c8787] font-medium"
           onClick={handleMessageHost}
-          disabled={isPending}
         >
           Message Host
         </BrandButton>
 
         <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} redirectUrl={authRedirectUrl} />
-
-        <MobileAvailabilityOverlay
-          isOpen={showOverlay}
-          onClose={() => setShowOverlay(false)}
-          dateRange={{ start: popoverStart, end: popoverEnd }}
-          onDateChange={handleDateChange}
-          guests={guests}
-          setGuests={setGuests}
-          onConfirm={() => setShowOverlay(false)}
-          unavailablePeriods={unavailablePeriods}
-        />
       </CardContent>
     </Card>
   );

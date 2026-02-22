@@ -11,6 +11,7 @@ import { useTripContext } from '@/contexts/trip-context-provider';
 import { ListingAndImages } from '@/types';
 import LoadingSpinner from '@/components/ui/spinner';
 import ListingDescription from '../../searches/(trips-components)/listing-info';
+import HostInformation from '../../searches/(trips-components)/host-information';
 import ListingDetailsBox from '../(components)/search-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -316,6 +317,7 @@ const MatchViewTab: React.FC<MatchViewTabProps> = ({ setIsFilterOpen }) => {
         <div className='flex justify-between gap-x-8 lg:gap-x-16 relative'>
           <div className='w-full lg:w-full'>
             <ListingDescription listing={showListings[0]} isFlexible={!!isFlexible} trip={state.trip}/>
+            <HostInformation listing={showListings[0]} />
 
             <Card className="border-none shadow-none rounded-xl mt-5">
               <CardContent className="flex flex-col items-start gap-[18px] p-5">
