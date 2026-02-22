@@ -4,9 +4,8 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ListingAndImages } from '@/types';
 import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view';
+import { RenterListingActionBoxProvider } from '@/app/guest/listing/[listingId]/(components)/renter-listing-action-box-context';
 import ApplicationWizard from './application-wizard';
-import { calculateRent } from '@/lib/calculate-rent';
-import { Trip } from '@prisma/client';
 import { CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
@@ -67,27 +66,15 @@ export default function ListingDetailWithWizard({
       }
     : null;
 
-  const effectivePrice = useCallback(() => {
-    if (collectedDates) {
-      const mockTrip = { startDate: collectedDates.start, endDate: collectedDates.end } as Trip;
-      const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
-      return calculateRent({ listing: listingWithPricing, trip: mockTrip });
-    }
-    return initialCalculatedPrice;
-  }, [collectedDates, listing, initialCalculatedPrice]);
-
   const effectiveListingState = hasAppliedLocal
     ? { hasApplied: true, isMatched: initialListingState?.isMatched ?? false }
     : initialListingState;
 
-  const handleApplyClick = () => {
-    scrollToTopAndTransition('application');
-  };
-
-  const handleDatesSelected = (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => {
-    setCollectedDates({ start, end });
+  const handleApplyOverride = useCallback((dates: { start: Date; end: Date }, guests: { adults: number; children: number; pets: number }) => {
+    setCollectedDates(dates);
     setCollectedGuests(guests);
-  };
+    scrollToTopAndTransition('application');
+  }, []);
 
   const handleBackToListing = () => {
     scrollToTopAndTransition('listing');
@@ -117,17 +104,26 @@ export default function ListingDetailWithWizard({
           exit={{ x: '-100%', opacity: 0 }}
           transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
-          <PublicListingDetailsView
+          <RenterListingActionBoxProvider
             listing={listing}
-            locationString={locationString}
             isAuthenticated={isAuthenticated}
-            tripContext={effectiveTripContext}
-            calculatedPrice={effectivePrice()}
             listingState={effectiveListingState}
-            onApplyClick={handleApplyClick}
-            onDatesSelected={handleDatesSelected}
-            isFavorited={isFavorited}
-          />
+            initialStartDate={effectiveTripContext?.startDate}
+            initialEndDate={effectiveTripContext?.endDate}
+            initialGuests={effectiveTripContext ? {
+              adults: effectiveTripContext.numAdults ?? 0,
+              children: effectiveTripContext.numChildren ?? 0,
+              pets: effectiveTripContext.numPets ?? 0,
+            } : undefined}
+            onApplyOverride={handleApplyOverride}
+          >
+            <PublicListingDetailsView
+              listing={listing}
+              locationString={locationString}
+              isAuthenticated={isAuthenticated}
+              isFavorited={isFavorited}
+            />
+          </RenterListingActionBoxProvider>
         </motion.div>
       )}
 

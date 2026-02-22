@@ -1,6 +1,5 @@
 'use client'
-import React, { useState, useTransition, useEffect, useMemo } from 'react';
-import { ListingAndImages } from '@/types';
+import React, { useState, useEffect } from 'react';
 import { StarIcon } from '@/components/icons';
 import { Card, CardContent } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
@@ -8,8 +7,6 @@ import { Separator } from '@/components/ui/separator';
 import { Badge } from '@/components/ui/badge';
 import { BrandButton } from '@/components/ui/brandButton';
 
-import { useRouter } from 'next/navigation';
-import { applyToListingFromSearch } from '@/app/actions/housing-requests';
 import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import SearchDateRange from '@/components/newnew/search-date-range';
 import { Button } from '@/components/ui/button';
@@ -17,55 +14,13 @@ import { format } from 'date-fns';
 import { ChevronDown } from 'lucide-react';
 import { VerifiedIcon } from '@/components/icons-v3';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
-import GuestAuthModal from '@/components/guest-auth-modal';
-import { calculateRent } from '@/lib/calculate-rent';
-import { Trip } from '@prisma/client';
+import { useRenterListingActionBox } from './renter-listing-action-box-context';
 
-interface PublicListingDetailsBoxProps {
-  listing: ListingAndImages;
-  isAuthenticated?: boolean;
-  tripContext?: {
-    tripId?: string;
-    startDate: Date;
-    endDate: Date;
-    numAdults?: number;
-    numChildren?: number;
-    numPets?: number;
-  } | null;
-  calculatedPrice?: number | null;
-  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
-  onApplyClick?: () => void;
-  onDatesSelected?: (start: Date, end: Date, guests: { adults: number; children: number; pets: number }) => void;
-}
+const PublicListingDetailsBox: React.FC = () => {
+  const { state, actions, listing } = useRenterListingActionBox();
+  const host = listing.user;
 
-const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
-  listing,
-  isAuthenticated = false,
-  tripContext = null,
-  calculatedPrice = null,
-  listingState = null,
-  onApplyClick,
-  onDatesSelected,
-}) => {
-  const router = useRouter();
-  const [isPending, startTransition] = useTransition();
-  const [hasApplied, setHasApplied] = useState(listingState?.hasApplied ?? false);
-  const [isMatched, setIsMatched] = useState(listingState?.isMatched ?? false);
-  const [error, setError] = useState<string | null>(null);
-
-  const [popoverStart, setPopoverStart] = useState<Date | null>(tripContext?.startDate ?? null);
-  const [popoverEnd, setPopoverEnd] = useState<Date | null>(tripContext?.endDate ?? null);
-  const [showDatesPopover, setShowDatesPopover] = useState(false);
-  const [showRentersPopover, setShowRentersPopover] = useState(false);
-  const [guests, setGuests] = useState({
-    adults: tripContext?.numAdults ?? 0,
-    children: tripContext?.numChildren ?? 0,
-    pets: tripContext?.numPets ?? 0,
-  });
   const [isLargeScreen, setIsLargeScreen] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authRedirectUrl, setAuthRedirectUrl] = useState<string | undefined>(undefined);
-
   useEffect(() => {
     const checkScreenSize = () => setIsLargeScreen(window.innerWidth >= 1024);
     checkScreenSize();
@@ -73,147 +28,13 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
     return () => window.removeEventListener('resize', checkScreenSize);
   }, []);
 
-  const unavailablePeriods = useMemo(() => {
-    const periods: Array<{ startDate: Date; endDate: Date }> = [];
-    if (listing.unavailablePeriods) {
-      for (const p of listing.unavailablePeriods) {
-        periods.push({ startDate: new Date(p.startDate), endDate: new Date(p.endDate) });
-      }
-    }
-    if (listing.bookings) {
-      for (const b of listing.bookings) {
-        if (b.startDate && b.endDate) {
-          periods.push({ startDate: new Date(b.startDate), endDate: new Date(b.endDate) });
-        }
-      }
-    }
-    return periods;
-  }, [listing.unavailablePeriods, listing.bookings]);
-
-  const host = listing.user;
-
-  const buildApplyRedirectUrl = () => {
-    const currentPath = window.location.pathname;
-    const params = new URLSearchParams(window.location.search);
-    if (popoverStart) params.set('startDate', popoverStart.toISOString());
-    if (popoverEnd) params.set('endDate', popoverEnd.toISOString());
-    if (guests.adults > 0) params.set('numAdults', String(guests.adults));
-    if (guests.children > 0) params.set('numChildren', String(guests.children));
-    if (guests.pets > 0) params.set('numPets', String(guests.pets));
-    params.set('isApplying', 'true');
-    return `${currentPath}?${params.toString()}`;
-  };
-
-  const handleApplyClick = () => {
-    if (!isAuthenticated) {
-      setAuthRedirectUrl(popoverStart && popoverEnd ? buildApplyRedirectUrl() : undefined);
-      setShowAuthModal(true);
-      return;
-    }
-    if (onApplyClick) {
-      if (onDatesSelected && popoverStart && popoverEnd) {
-        onDatesSelected(popoverStart, popoverEnd, guests);
-      }
-      onApplyClick();
-      return;
-    }
-    handleApplyNow();
-  };
-
-  const handleDateChange = (start: Date | null, end: Date | null) => {
-    setPopoverStart(start);
-    setPopoverEnd(end);
-  };
-
-  const handleDatesConfirm = () => {
-    setShowDatesPopover(false);
-    if (popoverStart && popoverEnd) {
-      onDatesSelected?.(popoverStart, popoverEnd, guests);
-    }
-    handleRentersOpen(true);
-  };
-  const handleRentersOpen = (open: boolean) => {
-    setShowRentersPopover(open);
-    if (open && guests.adults === 0) {
-      setGuests(prev => ({ ...prev, adults: 1 }));
-    }
-  };
-  const handleRentersConfirm = () => {
-    setShowRentersPopover(false);
-    if (popoverStart && popoverEnd) {
-      onDatesSelected?.(popoverStart, popoverEnd, guests);
-    }
-  };
-  const handleClearDates = () => { setPopoverStart(null); setPopoverEnd(null); };
-  const handleClearRenters = () => setGuests({ adults: 0, children: 0, pets: 0 });
-
-  const hasDates = !!(popoverStart && popoverEnd);
-  const hasRenterInfo = guests.adults > 0;
-  const totalRenters = guests.adults + guests.children;
-
-  const getPriceRange = () => {
-    if (!listing.monthlyPricing || listing.monthlyPricing.length === 0) {
-      return { min: listing.price || 0, max: listing.price || 0, hasRange: false };
-    }
-
-    const prices = listing.monthlyPricing.map(pricing => pricing.price);
-    const minPrice = Math.min(...prices);
-    const maxPrice = Math.max(...prices);
-
-    return {
-      min: minPrice,
-      max: maxPrice,
-      hasRange: minPrice !== maxPrice
-    };
-  };
-
-  const priceRange = getPriceRange();
-
-  // Compute price locally when dates are selected, no callback needed
-  const localCalculatedPrice = useMemo(() => {
-    if (popoverStart && popoverEnd) {
-      const mockTrip = { startDate: popoverStart, endDate: popoverEnd } as Trip;
-      const listingWithPricing = { ...listing, monthlyPricing: listing.monthlyPricing || [] };
-      return calculateRent({ listing: listingWithPricing, trip: mockTrip });
-    }
-    return calculatedPrice;
-  }, [popoverStart, popoverEnd, listing, calculatedPrice]);
-
-  const handleApplyNow = () => {
-    setError(null);
-    startTransition(async () => {
-      const result = await applyToListingFromSearch(listing.id, {
-        tripId: tripContext?.tripId,
-        startDate: tripContext?.startDate,
-        endDate: tripContext?.endDate,
-      });
-
-      if (result.success) {
-        setHasApplied(true);
-        // Optionally navigate to the trip page
-        // router.push(`/app/rent/searches/${result.tripId}`);
-      } else {
-        setError(result.error || 'Failed to apply');
-      }
-    });
-  };
-
-  const handleMessageHost = () => {
-    if (!isAuthenticated) {
-      setAuthRedirectUrl(`/app/rent/messages?listingId=${listing.id}`);
-      setShowAuthModal(true);
-      return;
-    }
-    router.push(`/app/rent/messages?listingId=${listing.id}`);
-  };
-
   const getApplyButtonText = () => {
-    if (isMatched) return 'Matched';
-    if (hasApplied) return 'Applied';
+    if (state.isMatched) return 'Matched';
+    if (state.hasApplied) return 'Applied';
     return 'Apply Now';
   };
 
-  const isApplyButtonDisabled = hasApplied || isMatched || isPending;
+  const isApplyButtonDisabled = state.hasApplied || state.isMatched || state.isApplying;
 
   return (
     <Card className="w-full border border-[#0000001a] rounded-xl">
@@ -263,11 +84,11 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
         <div className="flex justify-between w-full">
           <div className="flex flex-col gap-1">
             <div className="font-semibold text-[#373940] text-sm font-['Poppins']">
-              {localCalculatedPrice
-                ? `$${localCalculatedPrice.toLocaleString()}`
-                : priceRange.hasRange
-                  ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()}`
-                  : `$${priceRange.min.toLocaleString()}`
+              {state.calculatedPrice
+                ? `$${state.calculatedPrice.toLocaleString()}`
+                : state.priceRange.hasRange
+                  ? `$${state.priceRange.min.toLocaleString()} - $${state.priceRange.max.toLocaleString()}`
+                  : `$${state.priceRange.min.toLocaleString()}`
               }
             </div>
             <div className="font-normal text-[#5d606d] text-base font-['Poppins']">Month</div>
@@ -284,9 +105,9 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
         </div>
 
         {/* Error message */}
-        {error && (
+        {state.applyError && (
           <div className="text-red-500 text-sm font-['Poppins']">
-            {error}
+            {state.applyError}
           </div>
         )}
 
@@ -294,19 +115,19 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
         <div className="flex flex-col gap-2 w-full mt-1">
             <div className="w-full border border-gray-300 rounded-xl">
               {/* Dates Section */}
-              <Popover open={showDatesPopover} onOpenChange={setShowDatesPopover}>
+              <Popover open={state.showDatesPopover} onOpenChange={(open) => open ? actions.openDatesPopover() : actions.closeDatesPopover()}>
                 <PopoverTrigger asChild>
                   <div className="flex divide-x divide-gray-300 cursor-pointer hover:bg-gray-50 transition-colors rounded-t-xl">
                     <div className="flex-1 px-4 py-3">
                       <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-In</div>
-                      <div className={`text-sm font-['Poppins'] ${popoverStart ? 'text-[#373940]' : 'text-gray-400'}`}>
-                        {popoverStart ? format(popoverStart, 'MMM d, yyyy') : 'Add Date'}
+                      <div className={`text-sm font-['Poppins'] ${state.startDate ? 'text-[#373940]' : 'text-gray-400'}`}>
+                        {state.startDate ? format(state.startDate, 'MMM d, yyyy') : 'Add Date'}
                       </div>
                     </div>
                     <div className="flex-1 px-4 py-3">
                       <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Move-Out</div>
-                      <div className={`text-sm font-['Poppins'] ${popoverEnd ? 'text-[#373940]' : 'text-gray-400'}`}>
-                        {popoverEnd ? format(popoverEnd, 'MMM d, yyyy') : 'Add Date'}
+                      <div className={`text-sm font-['Poppins'] ${state.endDate ? 'text-[#373940]' : 'text-gray-400'}`}>
+                        {state.endDate ? format(state.endDate, 'MMM d, yyyy') : 'Add Date'}
                       </div>
                     </div>
                   </div>
@@ -320,25 +141,25 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                 >
                   <div className="flex flex-col gap-3">
                     <SearchDateRange
-                      start={popoverStart}
-                      end={popoverEnd}
-                      handleChange={handleDateChange}
+                      start={state.startDate}
+                      end={state.endDate}
+                      handleChange={actions.setDates}
                       minimumDateRange={{ months: 1 }}
                       singleMonth={!isLargeScreen}
                       hideFlexibility
-                      unavailablePeriods={unavailablePeriods}
+                      unavailablePeriods={state.unavailablePeriods}
                     />
                     <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-200 mt-2">
                       <button
                         type="button"
-                        onClick={handleClearDates}
+                        onClick={actions.clearDates}
                         className="text-sm font-medium text-[#2A7F7A] hover:text-[#236663] underline"
                       >
                         Clear dates
                       </button>
                       <Button
-                        onClick={handleDatesConfirm}
-                        disabled={!popoverStart || !popoverEnd}
+                        onClick={actions.confirmDates}
+                        disabled={!state.startDate || !state.endDate}
                         className="px-6 bg-[#2A7F7A] hover:bg-[#236663] text-white font-medium rounded-lg"
                       >
                         Done
@@ -349,15 +170,15 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
               </Popover>
 
               {/* Renters Section */}
-              <Popover open={showRentersPopover} onOpenChange={handleRentersOpen}>
+              <Popover open={state.showRentersPopover} onOpenChange={(open) => open ? actions.openRentersPopover() : actions.closeRentersPopover()}>
                 <PopoverTrigger asChild>
                   <div className="flex items-center justify-between px-4 py-3 border-t border-gray-300 cursor-pointer hover:bg-gray-50 transition-colors rounded-b-xl">
                     <div>
                       <div className="font-semibold text-sm text-[#373940] font-['Poppins']">Renters</div>
-                      <div className={`text-sm font-['Poppins'] ${totalRenters > 0 ? 'text-[#373940]' : 'text-gray-400'}`}>
-                        {totalRenters === 0 && guests.pets === 0
+                      <div className={`text-sm font-['Poppins'] ${state.totalRenters > 0 ? 'text-[#373940]' : 'text-gray-400'}`}>
+                        {state.totalRenters === 0 && state.guests.pets === 0
                           ? 'Add Renters'
-                          : `${totalRenters} renter${totalRenters !== 1 ? 's' : ''}${guests.pets > 0 ? `, ${guests.pets} pet${guests.pets !== 1 ? 's' : ''}` : ''}`}
+                          : `${state.totalRenters} renter${state.totalRenters !== 1 ? 's' : ''}${state.guests.pets > 0 ? `, ${state.guests.pets} pet${state.guests.pets !== 1 ? 's' : ''}` : ''}`}
                       </div>
                     </div>
                     <ChevronDown className="w-5 h-5 text-gray-500" />
@@ -373,19 +194,19 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                   <div className="flex flex-col gap-3">
                     <div className="min-w-[280px]">
                       <h3 className="font-semibold text-[#373940] font-['Poppins'] mb-2">Who&apos;s coming?</h3>
-                      <GuestTypeCounter guests={guests} setGuests={setGuests} />
+                      <GuestTypeCounter guests={state.guests} setGuests={actions.setGuests} />
                     </div>
                     <div className="flex items-center justify-end gap-4 pt-4 border-t border-gray-200 mt-2">
                       <button
                         type="button"
-                        onClick={handleClearRenters}
+                        onClick={actions.clearGuests}
                         className="text-sm font-medium text-[#2A7F7A] hover:text-[#236663] underline"
                       >
                         Clear
                       </button>
                       <Button
-                        onClick={handleRentersConfirm}
-                        disabled={guests.adults < 1}
+                        onClick={actions.confirmRenters}
+                        disabled={state.guests.adults < 1}
                         className="px-6 bg-[#2A7F7A] hover:bg-[#236663] text-white font-medium rounded-lg"
                       >
                         Done
@@ -397,36 +218,30 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
             </div>
 
             {/* Apply button - visible when both dates and renters are filled */}
-            {hasDates && hasRenterInfo && (
+            {state.hasDates && state.hasRenterInfo && (
               <BrandButton
-                variant={hasApplied || isMatched ? "secondary" : "default"}
+                variant={state.hasApplied || state.isMatched ? "secondary" : "default"}
                 className={`w-full min-w-0 font-semibold transition-colors ${
-                  hasApplied || isMatched
+                  state.hasApplied || state.isMatched
                     ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
                     : ''
                 }`}
-                onClick={handleApplyClick}
+                onClick={actions.handleApplyClick}
                 disabled={isApplyButtonDisabled}
               >
-                {isPending ? 'Applying...' : getApplyButtonText()}
+                {state.isApplying ? 'Applying...' : getApplyButtonText()}
               </BrandButton>
             )}
 
             <BrandButton
               variant="ghost"
               className="w-full min-w-0 text-[#3c8787] font-medium hover:bg-[#3c8787]/10"
-              onClick={handleMessageHost}
-              disabled={isPending}
+              onClick={actions.handleMessageHost}
+              disabled={state.isApplying}
             >
               Message Host
             </BrandButton>
           </div>
-
-        <GuestAuthModal
-          isOpen={showAuthModal}
-          onOpenChange={setShowAuthModal}
-          redirectUrl={authRedirectUrl}
-        />
       </CardContent>
     </Card>
   );

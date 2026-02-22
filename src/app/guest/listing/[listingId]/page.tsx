@@ -4,8 +4,8 @@ import prisma from '@/lib/prismadb'
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Footer from "@/components/marketing-landing-components/footer";
 import { PAGE_MARGIN } from '@/constants/styles'
-import { calculateRent } from '@/lib/calculate-rent';
 import PublicListingDetailsView from './(components)/public-listing-details-view'
+import { RenterListingActionBoxProvider } from './(components)/renter-listing-action-box-context'
 import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from 'next';
 import { getHostListingsCountForUser } from "@/app/actions/listings";
@@ -115,10 +115,13 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
         hasListings={hasListings}
       />
       <div className={`${PAGE_MARGIN} font-montserrat min-h-screen`}>
-        <PublicListingDetailsView 
-          listing={listing} 
-          locationString={locationString} 
-        />
+        <RenterListingActionBoxProvider listing={listing} isAuthenticated={!!user}>
+          <PublicListingDetailsView
+            listing={listing}
+            locationString={locationString}
+            isAuthenticated={!!user}
+          />
+        </RenterListingActionBoxProvider>
       </div>
       <Footer />
     </>
