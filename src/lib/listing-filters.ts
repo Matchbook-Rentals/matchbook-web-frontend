@@ -1,4 +1,4 @@
-import { ListingAndImages } from '@/types';
+import { ListingAndImages, ListingWithRelations } from '@/types';
 import { subDays, addDays, differenceInDays, isValid } from 'date-fns';
 import { getUtilitiesIncluded } from './calculate-rent';
 
@@ -23,7 +23,7 @@ export interface FilterOptions {
   laundry: string[];
 }
 
-export interface ListingWithCalculations extends ListingAndImages {
+export interface ListingWithCalculations extends ListingWithRelations {
   calculatedPrice?: number;
   calculatedPriceMin?: number;
   calculatedPriceMax?: number;
@@ -152,7 +152,7 @@ export const matchesFilters = (
  * Calculate availability for a listing based on trip dates and unavailable periods
  */
 export const calculateListingAvailability = (
-  listing: ListingAndImages,
+  listing: ListingWithRelations,
   tripDates: TripDates
 ): {
   isActuallyAvailable: boolean;

@@ -1,12 +1,12 @@
 import { create } from 'zustand';
-import { ListingAndImages } from '@/types';
+import { SearchListing } from '@/types';
 
 export interface MapMarker {
   lat: number;
   lng: number;
   title?: string;
   color?: string; // Optional for mobile/desktop
-  listing: ListingAndImages & {
+  listing: SearchListing & {
     user: {
       imageUrl: string;
       fullName: string;

@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { ListingAndImages } from '@/types';
+import { ListingAndImages, ListingWithRelations } from '@/types';
 import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { matchesFilters, FilterOptions } from '@/lib/listing-filters';
@@ -14,7 +14,7 @@ import {
 } from '@/app/actions/guest-favorites';
 import GuestAuthModal from '@/components/guest-auth-modal';
 
-interface ListingWithAvailability extends ListingAndImages {
+interface ListingWithAvailability extends ListingWithRelations {
   availableStart?: Date;
   availableEnd?: Date;
   isActuallyAvailable?: boolean;
