@@ -62,7 +62,7 @@ flowchart TD
     class G2 tested
     class G3 mobile
     class G1 mobile
-    class G4 untested
+    class G4 tested
     class A1 mobile
     class C tested
     class UNIFY,MERGE,AP1,AP2,I,J,K untested
@@ -78,7 +78,7 @@ flowchart TD
 | Create Trip — Guided (popover / mobile overlay) | Authed | ✅ | ★ | renter-authed.spec.ts | Story 02a: desktop popover + mobile overlay |
 | Create Trip — Explore button | Authed | ✅ | — | renter-authed.spec.ts | Story 02b: creates tripId and navigates |
 | Create Trip — Direct URL | Authed | ✅ | ★ | renter-authed.spec.ts | Story 02b/02d: bare lat/lng redirects to tripId |
-| Create Trip — Like from outside search | Authed | ❌ | — | — | Home page like, direct listing visit |
+| Create Trip — Like from outside search | Authed | ✅ | ★ | renter-authed.spec.ts, guest-browse.spec.ts | Story 06: direct listing URL like creates trip, guest gets auth modal |
 | Create Guest Session — Guided (popover / mobile overlay) | Guest | ✅ | ★ | guest-browse.spec.ts | Story 02a: desktop popover + mobile overlay |
 | Create Guest Session — Explore button | Guest | ✅ | — | guest-browse.spec.ts | Story 04: creates sessionId and navigates |
 | Create Guest Session — Direct URL | Guest | ✅ | ★ | guest-browse.spec.ts | Story 02b/02c: bare lat/lng redirects to sessionId |
