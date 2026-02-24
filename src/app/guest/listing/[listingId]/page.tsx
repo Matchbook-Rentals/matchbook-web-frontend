@@ -102,6 +102,19 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
 
   const hasListings = user?.id ? await getHostListingsCountForUser(user.id) > 0 : false;
 
+  // Check if listing is favorited on any of the user's trips
+  let isFavorited = false;
+  if (user) {
+    const existingFavorite = await prisma.favorite.findFirst({
+      where: {
+        listingId: params.listingId,
+        trip: { userId: user.id },
+      },
+      select: { id: true },
+    });
+    isFavorited = !!existingFavorite;
+  }
+
   // Default location string for display
   const locationString = `${listing.city}, ${listing.state}`
 
@@ -120,6 +133,7 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
             listing={listing}
             locationString={locationString}
             isAuthenticated={!!user}
+            isFavorited={isFavorited}
           />
         </RenterListingActionBoxProvider>
       </div>

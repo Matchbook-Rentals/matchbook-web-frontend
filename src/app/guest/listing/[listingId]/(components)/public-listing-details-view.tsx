@@ -282,14 +282,6 @@ export default function PublicListingDetailsView({
           </div>
           <BrandButton
             size="lg"
-            variant="ghost"
-            className="text-primaryBrand font-semibold"
-            onClick={() => fromUrl ? router.replace(fromUrl) : router.back()}
-          >
-            Back
-          </BrandButton>
-          <BrandButton
-            size="lg"
             className="shrink-0 font-semibold"
             onClick={() => {
               if (state.hasDates) {

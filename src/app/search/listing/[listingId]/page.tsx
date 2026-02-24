@@ -188,14 +188,27 @@ export default async function SearchListingPage({ params, searchParams }: Listin
     userApplication = appResult.success ? appResult.application : null;
   }
 
-  // Check if listing is favorited for this trip
+  // Check if listing is favorited
   let isFavorited = false;
-  if (user && tripContext?.tripId) {
-    const existingFavorite = await prisma.favorite.findFirst({
-      where: { tripId: tripContext.tripId, listingId: params.listingId },
-      select: { id: true },
-    });
-    isFavorited = !!existingFavorite;
+  if (user) {
+    if (tripContext?.tripId) {
+      // Check for this specific trip
+      const existingFavorite = await prisma.favorite.findFirst({
+        where: { tripId: tripContext.tripId, listingId: params.listingId },
+        select: { id: true },
+      });
+      isFavorited = !!existingFavorite;
+    } else {
+      // No trip context — check if favorited on any of the user's trips
+      const existingFavorite = await prisma.favorite.findFirst({
+        where: {
+          listingId: params.listingId,
+          trip: { userId: user.id },
+        },
+        select: { id: true },
+      });
+      isFavorited = !!existingFavorite;
+    }
   }
 
   // Default location string for display
