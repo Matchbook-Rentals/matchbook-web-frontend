@@ -48,6 +48,13 @@ export default function PublicListingDetailsView({
   // Favorite state
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
   const [resolvedTripId, setResolvedTripId] = useState<string | null>(initialTripId);
+
+  // Build back URL: prefer fromUrl, but inject tripId if we created one
+  const getBackUrl = useCallback(() => {
+    if (fromUrl) return fromUrl;
+    if (resolvedTripId) return `/search?tripId=${resolvedTripId}`;
+    return null;
+  }, [fromUrl, resolvedTripId]);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const handleFavoriteClick = useCallback(async () => {
     if (!isAuthenticated) {
@@ -126,7 +133,7 @@ export default function PublicListingDetailsView({
           {/* Mobile overlay buttons on image carousel */}
           {/* Top-left: Back button */}
           <button
-            onClick={() => fromUrl ? router.replace(fromUrl) : router.back()}
+            onClick={() => { const back = getBackUrl(); back ? router.replace(back) : router.back(); }}
             className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
           >
             <ArrowLeft className="w-5 h-5 text-gray-700" />
