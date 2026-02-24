@@ -81,7 +81,7 @@ export default function SearchListingCard({ listing, status, className, style, d
     if (favIds.has(listing.id)) {
       return (
         <div
-          className="bg-black/50 rounded-full p-2"
+          className="bg-black/50 rounded-[10px] p-2"
           onClick={(e: React.MouseEvent) => {
             optimisticRemoveLike(listing.id);
             e.stopPropagation();
@@ -96,7 +96,7 @@ export default function SearchListingCard({ listing, status, className, style, d
     } else if (dislikedIds.has(listing.id)) {
       return (
         <div
-          className="bg-black/50 rounded-full "
+          className="bg-black/50 rounded-[10px] "
           onClick={(e: React.MouseEvent) => {
             optimisticRemoveDislike(listing.id);
             e.stopPropagation();
@@ -111,7 +111,7 @@ export default function SearchListingCard({ listing, status, className, style, d
 
     return (
       <div
-        className="bg-black/50 rounded-full p-2"
+        className="bg-black/50 rounded-[10px] p-2"
         onClick={(e: React.MouseEvent) => {
           optimisticLike(listing.id);
           e.stopPropagation();

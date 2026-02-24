@@ -3,7 +3,7 @@ import { BrandButton } from "@/components/ui/brandButton"
 import { Heart, Heart as HeartIcon, ChevronLeft, ChevronRight } from "lucide-react"
 import { SearchListing } from "@/types"
 import { useState, useCallback, useEffect } from 'react'
-import { useGuestTripContext } from '@/contexts/guest-trip-context-provider'
+import { useSearchContext } from '@/contexts/search-context-provider'
 import { RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
 import { useRouter } from 'next/navigation'
@@ -52,7 +52,7 @@ export default function SearchListingCard({ listing, status, className, style, d
   const setHoveredListing = useListingHoverStore((state) => state.setHoveredListing)
   const router = useRouter()
   const { userId } = useAuth()
-  const { state, actions } = useGuestTripContext()
+  const { state, actions } = useSearchContext()
   const hasTripDates = Boolean(trip?.startDate && trip?.endDate);
 
   // Carousel navigation handlers
@@ -292,7 +292,7 @@ export default function SearchListingCard({ listing, status, className, style, d
         {/* Heart Button */}
         <div className="absolute top-3 right-3">
           <button
-            className="w-8 h-8 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-gray-200 transition-colors"
+            className="w-8 h-8 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white border border-gray-200 transition-colors"
             onClick={(e: React.MouseEvent) => {
               if (snapshot.isLiked(listing.id)) {
                 snapshot.optimisticRemoveLike(listing.id);

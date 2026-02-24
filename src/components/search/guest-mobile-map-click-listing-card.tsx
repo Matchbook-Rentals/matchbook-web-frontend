@@ -14,7 +14,7 @@ import * as AmenitiesIcons from '@/components/icons/amenities';
 import { Badge } from "@/components/ui/badge"
 import { BrandButton } from "@/components/ui/brandButton"
 import { getUtilitiesIncluded } from '@/lib/calculate-rent';
-import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
+import { useSearchContext } from '@/contexts/search-context-provider';
 
 interface GuestListingCardProps {
   listing: {
@@ -68,7 +68,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
   customSnapshot
 }) => {
   const router = useRouter();
-  const { state } = useGuestTripContext();
+  const { state } = useSearchContext();
   const [isHovered, setIsHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
 
@@ -115,7 +115,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
     if (isLiked) {
       return (
         <div
-          className="bg-black/50 rounded-full p-2"
+          className="bg-black/50 rounded-[10px] p-2"
           onClick={(e: React.MouseEvent) => {
             listingsSnapshot.optimisticRemoveLike(listing.id);
             e.stopPropagation();
@@ -130,7 +130,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
     } else if (isDisliked) {
       return (
         <div
-          className="bg-black/50 rounded-full"
+          className="bg-black/50 rounded-[10px]"
           onClick={(e: React.MouseEvent) => {
             listingsSnapshot.optimisticRemoveDislike(listing.id);
             e.stopPropagation();
@@ -145,7 +145,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
 
     return (
       <div
-        className="bg-black/50 rounded-full p-2"
+        className="bg-black/50 rounded-[10px] p-2"
         onClick={(e: React.MouseEvent) => {
           listingsSnapshot.optimisticLike(listing.id);
           e.stopPropagation();
@@ -222,7 +222,7 @@ const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
           {/* Close Button */}
           <div className="absolute top-2 left-2 z-10 transition-opacity duration-300 opacity-60">
             <div
-              className="bg-black/50 rounded-full p-1 cursor-pointer"
+              className="bg-black/50 rounded-[10px] p-1 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 onClose();

@@ -79,7 +79,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
     if (isLiked) {
       return (
         <div
-          className="bg-black/50 rounded-full p-2"
+          className="bg-black/50 rounded-[10px] p-2"
           onClick={(e: React.MouseEvent) => {
             listingsSnapshot.optimisticRemoveLike(listing.id);
             e.stopPropagation();
@@ -94,7 +94,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
     } else if (isDisliked) {
       return (
         <div
-          className="bg-black/50 rounded-full"
+          className="bg-black/50 rounded-[10px]"
           onClick={(e: React.MouseEvent) => {
             listingsSnapshot.optimisticRemoveDislike(listing.id);
             e.stopPropagation();
@@ -107,7 +107,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
 
     return (
       <div
-        className="bg-black/50 rounded-full p-2"
+        className="bg-black/50 rounded-[10px] p-2"
         onClick={(e: React.MouseEvent) => {
           listingsSnapshot.optimisticLike(listing.id);
           e.stopPropagation();
@@ -179,7 +179,7 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
           {/* Close Button */}
           <div className="absolute top-2 left-2 z-10 transition-opacity duration-300 opacity-60">
             <div
-              className="bg-black/50 rounded-full p-1 cursor-pointer"
+              className="bg-black/50 rounded-[10px] p-1 cursor-pointer"
               onClick={(e) => {
                 e.stopPropagation();
                 onClose();

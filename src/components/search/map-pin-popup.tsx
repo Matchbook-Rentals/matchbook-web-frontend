@@ -207,7 +207,7 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
           {/* Heart Button */}
           <button
             onClick={handleHeartClick}
-            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-full bg-white/80 hover:bg-white border border-gray-200 transition-colors"
+            className="absolute top-3 right-3 w-8 h-8 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white border border-gray-200 transition-colors"
           >
             <Heart
               className={`w-[18px] h-[18px] ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-500'}`}
