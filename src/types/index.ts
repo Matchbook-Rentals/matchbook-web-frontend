@@ -27,25 +27,29 @@ export interface TripAndMatches extends Trip {
   matches: Match[];
   housingRequests: HousingRequest[];
   dislikes: Dislike[];
+  maybes: Maybe[];
 }
 
-export interface ListingAndImages extends Listing {
+/** Listing with its DB relations and query-computed fields */
+export interface ListingWithRelations extends Listing {
   listingImages: ListingImage[];
   bedrooms?: Bedroom[];
-  distance?: number;
   user?: User;
-  price?: number;
-  calculatedPrice?: number;
-  uScore?: number;
   unavailablePeriods?: ListingUnavailability[];
   bookings?: Booking[];
-  matches?: MatchWithRelations[];
-  availableStart?: Date;
-  availableEnd?: Date;
-  isActuallyAvailable?: boolean; // Helper flag from calculation
   monthlyPricing?: ListingMonthlyPricing[];
-  displayCategory?: string; // Human-readable category display name
+  distance?: number;        // computed in SQL haversine query
+  displayCategory?: string; // computed in action via getCategoryDisplay()
 }
+
+/** Listing enriched with client-side price calculations */
+export interface SearchListing extends ListingWithRelations {
+  calculatedPrice?: number;
+  price?: number;
+}
+
+/** @deprecated Use ListingWithRelations or SearchListing */
+export type ListingAndImages = SearchListing;
 
 export interface RequestWithUser extends HousingRequest {
   user?: User;
@@ -56,37 +60,6 @@ export interface ApplicationWithArrays extends Application {
   verificationImages: VerificationImage[];
   incomes: Income[];
   identifications: Identification[];
-}
-export interface TripAndMatches extends Trip {
-  favorites: Favorite[]
-  matches: Match[]
-  housingRequests: HousingRequest[]
-  dislikes: Dislike[]
-  maybes: Maybe[]
-};
-
-export interface ListingAndImages extends Listing {
-  listingImages: ListingImage[]
-  bedrooms?: Bedroom[]
-  distance?: number
-  user?: User
-  price?: number
-  calculatedPrice?: number
-  uScore?: number
-  unavailablePeriods?: ListingUnavailability[]
-  bookings?: Booking[]
-  displayCategory?: string // Human-readable category display name
-};
-
-export interface RequestWithUser extends HousingRequest {
-  user?: User
-  trip?: Trip
-}
-
-export interface ApplicationWithArrays extends Application {
-  verificationImages: VerificationImage[]
-  incomes: Income[]
-  identifications: Identification[]
 }
 
 export interface MatchWithRelations extends Match {
