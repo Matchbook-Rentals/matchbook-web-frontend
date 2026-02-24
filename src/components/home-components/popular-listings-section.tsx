@@ -139,6 +139,7 @@ function ListingRow({ title, listings = [], showBadges = false, exploreHref, sec
           {exploreHref ? (
             <Link
               href={exploreHref}
+              prefetch={false}
               className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors"
             >
               <ArrowRight className="w-4 h-4 text-primaryBrand" />
