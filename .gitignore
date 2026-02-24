@@ -79,3 +79,8 @@ isoftpull-response.json
 
 # Dev-only API routes (local testing utilities - never deploy)
 src/app/api/dev/
+
+# Claude Code / agent tooling
+.agents/
+.claude/
+skills-lock.json
