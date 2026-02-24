@@ -1,8 +1,15 @@
-import { MoreVerticalIcon } from "lucide-react";
+import { MoreVerticalIcon, Home } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Link from "next/link";
 
 interface RenterDashboardApplicationCardProps {
   title: string;
@@ -50,13 +57,32 @@ export const RenterDashboardApplicationCard = ({
                 </span>
               </Badge>
             </div>
-            <Button
-              variant="outline"
-              size="icon"
-              className="w-6 h-6 p-0 rounded-[5px] border-[#3c8787]"
-            >
-              <MoreVerticalIcon className="w-4 h-4 text-[#3c8787]" />
-            </Button>
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="outline"
+                  size="icon"
+                  className="w-6 h-6 p-0 rounded-[5px] border-[#3c8787]"
+                >
+                  <MoreVerticalIcon className="w-4 h-4 text-[#3c8787]" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                {listingId && (
+                  <DropdownMenuItem asChild>
+                    <Link
+                      href={`/search/listing/${listingId}?from=rent/dashboard`}
+                      className="cursor-pointer flex items-center gap-2"
+                    >
+                      <Home className="w-4 h-4 text-black" />
+                      <span className="[font-family:'Poppins',Helvetica] font-medium text-sm">
+                        See Listing
+                      </span>
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+              </DropdownMenuContent>
+            </DropdownMenu>
 
             {/* Row 2: Date */}
             <div className="[font-family:'Poppins',Helvetica] font-light text-black text-xs col-span-2">
