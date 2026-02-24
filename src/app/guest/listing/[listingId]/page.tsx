@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { ListingAndImages } from '@/types'
+import { ListingWithRelations } from '@/types'
 import prisma from '@/lib/prismadb'
 import MatchbookHeader from "@/components/marketing-landing-components/matchbook-header";
 import Footer from "@/components/marketing-landing-components/footer";
@@ -80,7 +80,7 @@ export default async function PublicListingPage({ params }: ListingPageProps) {
       unavailablePeriods: true,
       bookings: { where: { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } } },
     },
-  }) as ListingAndImages | null
+  }) as ListingWithRelations | null
 
   // Return 404 if listing doesn't exist or doesn't meet criteria
   if (!listing) {

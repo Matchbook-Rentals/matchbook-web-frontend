@@ -1,10 +1,10 @@
 'use client'
 import React, { useCallback, useRef, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
-import { ListingAndImages } from '@/types';
-import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
-import HostInformation from '@/app/app/rent/searches/(trips-components)/host-information';
+import ListingImageCarousel from '@/components/listing-details/image-carousel';
+import { ListingWithRelations } from '@/types';
+import ListingDescription from '@/components/listing-details/listing-info';
+import HostInformation from '@/components/listing-details/host-information';
 import PublicListingDetailsBox from './public-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
@@ -19,7 +19,7 @@ import { useRenterListingActionBox } from './renter-listing-action-box-context';
 
 
 interface PublicListingDetailsViewProps {
-  listing: ListingAndImages;
+  listing: ListingWithRelations;
   locationString: string;
   isAuthenticated?: boolean;
   isFavorited?: boolean;
@@ -271,6 +271,14 @@ export default function PublicListingDetailsView({
               </div>
             )}
           </div>
+          <BrandButton
+            size="lg"
+            variant="ghost"
+            className="text-primaryBrand font-semibold"
+            onClick={() => fromUrl ? router.replace(fromUrl) : router.back()}
+          >
+            Back
+          </BrandButton>
           <BrandButton
             size="lg"
             className="shrink-0 font-semibold"
