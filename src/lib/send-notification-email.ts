@@ -9,9 +9,6 @@ import { emailQueueClient } from '@/lib/email-queue-client'
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
-// Toggle between queue mode and direct sending
-const USE_EMAIL_QUEUE = process.env.USE_EMAIL_QUEUE === 'true';
-
 export async function sendNotificationEmail({
   to,
   subject,
@@ -24,12 +21,7 @@ export async function sendNotificationEmail({
       return { success: false, error: 'Email service not configured' };
     }
 
-    // Route to queue if enabled, otherwise send directly
-    if (USE_EMAIL_QUEUE) {
-      return await sendViaQueue({ to, subject, emailData });
-    } else {
-      return await sendDirectly({ to, subject, emailData });
-    }
+    return await sendViaQueue({ to, subject, emailData });
   } catch (error) {
     console.error('Error in sendNotificationEmail:', error);
     return { success: false, error: 'Failed to send notification email' };
