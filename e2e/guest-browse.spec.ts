@@ -666,4 +666,74 @@ test.describe('Guest Browse', () => {
       await waitForSearchListings(page);
     });
   });
+
+  // -----------------------------------------------------------------------
+  // Story 06: Like from Direct Listing URL (guest → auth modal)
+  // -----------------------------------------------------------------------
+  test.describe('Story 06: Like from Direct Listing URL', () => {
+
+    test('guest liking a listing from direct URL shows auth modal', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const listingLink = page.locator('a[href*="/search/listing/"]').first();
+      const href = await listingLink.getAttribute('href');
+      expect(href).toBeTruthy();
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate directly to the listing (no auth, no trip)
+      await page.goto(`/search/listing/${listingId}`);
+      await page.waitForLoadState('domcontentloaded');
+
+      // Click the desktop favorite button
+      const heartButton = page.locator('[data-testid="desktop-favorite-button"]');
+      await heartButton.waitFor({ state: 'visible', timeout: 15_000 });
+      await heartButton.click();
+
+      // Auth modal should appear
+      const authModal = page.locator('[role="dialog"]');
+      await expect(authModal).toBeVisible({ timeout: 5_000 });
+
+      // URL should NOT have tripId (no trip created for guest)
+      expect(page.url()).not.toContain('tripId');
+    });
+
+    test('mobile: guest liking a listing shows auth modal', async ({ browser }) => {
+      const context = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+        geolocation: { latitude: 40.7608, longitude: -111.891 },
+        permissions: ['geolocation'],
+      });
+      const page = await context.newPage();
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await page.locator('a[href*="/search/listing/"]').first().waitFor({ state: 'visible', timeout: 30_000 });
+      const href = await page.locator('a[href*="/search/listing/"]').first().getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate directly to listing
+      await page.goto(`/search/listing/${listingId}`);
+      await page.waitForLoadState('domcontentloaded');
+
+      // Click the mobile favorite button
+      const heartButton = page.locator('[data-testid="mobile-favorite-button"]');
+      await heartButton.waitFor({ state: 'visible', timeout: 15_000 });
+      await heartButton.click();
+
+      // Auth modal should appear
+      const authModal = page.locator('[role="dialog"]');
+      await expect(authModal).toBeVisible({ timeout: 5_000 });
+
+      // URL should NOT have tripId
+      expect(page.url()).not.toContain('tripId');
+
+      await context.close();
+    });
+  });
 });

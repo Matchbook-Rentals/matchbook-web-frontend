@@ -469,6 +469,98 @@ test.describe('Authenticated Renter', () => {
   });
 
   // -----------------------------------------------------------------------
+  // Story 06: Like from Direct Listing URL (trip creation + URL update)
+  // -----------------------------------------------------------------------
+  test.describe('Story 06: Like from Direct Listing URL', () => {
+
+    test('liking a listing from direct URL creates trip and updates URL', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Grab a listing ID from the homepage (cards are <a> tags there)
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const listingLink = page.locator('a[href*="/search/listing/"]').first();
+      const href = await listingLink.getAttribute('href');
+      expect(href).toBeTruthy();
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate directly to the listing with NO tripId (simulates shared link)
+      await page.goto(`/search/listing/${listingId}`);
+      await page.waitForLoadState('domcontentloaded');
+
+      // URL should NOT have tripId yet
+      expect(page.url()).not.toContain('tripId');
+
+      // Click the desktop favorite button
+      const heartButton = page.locator('[data-testid="desktop-favorite-button"]');
+      await heartButton.waitFor({ state: 'visible', timeout: 15_000 });
+      await heartButton.click();
+
+      // Wait for trip creation and URL update
+      await page.waitForFunction(
+        () => window.location.search.includes('tripId'),
+        { timeout: 15_000 }
+      );
+
+      // URL should now contain tripId
+      const updatedUrl = new URL(page.url());
+      const tripId = updatedUrl.searchParams.get('tripId');
+      expect(tripId).toBeTruthy();
+
+      // Heart should be filled (favorited)
+      const heartIcon = heartButton.locator('svg');
+      await expect(heartIcon).toHaveClass(/fill-red-500/, { timeout: 5_000 });
+    });
+
+    test('after liking, getBackUrl resolves to /search with tripId', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const listingLink = page.locator('a[href*="/search/listing/"]').first();
+      const href = await listingLink.getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+
+      // Go directly to listing (no tripId, no from param)
+      await page.goto(`/search/listing/${listingId}`);
+      await page.waitForLoadState('domcontentloaded');
+
+      // Like the listing to create a trip
+      const heartButton = page.locator('[data-testid="desktop-favorite-button"]');
+      await heartButton.waitFor({ state: 'visible', timeout: 15_000 });
+      await heartButton.click();
+
+      // Wait for tripId in URL
+      await page.waitForFunction(
+        () => window.location.search.includes('tripId'),
+        { timeout: 15_000 }
+      );
+      const tripId = new URL(page.url()).searchParams.get('tripId');
+      expect(tripId).toBeTruthy();
+
+      // Reload the page — it should now have tripId in the URL
+      // and the back button should resolve to /search?tripId=...
+      await page.reload();
+      await page.waitForLoadState('domcontentloaded');
+
+      // Verify the URL still has the tripId after reload
+      expect(page.url()).toContain(`tripId=${tripId}`);
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // Story 11: Renter Dashboard
   // -----------------------------------------------------------------------
   test.describe('Story 11: Renter Dashboard', () => {

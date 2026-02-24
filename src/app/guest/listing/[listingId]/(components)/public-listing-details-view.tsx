@@ -160,6 +160,7 @@ export default function PublicListingDetailsView({
             <button
               onClick={handleFavoriteClick}
               className="w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+              data-testid="mobile-favorite-button"
             >
               <Heart className={`w-[18px] h-[18px] ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
             </button>
