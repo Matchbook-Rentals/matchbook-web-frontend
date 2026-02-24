@@ -8,7 +8,7 @@ import { getListingsByBounds, MapBounds } from '@/app/actions/listings';
 import { ListingAndImages } from '@/types';
 import { ListingSection } from '@/lib/listings/get-listing-sections';
 import AnimatedSearchHeader from './animated-search-header';
-import SearchMap from '@/app/app/rent/old-search/(components)/search-map';
+import SearchMap from '@/components/maps/search-map';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { Loader2 } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';

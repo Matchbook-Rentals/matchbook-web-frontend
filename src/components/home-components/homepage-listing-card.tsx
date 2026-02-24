@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ListingAndImages } from '@/types';
+import { ListingWithRelations } from '@/types';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
@@ -84,12 +84,12 @@ function LikedActionButton({
 }
 
 interface HomepageListingCardProps {
-  listing: ListingAndImages;
+  listing: ListingWithRelations;
   badge?: 'matched' | 'liked';
   tripId?: string;
   matchId?: string;
   isApplied?: boolean;
-  onApply?: (listing: ListingAndImages, tripId: string) => Promise<void>;
+  onApply?: (listing: ListingWithRelations, tripId: string) => Promise<void>;
   onBookNow?: (matchId: string) => void;
   onSignInPrompt?: () => void;
   initialFavorited?: boolean;

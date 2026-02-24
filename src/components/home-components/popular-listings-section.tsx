@@ -1,6 +1,6 @@
 'use client';
 
-import { ListingAndImages } from '@/types';
+import { ListingWithRelations } from '@/types';
 import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
@@ -17,7 +17,7 @@ import {
 
 export interface ListingSection {
   title: string;
-  listings: ListingAndImages[];
+  listings: ListingWithRelations[];
   showBadges?: boolean;
   center?: { lat: number; lng: number };
   locationString?: string;
@@ -34,7 +34,7 @@ type BadgeType = 'matched' | 'liked';
 
 interface ListingRowProps {
   title: string;
-  listings: ListingAndImages[];
+  listings: ListingWithRelations[];
   showBadges?: boolean;
   exploreHref?: string;
   sectionTripId?: string;
