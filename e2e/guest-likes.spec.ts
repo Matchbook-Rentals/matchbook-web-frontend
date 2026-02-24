@@ -28,8 +28,8 @@ import { disconnectTestPrisma } from './helpers/prisma';
 import { signIn, signOut } from './helpers/auth';
 import { getTestUser } from './helpers/auth';
 
-const NEWNEW_URL = '/newnew';
-const NEWNEW_TRIPS_URL = '/newnew/trips';
+const HOME_URL = '/';
+const TRIPS_URL = '/trips';
 const GUEST_COOKIE_NAME = 'matchbook_guest_session_id';
 
 // ---------------------------------------------------------------------------
@@ -58,14 +58,12 @@ async function getGuestSessionCookie(page: Page): Promise<string | undefined> {
 
 /** Wait for listing cards to render on the page. */
 async function waitForListingCards(page: Page, timeout = 15000) {
-  // Wait for at least one listing card link to appear
-  await page.locator('a[href*="/listing/"]').first().waitFor({ state: 'visible', timeout });
+  await page.locator('a[href*="/search/listing/"]').first().waitFor({ state: 'visible', timeout });
 }
 
 /** Click the heart (favorite) button on the nth visible listing card. */
 async function clickHeartOnCard(page: Page, index: number = 0) {
-  // The heart is a button inside listing cards — find via the Heart SVG or button
-  const hearts = page.locator('a[href*="/listing/"] button, [data-testid="favorite-button"]');
+  const hearts = page.locator('a[href*="/search/listing/"] button, [data-testid="favorite-button"]');
   const heart = hearts.nth(index);
   await heart.waitFor({ state: 'visible', timeout: 10000 });
   await heart.click();
@@ -75,8 +73,7 @@ async function clickHeartOnCard(page: Page, index: number = 0) {
 
 /** Check if the nth heart is filled (favorited). */
 async function isHeartFilled(page: Page, index: number = 0): Promise<boolean> {
-  // A filled heart has fill="currentColor" or the SVG path has a fill class
-  const hearts = page.locator('a[href*="/listing/"] button svg, [data-testid="favorite-button"] svg');
+  const hearts = page.locator('a[href*="/search/listing/"] button svg, [data-testid="favorite-button"] svg');
   const heart = hearts.nth(index);
   if (!await heart.isVisible({ timeout: 3000 }).catch(() => false)) {
     return false;
@@ -102,7 +99,7 @@ test.describe('Guest Likes', () => {
       await context.grantPermissions(['geolocation'], { origin: 'http://localhost:3000' });
       await context.setGeolocation({ latitude: 40.7608, longitude: -111.891 });
 
-      await page.goto(NEWNEW_URL);
+      await page.goto(HOME_URL);
       await waitForListingCards(page, 30000);
 
       // Check that section headings contain location names, not generic text
@@ -142,50 +139,21 @@ test.describe('Guest Likes', () => {
       }
     });
 
-    test('clicking heart on homepage creates guest session and persists favorite', async ({ page, context }) => {
-      // Grant geolocation so listing cards render without waiting for timeout
+    test('clicking heart on homepage shows auth modal for guest users', async ({ page, context }) => {
       await context.grantPermissions(['geolocation'], { origin: 'http://localhost:3000' });
       await context.setGeolocation({ latitude: 40.7608, longitude: -111.891 });
 
-      // Visit homepage as unauthenticated user
-      await page.goto(NEWNEW_URL);
+      await page.goto(HOME_URL);
       await waitForListingCards(page, 30000);
 
-      // Click the first heart
       await clickHeartOnCard(page, 0);
 
-      // A guest session cookie should now exist
+      // Guest users should see the auth modal, not create a session
+      await expect(page.locator('h3:has-text("Sign in required")')).toBeVisible({ timeout: 5000 });
+
+      // No guest session cookie should be created
       const cookieValue = await getGuestSessionCookie(page);
-      expect(cookieValue).toBeTruthy();
-      guestSessionId = cookieValue!;
-
-      // Wait for the server action to persist the favorite to DB
-      // (the optimistic UI updates immediately but the DB write is async)
-      let favorites: string[] = [];
-      for (let i = 0; i < 10; i++) {
-        favorites = await getGuestFavorites(guestSessionId);
-        if (favorites.length > 0) break;
-        await page.waitForTimeout(500);
-      }
-      expect(favorites.length).toBe(1);
-    });
-
-    test('guest favorites persist across page refresh', async ({ page, context }) => {
-      // Skip if no session from previous test
-      test.skip(!guestSessionId, 'Requires guest session from previous test');
-
-      // Grant geolocation so listing cards render without waiting for timeout
-      await context.grantPermissions(['geolocation'], { origin: 'http://localhost:3000' });
-      await context.setGeolocation({ latitude: 40.7608, longitude: -111.891 });
-
-      // Set the cookie and navigate
-      await setGuestSessionCookie(page, guestSessionId);
-      await page.goto(NEWNEW_URL);
-      await waitForListingCards(page, 30000);
-
-      // The first heart should still be filled
-      const filled = await isHeartFilled(page, 0);
-      expect(filled).toBe(true);
+      expect(cookieValue).toBeFalsy();
     });
   });
 
@@ -218,7 +186,7 @@ test.describe('Guest Likes', () => {
 
     test.skip('trips page shows pre-existing guest favorites', async ({ page }) => {
       await setGuestSessionCookie(page, guestSessionId);
-      await page.goto(NEWNEW_TRIPS_URL);
+      await page.goto(TRIPS_URL);
       await waitForListingCards(page);
 
       const favorites = await getGuestFavorites(guestSessionId);
@@ -227,7 +195,7 @@ test.describe('Guest Likes', () => {
 
     test.skip('clicking heart on trips page persists to DB', async ({ page }) => {
       await setGuestSessionCookie(page, guestSessionId);
-      await page.goto(NEWNEW_TRIPS_URL);
+      await page.goto(TRIPS_URL);
       await waitForListingCards(page);
 
       await clickHeartOnCard(page, 0);
@@ -283,7 +251,7 @@ test.describe('Guest Likes', () => {
 
       // Navigate to /newnew to ensure GuestFavoriteSyncProcessor runs
       // (it's in root layout, but navigating gives it a fresh mount)
-      await page.goto(NEWNEW_URL);
+      await page.goto(HOME_URL);
 
       // Poll DB for conversion — the sync processor runs 4 sequential server
       // actions so it can take 10+ seconds to complete
@@ -316,43 +284,34 @@ test.describe('Guest Likes', () => {
   });
 
   test.describe('Session Persistence (10-year cookie)', () => {
-    test('guest session cookie has far-future expiry', async ({ page, context }) => {
-      test.setTimeout(60000);
-
-      // Grant geolocation so listing cards render without waiting for timeout
+    test('guest session cookie persists across page reload', async ({ page, context }) => {
       await context.grantPermissions(['geolocation'], { origin: 'http://localhost:3000' });
       await context.setGeolocation({ latitude: 40.7608, longitude: -111.891 });
 
-      await page.goto(NEWNEW_URL);
-      await waitForListingCards(page, 30000);
+      // Seed a guest session directly in the DB and set the cookie
+      const sessionId = await createGuestSessionInDb({
+        locationString: 'Salt Lake City, UT',
+        latitude: 40.7608,
+        longitude: -111.891,
+      });
+      await setGuestSessionCookie(page, sessionId);
 
-      // Click a heart to trigger session creation
-      await clickHeartOnCard(page, 0);
+      // Verify cookie survives a page reload
+      await page.goto(HOME_URL);
+      await page.reload();
 
-      // Poll for cookie — the server action + cookie write is async and may
-      // take several seconds to complete
-      let guestCookie: { name: string; value: string; expires: number } | undefined;
-      for (let i = 0; i < 20; i++) {
-        const cookies = await page.context().cookies();
-        guestCookie = cookies.find(c => c.name === GUEST_COOKIE_NAME);
-        if (guestCookie) break;
-        await page.waitForTimeout(500);
-      }
+      const cookies = await page.context().cookies();
+      const guestCookie = cookies.find(c => c.name === GUEST_COOKIE_NAME);
       expect(guestCookie).toBeTruthy();
+      expect(guestCookie!.value).toBe(sessionId);
 
-      // Chrome caps cookie lifetime at ~400 days regardless of max-age.
-      // We set 10 years but expect Chrome to clamp it. Verify it's at least
-      // 300 days — well beyond the old 24-hour value.
+      // Chrome caps cookie lifetime at ~400 days — verify it's at least 300 days out
       if (guestCookie!.expires > 0) {
         const expiresInSeconds = guestCookie!.expires - Date.now() / 1000;
         expect(expiresInSeconds).toBeGreaterThan(300 * 24 * 60 * 60);
       }
 
-      // Cleanup
-      const sessionId = guestCookie!.value;
-      if (sessionId) {
-        await cleanupGuestSession(sessionId).catch(() => {});
-      }
+      await cleanupGuestSession(sessionId).catch(() => {});
     });
   });
 
@@ -367,7 +326,7 @@ test.describe('Guest Likes', () => {
       const testUser = getTestUser();
       await signIn(page, testUser.email, testUser.password);
 
-      await page.goto(NEWNEW_URL);
+      await page.goto(HOME_URL);
       await waitForListingCards(page, 30000);
 
       // Click a heart as an authenticated user
@@ -377,7 +336,6 @@ test.describe('Guest Likes', () => {
       const cookieValue = await getGuestSessionCookie(page);
       expect(cookieValue).toBeFalsy();
 
-      // Sign out — may stay on /newnew rather than redirecting to / or /sign-in
       await signOut(page).catch(() => {});
     });
   });
