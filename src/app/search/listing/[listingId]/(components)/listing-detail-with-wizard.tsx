@@ -2,7 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ListingAndImages } from '@/types';
+import { SearchListing } from '@/types';
 import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view';
 import { RenterListingActionBoxProvider } from '@/app/guest/listing/[listingId]/(components)/renter-listing-action-box-context';
 import ApplicationWizard from './application-wizard';
@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button';
 type WizardState = 'listing' | 'application' | 'success';
 
 interface ListingDetailWithWizardProps {
-  listing: ListingAndImages;
+  listing: SearchListing;
   locationString: string;
   isAuthenticated: boolean;
   tripContext: {
