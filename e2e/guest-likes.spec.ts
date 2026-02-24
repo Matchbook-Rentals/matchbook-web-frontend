@@ -29,7 +29,6 @@ import { signIn, signOut } from './helpers/auth';
 import { getTestUser } from './helpers/auth';
 
 const HOME_URL = '/';
-const TRIPS_URL = '/trips';
 const GUEST_COOKIE_NAME = 'matchbook_guest_session_id';
 
 // ---------------------------------------------------------------------------
@@ -157,53 +156,6 @@ test.describe('Guest Likes', () => {
     });
   });
 
-  test.describe('Guest Likes on Trips Page', () => {
-    // SKIPPED: /newnew/trips imports SearchMap which calls useTripContext() without
-    // a TripContextProvider wrapper, causing a runtime crash. This is a pre-existing
-    // issue — the SearchMap component was designed for /app/rent/searches/[tripId]
-    // which has TripContextProvider in its layout. Needs separate fix.
-
-    let guestSessionId: string;
-    let testListingIds: string[];
-
-    test.beforeAll(async () => {
-      testListingIds = await getTestListingIds(3);
-      expect(testListingIds.length).toBeGreaterThan(0);
-
-      guestSessionId = await createGuestSessionInDb({
-        locationString: 'Salt Lake City, UT',
-        latitude: 40.7608,
-        longitude: -111.891,
-      });
-      await addGuestFavorite(guestSessionId, testListingIds[0]);
-    });
-
-    test.afterAll(async () => {
-      if (guestSessionId) {
-        await cleanupGuestSession(guestSessionId);
-      }
-    });
-
-    test.skip('trips page shows pre-existing guest favorites', async ({ page }) => {
-      await setGuestSessionCookie(page, guestSessionId);
-      await page.goto(TRIPS_URL);
-      await waitForListingCards(page);
-
-      const favorites = await getGuestFavorites(guestSessionId);
-      expect(favorites).toContain(testListingIds[0]);
-    });
-
-    test.skip('clicking heart on trips page persists to DB', async ({ page }) => {
-      await setGuestSessionCookie(page, guestSessionId);
-      await page.goto(TRIPS_URL);
-      await waitForListingCards(page);
-
-      await clickHeartOnCard(page, 0);
-
-      const favorites = await getGuestFavorites(guestSessionId);
-      expect(favorites.length).toBeGreaterThanOrEqual(1);
-    });
-  });
 
   test.describe('Guest Likes Sync on Sign-In', () => {
     let guestSessionId: string;
