@@ -11,12 +11,22 @@ import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover
 import SearchDateRange from '@/components/newnew/search-date-range';
 import { Button } from '@/components/ui/button';
 import { format } from 'date-fns';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Heart } from 'lucide-react';
 import { VerifiedIcon } from '@/components/icons-v3';
 import GuestTypeCounter from '@/components/home-components/GuestTypeCounter';
 import { useRenterListingActionBox } from './renter-listing-action-box-context';
 
-const PublicListingDetailsBox: React.FC = () => {
+interface PublicListingDetailsBoxProps {
+  isFavorited?: boolean;
+  onFavoriteClick?: () => void;
+  isAuthenticated?: boolean;
+}
+
+const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
+  isFavorited = false,
+  onFavoriteClick,
+  isAuthenticated = false,
+}) => {
   const { state, actions, listing } = useRenterListingActionBox();
   const host = listing.user;
 
@@ -39,16 +49,27 @@ const PublicListingDetailsBox: React.FC = () => {
   return (
     <Card className="w-full border border-[#0000001a] rounded-xl">
       <CardContent className="flex flex-col items-start gap-5 p-4">
-        {/* Verified badge */}
-        <Badge
-          variant="outline"
-          className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
-        >
-          <VerifiedIcon className="w-[21px] h-[21px]" />
-          <span className="font-normal text-xs text-[#0B6E6E] font-['Poppins'] leading-normal">
-            Verified Host
-          </span>
-        </Badge>
+        {/* Verified badge + Like button */}
+        <div className="flex items-center justify-between w-full">
+          <Badge
+            variant="outline"
+            className="flex items-center gap-1 px-0 py-1 bg-transparent border-0"
+          >
+            <VerifiedIcon className="w-[21px] h-[21px]" />
+            <span className="font-normal text-xs text-[#0B6E6E] font-['Poppins'] leading-normal">
+              Verified Host
+            </span>
+          </Badge>
+
+          <button
+            onClick={onFavoriteClick}
+            className="w-9 h-9 flex items-center justify-center rounded-[10px] border border-gray-300 hover:bg-gray-100 transition-colors"
+            aria-label={isFavorited ? 'Remove from favorites' : 'Add to favorites'}
+            data-testid="desktop-favorite-button"
+          >
+            <Heart className={`w-5 h-5 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-400'}`} />
+          </button>
+        </div>
 
         {/* Host information */}
         <div className="flex items-center gap-3 w-full">

@@ -16,6 +16,7 @@ import { format } from 'date-fns';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { getOrCreateTripForListing } from '@/app/actions/trips';
 import { useRenterListingActionBox } from './renter-listing-action-box-context';
+import { GuestAuthModal } from '@/components/guest-auth-modal';
 
 
 interface PublicListingDetailsViewProps {
@@ -46,8 +47,12 @@ export default function PublicListingDetailsView({
   // Favorite state
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
   const [resolvedTripId, setResolvedTripId] = useState<string | null>(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const handleFavoriteClick = useCallback(async () => {
-    if (!isAuthenticated) return;
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
     const newState = !isFavorited;
     setIsFavorited(newState);
 
@@ -179,7 +184,11 @@ export default function PublicListingDetailsView({
           <div
             className="w-1/2 mt-6 h-fit lg:w-full rounded-[12px] shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
           >
-            <PublicListingDetailsBox />
+            <PublicListingDetailsBox
+              isFavorited={isFavorited}
+              onFavoriteClick={handleFavoriteClick}
+              isAuthenticated={isAuthenticated}
+            />
           </div>
         </div>
 
@@ -294,6 +303,11 @@ export default function PublicListingDetailsView({
           </BrandButton>
         </div>
       </footer>
+
+      <GuestAuthModal
+        isOpen={showAuthModal}
+        onOpenChange={setShowAuthModal}
+      />
     </>
   );
 }
