@@ -71,7 +71,7 @@ export const RenterDashboardApplicationCard = ({
                 {listingId && (
                   <DropdownMenuItem asChild>
                     <Link
-                      href={`/search/listing/${listingId}?from=rent/dashboard`}
+                      href={`/search/listing/${listingId}?from=/rent/dashboard`}
                       className="cursor-pointer flex items-center gap-2"
                     >
                       <Home className="w-4 h-4 text-black" />
