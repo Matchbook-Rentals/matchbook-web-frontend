@@ -23,7 +23,7 @@ const DescriptionSection: React.FC<DescriptionSectionProps> = ({ listing }) => {
         <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">
           Description
         </h3>
-        <p className="font-['Poppins'] text-[16px] font-normal text-[#484A54] whitespace-pre-wrap break-words overflow-hidden">
+        <p className="font-['Poppins'] text-[16px] font-normal text-[#484A54] whitespace-pre-wrap break-words overflow-hidden text-wrap w-full lg:max-w-[52vw]">
           {displayText}
           {shouldTruncate && (
             <BrandButton
