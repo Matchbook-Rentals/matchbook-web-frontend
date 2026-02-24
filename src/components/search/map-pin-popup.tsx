@@ -82,7 +82,12 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) return;
     if ((e.target as HTMLElement).closest('.carousel-controls')) return;
-    const url = `/search/listing/${listing.id}`;
+    const params = new URLSearchParams();
+    if (tripId) params.set('tripId', tripId);
+    if (trip?.startDate) params.set('startDate', new Date(trip.startDate).toISOString());
+    if (trip?.endDate) params.set('endDate', new Date(trip.endDate).toISOString());
+    const qs = params.toString();
+    const url = `/search/listing/${listing.id}${qs ? `?${qs}` : ''}`;
     const isMobile = window.innerWidth < 1024;
     if (isMobile) {
       router.push(url);
