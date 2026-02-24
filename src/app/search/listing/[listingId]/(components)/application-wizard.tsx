@@ -6,11 +6,11 @@ import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
 import { cn } from '@/lib/utils';
 import { ListingAndImages } from '@/types';
-import { PersonalInfo } from '@/app/app/rent/searches/(trips-components)/application-personal-info';
-import { Identification } from '@/app/app/rent/searches/(trips-components)/application-identity';
-import { Income } from '@/app/app/rent/searches/(trips-components)/application-income';
-import Questionnaire from '@/app/app/rent/searches/(trips-components)/application-questionnaire';
-import { ResidentialLandlordInfo } from '@/app/app/rent/searches/(trips-components)/residential-landlord-info';
+import { PersonalInfo } from '@/components/application/application-personal-info';
+import { Identification } from '@/components/application/application-identity';
+import { Income } from '@/components/application/application-income';
+import Questionnaire from '@/components/application/application-questionnaire';
+import { ResidentialLandlordInfo } from '@/components/application/residential-landlord-info';
 import { useApplicationStore } from '@/stores/application-store';
 import { upsertApplication, markComplete, getFullApplication } from '@/app/actions/applications';
 import { applyToListingFromSearch } from '@/app/actions/housing-requests';
@@ -23,7 +23,7 @@ import {
 } from '@/utils/application-validation';
 import { SaveStatusIndicator } from '@/components/ui/save-status-indicator';
 import { ApplicationItemHeaderStyles } from '@/constants/styles';
-import { TripContextDisplay } from '@/app/app/rent/searches/(trips-components)/trip-context-display';
+import { TripContextDisplay } from '@/components/application/trip-context-display';
 
 const INPUT_CLASS_NAME = `
   flex h-12 items-center gap-2 px-3 py-2
