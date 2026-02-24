@@ -2,16 +2,16 @@
 
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import { ListingAndImages } from '@/types';
+import { SearchListing } from '@/types';
 import { GuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { FilterOptions, matchesFilters } from '@/lib/listing-filters';
 import { getListingsByBounds, getListingsWithDates, getListingsNearLocation, type MapBounds } from '@/app/actions/listings';
 import SearchFiltersModal from './search-filters-modal';
-import GuestSearchListingsGrid from '@/app/guest/rent/searches/components/guest-search-listings-grid';
-import GuestSearchMap from '@/app/guest/rent/searches/components/guest-search-map';
-import GuestSearchMapMobile from '@/app/guest/rent/searches/components/guest-search-map-mobile';
+import GuestSearchListingsGrid from '@/components/search/guest-search-listings-grid';
+import GuestSearchMap from '@/components/search/guest-search-map';
+import GuestSearchMapMobile from '@/components/search/guest-search-map-mobile';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
 import SearchResultsNavbar from '@/components/newnew/search-results-navbar';
 import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
@@ -40,7 +40,7 @@ interface UserObject {
 }
 
 interface SearchPageClientProps {
-  listings: ListingAndImages[];
+  listings: SearchListing[];
   center: { lat: number; lng: number };
   locationString: string;
   isSignedIn: boolean;
@@ -225,7 +225,7 @@ export default function SearchPageClient({
 }: SearchPageClientProps) {
   const router = useRouter();
 
-  const [listings, setListings] = useState<ListingAndImages[]>(initialListings);
+  const [listings, setListings] = useState<SearchListing[]>(initialListings);
   const [staleBounds, setStaleBounds] = useState<MapBounds | null>(null);
   const [visibleBounds, setVisibleBounds] = useState<MapBounds | null>(null);
   const [isSearching, setIsSearching] = useState(false);

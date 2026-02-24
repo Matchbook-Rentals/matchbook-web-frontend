@@ -3,20 +3,20 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from '@/components/ui/carousel';
 import { useRouter } from 'next/navigation';
-import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
 import { RejectIcon } from '@/components/svgs/svg-components';
 import { Heart, Star, Bed, Bath, Square } from 'lucide-react';
+import { ListingStatus, PropertyType } from '@/constants/enums';
 import { ArrowLeft, ArrowRight } from '@/components/icons';
-import { ScrollArea } from '@/components/ui/scroll-area';
-import AmenityListItem from '@/app/app/rent/old-search/(components)/amenity-list-item';
-import * as AmenitiesIcons from '@/components/icons/amenities';
 import { iconAmenities } from '@/lib/amenities-list';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import AmenityListItem from '@/components/search/amenity-list-item';
+import * as AmenitiesIcons from '@/components/icons/amenities';
 import { Badge } from "@/components/ui/badge"
 import { BrandButton } from "@/components/ui/brandButton"
 import { getUtilitiesIncluded } from '@/lib/calculate-rent';
-import { PropertyType } from '@/constants/enums';
+import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
 
-interface DesktopListingCardProps {
+interface GuestListingCardProps {
   listing: {
     listingImages: { url: string }[];
     price: number;
@@ -35,26 +35,54 @@ interface DesktopListingCardProps {
   };
   distance?: number;
   onClose: () => void;
-  customSnapshot?: any; // Optional custom snapshot with enhanced functions
+  // Allow parent to override the container positioning/styling
+  className?: string;
+  status?: ListingStatus;
+  customSnapshot: any; // Required custom snapshot for guest mode
 }
 
-const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distance, onClose, customSnapshot }) => {
+// Custom hook to detect media query matches
+function useMediaQuery(query: string): boolean {
+  const [matches, setMatches] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      const mediaQueryList = window.matchMedia(query);
+      const listener = (event: MediaQueryListEvent) => setMatches(event.matches);
+      // set the initial state
+      setMatches(mediaQueryList.matches);
+      mediaQueryList.addEventListener('change', listener);
+      return () => mediaQueryList.removeEventListener('change', listener);
+    }
+  }, [query]);
+
+  return matches;
+}
+
+const GuestMobileMapClickListingCard: React.FC<GuestListingCardProps> = ({
+  listing,
+  distance,
+  onClose,
+  className,
+  status = ListingStatus.None,
+  customSnapshot
+}) => {
   const router = useRouter();
   const { state } = useGuestTripContext();
   const [isHovered, setIsHovered] = useState(false);
   const [expanded, setExpanded] = useState(false);
-  
-  // For guest components, customSnapshot should always be provided
-  // No need to call useListingsSnapshot since we're in guest context
+
+  // Using our hook to check if viewport is medium (768px) or larger
+  const isMediumOrAbove = useMediaQuery('(min-width: 768px)');
+  // Set default positioning based on viewport size:
+  const defaultPositionClass = isMediumOrAbove
+    ? "bottom-2 left-2" // bottom left for medium and above
+    : "top-16 left-1/2 transform -translate-x-1/2"; // top middle for smaller screens, moved down more
+
+  // Use guest-provided snapshot
   const listingsSnapshot = customSnapshot;
 
-  // Safety check - guest components should always have customSnapshot
-  if (!listingsSnapshot) {
-    console.error('Guest component missing customSnapshot');
-    return <div>Error: Unable to load listing details</div>;
-  }
-
-  // Use properties and functions from the snapshot
+  // Use properties and functions from the resolved listingsSnapshot
   const isLiked = listingsSnapshot.isLiked(listing.id);
   const isDisliked = listingsSnapshot.isDisliked(listing.id);
 
@@ -108,7 +136,9 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
             e.stopPropagation();
           }}
         >
-          <RejectIcon className="w-9 h-9 text-white cursor-pointer p-2" />
+          <RejectIcon
+            className="w-9 h-9 text-white cursor-pointer p-2"
+          />
         </div>
       );
     }
@@ -129,12 +159,17 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
     );
   };
 
-  const cardHeight = expanded ? '88vh' : '400px';
+  const expandedHeight = isMediumOrAbove ? '80vh' : 'calc(87vh - 20px)';
+  const cardHeight = expanded ? expandedHeight : '400px';
 
   return (
     <div
-      className="absolute z-20 bg-white shadow-lg border border-gray-200 rounded-lg transition-all duration-300 ease-in-out top-14 left-2 w-96 flex flex-col"
-      style={{ height: cardHeight }}
+      className={`absolute ${expanded ? 'z-[60]' : 'z-40'} bg-white shadow-lg border border-gray-200 rounded-lg transition-all duration-300 ease-in-out flex flex-col ${className || defaultPositionClass}`}
+      style={{
+        height: cardHeight,
+        width: expanded ? '95%' : (isMediumOrAbove ? '320px' : '95%'),
+        maxWidth: isMediumOrAbove ? '360px' : '95%'
+      }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -178,8 +213,8 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
                 e.stopPropagation();
               }}
             >
-              <Heart 
-                className={`w-[18px] h-[18px] ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`} 
+              <Heart
+                className={`w-[18px] h-[18px] ${isLiked ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
               />
             </BrandButton>
           </div>
@@ -408,6 +443,19 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
               </div>
             )}
 
+            {/* Guest Sign In Prompt - No direct link to listing details */}
+            <div className="border-t border-gray-200 p-4">
+              <button
+                onClick={() => {
+                  const currentPath = window.location.pathname;
+                  const redirectUrl = encodeURIComponent(currentPath);
+                  window.location.href = `/sign-in?redirect_url=${redirectUrl}`;
+                }}
+                className="px-4 py-2 bg-[#404040]/80 hover:bg-[#404040] text-white font-medium rounded text-center transition-colors w-full"
+              >
+                Sign in to see full details
+              </button>
+            </div>
           </div>
       </div>
       </ScrollArea>
@@ -415,4 +463,4 @@ const DesktopListingCard: React.FC<DesktopListingCardProps> = ({ listing, distan
   );
 };
 
-export default DesktopListingCard;
+export default GuestMobileMapClickListingCard;

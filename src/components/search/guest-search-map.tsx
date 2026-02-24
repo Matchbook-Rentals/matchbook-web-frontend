@@ -9,10 +9,10 @@ import { useSearchParams } from 'next/navigation';
 import MapPinPopup from './map-pin-popup';
 
 // Import custom hooks
-import { useMapUtilities } from '@/app/app/rent/old-search/(components)/hooks/useMapUtilities';
-import { useMapMarkerFactory } from '@/app/app/rent/old-search/(components)/hooks/useMapMarkerFactory';
-import { useMapMarkerStyles } from '@/app/app/rent/old-search/(components)/hooks/useMapMarkerStyles';
-import { useMapMarkerManager } from '@/app/app/rent/old-search/(components)/hooks/useMapMarkerManager';
+import { useMapUtilities } from '@/components/maps/hooks/useMapUtilities';
+import { useMapMarkerFactory } from '@/components/maps/hooks/useMapMarkerFactory';
+import { useMapMarkerStyles } from '@/components/maps/hooks/useMapMarkerStyles';
+import { useMapMarkerManager } from '@/components/maps/hooks/useMapMarkerManager';
 
 // Constants for debouncing and timing
 const DEBOUNCE_DELAY = 100; // Debounce delay for map events (ms)
@@ -133,13 +133,13 @@ const SearchMap: React.FC<SearchMapProps> = ({
   // **Initialize Custom Hooks**
   const mapUtilities = useMapUtilities({ mapRef });
   const { calculateDistance, createStyleUpdateScheduler, createMarkerStyleVerifier } = mapUtilities;
-  
+
   const styleScheduler = createStyleUpdateScheduler();
   const { scheduleStyleUpdate } = styleScheduler;
-  
+
   const styleVerifier = createMarkerStyleVerifier();
   const { verifyAndFixMarkerStyles, verifyAllMarkerStyles } = styleVerifier;
-  
+
   const markerFactory = useMapMarkerFactory({ mapRef, markerStyles, verifyAndFixMarkerStyles });
   const { createSimpleMarker, createPriceBubbleMarker } = markerFactory;
 
@@ -185,7 +185,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     const visibleIds = markersDataRef.current
       .filter(marker => bounds.contains(new maplibregl.LngLat(marker.lng, marker.lat)))
       .map(marker => marker.listing.id);
-    
+
     // Always update visible listings - this ensures zoom/pan changes are reflected
     useVisibleListingsStore.getState().setVisibleListingIds(visibleIds);
   };
@@ -248,22 +248,21 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
 
 
-
   // **Debouncing for Map Event Handlers**
   const mapEventDebounceTimer = useRef<NodeJS.Timeout | null>(null);
-  
+
   const debouncedUpdateMarkers = (skipRender = false) => {
     if (mapEventDebounceTimer.current) {
       clearTimeout(mapEventDebounceTimer.current);
     }
-    
+
     mapEventDebounceTimer.current = setTimeout(() => {
       if (!mapRef.current) return;
       const newZoom = mapRef.current.getZoom();
       setCurrentZoom(newZoom);
-      
+
       updateVisibleMarkers();
-      
+
       // Only render markers if not skipping render
       if (!skipRender) {
         renderMarkers();
@@ -271,7 +270,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
     }, DEBOUNCE_DELAY);
   };
 
-  // **Map Initialization and Event Handlers** 
+  // **Map Initialization and Event Handlers**
   // Only initialize map once and never re-create it on prop changes
   useEffect(() => {
     // Return early if we don't have what we need to initialize
@@ -328,7 +327,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
         // On move, update visible listings and re-render markers
         map.on('moveend', () => {
           if (!mapRef.current) return;
-          
+
           // Report center change to parent
           const newCenter = mapRef.current.getCenter();
           onCenterChanged(newCenter.lng, newCenter.lat);
@@ -441,11 +440,11 @@ const SearchMap: React.FC<SearchMapProps> = ({
   // Use debounced updates for hover/selection changes to prevent infinite loops
   useEffect(() => {
     if (!mapRef.current || !mapLoaded) return;
-    
+
     const timeoutId = setTimeout(() => {
       updateMarkerColors();
     }, STYLE_UPDATE_DELAY);
-    
+
     return () => clearTimeout(timeoutId);
   }, [hoveredListing, clickedMarkerId, selectedMarker, mapLoaded, markers]);
 

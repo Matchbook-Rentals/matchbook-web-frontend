@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
     console.log('Inviting user to trip', tripId, recipientEmail);
 
-    const tripLink = `${baseUrl}/guest/trips/${tripId}&invited=${recipientEmail}`;
+    const tripLink = `${baseUrl}/search/?invited=${recipientEmail}`;
 
     // Create email data using the standard template format
     const emailData = {

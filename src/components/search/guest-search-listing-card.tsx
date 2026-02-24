@@ -1,7 +1,7 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { BrandButton } from "@/components/ui/brandButton"
 import { Heart, Heart as HeartIcon, ChevronLeft, ChevronRight } from "lucide-react"
-import { ListingAndImages } from "@/types"
+import { SearchListing } from "@/types"
 import { useState, useCallback, useEffect } from 'react'
 import { useGuestTripContext } from '@/contexts/guest-trip-context-provider'
 import { RejectIcon } from '@/components/svgs/svg-components'
@@ -24,7 +24,7 @@ const headerTextStyle = "font-medium text-black text-sm"
 const bodyTextStyle = "font-normal text-[#4f4f4f] text-sm"
 
 interface SearchListingCardProps {
-  listing: ListingAndImages
+  listing: SearchListing
   status: ListingStatus
   className?: string
   style?: React.CSSProperties
@@ -100,7 +100,7 @@ export default function SearchListingCard({ listing, status, className, style, d
   // Use custom snapshot if provided (from search-page-client), otherwise use auth from context
   // For guests, all like actions should trigger sign-in prompt
   const { isSignedIn } = useAuth();
-  
+
   const snapshot = customSnapshot || {
     isLiked: () => false,
     isDisliked: () => false,
