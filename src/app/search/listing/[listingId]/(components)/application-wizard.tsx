@@ -343,8 +343,16 @@ export default function ApplicationWizard({
       </div>
 
       {/* Sticky footer */}
-      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 p-4 z-20">
-        <div className="max-w-3xl mx-auto flex justify-end items-center">
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 px-4 py-4 pb-[max(env(safe-area-inset-bottom),16px)] z-20">
+        <div className="max-w-3xl mx-auto flex justify-between items-center">
+          <BrandButton
+            variant="outline"
+            size="sm"
+            onClick={onBack}
+            className="font-semibold"
+          >
+            Back to Listing
+          </BrandButton>
           <Button
             onClick={handleSubmit}
             disabled={isSubmitting}
