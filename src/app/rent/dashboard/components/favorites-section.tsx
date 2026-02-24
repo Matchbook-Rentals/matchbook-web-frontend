@@ -119,10 +119,10 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
   useEffect(() => {
     const updateCardsPerSlide = () => {
       const width = window.innerWidth;
-      if (width >= 1024) setCardsPerSlide(5);
-      else if (width >= 768) setCardsPerSlide(4);
-      else if (width >= 640) setCardsPerSlide(3);
-      else setCardsPerSlide(2);
+      if (width >= 1024) setCardsPerSlide(10);
+      else if (width >= 768) setCardsPerSlide(8);
+      else if (width >= 640) setCardsPerSlide(6);
+      else setCardsPerSlide(4);
     };
 
     updateCardsPerSlide();
@@ -185,7 +185,7 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
                   <CarouselContent className="-ml-6">
                     {favoriteSlides.map((slideFavorites, idx) => (
                       <CarouselItem key={idx} className="pl-6 basis-full">
-                        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
+                        <div className="grid grid-cols-2 grid-rows-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
                           {slideFavorites.map((fav, favIdx) => {
                             const globalIndex = idx * cardsPerSlide + favIdx;
                             return (
