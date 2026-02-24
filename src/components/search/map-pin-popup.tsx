@@ -3,7 +3,7 @@ import { useRouter } from 'next/navigation';
 import maplibregl from 'maplibre-gl';
 import { MapMarker } from '@/store/map-selection-store';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
-import { calculateRent } from '@/lib/calculate-rent';
+import { calculateRent, applyServiceFee } from '@/lib/calculate-rent';
 import {
   Carousel,
   CarouselContent,
@@ -108,7 +108,9 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
 
   const isLiked = customSnapshot?.isLiked(listing.id) ?? false;
   const hasTripDates = Boolean(trip?.startDate && trip?.endDate);
-  const calculatedPrice = hasTripDates ? calculateRent({ listing, trip } as any) : listing.price;
+  const calculatedPrice = hasTripDates
+    ? calculateRent({ listing, trip } as any)
+    : applyServiceFee(listing.price || 0, (listing as any).monthlyPricing?.length ? Math.min(...(listing as any).monthlyPricing.map((p: any) => p.months)) : 1);
   const displayTitle = listing.title.length > TITLE_MAX_LENGTH
     ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
     : listing.title;

@@ -115,14 +115,12 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
             <div className="font-normal text-[#5d606d] text-base font-['Poppins']">Month</div>
           </div>
 
-          {listing.depositSize && (
-            <div className="flex flex-col gap-1 items-end">
-              <div className="font-semibold text-[#373940] text-sm font-['Poppins']">
-                ${listing.depositSize?.toLocaleString()}
-              </div>
-              <div className="font-normal text-[#5d606d] text-base font-['Poppins']">Deposit</div>
+          <div className="flex flex-col gap-1 items-end">
+            <div className="font-semibold text-[#373940] text-sm font-['Poppins']">
+              ${(listing.depositSize || 0).toLocaleString()}
             </div>
-          )}
+            <div className="font-normal text-[#5d606d] text-base font-['Poppins']">Deposit</div>
+          </div>
         </div>
 
         {/* Error message */}

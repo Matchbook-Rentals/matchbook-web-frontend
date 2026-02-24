@@ -37,6 +37,7 @@ export default function PublicListingDetailsView({
   const router = useRouter();
   const searchParams = useSearchParams();
   const fromUrl = searchParams.get('from');
+  const initialTripId = searchParams.get('tripId');
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -46,7 +47,7 @@ export default function PublicListingDetailsView({
 
   // Favorite state
   const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
-  const [resolvedTripId, setResolvedTripId] = useState<string | null>(null);
+  const [resolvedTripId, setResolvedTripId] = useState<string | null>(initialTripId);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const handleFavoriteClick = useCallback(async () => {
     if (!isAuthenticated) {
@@ -65,6 +66,11 @@ export default function PublicListingDetailsView({
       }
       tripId = tripResult.trip.id;
       setResolvedTripId(tripId);
+
+      // Silently update URL with new tripId
+      const url = new URL(window.location.href);
+      url.searchParams.set('tripId', tripId);
+      window.history.replaceState({}, '', url.toString());
     }
 
     if (newState) {
@@ -256,14 +262,12 @@ export default function PublicListingDetailsView({
                 </span>
                 <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Per Month</span>
               </div>
-              {listing.depositSize && (
-                <div className="flex items-baseline gap-1">
-                  <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
-                    ${listing.depositSize.toLocaleString()}
-                  </span>
-                  <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Deposit</span>
-                </div>
-              )}
+              <div className="flex items-baseline gap-1">
+                <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
+                  ${(listing.depositSize || 0).toLocaleString()}
+                </span>
+                <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Deposit</span>
+              </div>
             </div>
             {/* Dates row */}
             {state.startDate && state.endDate && (

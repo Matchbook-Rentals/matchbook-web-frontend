@@ -3,7 +3,7 @@
 import React, { createContext, useState, useContext, useMemo, useCallback, useTransition, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
 import { ListingAndImages } from '@/types';
-import { calculateRent } from '@/lib/calculate-rent';
+import { calculateRent, applyServiceFee } from '@/lib/calculate-rent';
 import { applyToListingFromSearch } from '@/app/actions/housing-requests';
 import { Trip } from '@prisma/client';
 import GuestAuthModal from '@/components/guest-auth-modal';
@@ -120,9 +120,10 @@ export function RenterListingActionBoxProvider({
 
   const priceRange = useMemo(() => {
     if (!listing.monthlyPricing || listing.monthlyPricing.length === 0) {
-      return { min: listing.price || 0, max: listing.price || 0, hasRange: false };
+      const feePrice = applyServiceFee(listing.price || 0, 1);
+      return { min: feePrice, max: feePrice, hasRange: false };
     }
-    const prices = listing.monthlyPricing.map(p => p.price);
+    const prices = listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months));
     const min = Math.min(...prices);
     const max = Math.max(...prices);
     return { min, max, hasRange: min !== max };

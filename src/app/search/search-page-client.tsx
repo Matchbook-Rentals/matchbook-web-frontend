@@ -16,7 +16,7 @@ import { GuestAuthModal } from '@/components/guest-auth-modal';
 import SearchResultsNavbar from '@/components/newnew/search-results-navbar';
 import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
-import { calculateRent } from '@/lib/calculate-rent';
+import { calculateRent, applyServiceFee } from '@/lib/calculate-rent';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Map, XIcon } from 'lucide-react';
@@ -642,9 +642,9 @@ export default function SearchPageClient({
           const calcPrice = calculateRent({ listing: l, trip: filterTrip } as any) || l.price || 0;
           return matchesFilters({ ...l, calculatedPrice: calcPrice }, filters, false, null);
         }
-        // No dates: use price range overlap
-        const prices = l.monthlyPricing?.map((p: any) => p.price) || [];
-        const minP = prices.length ? Math.min(...prices) : (l.shortestLeasePrice || 0);
+        // No dates: use price range overlap (with per-tier service fee)
+        const prices = l.monthlyPricing?.map((p: any) => applyServiceFee(p.price, p.months)) || [];
+        const minP = prices.length ? Math.min(...prices) : applyServiceFee(l.shortestLeasePrice || 0, 1);
         const maxP = prices.length ? Math.max(...prices) : minP;
         return matchesFilters({ ...l, calculatedPrice: l.price, calculatedPriceMin: minP, calculatedPriceMax: maxP }, filters, false, null);
       }),
@@ -723,8 +723,8 @@ export default function SearchPageClient({
       .filter(l => typeof l.latitude === 'number' && typeof l.longitude === 'number' && !isNaN(l.latitude) && !isNaN(l.longitude))
       .map(listing => {
         const hasDates = Boolean(mockTrip?.startDate && mockTrip?.endDate);
-        const prices = listing.monthlyPricing?.map((p: any) => p.price) || [];
-        const minPrice = prices.length ? Math.min(...prices) : (listing.shortestLeasePrice || 0);
+        const prices = listing.monthlyPricing?.map((p: any) => applyServiceFee(p.price, p.months)) || [];
+        const minPrice = prices.length ? Math.min(...prices) : applyServiceFee(listing.shortestLeasePrice || 0, 1);
         const maxPrice = prices.length ? Math.max(...prices) : minPrice;
         const displayPrice = hasDates
           ? (calculateRent({ listing, trip: mockTrip } as any) || minPrice)

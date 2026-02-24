@@ -9,7 +9,7 @@ import { useListingHoverStore } from '@/store/listing-hover-store'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
 import { ListingStatus } from '@/constants/enums'
-import { calculateRent } from '@/lib/calculate-rent'
+import { calculateRent, applyServiceFee } from '@/lib/calculate-rent'
 import {
   Carousel,
   CarouselContent,
@@ -87,13 +87,16 @@ export default function SearchListingCard({ listing, status, className, style, d
   const canScrollNext = currentSlide < listing.listingImages.length - 1
 
   // Calculate trip-specific price using the same logic as authenticated users
-  const calculatedPrice = hasTripDates ? calculateRent({ listing, trip }) : listing.price;
+  // calculateRent already applies the service fee when includeServiceFee defaults to true
+  const calculatedPrice = hasTripDates
+    ? calculateRent({ listing, trip })
+    : applyServiceFee(listing.price || 0, listing.monthlyPricing?.length ? Math.min(...listing.monthlyPricing.map(p => p.months)) : 1);
 
-  // When no dates, derive price range from monthlyPricing table
+  // When no dates, derive price range from monthlyPricing table (with per-tier service fee)
   const priceRange = !hasTripDates && listing.monthlyPricing?.length
     ? {
-        min: Math.min(...listing.monthlyPricing.map(p => p.price)),
-        max: Math.max(...listing.monthlyPricing.map(p => p.price)),
+        min: Math.min(...listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months))),
+        max: Math.max(...listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months))),
       }
     : null;
 
