@@ -53,10 +53,9 @@ flowchart TD
     I -.-> J["Click Book Now on Match"]
     J -.-> K["Pay"]
 
-    class F tested
-    class H tested
+    class F,H,E,D tested
     class G1,G2,G3,G4 untested
-    class A1,A2,A3,C,D,E,UNIFY,MERGE,AP1,AP2,I,J,K untested
+    class A1,A2,A3,C,UNIFY,MERGE,AP1,AP2,I,J,K untested
 ```
 
 ## Coverage Summary
@@ -72,8 +71,8 @@ flowchart TD
 | Create Guest Session — Explore button | Guest | ❌ | — | |
 | Create Guest Session — Direct URL | Guest | ❌ | — | Must create session before apply |
 | Enter Trip Details | Guest | ❌ | — | |
-| Prompted to Auth | Guest | ❌ | — | |
-| Session Details Persist to Trip (Guest → Authed) | Guest | ❌ | — | |
+| Prompted to Auth | Guest | ✅ | guest-likes.spec.ts | Auth modal on heart click tested |
+| Session Details Persist to Trip (Guest → Authed) | Guest | ✅ | guest-likes.spec.ts | |
 | Like Listings (optional) | Both (authed) | ✅ | guest-likes.spec.ts | Can skip — apply directly from listing page |
 | Apply to Listing — with trip details | Both | ❌ | — | Happy path |
 | Apply to Listing — without trip details | Both | ❌ | — | Details collected inline at apply time |
