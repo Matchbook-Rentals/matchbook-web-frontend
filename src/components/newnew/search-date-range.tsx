@@ -168,7 +168,7 @@ export default function SearchDateRange({
 
   const getDisabledReason = (date: Date): string | null => {
     const d = normalizeDate(date);
-    if (d < today) return 'Trips cannot begin in the past.';
+    if (d <= today) return 'Trips must begin at least tomorrow.';
 
     if (unavailablePeriods) {
       for (const period of unavailablePeriods) {
@@ -270,7 +270,7 @@ export default function SearchDateRange({
     const parsed = parseShortDate(formatted);
     if (!parsed) return 'Invalid date';
     const normalizedParsed = normalizeDate(parsed);
-    if (normalizedParsed < today) return 'Date must be in the future';
+    if (normalizedParsed <= today) return 'Date must be tomorrow or later';
     if (field === 'end' && start) {
       const s = normalizeDate(start);
       if (normalizedParsed <= s) return 'Must be after move-in date';
@@ -308,7 +308,7 @@ export default function SearchDateRange({
     else { setEndInputRaw(formatted); setEndError(null); }
 
     const parsed = parseShortDate(formatted);
-    if (!parsed || parsed < today) {
+    if (!parsed || parsed <= today) {
       // If input is cleared, set to null
       if (formatted === '') {
         if (field === 'start') handleChange(null, end);
@@ -383,7 +383,7 @@ export default function SearchDateRange({
     }
 
     const parsed = parseShortDate(formatted);
-    if (parsed && parsed >= today) {
+    if (parsed && parsed > today) {
       applyParsedDate(parsed, field);
     }
   };

@@ -4,6 +4,7 @@ import { getListingsNearLocation, getPopularListingAreas, getHostListingsCountFo
 import { getTripById, createTripFromGuestSession, getAllUserTrips, createTrip } from '@/app/actions/trips';
 import { getGuestSession, createGuestSession } from '@/app/actions/guest-session-db';
 import { convertGuestSessionToTrip } from '@/app/actions/guest-to-trip';
+import { getIpLocation } from '@/lib/ip-geolocation';
 import SearchPageClient from './search-page-client';
 import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
 
@@ -43,6 +44,8 @@ export interface TripData {
   locationString: string;
 }
 
+export const dynamic = 'force-dynamic';
+
 export default async function SearchPage({ searchParams }: SearchPageProps) {
   const params = await searchParams;
   let tripId = params.tripId || undefined;
@@ -75,6 +78,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   if (tripId && user?.id) {
     try {
       const trip = await getTripById(tripId);
+      console.log('[SearchPage] Trip loaded:', tripId, 'startDate:', trip?.startDate, 'endDate:', trip?.endDate);
       if (trip) {
         lat = trip.latitude ?? OGDEN_UT.lat;
         lng = trip.longitude ?? OGDEN_UT.lng;
@@ -97,7 +101,8 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
         lng = OGDEN_UT.lng;
         locationString = `${OGDEN_UT.city}, ${OGDEN_UT.state}`;
       }
-    } catch {
+    } catch (err) {
+      console.error('[SearchPage] getTripById failed:', err);
       tripId = undefined;
       lat = OGDEN_UT.lat;
       lng = OGDEN_UT.lng;
@@ -132,13 +137,30 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
       locationString = `${OGDEN_UT.city}, ${OGDEN_UT.state}`;
     }
   } else {
-    // No trip/session — parse location from URL params or use Ogden default
+    // No trip/session — parse location from URL params, IP geolocation, or Ogden default
     const parsedLat = parseFloat(params.lat || '');
     const parsedLng = parseFloat(params.lng || '');
     hasLocationParams = !isNaN(parsedLat) && !isNaN(parsedLng);
-    lat = hasLocationParams ? parsedLat : OGDEN_UT.lat;
-    lng = hasLocationParams ? parsedLng : OGDEN_UT.lng;
-    locationString = params.location || (hasLocationParams ? 'this area' : `${OGDEN_UT.city}, ${OGDEN_UT.state}`);
+
+    if (hasLocationParams) {
+      lat = parsedLat;
+      lng = parsedLng;
+      locationString = params.location || 'this area';
+    } else {
+      // Try IP geolocation for US users, fall back to Ogden
+      const ipLocation = await getIpLocation();
+      if (ipLocation && ipLocation.country === 'US') {
+        lat = ipLocation.lat;
+        lng = ipLocation.lng;
+        locationString = ipLocation.city && ipLocation.region
+          ? `${ipLocation.city}, ${ipLocation.region}`
+          : 'your area';
+      } else {
+        lat = OGDEN_UT.lat;
+        lng = OGDEN_UT.lng;
+        locationString = `${OGDEN_UT.city}, ${OGDEN_UT.state}`;
+      }
+    }
 
     // Auto-create a trip (authed) or guest session (guest) so date/guest
     // changes can be persisted and price updates work.
