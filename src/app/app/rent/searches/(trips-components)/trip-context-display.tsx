@@ -10,11 +10,6 @@ interface TripContextDisplayProps {
   numAdults: number;
   numChildren: number;
   numPets: number;
-  onStartDateChange: (date: Date) => void;
-  onEndDateChange: (date: Date) => void;
-  onNumAdultsChange: (num: number) => void;
-  onNumChildrenChange: (num: number) => void;
-  onNumPetsChange: (num: number) => void;
 }
 
 export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
@@ -23,11 +18,6 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
   numAdults,
   numChildren,
   numPets,
-  onStartDateChange,
-  onEndDateChange,
-  onNumAdultsChange,
-  onNumChildrenChange,
-  onNumPetsChange,
 }) => {
   const formatDate = (date: Date) => {
     try {
@@ -48,12 +38,7 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
     }
   };
 
-  const handleCountChange = (current: number, delta: number, onChange: (num: number) => void, min: number = 0) => {
-    const newValue = current + delta;
-    if (newValue >= min) {
-      onChange(newValue);
-    }
-  };
+  
 
   return (
     <div className="space-y-6">
@@ -66,9 +51,9 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
           <Input
             type="text"
             value={formatDate(startDate)}
-            onChange={(e) => handleDateChange(e.target.value, onStartDateChange)}
+            readOnly
             placeholder="MM/DD/YYYY"
-            className="flex h-12 items-center gap-2 px-3 py-2 bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900"
+            className="flex h-12 items-center gap-2 px-3 py-2 bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 cursor-not-allowed"
           />
         </div>
 
@@ -79,9 +64,9 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
           <Input
             type="text"
             value={formatDate(endDate)}
-            onChange={(e) => handleDateChange(e.target.value, onEndDateChange)}
+            readOnly
             placeholder="MM/DD/YYYY"
-            className="flex h-12 items-center gap-2 px-3 py-2 bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900"
+            className="flex h-12 items-center gap-2 px-3 py-2 bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 cursor-not-allowed"
           />
         </div>
       </div>
@@ -101,20 +86,20 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => handleCountChange(numAdults, -1, onNumAdultsChange, 1)}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+                disabled
+                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-100 cursor-not-allowed transition-colors"
               >
-                <span className="text-gray-700">−</span>
+                <span className="text-gray-400">−</span>
               </button>
               <span className="[font-family:'Poppins',Helvetica] font-medium text-gray-900 text-sm w-6 text-center">
                 {numAdults}
               </span>
               <button
                 type="button"
-                onClick={() => handleCountChange(numAdults, 1, onNumAdultsChange, 1)}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+                disabled
+                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-100 cursor-not-allowed transition-colors"
               >
-                <span className="text-gray-700">+</span>
+                <span className="text-gray-400">+</span>
               </button>
             </div>
           </div>
@@ -127,20 +112,20 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => handleCountChange(numChildren, -1, onNumChildrenChange, 0)}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+                disabled
+                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-100 cursor-not-allowed transition-colors"
               >
-                <span className="text-gray-700">−</span>
+                <span className="text-gray-400">−</span>
               </button>
               <span className="[font-family:'Poppins',Helvetica] font-medium text-gray-900 text-sm w-6 text-center">
                 {numChildren}
               </span>
               <button
                 type="button"
-                onClick={() => handleCountChange(numChildren, 1, onNumChildrenChange, 0)}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+                disabled
+                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-100 cursor-not-allowed transition-colors"
               >
-                <span className="text-gray-700">+</span>
+                <span className="text-gray-400">+</span>
               </button>
             </div>
           </div>
@@ -153,20 +138,20 @@ export const TripContextDisplay: React.FC<TripContextDisplayProps> = ({
             <div className="flex items-center gap-3">
               <button
                 type="button"
-                onClick={() => handleCountChange(numPets, -1, onNumPetsChange, 0)}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+                disabled
+                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-100 cursor-not-allowed transition-colors"
               >
-                <span className="text-gray-700">−</span>
+                <span className="text-gray-400">−</span>
               </button>
               <span className="[font-family:'Poppins',Helvetica] font-medium text-gray-900 text-sm w-6 text-center">
                 {numPets}
               </span>
               <button
                 type="button"
-                onClick={() => handleCountChange(numPets, 1, onNumPetsChange, 0)}
-                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-white hover:bg-gray-50 cursor-pointer transition-colors"
+                disabled
+                className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center bg-gray-100 cursor-not-allowed transition-colors"
               >
-                <span className="text-gray-700">+</span>
+                <span className="text-gray-400">+</span>
               </button>
             </div>
           </div>
