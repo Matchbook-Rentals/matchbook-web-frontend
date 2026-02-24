@@ -81,10 +81,9 @@ In Vercel, add these environment variables:
 
 ```bash
 REDIS_URL=redis://:<redis_password>@<redis_host>:<redis_port>
-USE_EMAIL_QUEUE=true
 ```
 
-You can get the Redis URL from Railway dashboard.
+You can get the Redis URL from Railway dashboard. The email queue is always active when `REDIS_URL` is configured, with automatic fallback to direct sending if Redis is unavailable.
 
 ## Option 2: Render
 
@@ -178,7 +177,6 @@ resource "aws_ecs_task_definition" "worker" {
 
 - [ ] Set `RESEND_API_KEY` in worker environment
 - [ ] Configure Redis connection (URL, host, port, password)
-- [ ] Set `USE_EMAIL_QUEUE=true` in Next.js environment
 - [ ] Test email sending in staging environment
 - [ ] Set up monitoring alerts
 
@@ -320,12 +318,9 @@ railway rollback
 
 **Fallback to Direct Sending**:
 
-In Next.js environment (Vercel), set:
-```bash
-USE_EMAIL_QUEUE=false
-```
+If Redis becomes unavailable, the system automatically falls back to sending emails directly via the Resend API. No manual intervention is needed.
 
-This will send emails directly via Resend until worker is fixed.
+To fully disable the queue, remove the `REDIS_URL` environment variable from Vercel and redeploy.
 
 ## Cost Optimization
 

@@ -57,9 +57,6 @@ Add to `.env.local`:
 # Redis
 REDIS_URL=redis://localhost:6379
 
-# Enable queue mode
-USE_EMAIL_QUEUE=true
-
 # Resend (you already have this)
 RESEND_API_KEY=re_your_key_here
 ```
@@ -134,26 +131,13 @@ railway up
 Then in Vercel, set:
 ```bash
 REDIS_URL=<from_railway_redis>
-USE_EMAIL_QUEUE=true
 ```
 
 **Cost**: ~$15-20/month
 
-## Toggle Queue On/Off
+## Queue Fallback Behavior
 
-The system has built-in fallback. To switch modes:
-
-**Queue Mode** (recommended for production):
-```bash
-USE_EMAIL_QUEUE=true
-```
-
-**Direct Mode** (fallback, original behavior):
-```bash
-USE_EMAIL_QUEUE=false
-```
-
-If Redis is unavailable, it automatically falls back to direct sending.
+The email queue is always active when `REDIS_URL` is configured. If Redis becomes unavailable, the system automatically falls back to sending emails directly via the Resend API. No manual configuration is needed to toggle between modes.
 
 ## Monitoring
 
@@ -372,7 +356,7 @@ Add new endpoints to `java_backend/worker/src/main/java/com/matchbook/worker/con
 ## FAQ
 
 **Q: Do I need to change my email sending code?**
-A: No! Just set `USE_EMAIL_QUEUE=true`. All existing `sendNotificationEmail()` calls work unchanged.
+A: No! All existing `sendNotificationEmail()` calls work unchanged. The email queue is always active when `REDIS_URL` is configured.
 
 **Q: What if Redis goes down?**
 A: Automatic fallback to direct Resend API (original behavior).
@@ -381,7 +365,7 @@ A: Automatic fallback to direct Resend API (original behavior).
 A: Yes, use Redis CLI: `LRANGE matchbook:emails:pending 0 -1`
 
 **Q: How do I rollback?**
-A: Set `USE_EMAIL_QUEUE=false` in Next.js environment. Instant rollback.
+A: If Redis is unavailable, the system automatically falls back to direct sending. To fully disable the queue, remove the `REDIS_URL` environment variable.
 
 **Q: Does this work with my existing email templates?**
 A: Yes! Uses the same `generateEmailTemplateHtml()` function.

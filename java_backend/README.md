@@ -141,11 +141,7 @@ await emailQueueClient.enqueue({
 });
 ```
 
-Existing `sendNotificationEmail()` calls automatically use the queue when:
-
-```bash
-USE_EMAIL_QUEUE=true  # In Next.js .env.local
-```
+Existing `sendNotificationEmail()` calls automatically use the queue when `REDIS_URL` is configured. If Redis is unavailable, it falls back to direct sending.
 
 ## Monitoring
 

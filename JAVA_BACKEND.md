@@ -49,10 +49,9 @@ Add to `.env.local`:
 
 ```bash
 REDIS_URL=redis://localhost:6379
-USE_EMAIL_QUEUE=true
 ```
 
-That's it! All your existing `sendNotificationEmail()` calls now use the queue.
+That's it! All your existing `sendNotificationEmail()` calls now use the queue automatically when `REDIS_URL` is configured.
 
 ## Documentation
 
@@ -127,21 +126,9 @@ Add new services in `java_backend/worker/src/main/java/com/matchbook/worker/`.
 }
 ```
 
-## Toggle On/Off
+## Fallback Behavior
 
-The system has automatic fallback:
-
-**Queue Mode** (recommended):
-```bash
-USE_EMAIL_QUEUE=true  # In Next.js .env
-```
-
-**Direct Mode** (fallback):
-```bash
-USE_EMAIL_QUEUE=false  # Falls back to direct Resend API
-```
-
-If Redis is unavailable, it automatically falls back to direct sending.
+The email queue is always active when `REDIS_URL` is configured. If Redis becomes unavailable, the system automatically falls back to sending emails directly via the Resend API. No manual configuration is needed.
 
 ## Tech Stack
 
