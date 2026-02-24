@@ -4,7 +4,7 @@ import 'maplibre-gl/dist/maplibre-gl.css';
 import { useListingHoverStore } from '@/store/listing-hover-store';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
-import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
+import { useSearchContext } from '@/contexts/search-context-provider';
 import { useSearchParams } from 'next/navigation';
 import MapPinPopup from './map-pin-popup';
 
@@ -121,7 +121,7 @@ const SearchMap: React.FC<SearchMapProps> = ({
 
   const { hoveredListing } = useListingHoverStore();
   const { selectedMarker, setSelectedMarker } = useMapSelectionStore();
-  const { state: { filters, session } } = useGuestTripContext();
+  const { state: { filters, session } } = useSearchContext();
   const searchRadius = 100; // Default for guests
   const queryParams = useSearchParams();
 

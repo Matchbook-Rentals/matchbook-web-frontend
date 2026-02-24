@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import maplibregl from 'maplibre-gl';
 import { MapMarker } from '@/store/map-selection-store';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
@@ -25,6 +26,7 @@ interface MapPinPopupProps {
 }
 
 export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, trip, tripId }: MapPinPopupProps) {
+  const router = useRouter();
   const [position, setPosition] = useState<{ x: number; y: number } | null>(null);
   const [isHovered, setIsHovered] = useState(false);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
@@ -80,7 +82,13 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
   const handleCardClick = (e: React.MouseEvent) => {
     if ((e.target as HTMLElement).closest('button')) return;
     if ((e.target as HTMLElement).closest('.carousel-controls')) return;
-    window.open(`/search/listing/${listing.id}`, '_blank');
+    const url = `/search/listing/${listing.id}`;
+    const isMobile = window.innerWidth < 1024;
+    if (isMobile) {
+      router.push(url);
+    } else {
+      window.open(url, '_blank');
+    }
   };
 
   const handleHeartClick = (e: React.MouseEvent) => {

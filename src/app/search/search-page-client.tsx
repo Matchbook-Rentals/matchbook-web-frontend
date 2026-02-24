@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { SearchListing } from '@/types';
-import { GuestTripContext } from '@/contexts/guest-trip-context-provider';
+import { SearchContext } from '@/contexts/search-context-provider';
 import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { FilterOptions, matchesFilters } from '@/lib/listing-filters';
@@ -753,7 +753,7 @@ export default function SearchPageClient({
   const formatHeight = () => `${Math.max(calculatedHeight, 500)}px`;
 
   return (
-    <GuestTripContext.Provider value={contextValue}>
+    <SearchContext.Provider value={contextValue}>
       <div className="flex flex-col h-screen">
         <SearchResultsNavbar
           userId={userId}
@@ -907,6 +907,8 @@ export default function SearchPageClient({
                     requestedIds: new Set<string>(),
                     matchIds: new Set<string>(),
                   }}
+                  trip={tripData}
+                  tripId={currentTripId}
                 />
                 {(staleBounds || isSearching) && (
                   <Button
@@ -936,6 +938,6 @@ export default function SearchPageClient({
         listings={boundsFilteredListings}
         totalCount={boundsFilteredListings.length}
       />
-    </GuestTripContext.Provider>
+    </SearchContext.Provider>
   );
 }

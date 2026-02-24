@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import { ListingAndImages } from '@/types';
 import GuestSearchListingCard from './guest-search-listing-card';
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useGuestTripContext } from '@/contexts/guest-trip-context-provider';
+import { useSearchContext } from '@/contexts/search-context-provider';
 import { ListingStatus } from '@/constants/enums';
 import { useMapSelectionStore } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
@@ -35,7 +35,7 @@ const GuestSearchListingsGrid: React.FC<GuestSearchListingsGridProps> = ({
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const prevFilteredIdsRef = useRef<Set<string>>(new Set()); // Ref to store previous IDs
 
-  const { state, actions } = useGuestTripContext();
+  const { state, actions } = useSearchContext();
   const { session } = state;
   const { showAuthPrompt } = actions;
 

@@ -6,7 +6,7 @@ import { Button } from '@/components/ui/button';
 import { ChevronDown } from 'lucide-react';
 import { useMapSelectionStore, MapMarker } from '@/store/map-selection-store';
 import { useVisibleListingsStore } from '@/store/visible-listings-store';
-import GuestMobileMapClickListingCard from './guest-mobile-map-click-listing-card';
+import MapPinPopup from './map-pin-popup';
 
 // No longer using clustering
 
@@ -49,6 +49,8 @@ interface GuestSearchMapProps {
   onCenterChanged?: (lng: number, lat: number) => void;
   onBoundsChanged?: (bounds: { north: number; south: number; east: number; west: number }) => void;
   customSnapshot: any; // Required custom snapshot for guest mode
+  trip?: any;
+  tripId?: string;
 }
 
 const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
@@ -60,7 +62,9 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
   onClose,
   onCenterChanged = () => {},
   onBoundsChanged = () => {},
-  customSnapshot
+  customSnapshot,
+  trip,
+  tripId,
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
@@ -569,14 +573,15 @@ const GuestSearchMapMobile: React.FC<GuestSearchMapProps> = ({
 
       {mapLoaded === true && mapRef.current && (
         <>
-          {/* Listing Card */}
-          {selectedMarker && selectedMarker.listing && center && (
-            <GuestMobileMapClickListingCard
-              listing={selectedMarker.listing}
-              distance={calculateDistance(center[1], center[0], selectedMarker.lat, selectedMarker.lng)}
+          {/* Listing Card - uses same MapPinPopup as desktop */}
+          {selectedMarker && (
+            <MapPinPopup
+              marker={selectedMarker}
+              mapRef={mapRef}
               onClose={() => setSelectedMarker(null)}
-              className="top-2 left-1/2 transform -translate-x-1/2 w-[95%] z-40"
               customSnapshot={listingsSnapshot}
+              trip={trip}
+              tripId={tripId}
             />
           )}
           {/* Zoom controls */}
