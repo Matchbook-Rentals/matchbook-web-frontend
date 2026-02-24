@@ -2,7 +2,7 @@
 //Imports
 import prisma from "@/lib/prismadb";
 import { checkAuth } from '@/lib/auth-utils';
-import { ListingAndImages } from "@/types/";
+import { ListingAndImages, ListingWithRelations } from "@/types/";
 import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
 import { statesInRadiusData } from "@/constants/state-radius-data";
 import { STATE_CODE_MAPPING } from "@/constants/state-code-mapping";
@@ -84,7 +84,7 @@ export const pullListingsFromDb = async (
   state: string,
   startDate: Date, // Add startDate parameter
   endDate: Date    // Add endDate parameter
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   const startTime = performance.now();
 
   const userId = await checkAuth();
@@ -997,7 +997,7 @@ export const deleteUnavailability = async (unavailabilityId: string): Promise<vo
 }
 
 // Fetch a single listing by ID, including images, bedrooms, and unavailablePeriods
-export const getListingById = async (listingId: string): Promise<ListingAndImages | null> => {
+export const getListingById = async (listingId: string): Promise<ListingWithRelations | null> => {
   const userId = await checkAuth();
   try {
     const listing = await prisma.listing.findUnique({
@@ -1062,7 +1062,7 @@ export const getUserDraftListings = async () => {
 
 // Get paginated listings for the current host user
 export const getHostListings = async (page: number = 1, itemsPerPage: number = 10): Promise<{
-  listings: ListingAndImages[];
+  listings: ListingWithRelations[];
   totalCount: number;
   totalPages: number;
   currentPage: number;
@@ -1393,7 +1393,7 @@ export const restoreSoftDeletedListing = async (listingId: string) => {
  * Fetches random active listings for homepage display.
  * No authentication required - public endpoint.
  */
-export const getRandomActiveListings = async (count: number = 12): Promise<ListingAndImages[]> => {
+export const getRandomActiveListings = async (count: number = 12): Promise<ListingWithRelations[]> => {
   const fetchRandomListingIds = async () => {
     return prisma.$queryRaw<{ id: string }[]>`
       SELECT id
@@ -1416,7 +1416,7 @@ export const getRandomActiveListings = async (count: number = 12): Promise<Listi
     });
   };
 
-  const formatListingsForDisplay = (listings: any[]): ListingAndImages[] => {
+  const formatListingsForDisplay = (listings: any[]): ListingWithRelations[] => {
     return listings.map(listing => ({
       ...listing,
       displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
@@ -1441,7 +1441,7 @@ export const getRandomActiveListings = async (count: number = 12): Promise<Listi
  * Fetches random test listings for development/preview display.
  * Returns recently imported test listings.
  */
-export const getRandomTestListings = async (count: number = 12): Promise<ListingAndImages[]> => {
+export const getRandomTestListings = async (count: number = 12): Promise<ListingWithRelations[]> => {
   try {
     const listings = await prisma.listing.findMany({
       where: {
@@ -1477,7 +1477,7 @@ export const getListingsByLocation = async (
   city: string | null,
   state: string | null,
   count: number = 12
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   try {
     const whereClause: Prisma.ListingWhereInput = {
       deletedAt: null,
@@ -1557,7 +1557,7 @@ export const getListingsNearLocation = async (
   lng: number,
   count: number = 12,
   radiusMiles: number = 50
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   try {
     const earthRadiusMiles = 3959;
 
@@ -1625,7 +1625,7 @@ export const getListingsWithDates = async (
   radiusMiles: number,
   startDate: Date,
   endDate: Date
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   const earthRadiusMiles = 3959;
   const tripLengthDays = Math.max(1, differenceInDays(endDate, startDate));
   const tripLengthMonths = Math.max(1, Math.floor(tripLengthDays / 30.44));
@@ -1767,7 +1767,7 @@ export interface MapBounds {
   west: number;
 }
 
-export async function getListingsByBounds(bounds: MapBounds): Promise<ListingAndImages[]> {
+export async function getListingsByBounds(bounds: MapBounds): Promise<ListingWithRelations[]> {
   try {
     const listingsWithRating = await prisma.$queryRaw<{ id: string; avgRating: number }[]>`
       SELECT l.id,
@@ -1819,7 +1819,7 @@ export async function getListingsByBounds(bounds: MapBounds): Promise<ListingAnd
       .map(listing => ({
         ...listing,
         displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
-      })) as ListingAndImages[];
+      })) as ListingWithRelations[];
   } catch (error) {
     console.error('Error fetching listings by bounds:', error);
     return [];

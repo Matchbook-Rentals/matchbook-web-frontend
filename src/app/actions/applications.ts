@@ -621,7 +621,7 @@ export async function upsertApplication(data: any) {
       }
 
       // Revalidate paths to clear cached application data
-      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/searches');
       revalidatePath('/app/rent/applications/general');
 
       // Send notifications to listing owners with pending housing requests
@@ -817,7 +817,7 @@ export async function upsertApplication(data: any) {
       }
 
       // Revalidate paths to clear cached application data
-      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/searches');
       revalidatePath('/app/rent/applications/general');
 
       return { success: true, application };
@@ -1316,7 +1316,7 @@ export async function markComplete(applicationId: string) {
       });
 
       // Revalidate paths to clear cached application data
-      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/searches');
       revalidatePath('/app/rent/applications/general');
 
       return { success: true, application: updatedApplication };
