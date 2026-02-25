@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { ChevronLeft, ChevronRight as ChevronRightIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,6 +12,9 @@ import {
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import { SectionEmptyState } from './section-empty-state';
 import { SearchCard } from './search-card';
+import { useToast } from '@/components/ui/use-toast';
+import { deleteTrip } from '@/app/actions/trips';
+import { getLocationDisplay } from '../lib/dashboard-helpers';
 import type { DashboardTrip } from '@/app/actions/renter-dashboard';
 
 interface RecentSearchesSectionProps {
@@ -23,6 +26,73 @@ export const RecentSearchesSection = ({ searches, defaultOpen = false }: RecentS
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [hiddenSearchIds, setHiddenSearchIds] = useState<Set<string>>(new Set());
+  const deleteTimers = useRef<Map<string, NodeJS.Timeout>>(new Map());
+  const { toast } = useToast();
+
+  // Cleanup timers on unmount
+  useEffect(() => {
+    return () => {
+      deleteTimers.current.forEach((timer) => clearTimeout(timer));
+    };
+  }, []);
+
+  const handleDelete = useCallback((tripId: string) => {
+    const trip = searches.find((s) => s.id === tripId);
+    if (!trip) return;
+
+    // Hide immediately (optimistic)
+    setHiddenSearchIds((prev) => new Set(prev).add(tripId));
+
+    // Schedule permanent deletion after 5 seconds
+    const timer = setTimeout(async () => {
+      deleteTimers.current.delete(tripId);
+      const result = await deleteTrip(tripId);
+      if (!result.success) {
+        // Restore on failure
+        setHiddenSearchIds((prev) => {
+          const next = new Set(prev);
+          next.delete(tripId);
+          return next;
+        });
+        toast({
+          title: 'Error',
+          description: 'Failed to delete search',
+          variant: 'destructive',
+        });
+      }
+    }, 5000);
+    deleteTimers.current.set(tripId, timer);
+
+    const locationName = getLocationDisplay(trip);
+    const { dismiss } = toast({
+      title: 'Search deleted',
+      description: `${locationName} has been removed`,
+      action: (
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => {
+            // Cancel the permanent delete
+            const existingTimer = deleteTimers.current.get(tripId);
+            if (existingTimer) {
+              clearTimeout(existingTimer);
+              deleteTimers.current.delete(tripId);
+            }
+            // Restore in UI
+            setHiddenSearchIds((prev) => {
+              const next = new Set(prev);
+              next.delete(tripId);
+              return next;
+            });
+            dismiss();
+          }}
+        >
+          Undo
+        </Button>
+      ),
+    });
+  }, [searches, toast]);
 
   useEffect(() => {
     if (!api) return;
@@ -41,13 +111,15 @@ export const RecentSearchesSection = ({ searches, defaultOpen = false }: RecentS
     });
   }, [api]);
 
+  const visibleSearches = searches.filter((s) => !hiddenSearchIds.has(s.id));
+
   // Group searches into pairs for mobile
   const mobileSlides = [];
-  for (let i = 0; i < searches.length; i += 2) {
-    mobileSlides.push(searches.slice(i, i + 2));
+  for (let i = 0; i < visibleSearches.length; i += 2) {
+    mobileSlides.push(visibleSearches.slice(i, i + 2));
   }
 
-  const showNavigation = searches.length > 1;
+  const showNavigation = visibleSearches.length > 1;
 
   return (
     <section className="mb-8 overflow-x-hidden">
@@ -59,7 +131,7 @@ export const RecentSearchesSection = ({ searches, defaultOpen = false }: RecentS
             </span>
           </AccordionTrigger>
           <AccordionContent>
-            {searches.length === 0 ? (
+            {visibleSearches.length === 0 ? (
               <SectionEmptyState
                 imageSrc="/empty-states/no-searches.png"
                 title="No recent searches"
@@ -81,7 +153,7 @@ export const RecentSearchesSection = ({ searches, defaultOpen = false }: RecentS
                         <CarouselItem key={idx} className="pl-0 basis-full">
                           <div className="flex flex-col gap-2">
                             {slideTrips.map((trip) => (
-                              <SearchCard key={trip.id} trip={trip} compact />
+                              <SearchCard key={trip.id} trip={trip} compact onDelete={handleDelete} />
                             ))}
                           </div>
                         </CarouselItem>

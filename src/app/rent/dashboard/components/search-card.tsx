@@ -1,16 +1,17 @@
 'use client';
 
 import Link from 'next/link';
-import { ChevronRight, Home } from 'lucide-react';
+import { ChevronRight, Home, Trash2 } from 'lucide-react';
 import { getLocationDisplay, formatDateParts, formatOccupants } from '../lib/dashboard-helpers';
 import type { DashboardTrip } from '@/app/actions/renter-dashboard';
 
 interface SearchCardProps {
   trip: DashboardTrip;
   compact?: boolean;
+  onDelete?: (tripId: string) => void;
 }
 
-export const SearchCard = ({ trip, compact = false }: SearchCardProps) => {
+export const SearchCard = ({ trip, compact = false, onDelete }: SearchCardProps) => {
   const start = formatDateParts(trip.startDate);
   const end = formatDateParts(trip.endDate);
 
@@ -42,6 +43,20 @@ export const SearchCard = ({ trip, compact = false }: SearchCardProps) => {
       <div className="hidden min-[350px]:flex items-center font-poppins font-normal text-[#777b8b] text-[11px] truncate min-w-0 shrink-0">
         {formatOccupants(trip.numAdults, trip.numChildren, trip.numPets)}
       </div>
+
+      {onDelete && (
+        <button
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            onDelete(trip.id);
+          }}
+          className="shrink-0 p-1 rounded-md text-gray-400 hover:text-red-500 hover:bg-red-50 transition-colors"
+          aria-label="Delete search"
+        >
+          <Trash2 className="w-3.5 h-3.5" />
+        </button>
+      )}
 
       <ChevronRight className="w-5 h-5 text-primaryBrand shrink-0 transition-transform group-hover:scale-110" strokeWidth={3} />
     </Link>
