@@ -70,6 +70,23 @@ flowchart TD
     class A2 tested
 ```
 
+## Edge Cases
+
+```mermaid
+flowchart LR
+    classDef tested fill:#0d2818,stroke:#2ea043,stroke-width:2px,color:#e6edf3
+    classDef untested fill:#2d0f0f,stroke:#f85149,stroke-width:2px,color:#e6edf3,stroke-dasharray:5 5
+
+    subgraph EC_AUTH ["Auth redirect preserves trip details"]
+        direction LR
+        EC1["Guest fills dates<br/>on listing page"] -.-> EC2["Clicks Apply Now<br/>(auth modal)"]
+        EC2 -.-> EC3["Signs in via redirect"]
+        EC3 -.-> EC4["Returns to listing<br/>with dates + trip<br/>+ auto-apply"]
+    end
+
+    class EC1,EC2,EC3,EC4 untested
+```
+
 ## Coverage Summary
 
 | Step | Branch | Tested | Mobile ★ | Test File(s) | Notes |
@@ -89,6 +106,7 @@ flowchart TD
 | Prompted to Auth | Guest | ✅ | — | guest-likes.spec.ts | Auth modal on heart click tested |
 | Session Details Persist to Trip (Guest → Authed) | Guest | ✅ | — | guest-likes.spec.ts | |
 | Like Listings (optional) | Both (authed) | ✅ | — | guest-likes.spec.ts | Can skip — apply directly from listing page |
+| **Edge: Auth redirect preserves trip details** | Guest → Authed | ❌ | — | — | Guest fills dates, clicks Apply, signs in, returns with dates + trip created + auto-apply |
 | Apply to Listing — with trip details | Both | ❌ | — | — | Happy path |
 | Apply to Listing — without trip details | Both | ❌ | — | — | Details collected inline at apply time |
 | Wait for Host Approval | Both | ❌ | — | — | Host side |

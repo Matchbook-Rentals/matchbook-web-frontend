@@ -79,6 +79,8 @@ interface RenterListingActionBoxProviderProps {
   initialStartDate?: Date | null;
   initialEndDate?: Date | null;
   initialGuests?: Guests;
+  /** If true, automatically trigger apply on mount (used after auth redirect). */
+  autoApply?: boolean;
   /** If provided, called instead of the default server-action apply after auth check. Receives current dates + guests. */
   onApplyOverride?: (dates: { start: Date; end: Date }, guests: Guests) => void;
 }
@@ -86,7 +88,7 @@ interface RenterListingActionBoxProviderProps {
 export function RenterListingActionBoxProvider({
   children, listing, isAuthenticated, listingState = null,
   initialStartDate = null, initialEndDate = null, initialGuests,
-  onApplyOverride,
+  autoApply = false, onApplyOverride,
 }: RenterListingActionBoxProviderProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -230,6 +232,15 @@ export function RenterListingActionBoxProvider({
     }
     router.push(`/app/rent/messages?listingId=${listing.id}`);
   }, [isAuthenticated, listing.id, router]);
+
+  // Auto-apply after auth redirect
+  const hasAutoApplied = React.useRef(false);
+  React.useEffect(() => {
+    if (autoApply && !hasAutoApplied.current && isAuthenticated && startDate && endDate) {
+      hasAutoApplied.current = true;
+      handleApplyNow();
+    }
+  }, [autoApply, isAuthenticated, startDate, endDate, handleApplyNow]);
 
   // Assemble context value
   const state: RenterListingActionBoxState = {

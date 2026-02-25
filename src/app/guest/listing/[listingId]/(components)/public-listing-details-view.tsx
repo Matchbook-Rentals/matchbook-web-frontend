@@ -24,6 +24,7 @@ interface PublicListingDetailsViewProps {
   locationString: string;
   isAuthenticated?: boolean;
   isFavorited?: boolean;
+  tripId?: string;
 }
 
 const baseUrl = process.env.NEXT_PUBLIC_URL || "https://matchbookrentals.com";
@@ -33,11 +34,12 @@ export default function PublicListingDetailsView({
   locationString,
   isAuthenticated = false,
   isFavorited: initialIsFavorited = false,
+  tripId: serverTripId,
 }: PublicListingDetailsViewProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const fromUrl = searchParams.get('from');
-  const initialTripId = searchParams.get('tripId');
+  const initialTripId = serverTripId || searchParams.get('tripId');
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
