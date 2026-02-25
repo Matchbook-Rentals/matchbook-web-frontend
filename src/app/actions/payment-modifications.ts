@@ -30,7 +30,7 @@ export async function createPaymentModification({
       include: {
         booking: {
           include: {
-            listing: { select: { userId: true } },
+            listing: { select: { id: true, userId: true } },
             user: { select: { id: true } }
           }
         }
@@ -69,7 +69,7 @@ export async function createPaymentModification({
           include: {
             booking: {
               include: {
-                listing: { select: { title: true } }
+                listing: { select: { id: true, title: true, userId: true } }
               }
             }
           }
@@ -78,17 +78,26 @@ export async function createPaymentModification({
     })
 
     // Create notification for the recipient
-    const requestorName = paymentModification.requestor.fullName || 
+    const requestorName = paymentModification.requestor.fullName ||
       `${paymentModification.requestor.firstName || ''} ${paymentModification.requestor.lastName || ''}`.trim()
-    
+
+    const listingTitle = paymentModification.rentPayment.booking.listing.title
+
+    // Determine correct URL based on who the recipient is
+    const isRecipientHost = rentPayment.booking.listing.userId === recipientId
+    const notificationUrl = isRecipientHost
+      ? `/app/host/${rentPayment.booking.listingId}/bookings/${rentPayment.bookingId}/changes`
+      : `/app/rent/bookings/${rentPayment.bookingId}/changes`
+
     await createNotification({
       userId: recipientId,
-      title: 'Payment Modification Request',
-      message: `${requestorName} has requested to modify a payment for ${paymentModification.rentPayment.booking.listing.title}`,
-      type: 'payment_modification_request',
-      metadata: {
-        paymentModificationId: paymentModification.id,
-        bookingId: rentPayment.bookingId
+      content: `${requestorName} has requested to modify a payment for "${listingTitle}."`,
+      url: notificationUrl,
+      actionType: 'payment_modification_request',
+      actionId: paymentModification.id,
+      emailData: {
+        listingTitle,
+        senderName: requestorName
       }
     })
 
@@ -118,7 +127,7 @@ export async function approvePaymentModification(paymentModificationId: string) 
           include: {
             booking: {
               include: {
-                listing: { select: { title: true } }
+                listing: { select: { id: true, title: true, userId: true } }
               }
             }
           }
@@ -162,17 +171,27 @@ export async function approvePaymentModification(paymentModificationId: string) 
     ])
 
     // Notify the requestor of approval
-    const requestorName = paymentModification.requestor.fullName || 
-      `${paymentModification.requestor.firstName || ''} ${paymentModification.requestor.lastName || ''}`.trim()
-    
+    const approver = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { fullName: true, firstName: true, lastName: true }
+    })
+    const approverName = approver?.fullName ||
+      `${approver?.firstName || ''} ${approver?.lastName || ''}`.trim() || 'the other party'
+
+    const isRequestorHost = paymentModification.rentPayment.booking.listing.userId === paymentModification.requestorId
+    const approveNotificationUrl = isRequestorHost
+      ? `/app/host/${paymentModification.rentPayment.booking.listingId}/bookings/${paymentModification.rentPayment.bookingId}/changes`
+      : `/app/rent/bookings/${paymentModification.rentPayment.bookingId}/changes`
+
     await createNotification({
       userId: paymentModification.requestorId,
-      title: 'Payment Modification Approved',
-      message: `Your payment modification request for ${paymentModification.rentPayment.booking.listing.title} has been approved`,
-      type: 'payment_modification_approved',
-      metadata: {
-        paymentModificationId: paymentModification.id,
-        bookingId: paymentModification.rentPayment.bookingId
+      content: `Good news! Your payment modification for "${paymentModification.rentPayment.booking.listing.title}" has been approved by ${approverName}.`,
+      url: approveNotificationUrl,
+      actionType: 'payment_modification_approved',
+      actionId: paymentModification.id,
+      emailData: {
+        senderName: approverName,
+        listingTitle: paymentModification.rentPayment.booking.listing.title
       }
     })
 
@@ -202,7 +221,7 @@ export async function rejectPaymentModification(paymentModificationId: string, r
           include: {
             booking: {
               include: {
-                listing: { select: { title: true } }
+                listing: { select: { id: true, title: true, userId: true } }
               }
             }
           }
@@ -236,14 +255,27 @@ export async function rejectPaymentModification(paymentModificationId: string, r
     })
 
     // Notify the requestor of rejection
+    const rejecter = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { fullName: true, firstName: true, lastName: true }
+    })
+    const rejecterName = rejecter?.fullName ||
+      `${rejecter?.firstName || ''} ${rejecter?.lastName || ''}`.trim() || 'the other party'
+
+    const isRequestorHost = paymentModification.rentPayment.booking.listing.userId === paymentModification.requestorId
+    const rejectNotificationUrl = isRequestorHost
+      ? `/app/host/${paymentModification.rentPayment.booking.listingId}/bookings/${paymentModification.rentPayment.bookingId}/changes`
+      : `/app/rent/bookings/${paymentModification.rentPayment.bookingId}/changes`
+
     await createNotification({
       userId: paymentModification.requestorId,
-      title: 'Payment Modification Rejected',
-      message: `Your payment modification request for ${paymentModification.rentPayment.booking.listing.title} has been rejected${rejectionReason ? `: ${rejectionReason}` : ''}`,
-      type: 'payment_modification_rejected',
-      metadata: {
-        paymentModificationId: paymentModification.id,
-        bookingId: paymentModification.rentPayment.bookingId
+      content: `Your payment modification for "${paymentModification.rentPayment.booking.listing.title}" has been declined by ${rejecterName}.`,
+      url: rejectNotificationUrl,
+      actionType: 'payment_modification_rejected',
+      actionId: paymentModification.id,
+      emailData: {
+        senderName: rejecterName,
+        listingTitle: paymentModification.rentPayment.booking.listing.title
       }
     })
 
@@ -365,7 +397,7 @@ export async function getUserPaymentModifications(status?: 'pending' | 'approved
           include: {
             booking: {
               include: {
-                listing: { select: { title: true } }
+                listing: { select: { id: true, title: true, userId: true } }
               }
             }
           }

@@ -33,3 +33,6 @@ export * from './verification';
 
 // Guest session helpers (direct Prisma access for guest likes tests)
 export * from './guest-session';
+
+// Booking modification helpers (direct Prisma fixtures for modification tests)
+export * from './booking-modifications';

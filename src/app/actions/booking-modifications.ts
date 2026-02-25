@@ -373,7 +373,7 @@ export async function approveBookingModification(bookingModificationId: string) 
         requestor: { select: { fullName: true, firstName: true, lastName: true } },
         booking: {
           include: {
-            listing: { select: { id: true, title: true, userId: true, monthlyRent: true } },
+            listing: { select: { id: true, title: true, userId: true } },
             rentPayments: {
               where: { type: 'MONTHLY_RENT', cancelledAt: null },
               orderBy: { dueDate: 'asc' }
@@ -427,7 +427,7 @@ export async function approveBookingModification(bookingModificationId: string) 
     const stripePaymentMethodId = existingPayments[0]?.stripePaymentMethodId ?? null
 
     // Convert monthly rent from dollars to cents for calculation
-    const monthlyRentCents = dollarsToCents(booking.listing.monthlyRent)
+    const monthlyRentCents = dollarsToCents(booking.monthlyRent ?? 0)
 
     // Recalculate payments for the new date range
     const recalc = recalculatePaymentsForDateChange(
