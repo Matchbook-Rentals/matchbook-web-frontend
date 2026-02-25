@@ -5,7 +5,6 @@ import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
 import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { HomepageUserState } from '@/app/actions/homepage-user-state';
 import { useHomepageListingsContext } from '@/contexts/homepage-listings-context';
 import {
@@ -28,6 +27,7 @@ export interface ListingSection {
 
 interface PopularListingsSectionProps {
   sections: ListingSection[];
+  onExplore?: (section: ListingSection) => void;
 }
 
 type BadgeType = 'matched' | 'liked';
@@ -36,7 +36,7 @@ interface ListingRowProps {
   title: string;
   listings: ListingWithRelations[];
   showBadges?: boolean;
-  exploreHref?: string;
+  onExplore?: () => void;
   sectionTripId?: string;
   sectionCenter?: { lat: number; lng: number };
   sectionLocationString?: string;
@@ -74,7 +74,7 @@ const getListingState = (
   };
 };
 
-function ListingRow({ title, listings = [], showBadges = false, exploreHref, sectionTripId, sectionCenter, sectionLocationString }: ListingRowProps) {
+function ListingRow({ title, listings = [], showBadges = false, onExplore, sectionTripId, sectionCenter, sectionLocationString }: ListingRowProps) {
   const { state, actions } = useHomepageListingsContext();
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [canScrollLeft, setCanScrollLeft] = useState(false);
@@ -136,14 +136,13 @@ function ListingRow({ title, listings = [], showBadges = false, exploreHref, sec
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h3 className="text-[#404040] text-lg font-medium">{title}</h3>
-          {exploreHref ? (
-            <Link
-              href={exploreHref}
-              prefetch={false}
-              className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors"
+          {onExplore ? (
+            <button
+              onClick={onExplore}
+              className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors cursor-pointer"
             >
               <ArrowRight className="w-4 h-4 text-primaryBrand" />
-            </Link>
+            </button>
           ) : (
             <div className="p-1 rounded-full bg-primaryBrand/10">
               <ArrowRight className="w-4 h-4 text-primaryBrand" />
@@ -213,19 +212,7 @@ function ListingRow({ title, listings = [], showBadges = false, exploreHref, sec
   );
 }
 
-const buildExploreHref = (section: ListingSection): string | undefined => {
-  if (!section.center) return undefined;
-  const params = new URLSearchParams({
-    lat: section.center.lat.toString(),
-    lng: section.center.lng.toString(),
-  });
-  if (section.locationString) {
-    params.set('location', section.locationString);
-  }
-  return `/search?${params.toString()}`;
-};
-
-export default function PopularListingsSection({ sections }: PopularListingsSectionProps) {
+export default function PopularListingsSection({ sections, onExplore }: PopularListingsSectionProps) {
 
   const hasSections = sections.length > 0;
 
@@ -245,7 +232,7 @@ export default function PopularListingsSection({ sections }: PopularListingsSect
             title={section.title}
             listings={section.listings}
             showBadges={section.showBadges}
-            exploreHref={buildExploreHref(section)}
+            onExplore={onExplore && section.center ? () => onExplore(section) : undefined}
             sectionTripId={section.sectionTripId}
             sectionCenter={section.center}
             sectionLocationString={section.locationString}

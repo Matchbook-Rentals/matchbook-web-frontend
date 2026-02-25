@@ -9,6 +9,9 @@ import {
 } from '@/app/actions/listings';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { createTrip } from '@/app/actions/trips';
+import { createGuestTrip } from '@/app/actions/guest-trips';
+import { GuestSessionService } from '@/utils/guest-session';
+import { buildSearchUrl } from '@/app/search/search-page-client';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
 import { HomepageUserState } from '@/app/actions/homepage-user-state';
 import { IpLocation } from '@/lib/ip-geolocation';
@@ -267,6 +270,34 @@ export default function PopularListingsSectionWrapper({
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sectionsFetchKey]);
 
+  const handleExplore = useCallback(async (section: ListingSection) => {
+    if (!section.center) return;
+
+    const tripData = {
+      locationString: section.locationString || `${section.city}, ${section.state}` || 'Unknown',
+      latitude: section.center.lat,
+      longitude: section.center.lng,
+    };
+
+    try {
+      if (isSignedIn) {
+        const response = await createTrip(tripData);
+        if (response.success && response.trip) {
+          window.location.href = buildSearchUrl({ tripId: response.trip.id });
+        }
+      } else {
+        const response = await createGuestTrip(tripData);
+        if (response.success && response.sessionId) {
+          const sessionData = GuestSessionService.createGuestSessionData(tripData, response.sessionId);
+          GuestSessionService.storeSession(sessionData);
+          window.location.href = buildSearchUrl({ sessionId: response.sessionId });
+        }
+      }
+    } catch (error) {
+      console.error('Failed to create trip for explore:', error);
+    }
+  }, [isSignedIn]);
+
   // Show loading state while building sections
   if (isLoading && sections.length === 0) {
     return (
@@ -335,7 +366,7 @@ export default function PopularListingsSectionWrapper({
           onSignInPrompt: isSignedIn ? undefined : handleGuestApplyPrompt,
         }}
       >
-        <PopularListingsSection sections={sections} />
+        <PopularListingsSection sections={sections} onExplore={handleExplore} />
       </HomepageListingsProvider>
       <GuestAuthModal isOpen={showAuthModal} onOpenChange={setShowAuthModal} />
     </>
