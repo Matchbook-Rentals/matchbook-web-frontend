@@ -155,8 +155,6 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                   className="w-auto p-4 shadow-xl"
                   side="left"
                   align="start"
-                  sideOffset={8}
-                  collisionPadding={16}
                 >
                   <div className="flex flex-col gap-3">
                     <SearchDateRange
@@ -207,8 +205,6 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
                   className="w-auto p-4 shadow-xl"
                   side="bottom"
                   align="start"
-                  alignOffset={-50}
-                  sideOffset={-50}
                 >
                   <div className="flex flex-col gap-3">
                     <div className="min-w-[280px]">
