@@ -30,14 +30,16 @@ export const GuestAuthModal: React.FC<GuestAuthModalProps> = ({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       heightStyle="!top-[30vh]"
-      className="max-w-md"
+      className="max-w-md w-[calc(100vw-2rem)] sm:w-full"
     >
       <div className="px-6">
         <h3 className="text-lg font-semibold mb-4">Sign in required</h3>
         <p className="text-gray-600 mb-6">
-          Please sign in to continue. You must have an account to save favorites and apply to listings.
+          Please sign in to continue.
+          <br />
+          You must have an account to save favorites and apply to listings.
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
           <BrandButton
             variant="outline"
             onClick={handleCancel}

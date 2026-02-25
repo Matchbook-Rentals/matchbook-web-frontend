@@ -344,19 +344,20 @@ export default function ApplicationWizard({
 
       {/* Sticky footer */}
       <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 px-4 py-4 pb-[max(env(safe-area-inset-bottom),16px)] z-20">
-        <div className="max-w-3xl mx-auto flex justify-between items-center">
+        <div className="max-w-3xl mx-auto flex justify-between items-center gap-3">
           <BrandButton
             variant="outline"
             size="sm"
             onClick={onBack}
             className="font-semibold"
           >
-            Back to Listing
+            <span className="hidden sm:inline">Back to Listing</span>
+            <span className="sm:hidden">Back</span>
           </BrandButton>
           <Button
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="bg-[#3c8787] hover:bg-[#2d6b6b] text-white font-semibold px-8"
+            className="bg-[#3c8787] hover:bg-[#2d6b6b] text-white font-semibold px-4 sm:px-8 text-sm sm:text-base"
           >
             {isSubmitting ? 'Submitting...' : 'Submit Application'}
           </Button>

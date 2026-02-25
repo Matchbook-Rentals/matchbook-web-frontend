@@ -736,4 +736,44 @@ test.describe('Guest Browse', () => {
       await context.close();
     });
   });
+
+  // -----------------------------------------------------------------------
+  // Edge Case: Guest Apply triggers auth modal with redirect
+  // -----------------------------------------------------------------------
+  test.describe('Edge Case: Guest Apply triggers auth redirect', () => {
+
+    test('guest clicking Apply Now shows auth modal', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const href = await page.locator('a[href*="/search/listing/"]').first().getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate to listing with date params (simulating a guest who entered dates)
+      const startDate = new Date(Date.now() + 30 * 86400000).toISOString();
+      const endDate = new Date(Date.now() + 120 * 86400000).toISOString();
+      await page.goto(
+        `/search/listing/${listingId}?startDate=${startDate}&endDate=${endDate}&numAdults=1`
+      );
+      await page.waitForLoadState('domcontentloaded');
+
+      // Since guest with dates, button should say "Apply Now" (desktop or mobile footer)
+      const applyButton = page.locator('button:has-text("Apply Now")').first();
+      await applyButton.scrollIntoViewIfNeeded();
+      await expect(applyButton).toBeVisible({ timeout: 20_000 });
+      await applyButton.click();
+
+      // Auth modal should appear
+      const authModal = page.locator('[role="dialog"]');
+      await expect(authModal).toBeVisible({ timeout: 5_000 });
+
+      // Sign In button should be present
+      const signInButton = authModal.locator('button:has-text("Sign In")');
+      await expect(signInButton).toBeVisible({ timeout: 5_000 });
+    });
+  });
 });

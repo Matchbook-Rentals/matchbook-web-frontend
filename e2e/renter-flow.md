@@ -84,7 +84,7 @@ flowchart LR
         EC3 -.-> EC4["Returns to listing<br/>with dates + trip<br/>+ auto-apply"]
     end
 
-    class EC1,EC2,EC3,EC4 untested
+    class EC1,EC2,EC3,EC4 tested
 ```
 
 ## Coverage Summary
@@ -106,7 +106,7 @@ flowchart LR
 | Prompted to Auth | Guest | ✅ | — | guest-likes.spec.ts | Auth modal on heart click tested |
 | Session Details Persist to Trip (Guest → Authed) | Guest | ✅ | — | guest-likes.spec.ts | |
 | Like Listings (optional) | Both (authed) | ✅ | — | guest-likes.spec.ts | Can skip — apply directly from listing page |
-| **Edge: Auth redirect preserves trip details** | Guest → Authed | ❌ | — | — | Guest fills dates, clicks Apply, signs in, returns with dates + trip created + auto-apply |
+| **Edge: Auth redirect preserves trip details** | Guest → Authed | ✅ | — | renter-authed.spec.ts, guest-browse.spec.ts | Guest fills dates, clicks Apply, signs in, returns with dates + trip created + auto-apply |
 | Apply to Listing — with trip details | Both | ❌ | — | — | Happy path |
 | Apply to Listing — without trip details | Both | ❌ | — | — | Details collected inline at apply time |
 | Wait for Host Approval | Both | ❌ | — | — | Host side |

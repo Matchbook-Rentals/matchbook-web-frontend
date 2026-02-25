@@ -561,6 +561,72 @@ test.describe('Authenticated Renter', () => {
   });
 
   // -----------------------------------------------------------------------
+  // Edge Case: Auth redirect preserves trip details
+  // -----------------------------------------------------------------------
+  test.describe('Edge Case: Auth redirect preserves trip details', () => {
+
+    test('landing with date params and isApplying shows application wizard', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const href = await page.locator('a[href*="/search/listing/"]').first().getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Simulate post-auth redirect: navigate to listing with date params + isApplying
+      const startDate = new Date(Date.now() + 30 * 86400000).toISOString(); // 30 days from now
+      const endDate = new Date(Date.now() + 120 * 86400000).toISOString();  // 120 days from now
+      await page.goto(
+        `/search/listing/${listingId}?startDate=${startDate}&endDate=${endDate}&numAdults=1&isApplying=true`
+      );
+      await page.waitForLoadState('domcontentloaded');
+
+      // Should land directly on the application wizard with "Submit Application" button
+      const submitButton = page.locator('button:has-text("Submit Application")');
+      await expect(submitButton).toBeVisible({ timeout: 30_000 });
+    });
+
+    test('landing with date params pre-fills dates in action box', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const href = await page.locator('a[href*="/search/listing/"]').first().getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate with dates but WITHOUT isApplying (just checking date pre-fill)
+      const startDate = new Date(Date.now() + 30 * 86400000).toISOString();
+      const endDate = new Date(Date.now() + 120 * 86400000).toISOString();
+      await page.goto(
+        `/search/listing/${listingId}?startDate=${startDate}&endDate=${endDate}&numAdults=1`
+      );
+      await page.waitForLoadState('domcontentloaded');
+
+      // Dates should be pre-filled — look for "Apply Now" on desktop action box or mobile footer
+      // Desktop: button only appears when hasDates && hasRenterInfo
+      // Mobile footer: shows "Apply Now" when hasDates, "Check Availability" otherwise
+      const applyButton = page.locator('button:has-text("Apply Now")');
+      await expect(applyButton.first()).toBeVisible({ timeout: 20_000 });
+
+      // "Check Availability" should NOT be visible (dates are pre-filled)
+      const checkButton = page.locator('button:has-text("Check Availability")');
+      await expect(checkButton).not.toBeVisible({ timeout: 3_000 });
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // Story 11: Renter Dashboard
   // -----------------------------------------------------------------------
   test.describe('Story 11: Renter Dashboard', () => {
