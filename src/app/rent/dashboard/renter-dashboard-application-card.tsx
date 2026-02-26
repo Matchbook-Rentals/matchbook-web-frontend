@@ -1,4 +1,8 @@
-import { MoreVerticalIcon, Home } from "lucide-react";
+'use client';
+
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { MoreVerticalIcon, Home, X } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
@@ -9,6 +13,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
+import { optimisticRemoveApplyDb } from "@/app/actions/housing-requests";
 import Link from "next/link";
 
 interface RenterDashboardApplicationCardProps {
@@ -20,6 +35,7 @@ interface RenterDashboardApplicationCardProps {
   imageUrl: string;
   applicationId: string;
   listingId?: string;
+  tripId?: string;
   userId?: string;
 }
 
@@ -32,9 +48,14 @@ export const RenterDashboardApplicationCard = ({
   imageUrl,
   applicationId,
   listingId,
+  tripId,
   userId,
 }: RenterDashboardApplicationCardProps): JSX.Element => {
+  const [showWithdrawDialog, setShowWithdrawDialog] = useState(false);
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
+  const router = useRouter();
   return (
+    <>
     <Card className="w-full bg-inherit rounded-[15px] border-[0.4px] border-[#0b6e6e] shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)] overflow-hidden">
       <CardContent className="p-[17px]">
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
@@ -81,6 +102,15 @@ export const RenterDashboardApplicationCard = ({
                     </Link>
                   </DropdownMenuItem>
                 )}
+                <DropdownMenuItem
+                  onClick={() => setShowWithdrawDialog(true)}
+                  className="cursor-pointer flex items-center gap-2"
+                >
+                  <X className="w-4 h-4 text-black" />
+                  <span className="[font-family:'Poppins',Helvetica] font-medium text-sm">
+                    Withdraw Application
+                  </span>
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
 
@@ -129,5 +159,39 @@ export const RenterDashboardApplicationCard = ({
         </div>
       </CardContent>
     </Card>
+
+    <AlertDialog open={showWithdrawDialog} onOpenChange={setShowWithdrawDialog}>
+      <AlertDialogContent>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Withdraw Application</AlertDialogTitle>
+          <AlertDialogDescription>
+            Are you sure you want to withdraw your application for {title}? This action cannot be undone.
+          </AlertDialogDescription>
+        </AlertDialogHeader>
+        <AlertDialogFooter>
+          <AlertDialogCancel disabled={isWithdrawing}>Cancel</AlertDialogCancel>
+          <AlertDialogAction
+            disabled={isWithdrawing || !tripId || !listingId}
+            onClick={async (e) => {
+              e.preventDefault();
+              if (!tripId || !listingId) return;
+              setIsWithdrawing(true);
+              try {
+                await optimisticRemoveApplyDb(tripId, listingId);
+                setShowWithdrawDialog(false);
+                router.refresh();
+              } catch (error) {
+                console.error('Failed to withdraw application:', error);
+              } finally {
+                setIsWithdrawing(false);
+              }
+            }}
+          >
+            {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
+          </AlertDialogAction>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
+    </>
   );
 };

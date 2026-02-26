@@ -52,6 +52,7 @@ export const ApplicationsSection = ({ applications }: ApplicationsSectionProps) 
                       imageUrl={app.listing?.listingImages?.[0]?.url || PLACEHOLDER_IMAGE}
                       applicationId={app.id}
                       listingId={app.listingId}
+                      tripId={app.tripId}
                       userId={app.listing?.user?.id}
                     />
                   );
