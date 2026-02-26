@@ -144,6 +144,7 @@ interface ApplicationErrors {
 }
 
 export const initialState = {
+  autoSaveEnabled: true,
   tripId: undefined as string | undefined,
   moveInDate: undefined as Date | undefined,
   moveOutDate: undefined as Date | undefined,
@@ -182,6 +183,7 @@ export const initialState = {
 };
 
 interface ApplicationState {
+  autoSaveEnabled: boolean;
   tripId?: string;
   moveInDate?: Date;
   moveOutDate?: Date;
@@ -207,6 +209,7 @@ interface ApplicationState {
   serverIsComplete: boolean;
 
   // Actions
+  setAutoSaveEnabled: (enabled: boolean) => void;
   setTripId: (tripId: string) => void;
   setMoveInDate: (date: Date) => void;
   setMoveOutDate: (date: Date) => void;
@@ -296,6 +299,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   ...initialState,
   originalData: { ...initialState },
 
+  setAutoSaveEnabled: (enabled) => set({ autoSaveEnabled: enabled }),
   setTripId: (tripId) => set({ tripId }),
   setMoveInDate: (date) => set({ moveInDate: date }),
   setMoveOutDate: (date) => set({ moveOutDate: date }),
@@ -723,6 +727,11 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   // Save a single field with debouncing handled by the component
   saveField: async (fieldPath, value, options) => {
     const state = get();
+
+    // Skip auto-save when disabled (e.g. in the listing submit wizard)
+    if (!state.autoSaveEnabled) {
+      return { success: true, fieldPath, skipped: true };
+    }
     
     // Validate the field first
     const error = get().validateField(fieldPath, value);

@@ -79,6 +79,7 @@ export default function ApplicationWizard({
     resetStore,
     setErrors,
     markSynced,
+    setAutoSaveEnabled,
   } = useApplicationStore();
 
   const hasInitialized = useRef(false);
@@ -88,6 +89,7 @@ export default function ApplicationWizard({
     hasInitialized.current = true;
 
     resetStore();
+    setAutoSaveEnabled(false);
 
     // Initialize trip context from props
     if (tripContext) {
@@ -111,7 +113,9 @@ export default function ApplicationWizard({
       }
     };
     fetchFull();
-  }, [application, initializeFromApplication, resetStore, tripContext, setMoveInDate, setMoveOutDate, setNumAdults, setNumChildren, setNumPets]);
+
+    return () => setAutoSaveEnabled(true);
+  }, [application, initializeFromApplication, resetStore, tripContext, setMoveInDate, setMoveOutDate, setNumAdults, setNumChildren, setNumPets, setAutoSaveEnabled]);
 
   const getFirstErrorMessage = (errors: any): string | null => {
     if (errors.personalInfo) {
