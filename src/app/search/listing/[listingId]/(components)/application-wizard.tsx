@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
@@ -82,7 +82,12 @@ export default function ApplicationWizard({
     markSynced,
   } = useApplicationStore();
 
+  const hasInitialized = useRef(false);
+
   useEffect(() => {
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
     resetStore();
 
     // Initialize trip context from props
@@ -192,11 +197,6 @@ export default function ApplicationWizard({
     return {
       ...personalInfo,
       dateOfBirth: formattedDateOfBirth,
-      moveInDate: moveInDate?.toISOString(),
-      moveOutDate: moveOutDate?.toISOString(),
-      numAdults,
-      numChildren,
-      numPets,
       ...answers,
       incomes,
       identifications: ids.map((id) => ({
@@ -232,7 +232,27 @@ export default function ApplicationWizard({
 
     setIsSubmitting(true);
     try {
-      // 1. First create/get the trip (this may create one if tripId is missing)
+      // 1. Save the application first — use default (no tripId) if none exists yet
+      const applicationData = buildApplicationData();
+      const upsertResult = await upsertApplication({
+        ...applicationData,
+        ...(tripContext.tripId ? { tripId: tripContext.tripId } : {}),
+      });
+
+      if (!upsertResult.success) {
+        toast({ title: 'Error', description: `Failed to save application: ${upsertResult.error || 'unknown error'}`, variant: 'destructive' });
+        setIsSubmitting(false);
+        return;
+      }
+
+      markSynced();
+
+      // 2. Mark as complete so application limit check passes
+      if (upsertResult.application?.id) {
+        await markComplete(upsertResult.application.id);
+      }
+
+      // 3. Now apply to listing (creates trip if needed and housing request)
       const applyResult = await applyToListingFromSearch(listing.id, {
         tripId: tripContext.tripId,
         startDate: tripContext.startDate,
@@ -247,26 +267,6 @@ export default function ApplicationWizard({
         });
         setIsSubmitting(false);
         return;
-      }
-
-      // 2. Now we have a guaranteed tripId - save the trip-specific application
-      const applicationData = buildApplicationData();
-      const upsertResult = await upsertApplication({
-        ...applicationData,
-        tripId: applyResult.tripId, // Use the returned tripId (guaranteed to exist)
-      });
-
-      if (!upsertResult.success) {
-        toast({ title: 'Error', description: 'Failed to save application', variant: 'destructive' });
-        setIsSubmitting(false);
-        return;
-      }
-
-      markSynced();
-
-      // 3. Mark as complete
-      if (upsertResult.application?.id) {
-        await markComplete(upsertResult.application.id);
       }
 
       toast({ title: 'Success', description: 'Application submitted successfully!' });

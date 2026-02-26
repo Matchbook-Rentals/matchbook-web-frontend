@@ -65,7 +65,8 @@ flowchart TD
     class G4 tested
     class A1 mobile
     class C tested
-    class UNIFY,MERGE,AP1,AP2,I,J,K untested
+    class AP1 tested
+    class UNIFY,MERGE,AP2,I,J,K untested
     class A3 mobile
     class A2 tested
 ```
@@ -107,7 +108,7 @@ flowchart LR
 | Session Details Persist to Trip (Guest → Authed) | Guest | ✅ | — | guest-likes.spec.ts | |
 | Like Listings (optional) | Both (authed) | ✅ | — | guest-likes.spec.ts | Can skip — apply directly from listing page |
 | **Edge: Auth redirect preserves trip details** | Guest → Authed | ✅ | — | renter-authed.spec.ts, guest-browse.spec.ts | Guest fills dates, clicks Apply, signs in, returns with dates + trip created + auto-apply |
-| Apply to Listing — with trip details | Both | ❌ | — | — | Happy path |
+| Apply to Listing — with trip details | Both | ✅ | — | renter-authed.spec.ts | Story 07: fill wizard + submit |
 | Apply to Listing — without trip details | Both | ❌ | — | — | Details collected inline at apply time |
 | Wait for Host Approval | Both | ❌ | — | — | Host side |
 | Click "Book Now" on Match | Both | ❌ | — | — | |

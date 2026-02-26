@@ -629,6 +629,110 @@ test.describe('Authenticated Renter', () => {
   });
 
   // -----------------------------------------------------------------------
+  // Story 07: Apply to Listing
+  // -----------------------------------------------------------------------
+  test.describe('Story 07: Apply to Listing', () => {
+    test('apply to listing with trip details (Story 07)', async ({ page, context }) => {
+      test.setTimeout(120_000);
+      await grantGeolocation(context);
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const href = await page.locator('a[href*="/search/listing/"]').first().getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate with date params + isApplying=true to open wizard directly
+      const startDate = new Date(Date.now() + 30 * 86400000).toISOString();
+      const endDate = new Date(Date.now() + 120 * 86400000).toISOString();
+      await page.goto(`/search/listing/${listingId}?startDate=${startDate}&endDate=${endDate}&numAdults=1&isApplying=true`);
+      await page.waitForLoadState('domcontentloaded');
+
+      const submitButton = page.locator('button:has-text("Submit Application")');
+      await expect(submitButton).toBeVisible({ timeout: 30_000 });
+      // Wait for async initialization to complete
+      await page.waitForTimeout(5_000);
+
+      // --- Personal Info ---
+      await page.getByPlaceholder('Enter First Name').fill('Test');
+      await page.getByPlaceholder('Enter Last Name').fill('Renter');
+      const noMiddleName = page.getByText('No Middle Name').locator('..').locator('input[type="checkbox"], button[role="checkbox"]');
+      await noMiddleName.first().click();
+      // DOB — the third MM/DD/YYYY input (first two are move-in/move-out)
+      const dobInput = page.getByRole('textbox', { name: 'MM/DD/YYYY' }).nth(2);
+      await dobInput.scrollIntoViewIfNeeded();
+      await dobInput.fill('01/15/1990');
+
+      // --- Identification ---
+      const idTypeSelect = page.locator('button[role="combobox"]').first();
+      await idTypeSelect.click();
+      await page.getByText("Driver's License", { exact: false }).click();
+      await page.getByPlaceholder('Enter ID Number').fill('DL123456789');
+
+      // ID photo upload via UploadThing filechooser
+      const idUploadArea = page.locator('text=Drag and drop file or').first().locator('..');
+      const [idFileChooser] = await Promise.all([
+        page.waitForEvent('filechooser'),
+        idUploadArea.click(),
+      ]);
+      await idFileChooser.setFiles('e2e/fixtures/test-id.png');
+      await expect(page.locator('text=test-id.png').first()).toBeVisible({ timeout: 15_000 });
+
+      // --- Residential History ---
+      await page.getByPlaceholder('Enter Street Address').fill('123 Test St');
+      await page.getByPlaceholder('Enter City').fill('Salt Lake City');
+      await page.getByPlaceholder('Enter State').fill('Utah');
+      await page.getByPlaceholder('Enter ZIP Code').fill('84101');
+
+      // Duration of tenancy — set to 24 months (meets 24-month requirement)
+      const durationInput = page.locator('input[type="number"]').first();
+      await durationInput.fill('24');
+
+      // Monthly payment
+      const monthlyPaymentInput = page.locator('#monthlyPayment-0');
+      await monthlyPaymentInput.scrollIntoViewIfNeeded();
+      await monthlyPaymentInput.click();
+      await monthlyPaymentInput.fill('1500');
+
+      // Housing status: "I own this property" (skips landlord fields)
+      await page.locator('#own-0').scrollIntoViewIfNeeded();
+      await page.locator('#own-0').click({ force: true });
+      await expect(page.getByPlaceholder("Enter landlord's first name")).not.toBeVisible({ timeout: 5_000 });
+
+      // --- Income ---
+      await page.getByPlaceholder('Enter your Income Source').fill('Software Engineering');
+      await page.getByPlaceholder('Enter Monthly Amount').fill('8000');
+
+      // Income proof upload
+      const incomeUploadArea = page.locator('text=Drag and drop file or').first().locator('..');
+      const [incomeFileChooser] = await Promise.all([
+        page.waitForEvent('filechooser'),
+        incomeUploadArea.click(),
+      ]);
+      await incomeFileChooser.setFiles('e2e/fixtures/test-id.png');
+      await expect(page.locator('h3:has-text("Income Proof 1")').first()).toBeVisible({ timeout: 15_000 });
+      await page.waitForTimeout(3_000);
+
+      // --- Questionnaire ---
+      const felonyNo = page.locator('#felony-no');
+      await felonyNo.scrollIntoViewIfNeeded();
+      await felonyNo.click();
+      await page.locator('#evicted-no').click();
+
+      // --- Submit ---
+      await expect(page.getByPlaceholder('Enter First Name')).toHaveValue('Test');
+      await expect(page.getByPlaceholder('Enter your Income Source')).toHaveValue('Software Engineering');
+
+      await submitButton.click();
+      await expect(page.getByText('Application Submitted!')).toBeVisible({ timeout: 30_000 });
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // Story 11: Renter Dashboard
   // -----------------------------------------------------------------------
   test.describe('Story 11: Renter Dashboard', () => {

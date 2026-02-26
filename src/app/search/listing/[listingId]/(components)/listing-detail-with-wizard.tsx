@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { SearchListing } from '@/types';
 import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view';
@@ -46,7 +46,7 @@ export default function ListingDetailWithWizard({
   const [collectedGuests, setCollectedGuests] = useState<{ adults: number; children: number; pets: number } | null>(null);
   const [hasAppliedLocal, setHasAppliedLocal] = useState(false);
 
-  const effectiveTripContext = collectedDates
+  const effectiveTripContext = useMemo(() => collectedDates
     ? {
         tripId: initialTripContext?.tripId,
         startDate: collectedDates.start,
@@ -64,7 +64,9 @@ export default function ListingDetailWithWizard({
         numChildren: initialTripContext.numChildren ?? 0,
         numPets: initialTripContext.numPets ?? 0,
       }
-    : null;
+    : null,
+    [collectedDates, collectedGuests, initialTripContext]
+  );
 
   const effectiveListingState = hasAppliedLocal
     ? { hasApplied: true, isMatched: initialListingState?.isMatched ?? false }
