@@ -19,6 +19,8 @@
 import { test, expect } from '@playwright/test';
 import { setupClerkTestingToken } from '@clerk/testing/playwright';
 import { signIn, getTestUser } from './helpers/auth';
+import { getTestPrisma } from './helpers/prisma';
+import { getUserIdByEmail, createTripViaAPI } from './helpers/trip';
 
 /** Grant geolocation so listing sections render. */
 async function grantGeolocation(context: import('@playwright/test').BrowserContext) {
@@ -648,6 +650,89 @@ test.describe('Authenticated Renter', () => {
 
       // Should redirect to sign-in
       await page.waitForURL(/sign-in/, { timeout: 15_000 });
+    });
+
+    test('can withdraw an application from the dashboard', async ({ page, request }) => {
+      test.setTimeout(90_000);
+      const prisma = getTestPrisma();
+
+      // --- Setup fixture ---
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Get the test user's DB userId
+      const userId = await getUserIdByEmail(request, testUser.email);
+      expect(userId).toBeTruthy();
+
+      // Find a listing NOT owned by the test user
+      const listing = await prisma.listing.findFirst({
+        where: { userId: { not: userId! } },
+        select: { id: true, title: true },
+      });
+      expect(listing).toBeTruthy();
+
+      // Create a trip for the test user
+      const startDate = new Date(Date.now() + 30 * 86400000);
+      const endDate = new Date(Date.now() + 120 * 86400000);
+      const tripId = await createTripViaAPI(request, userId!, {
+        location: 'Salt Lake City, UT',
+        latitude: 40.7608,
+        longitude: -111.891,
+        startDate,
+        endDate,
+        numAdults: 1,
+      });
+
+      // Create a housing request (application) via Prisma
+      const housingRequest = await prisma.housingRequest.create({
+        data: {
+          userId: userId!,
+          listingId: listing!.id,
+          tripId,
+          startDate,
+          endDate,
+          status: 'pending',
+        },
+      });
+
+      // --- Navigate + interact ---
+      await page.goto('/rent/dashboard');
+      await page.waitForLoadState('networkidle');
+
+      // Open the Applications accordion
+      const accordionTrigger = page.locator('button').filter({ hasText: 'Applications' });
+      await accordionTrigger.click();
+
+      // Find the application card by listing title
+      const card = page.locator('h3', { hasText: listing!.title });
+      await expect(card).toBeVisible({ timeout: 10_000 });
+
+      // Click the 3-dot menu on that card
+      const cardRow = card.locator('..').locator('..');
+      const moreButton = cardRow.locator('button:has(svg.lucide-more-vertical)');
+      await moreButton.click();
+
+      // Click "Withdraw Application"
+      await page.getByText('Withdraw Application').click();
+
+      // Confirm the AlertDialog
+      const withdrawButton = page.getByRole('alertdialog').getByRole('button', { name: 'Withdraw' });
+      await expect(withdrawButton).toBeVisible({ timeout: 5_000 });
+      await withdrawButton.click();
+
+      // --- Assert ---
+      // Card should disappear after the page refreshes
+      await expect(card).not.toBeVisible({ timeout: 15_000 });
+
+      // Verify the housing request is gone from the DB
+      const dbRecord = await prisma.housingRequest.findUnique({
+        where: { id: housingRequest.id },
+      });
+      expect(dbRecord).toBeNull();
+
+      // Cleanup: delete the trip we created
+      await prisma.trip.delete({ where: { id: tripId } }).catch(() => {});
     });
   });
 });
