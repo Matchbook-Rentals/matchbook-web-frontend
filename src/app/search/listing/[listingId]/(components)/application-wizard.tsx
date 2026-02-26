@@ -21,7 +21,6 @@ import {
   validateIncome,
   validateQuestionnaire,
 } from '@/utils/application-validation';
-import { SaveStatusIndicator } from '@/components/ui/save-status-indicator';
 import { ApplicationItemHeaderStyles } from '@/constants/styles';
 import { TripContextDisplay } from '@/components/application/trip-context-display';
 
@@ -242,7 +241,7 @@ export default function ApplicationWizard({
       });
 
       if (!upsertResult.success) {
-        toast({ title: 'Error', description: `Failed to save application: ${upsertResult.error || 'unknown error'}`, variant: 'destructive' });
+        toast({ title: 'Error', description: upsertResult.error || 'Failed to submit application', variant: 'destructive' });
         setIsSubmitting(false);
         return;
       }
@@ -293,8 +292,6 @@ export default function ApplicationWizard({
 
   return (
     <div className="w-full max-w-3xl mx-auto pb-24">
-      <SaveStatusIndicator />
-
       {/* Header Section */}
       <div className="flex items-center gap-4 w-full mb-10">
         <BrandButton
