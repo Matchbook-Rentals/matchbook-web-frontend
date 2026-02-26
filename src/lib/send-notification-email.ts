@@ -7,7 +7,13 @@ import { SendNotificationEmailInput, SendNotificationEmailResponse } from '@/typ
 import { generateEmailTemplateHtml } from '@/lib/email-template-html'
 import { emailQueueClient } from '@/lib/email-queue-client'
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+// Lazily initialize Resend client only when needed and API key is available
+let _resend: Resend | null = null;
+function getResendClient(): Resend | null {
+  if (!process.env.RESEND_API_KEY) return null;
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 export async function sendNotificationEmail({
   to,
@@ -73,6 +79,12 @@ async function sendDirectly({
   emailData
 }: SendNotificationEmailInput): Promise<SendNotificationEmailResponse> {
   try {
+    const resend = getResendClient();
+    if (!resend) {
+      console.warn('[Email] RESEND_API_KEY not configured, skipping email send');
+      return { success: false, error: 'Email service not configured' };
+    }
+
     console.log(`[Email] Using direct send fallback for ${to}`);
 
     // Send the email using Resend
