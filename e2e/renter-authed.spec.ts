@@ -6,6 +6,7 @@
  *   - renter/authed/02-search-listings
  *   - renter/authed/03-view-listing-details
  *   - renter/authed/05-favorite-listings
+ *   - renter/authed/07-apply-to-listing
  *   - renter/authed/11-renter-dashboard
  *
  * Tests that authenticated renters can browse, search, view listings,
@@ -629,12 +630,14 @@ test.describe('Authenticated Renter', () => {
   });
 
   // -----------------------------------------------------------------------
-  // Story 07: Apply to Listing
+  // Story 07: Apply to Listing with Trip Details
   // -----------------------------------------------------------------------
   test.describe('Story 07: Apply to Listing', () => {
+
     test('apply to listing with trip details (Story 07)', async ({ page, context }) => {
       test.setTimeout(120_000);
       await grantGeolocation(context);
+
       await setupClerkTestingToken({ page });
       const testUser = getTestUser();
       await signIn(page, testUser.email, testUser.password);
@@ -646,75 +649,96 @@ test.describe('Authenticated Renter', () => {
       const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
       expect(listingId).toBeTruthy();
 
-      // Navigate with date params + isApplying=true to open wizard directly
+      // Navigate to listing with date params + isApplying=true to open wizard
       const startDate = new Date(Date.now() + 30 * 86400000).toISOString();
       const endDate = new Date(Date.now() + 120 * 86400000).toISOString();
-      await page.goto(`/search/listing/${listingId}?startDate=${startDate}&endDate=${endDate}&numAdults=1&isApplying=true`);
+      await page.goto(
+        `/search/listing/${listingId}?startDate=${startDate}&endDate=${endDate}&numAdults=1&isApplying=true`
+      );
       await page.waitForLoadState('domcontentloaded');
 
+      // Wait for wizard to open — "Submit Application" button should be visible
       const submitButton = page.locator('button:has-text("Submit Application")');
       await expect(submitButton).toBeVisible({ timeout: 30_000 });
-      // Wait for async initialization to complete
+
+      // Wait for the wizard's async initialization (getFullApplication) to complete
+      // before filling fields, otherwise the async callback resets the store
       await page.waitForTimeout(5_000);
 
       // --- Personal Info ---
       await page.getByPlaceholder('Enter First Name').fill('Test');
       await page.getByPlaceholder('Enter Last Name').fill('Renter');
+
+      // Check "No Middle Name"
       const noMiddleName = page.getByText('No Middle Name').locator('..').locator('input[type="checkbox"], button[role="checkbox"]');
       await noMiddleName.first().click();
-      // DOB — the third MM/DD/YYYY input (first two are move-in/move-out)
+
+      // DOB — find the date of birth input (third MM/DD/YYYY textbox, after move-in and move-out)
       const dobInput = page.getByRole('textbox', { name: 'MM/DD/YYYY' }).nth(2);
       await dobInput.scrollIntoViewIfNeeded();
       await dobInput.fill('01/15/1990');
 
       // --- Identification ---
+      // Select ID type: Driver's License
       const idTypeSelect = page.locator('button[role="combobox"]').first();
       await idTypeSelect.click();
       await page.getByText("Driver's License", { exact: false }).click();
+
+      // ID number
       await page.getByPlaceholder('Enter ID Number').fill('DL123456789');
 
-      // ID photo upload via UploadThing filechooser
+      // Upload ID photo via UploadThing (triggers file chooser)
       const idUploadArea = page.locator('text=Drag and drop file or').first().locator('..');
       const [idFileChooser] = await Promise.all([
         page.waitForEvent('filechooser'),
         idUploadArea.click(),
       ]);
       await idFileChooser.setFiles('e2e/fixtures/test-id.png');
+
+      // Wait for ID upload to complete — photo preview appears
       await expect(page.locator('text=test-id.png').first()).toBeVisible({ timeout: 15_000 });
 
       // --- Residential History ---
-      await page.getByPlaceholder('Enter Street Address').fill('123 Test St');
+      const streetInput = page.getByPlaceholder('Enter Street Address');
+      await streetInput.scrollIntoViewIfNeeded();
+      await streetInput.fill('123 Test St');
       await page.getByPlaceholder('Enter City').fill('Salt Lake City');
       await page.getByPlaceholder('Enter State').fill('Utah');
       await page.getByPlaceholder('Enter ZIP Code').fill('84101');
-
-      // Duration of tenancy — set to 24 months (meets 24-month requirement)
-      const durationInput = page.locator('input[type="number"]').first();
-      await durationInput.fill('24');
+      await page.getByPlaceholder('Enter months').fill('24');
 
       // Monthly payment
-      const monthlyPaymentInput = page.locator('#monthlyPayment-0');
-      await monthlyPaymentInput.scrollIntoViewIfNeeded();
-      await monthlyPaymentInput.click();
-      await monthlyPaymentInput.fill('1500');
+      const monthlyPayment = page.locator('#monthlyPayment-0');
+      await monthlyPayment.scrollIntoViewIfNeeded();
+      await monthlyPayment.fill('1500');
 
-      // Housing status: "I own this property" (skips landlord fields)
-      await page.locator('#own-0').scrollIntoViewIfNeeded();
-      await page.locator('#own-0').click({ force: true });
+      // Housing status: "I own this property" — click the label text to toggle radio
+      const ownRadio = page.locator('#own-0');
+      await ownRadio.scrollIntoViewIfNeeded();
+      await ownRadio.click({ force: true });
+      // Wait for landlord fields to disappear
       await expect(page.getByPlaceholder("Enter landlord's first name")).not.toBeVisible({ timeout: 5_000 });
 
       // --- Income ---
-      await page.getByPlaceholder('Enter your Income Source').fill('Software Engineering');
-      await page.getByPlaceholder('Enter Monthly Amount').fill('8000');
+      const incomeSource = page.getByPlaceholder('Enter your Income Source');
+      await incomeSource.scrollIntoViewIfNeeded();
+      await incomeSource.fill('Software Engineering');
+      const monthlyAmount = page.getByPlaceholder('Enter Monthly Amount');
+      await monthlyAmount.scrollIntoViewIfNeeded();
+      await monthlyAmount.fill('8000');
 
-      // Income proof upload
-      const incomeUploadArea = page.locator('text=Drag and drop file or').first().locator('..');
+      // Upload income proof via UploadThing
+      const incomeUploadArea = page.locator('text=Drag and drop file or').first();
+      await incomeUploadArea.scrollIntoViewIfNeeded();
       const [incomeFileChooser] = await Promise.all([
         page.waitForEvent('filechooser'),
-        incomeUploadArea.click(),
+        incomeUploadArea.locator('..').click(),
       ]);
       await incomeFileChooser.setFiles('e2e/fixtures/test-id.png');
+
+      // Wait for income proof upload to complete — file name appears in income section
       await expect(page.locator('h3:has-text("Income Proof 1")').first()).toBeVisible({ timeout: 15_000 });
+      // Wait for the upload to fully process and set fileKey in store
       await page.waitForTimeout(3_000);
 
       // --- Questionnaire ---

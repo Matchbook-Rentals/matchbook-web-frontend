@@ -214,7 +214,9 @@ export default function ApplicationWizard({
             }))
           : undefined,
       })),
-      residentialHistories: residentialHistory,
+      residentialHistories: residentialHistory.filter(
+        (r) => r.street?.trim() || r.city?.trim() || r.state?.trim() || r.zipCode?.trim()
+      ),
     };
   };
 
@@ -249,7 +251,18 @@ export default function ApplicationWizard({
 
       // 2. Mark as complete so application limit check passes
       if (upsertResult.application?.id) {
-        await markComplete(upsertResult.application.id);
+        const completeResult = await markComplete(upsertResult.application.id);
+        if (!completeResult.success) {
+          toast({
+            title: 'Incomplete Application',
+            description: completeResult.missingRequirements
+              ? `Missing: ${completeResult.missingRequirements.join(', ')}`
+              : completeResult.error || 'Please complete all required fields.',
+            variant: 'destructive',
+          });
+          setIsSubmitting(false);
+          return;
+        }
       }
 
       // 3. Now apply to listing (creates trip if needed and housing request)
