@@ -82,6 +82,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
     errors,
     fieldErrors,
     saveField,
+    autoSaveEnabled,
     validateField,
     setFieldError,
     clearFieldError
@@ -142,45 +143,28 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
     }));
     setVerificationImages([...verificationImages, ...newImages]);
     
-    // IMMEDIATELY save the ID photos to the backend with completion checking
-    const fieldPath = 'identifications.0.idPhotos';
-    if (isDevelopment) {
-      console.log(`[Identification] Saving ID photos immediately for ${fieldPath}`);
-    }
-    
-    const result = await saveField(fieldPath, updatedId.idPhotos, { checkCompletion: true });
-    
-    // Handle completion status changes
-    if (result.success && result.completionStatus) {
-      if (result.completionStatus.statusChanged) {
-        if (!result.completionStatus.isComplete && result.completionStatus.missingRequirements?.length > 0) {
-          const missing = result.completionStatus.missingRequirements.slice(0, 3).join(', ');
-          const more = result.completionStatus.missingRequirements.length > 3
-            ? ` and ${result.completionStatus.missingRequirements.length - 3} more`
-            : '';
-          toast({
-            title: "Application Incomplete",
-            description: `Still need: ${missing}${more}`,
-            duration: 4000,
-          });
-        }
+    // Save ID photos to backend (skipped in submit wizard where auto-save is disabled)
+    // Read directly from store to avoid stale closure from UploadThing callback caching
+    const currentAutoSaveEnabled = useApplicationStore.getState().autoSaveEnabled;
+    if (currentAutoSaveEnabled) {
+      const fieldPath = 'identifications.0.idPhotos';
+      const result = await saveField(fieldPath, updatedId.idPhotos, { checkCompletion: true });
+
+      if (result.success) {
+        toast({
+          title: "ID Photo Uploaded",
+          description: `Successfully uploaded ${res.length} photo${res.length !== 1 ? 's' : ''}`,
+          duration: 3000,
+        });
+      } else {
+        console.error(`[Identification] Failed to save ID photos:`, result.error);
+        toast({
+          title: "Upload Error",
+          description: "Photos uploaded but failed to sync. They'll be included when you submit.",
+          variant: "destructive",
+          duration: 4000,
+        });
       }
-    }
-    
-    if (result.success) {
-      toast({
-        title: "ID Photo Uploaded",
-        description: `Successfully uploaded ${res.length} photo${res.length !== 1 ? 's' : ''}`,
-        duration: 3000,
-      });
-    } else {
-      console.error(`[Identification] Failed to save ID photos:`, result.error);
-      toast({
-        title: "Save Failed",
-        description: "Photos uploaded but failed to save. Please try again.",
-        variant: "destructive",
-        duration: 4000,
-      });
     }
   };
 
@@ -210,27 +194,29 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
       // If photo exists in database, delete it
       if (photo.id) {
         const result = await deleteIDPhoto(photo.id);
-        
+
         if (result.success) {
           toast({
             title: "Photo Deleted",
             description: "ID photo has been removed successfully",
             duration: 3000,
           });
-          
-          // Save the updated photos list and check completion status
-          const fieldPath = 'identifications.0.idPhotos';
-          const saveResult = await saveField(fieldPath, updatedPhotos, { checkCompletion: true });
-          
-          // Handle completion status changes
-          if (saveResult.success && saveResult.completionStatus) {
-            if (saveResult.completionStatus.statusChanged && !saveResult.completionStatus.isComplete) {
-              toast({
-                title: "Application Incomplete",
-                description: "Your application is now incomplete. Please add an ID photo.",
-                variant: "destructive",
-                duration: 5000,
-              });
+
+          // Save the updated photos list and check completion status (skip in submit wizard)
+          if (useApplicationStore.getState().autoSaveEnabled) {
+            const fieldPath = 'identifications.0.idPhotos';
+            const saveResult = await saveField(fieldPath, updatedPhotos, { checkCompletion: true });
+
+            // Handle completion status changes
+            if (saveResult.success && saveResult.completionStatus) {
+              if (saveResult.completionStatus.statusChanged && !saveResult.completionStatus.isComplete) {
+                toast({
+                  title: "Application Incomplete",
+                  description: "Your application is now incomplete. Please add an ID photo.",
+                  variant: "destructive",
+                  duration: 5000,
+                });
+              }
             }
           }
         } else {
@@ -255,20 +241,22 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
           description: "Photo has been removed",
           duration: 2000,
         });
-        
-        // Save the updated photos list and check completion status
-        const fieldPath = 'identifications.0.idPhotos';
-        const saveResult = await saveField(fieldPath, updatedPhotos, { checkCompletion: true });
-        
-        // Handle completion status changes
-        if (saveResult.success && saveResult.completionStatus) {
-          if (saveResult.completionStatus.statusChanged && !saveResult.completionStatus.isComplete) {
-            toast({
-              title: "Application Incomplete",
-              description: "Your application is now incomplete. Please add an ID photo.",
-              variant: "destructive",
-              duration: 5000,
-            });
+
+        // Save the updated photos list and check completion status (skip in submit wizard)
+        if (useApplicationStore.getState().autoSaveEnabled) {
+          const fieldPath = 'identifications.0.idPhotos';
+          const saveResult = await saveField(fieldPath, updatedPhotos, { checkCompletion: true });
+
+          // Handle completion status changes
+          if (saveResult.success && saveResult.completionStatus) {
+            if (saveResult.completionStatus.statusChanged && !saveResult.completionStatus.isComplete) {
+              toast({
+                title: "Application Incomplete",
+                description: "Your application is now incomplete. Please add an ID photo.",
+                variant: "destructive",
+                duration: 5000,
+              });
+            }
           }
         }
       }

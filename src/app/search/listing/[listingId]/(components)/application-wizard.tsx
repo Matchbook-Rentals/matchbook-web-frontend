@@ -114,7 +114,10 @@ export default function ApplicationWizard({
     };
     fetchFull();
 
-    return () => setAutoSaveEnabled(true);
+    return () => {
+      setAutoSaveEnabled(true);
+      hasInitialized.current = false;
+    };
   }, [application, initializeFromApplication, resetStore, tripContext, setMoveInDate, setMoveOutDate, setNumAdults, setNumChildren, setNumPets, setAutoSaveEnabled]);
 
   const getFirstErrorMessage = (errors: any): string | null => {

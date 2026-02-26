@@ -48,6 +48,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
     errors,
     fieldErrors,
     saveField,
+    autoSaveEnabled,
     validateField,
     setFieldError,
     clearFieldError
@@ -109,29 +110,32 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
       );
       setIncomes(updatedIncomes);
       
-      // IMMEDIATELY save the income proof to the backend
-      const fieldPath = `incomes.${index}.fileKey`;
-      if (isDevelopment) {
-        console.log(`[Income] Saving income proof immediately for ${fieldPath}`);
-      }
-      
-      const fileKey = upload.key || upload.serverData?.fileKey;
-      const result = await saveField(fieldPath, fileKey, { checkCompletion: false });
-      
-      if (result.success) {
-        toast({
-          title: "Income Proof Uploaded",
-          description: `Successfully uploaded proof for Income Source ${index + 1}`,
-          duration: 3000,
-        });
-      } else {
-        console.error(`[Income] Failed to save income proof:`, result.error);
-        toast({
-          title: "Save Failed",
-          description: "Proof uploaded but failed to save. Please try again.",
-          variant: "destructive",
-          duration: 4000,
-        });
+      // Save income proof to backend (skip in submit wizard where auto-save is disabled)
+      // Read directly from store to avoid stale closure from UploadThing callback caching
+      if (useApplicationStore.getState().autoSaveEnabled) {
+        const fieldPath = `incomes.${index}.fileKey`;
+        if (isDevelopment) {
+          console.log(`[Income] Saving income proof immediately for ${fieldPath}`);
+        }
+
+        const fileKey = upload.key || upload.serverData?.fileKey;
+        const result = await saveField(fieldPath, fileKey, { checkCompletion: false });
+
+        if (result.success) {
+          toast({
+            title: "Income Proof Uploaded",
+            description: `Successfully uploaded proof for Income Source ${index + 1}`,
+            duration: 3000,
+          });
+        } else {
+          console.error(`[Income] Failed to save income proof:`, result.error);
+          toast({
+            title: "Upload Error",
+            description: "Proof uploaded but failed to sync. It'll be included when you submit.",
+            variant: "destructive",
+            duration: 4000,
+          });
+        }
       }
     }
   };

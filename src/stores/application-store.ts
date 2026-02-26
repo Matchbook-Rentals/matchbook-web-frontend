@@ -324,7 +324,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   setIncomes: (incomes) => set({ incomes: incomes.length === 0 ? [{ source: '', monthlyAmount: '', imageUrl: '' }] : incomes }),
   setAnswers: (answers) => set({ answers }),
 
-  resetStore: () => set(initialState),
+  resetStore: () => set({ ...initialState, autoSaveEnabled: get().autoSaveEnabled }),
 
   initializeFromApplication: (application) => {
     if (!application) return;
