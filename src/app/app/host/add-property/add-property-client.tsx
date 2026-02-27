@@ -40,7 +40,6 @@ import {
   validateDeposits,
   validateAllSteps,
 } from "@/lib/listing-actions-helpers";
-import LocationForm from "./location-form";
 import LocationInput from "./listing-creation-location-input";
 import AddressConfirmation from "./listing-creation-address-confirmation";
 import ListingUploadHighlights from "./listing-creation-highlights";
@@ -136,7 +135,6 @@ export default function AddPropertyclient({ draftData }: AddPropertyClientProps)
   const { user } = useUser();
   const { toast } = useToast();
   
-  console.log('🎯 [CLIENT] Received draftData:', draftData);
   
   // Check if user is admin
   const userRole = user?.publicMetadata?.role as string | undefined;
@@ -263,12 +261,6 @@ const initializePricing = () => {
       utilitiesIncluded: p.utilitiesIncluded || false
     })) || [];
     
-    console.log('🎯 Initializing pricing with draft data:', {
-      shortestStay: draftData.shortestLeaseLength,
-      longestStay: draftData.longestLeaseLength,
-      monthlyPricing,
-      deposit: draftData.depositSize
-    });
     
     return {
       shortestStay: draftData.shortestLeaseLength || 1,
@@ -415,8 +407,6 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
 
     setIsSavingDraft(true);
     try {
-      console.log('🚀 [handleSaveExit] Starting draft save with current pricing:', listingPricing.monthlyPricing);
-      console.log('🚀 [handleSaveExit] Current amenities:', listingAmenities);
       
       // Use the extracted helper function
       const savedDraft = await handleSaveAndExit(
@@ -812,15 +802,6 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
 
   // Render different content based on the current step
   const renderStepContent = () => {
-    console.log('🎨 Rendering step content for step:', currentStep);
-    console.log('📊 Current state values:', {
-      highlights: listingHighlights,
-      location: listingLocation,
-      rooms: listingRooms,
-      basics: listingBasics,
-      amenities: listingAmenities
-    });
-    
     switch (currentStep) {
       case 0:
         return (
