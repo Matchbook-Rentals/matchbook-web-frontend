@@ -3,6 +3,25 @@ import { createClerkClient } from '@clerk/backend';
 
 const clerk = createClerkClient({ secretKey: process.env.CLERK_SECRET_KEY! });
 
+// Ephemeral test users are created with this prefix — only these should ever be deleted
+const EPHEMERAL_EMAIL_PREFIX = 'e2e-verification+';
+
+// Permanent test accounts that must NEVER be deleted
+const PROTECTED_EMAILS = [
+  process.env.TEST_USER_EMAIL,
+  process.env.TEST_ADMIN_EMAIL,
+  process.env.TEST_HOST_EMAIL,
+  process.env.TEST_RENTER_EMAIL,
+].filter(Boolean) as string[];
+
+const isEphemeralTestUser = (email: string): boolean => {
+  return email.startsWith(EPHEMERAL_EMAIL_PREFIX) && email.endsWith('@matchbookrentals.com');
+};
+
+const isProtectedUser = (email: string): boolean => {
+  return PROTECTED_EMAILS.includes(email);
+};
+
 export interface TestUser {
   id: string;
   email: string;
@@ -127,11 +146,25 @@ export async function createTestUser(
 }
 
 /**
- * Delete a specific test user
+ * Delete a specific test user. Refuses to delete protected permanent accounts.
  */
 export async function deleteTestUser(userId: string): Promise<void> {
   try {
-    console.log(`Deleting test user: ${userId}`);
+    // Fetch user first to verify it's ephemeral
+    const user = await clerk.users.getUser(userId);
+    const email = user.emailAddresses[0]?.emailAddress ?? '';
+
+    if (isProtectedUser(email)) {
+      console.warn(`REFUSED to delete protected account: ${email} (${userId})`);
+      return;
+    }
+
+    if (!isEphemeralTestUser(email)) {
+      console.warn(`REFUSED to delete non-ephemeral user: ${email} (${userId})`);
+      return;
+    }
+
+    console.log(`Deleting test user: ${userId} (${email})`);
     await clerk.users.deleteUser(userId);
     console.log(`Test user deleted: ${userId}`);
   } catch (error: any) {
@@ -158,7 +191,8 @@ export async function cleanupAllTestUsers(): Promise<void> {
 }
 
 /**
- * Cleanup old test users (older than 1 hour) that may have been left behind
+ * Cleanup old ephemeral test users (older than 1 hour) that may have been left behind
+ * by crashed test runs. Only deletes users matching the ephemeral email pattern.
  */
 export async function cleanupStaleTestUsers(): Promise<void> {
   console.log('Cleaning up stale test users...');
@@ -166,27 +200,30 @@ export async function cleanupStaleTestUsers(): Promise<void> {
   try {
     const oneHourAgo = Date.now() - (60 * 60 * 1000);
 
-    // Get all users with test email pattern
+    // Query matches the actual ephemeral email pattern: e2e-verification+*@matchbookrentals.com
     const users = await clerk.users.getUserList({
-      emailAddress: ['%@test.matchbookrentals.com'],
+      emailAddress: ['e2e-verification+%@matchbookrentals.com'],
       limit: 100,
     });
 
+    // Rate limit: only clean up 2 per run to avoid hammering the Clerk API
+    const MAX_CLEANUP_PER_RUN = 2;
     let deletedCount = 0;
+
     for (const user of users.data) {
-      // Check if it's a test user and older than 1 hour
-      const isTestUser = user.emailAddresses.some(
-        e => e.emailAddress.includes('@test.matchbookrentals.com')
-      );
+      if (deletedCount >= MAX_CLEANUP_PER_RUN) break;
+
+      const email = user.emailAddresses[0]?.emailAddress ?? '';
       const isOld = user.createdAt < oneHourAgo;
 
-      if (isTestUser && isOld) {
+      if (isEphemeralTestUser(email) && !isProtectedUser(email) && isOld) {
         await deleteTestUser(user.id);
         deletedCount++;
       }
     }
 
-    console.log(`Cleaned up ${deletedCount} stale test users`);
+    const remaining = users.data.length - deletedCount;
+    console.log(`Cleaned up ${deletedCount} stale test users${remaining > 0 ? ` (${remaining} remaining, will clean next run)` : ''}`);
   } catch (error: any) {
     console.error('Failed to cleanup stale users:', error.message);
   }
