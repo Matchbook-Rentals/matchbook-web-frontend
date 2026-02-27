@@ -256,31 +256,24 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
         }
       }
 
-      // TODO: Consider using Place Details API (with place_id) for structured address
-      // instead of parsing geocode response — more reliable and avoids this fallback path
-      const components = data.results?.[0]?.address_components ?? [];
+      const components = data.results[0].address_components;
 
-      if (components.length > 0) {
-        const streetNumber = components.find((c) => c.types.includes('street_number'))?.short_name || '';
-        const streetName = components.find((c) => c.types.includes('route'))?.short_name || '';
-        const street2 = components.find((c) => c.types.includes('subpremise'))?.short_name || '';
-        const city = components.find((c) => c.types.includes('locality'))?.short_name || '';
-        const state = components.find((c) => c.types.includes('administrative_area_level_1'))?.long_name || '';
-        const zip = components.find((c) => c.types.includes('postal_code'))?.short_name || '';
+      let streetNumber = components.find((component) => component.types.includes('street_number'))?.short_name || '';
+      let streetName = components.find((component) => component.types.includes('route'))?.short_name || '';
+      let street2 = components.find((component) => component.types.includes('subpremise'))?.short_name || '';
+      let city = components.find((component) => component.types.includes('locality'))?.short_name || '';
+      let state = components.find((component) => component.types.includes('administrative_area_level_1'))?.long_name || '';
+      let zip = components.find((component) => component.types.includes('postal_code'))?.short_name || '';
 
-        setAddress({
-          street: `${streetNumber} ${streetName}`,
-          street2,
-          city,
-          state,
-          zip,
-        });
-      } else {
-        toast({
-          title: "Couldn't parse address",
-          description: "Please fill in the address details manually below.",
-        });
+      let newAddress = {
+        street: `${streetNumber} ${streetName}`,
+        street2: street2,
+        city: city,
+        state: state,
+        zip: zip,
       }
+      
+      setAddress(newAddress);
       
       // Only continue if we have valid coordinates
       if (lat && lng && lat !== 0 && lng !== 0) {
@@ -433,14 +426,15 @@ export default function LocationForm({ listingLocation, setListingLocation, vali
                       // Check for different possible formats of the geocode response
                       if (data.results && data.results.length > 0) {
                         if (data.results[0].geometry && data.results[0].geometry.location) {
+                          // Google Maps API format
                           lat = data.results[0].geometry.location.lat;
                           lng = data.results[0].geometry.location.lng;
                         }
-
-                        const formattedAddress = data.results[0]?.formatted_address?.split(',')[0];
-                        if (formattedAddress) {
-                          setInputValue(formattedAddress);
-                        }
+                        
+                        // Format the address from the geocode results
+                        const formattedAddress = data.results[0].formatted_address.split(',')[0];
+                        // Update the input value with the new formatted address
+                        setInputValue(formattedAddress);
                       }
                       
                       // Only continue if we have valid coordinates
