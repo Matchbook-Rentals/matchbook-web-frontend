@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback, useRef } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
 import { useToast } from '@/components/ui/use-toast';
 import { Button } from '@/components/ui/button';
 import { BrandButton } from '@/components/ui/brandButton';
@@ -57,6 +58,7 @@ export default function ApplicationWizard({
   onComplete,
 }: ApplicationWizardProps) {
   const { toast } = useToast();
+  const isMobile = useIsMobile();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const {
@@ -334,9 +336,9 @@ export default function ApplicationWizard({
       <div className="space-y-10">
         <div>
           <h2 className={ApplicationItemHeaderStyles}>Basic Information</h2>
-          <PersonalInfo inputClassName={INPUT_CLASS_NAME} />
+          <PersonalInfo inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
           <div className="mt-8">
-            <Identification inputClassName={INPUT_CLASS_NAME} />
+            <Identification inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
           </div>
         </div>
 
@@ -345,17 +347,17 @@ export default function ApplicationWizard({
           <p className="text-sm text-gray-500 mb-4">
             Please add 24 months of residential history or three previous addresses.
           </p>
-          <ResidentialLandlordInfo inputClassName={INPUT_CLASS_NAME} />
+          <ResidentialLandlordInfo inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
         </div>
 
         <div>
           <h2 className={ApplicationItemHeaderStyles}>Income</h2>
-          <Income inputClassName={INPUT_CLASS_NAME} />
+          <Income inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
         </div>
 
         <div>
           <h2 className={ApplicationItemHeaderStyles}>Questionnaire</h2>
-          <Questionnaire />
+          <Questionnaire isMobile={isMobile} />
         </div>
       </div>
 
