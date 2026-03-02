@@ -793,6 +793,168 @@ test.describe('Authenticated Renter', () => {
       await submitButton.click();
       await expect(page.getByText('Application Submitted!')).toBeVisible({ timeout: 30_000 });
     });
+
+    test('mobile: full application flow via Check Availability', async ({ page, context }) => {
+      test.setTimeout(180_000);
+      await grantGeolocation(context);
+
+      // Set mobile viewport
+      await page.setViewportSize({ width: 390, height: 844 });
+
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const href = await page.locator('a[href*="/search/listing/"]').first().getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate to listing page without date params
+      await page.goto(`/search/listing/${listingId}`);
+      await page.waitForLoadState('domcontentloaded');
+
+      // Tap "Check Availability" in mobile footer
+      const checkAvailBtn = page.locator('button:has-text("Check Availability")');
+      await expect(checkAvailBtn).toBeVisible({ timeout: 15_000 });
+      await checkAvailBtn.click();
+
+      // Wait for calendar overlay — month label should appear
+      const monthLabel = page.locator('text=/^\\w+ \\d{4}$/').first();
+      await expect(monthLabel).toBeVisible({ timeout: 10_000 });
+
+      // Next-month button: the enabled button sibling after the month label in the calendar header
+      // Use evaluate to find it reliably
+      async function clickNextMonth() {
+        await page.evaluate(() => {
+          // Find the month label element (e.g. "March 2026")
+          const labels = [...document.querySelectorAll('*')].filter(
+            el => el.children.length === 0 && /^\w+ \d{4}$/.test(el.textContent?.trim() || '')
+          );
+          if (!labels.length) throw new Error('Month label not found');
+          const label = labels[0];
+          // The next button is the next sibling button, or the parent's last button child
+          const parent = label.parentElement!;
+          const buttons = parent.querySelectorAll('button');
+          const nextBtn = buttons[buttons.length - 1]; // last button = next month
+          if (!nextBtn || nextBtn.disabled) throw new Error('Next month button not found or disabled');
+          (nextBtn as HTMLButtonElement).click();
+        });
+        await page.waitForTimeout(400);
+      }
+
+      // Navigate forward 2 months for start date
+      await clickNextMonth();
+      await clickNextMonth();
+
+      // Pick start date: day 5
+      await page.locator('button').filter({ hasText: /^5$/ }).first().click();
+      await page.waitForTimeout(300);
+
+      // Navigate forward 2 more months for the end date
+      await clickNextMonth();
+      await clickNextMonth();
+
+      // Pick end date: day 10
+      await page.locator('button').filter({ hasText: /^10$/ }).first().click();
+      await page.waitForTimeout(500);
+
+      // Tap "Done" to close the overlay
+      const doneBtn = page.locator('button:has-text("Done")');
+      await expect(doneBtn).toBeVisible({ timeout: 5_000 });
+      await doneBtn.click();
+      await page.waitForTimeout(1_000);
+
+      // Footer should now show "Apply Now" — tap it (use last() since the visible one is the footer button)
+      const applyNowBtn = page.locator('button:has-text("Apply Now")').last();
+      await expect(applyNowBtn).toBeVisible({ timeout: 15_000 });
+      await applyNowBtn.click();
+
+      // Wizard slides in — wait for "Submit Application" button
+      const submitButton = page.locator('button:has-text("Submit Application")');
+      await expect(submitButton).toBeVisible({ timeout: 30_000 });
+
+      // Wait for wizard async initialization
+      await page.waitForTimeout(5_000);
+
+      // --- Personal Info ---
+      await page.getByPlaceholder('Enter First Name').fill('Test');
+      await page.getByPlaceholder('Enter Last Name').fill('Renter');
+
+      const noMiddleName = page.getByText('No Middle Name').locator('..').locator('input[type="checkbox"], button[role="checkbox"]');
+      await noMiddleName.first().click();
+
+      // DOB — on mobile it's a native <input type="date">
+      const dobInput = page.locator('input[type="date"]').first();
+      await dobInput.scrollIntoViewIfNeeded();
+      await dobInput.fill('1990-01-15');
+
+      // --- Identification ---
+      const idTypeSelect = page.locator('button[role="combobox"]').first();
+      await idTypeSelect.click();
+      await page.getByText("Driver's License", { exact: false }).click();
+
+      await page.getByPlaceholder('Enter ID Number').fill('DL123456789');
+
+      const idUploadArea = page.locator('text=Drag and drop file or').first().locator('..');
+      const [idFileChooser] = await Promise.all([
+        page.waitForEvent('filechooser'),
+        idUploadArea.click(),
+      ]);
+      await idFileChooser.setFiles('e2e/fixtures/test-id.png');
+      await expect(page.locator('text=test-id.png').first()).toBeVisible({ timeout: 15_000 });
+
+      // --- Residential History ---
+      const streetInput = page.getByPlaceholder('Enter Street Address');
+      await streetInput.scrollIntoViewIfNeeded();
+      await streetInput.fill('123 Test St');
+      await page.getByPlaceholder('Enter City').fill('Salt Lake City');
+      await page.getByPlaceholder('Enter State').fill('Utah');
+      await page.getByPlaceholder('Enter ZIP Code').fill('84101');
+      await page.getByPlaceholder('Enter months').fill('24');
+
+      const monthlyPayment = page.locator('#monthlyPayment-0');
+      await monthlyPayment.scrollIntoViewIfNeeded();
+      await monthlyPayment.fill('1500');
+
+      const ownRadio = page.locator('#own-0');
+      await ownRadio.scrollIntoViewIfNeeded();
+      await ownRadio.click({ force: true });
+      await expect(page.getByPlaceholder("Enter landlord's first name")).not.toBeVisible({ timeout: 5_000 });
+
+      // --- Income ---
+      const incomeSource = page.getByPlaceholder('Enter your Income Source');
+      await incomeSource.scrollIntoViewIfNeeded();
+      await incomeSource.fill('Software Engineering');
+      const monthlyAmount = page.getByPlaceholder('Enter Monthly Amount');
+      await monthlyAmount.scrollIntoViewIfNeeded();
+      await monthlyAmount.fill('8000');
+
+      const incomeUploadArea = page.locator('text=Drag and drop file or').first();
+      await incomeUploadArea.scrollIntoViewIfNeeded();
+      const [incomeFileChooser] = await Promise.all([
+        page.waitForEvent('filechooser'),
+        incomeUploadArea.locator('..').click(),
+      ]);
+      await incomeFileChooser.setFiles('e2e/fixtures/test-id.png');
+      await expect(page.locator('h3:has-text("Income Proof 1")').first()).toBeVisible({ timeout: 15_000 });
+      await page.waitForTimeout(3_000);
+
+      // --- Questionnaire ---
+      const felonyNo = page.locator('#felony-no');
+      await felonyNo.scrollIntoViewIfNeeded();
+      await felonyNo.click();
+      await page.locator('#evicted-no').click();
+
+      // --- Submit ---
+      await expect(page.getByPlaceholder('Enter First Name')).toHaveValue('Test');
+      await expect(page.getByPlaceholder('Enter your Income Source')).toHaveValue('Software Engineering');
+
+      await submitButton.click();
+      await expect(page.getByText('Application Submitted!')).toBeVisible({ timeout: 30_000 });
+    });
   });
 
   // -----------------------------------------------------------------------
