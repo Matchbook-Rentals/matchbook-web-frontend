@@ -147,7 +147,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     {
       id: 'switch-mode',
       label: 'Switch to Renting',
-      href: '/app/rent/searches',
+      href: '/rent/dashboard',
       section: 3
     },
     { id: 'settings', label: 'Account', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
