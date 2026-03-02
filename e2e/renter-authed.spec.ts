@@ -627,6 +627,45 @@ test.describe('Authenticated Renter', () => {
       const checkButton = page.locator('button:has-text("Check Availability")');
       await expect(checkButton).not.toBeVisible({ timeout: 3_000 });
     });
+
+    test('mobile: tapping Check Availability opens date/guest overlay', async ({ page, context }) => {
+      test.setTimeout(90_000);
+      await grantGeolocation(context);
+      await setupClerkTestingToken({ page });
+      const testUser = getTestUser();
+      await signIn(page, testUser.email, testUser.password);
+
+      // Set mobile viewport
+      await page.setViewportSize({ width: 390, height: 844 });
+
+      // Grab a listing ID from homepage
+      await page.goto('/');
+      await waitForHomepageListings(page);
+      const href = await page.locator('a[href*="/search/listing/"]').first().getAttribute('href');
+      const listingId = href!.match(/\/search\/listing\/([^?/]+)/)?.[1];
+      expect(listingId).toBeTruthy();
+
+      // Navigate to listing WITHOUT date params so "Check Availability" shows
+      await page.goto(`/search/listing/${listingId}`);
+      await page.waitForLoadState('domcontentloaded');
+
+      // Mobile footer should show "Check Availability"
+      const checkButton = page.locator('button:has-text("Check Availability")');
+      await expect(checkButton).toBeVisible({ timeout: 20_000 });
+
+      // Scroll to make sure the footer button is fully in view, then tap it
+      await checkButton.scrollIntoViewIfNeeded();
+      await checkButton.click({ force: true });
+
+      // The mobile availability overlay should slide up with "When" and "Who" accordion cards
+      const overlay = page.locator('.fixed.inset-0.z-50');
+      await expect(overlay).toBeVisible({ timeout: 10_000 });
+      await expect(overlay.locator('text=When')).toBeVisible({ timeout: 5_000 });
+      await expect(overlay.locator('text=Who')).toBeVisible();
+
+      // A "Done" button should be present at the bottom
+      await expect(overlay.locator('button:has-text("Done")')).toBeVisible();
+    });
   });
 
   // -----------------------------------------------------------------------

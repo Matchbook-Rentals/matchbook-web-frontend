@@ -17,6 +17,7 @@ import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favo
 import { getOrCreateTripForListing } from '@/app/actions/trips';
 import { useRenterListingActionBox } from './renter-listing-action-box-context';
 import { GuestAuthModal } from '@/components/guest-auth-modal';
+import MobileAvailabilityOverlay from '@/components/newnew/mobile-availability-overlay';
 
 
 interface PublicListingDetailsViewProps {
@@ -309,6 +310,17 @@ export default function PublicListingDetailsView({
           </BrandButton>
         </div>
       </footer>
+
+      <MobileAvailabilityOverlay
+        isOpen={state.showMobileOverlay}
+        onClose={actions.closeMobileOverlay}
+        dateRange={{ start: state.startDate, end: state.endDate }}
+        onDateChange={actions.setDates}
+        guests={state.guests}
+        setGuests={actions.setGuests}
+        onConfirm={actions.closeMobileOverlay}
+        unavailablePeriods={state.unavailablePeriods}
+      />
 
       <GuestAuthModal
         isOpen={showAuthModal}
