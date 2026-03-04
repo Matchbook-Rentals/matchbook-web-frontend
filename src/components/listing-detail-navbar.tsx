@@ -48,8 +48,8 @@ export default function ListingDetailNavbar({
       {/* Header row - matches SearchResultsNavbar styling */}
       <header className="relative z-30 flex items-center justify-between px-6 h-[76px]">
         <Link href="/" className="flex-shrink-0">
-          <img className="w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
-          <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
+          <img className="w-[200px] hidden lg:block" alt="MatchBook Logo" src="/new-green-logo.png" />
+          <img className="w-[35px] block lg:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
         </Link>
 
         <div className="flex items-center gap-6 flex-shrink-0">

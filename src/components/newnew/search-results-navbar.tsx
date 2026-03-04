@@ -378,8 +378,8 @@ export default function SearchResultsNavbar({
       <header className="relative z-30 flex items-center justify-between md:justify-start gap-4 px-4 sm:px-6 h-[76px]">
         {/* Logo */}
         <Link href="/" className="flex-shrink-0">
-          <img className="w-[160px] md:w-[200px] hidden md:block" alt="MatchBook Logo" src="/new-green-logo.png" />
-          <img className="w-[35px] block md:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
+          <img className="w-[160px] lg:w-[200px] hidden lg:block" alt="MatchBook Logo" src="/new-green-logo.png" />
+          <img className="w-[35px] block lg:hidden" alt="MatchBook Logo" src="/logo-small.svg" />
         </Link>
 
         {/* Desktop: Compact search bar in header (when not expanded) */}
