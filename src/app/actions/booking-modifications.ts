@@ -21,7 +21,7 @@
  * 
  * UI PAGES NEEDED:
  * - Host modifications page: /app/host/[listingId]/bookings/[bookingId]/changes
- * - Renter modifications page: /app/rent/bookings/[bookingId]/changes
+ * - Renter modifications page: /rent/bookings/[bookingId]/changes
  * - These pages should display modification history and allow approval/rejection actions
  * 
  * CURRENT STATUS:
@@ -335,7 +335,7 @@ export async function createBookingModification({
     const isRecipientHost = booking.listing.userId === recipientId
     const notificationUrl = isRecipientHost
       ? `/app/host/${booking.listingId}/bookings/${bookingId}/changes`
-      : `/app/rent/bookings/${bookingId}/changes`
+      : `/rent/bookings/${bookingId}/changes`
 
     await createNotification({
       userId: recipientId,
@@ -521,7 +521,7 @@ export async function approveBookingModification(bookingModificationId: string) 
     const isRequestorHost = bookingModification.booking.listing.userId === bookingModification.requestorId
     const notificationUrl = isRequestorHost
       ? `/app/host/${bookingModification.booking.listingId}/bookings/${bookingModification.bookingId}/changes`
-      : `/app/rent/bookings/${bookingModification.bookingId}/changes`
+      : `/rent/bookings/${bookingModification.bookingId}/changes`
 
     await createNotification({
       userId: bookingModification.requestorId,
@@ -604,7 +604,7 @@ export async function rejectBookingModification(bookingModificationId: string, r
     const isRequestorHost = bookingModification.booking.listing.userId === bookingModification.requestorId
     const notificationUrl = isRequestorHost
       ? `/app/host/${bookingModification.booking.listingId}/bookings/${bookingModification.bookingId}/changes`
-      : `/app/rent/bookings/${bookingModification.bookingId}/changes`
+      : `/rent/bookings/${bookingModification.bookingId}/changes`
 
     await createNotification({
       userId: bookingModification.requestorId,

@@ -87,7 +87,7 @@ export async function createPaymentModification({
     const isRecipientHost = rentPayment.booking.listing.userId === recipientId
     const notificationUrl = isRecipientHost
       ? `/app/host/${rentPayment.booking.listingId}/bookings/${rentPayment.bookingId}/changes`
-      : `/app/rent/bookings/${rentPayment.bookingId}/changes`
+      : `/rent/bookings/${rentPayment.bookingId}/changes`
 
     await createNotification({
       userId: recipientId,
@@ -181,7 +181,7 @@ export async function approvePaymentModification(paymentModificationId: string) 
     const isRequestorHost = paymentModification.rentPayment.booking.listing.userId === paymentModification.requestorId
     const approveNotificationUrl = isRequestorHost
       ? `/app/host/${paymentModification.rentPayment.booking.listingId}/bookings/${paymentModification.rentPayment.bookingId}/changes`
-      : `/app/rent/bookings/${paymentModification.rentPayment.bookingId}/changes`
+      : `/rent/bookings/${paymentModification.rentPayment.bookingId}/changes`
 
     await createNotification({
       userId: paymentModification.requestorId,
@@ -265,7 +265,7 @@ export async function rejectPaymentModification(paymentModificationId: string, r
     const isRequestorHost = paymentModification.rentPayment.booking.listing.userId === paymentModification.requestorId
     const rejectNotificationUrl = isRequestorHost
       ? `/app/host/${paymentModification.rentPayment.booking.listingId}/bookings/${paymentModification.rentPayment.bookingId}/changes`
-      : `/app/rent/bookings/${paymentModification.rentPayment.bookingId}/changes`
+      : `/rent/bookings/${paymentModification.rentPayment.bookingId}/changes`
 
     await createNotification({
       userId: paymentModification.requestorId,

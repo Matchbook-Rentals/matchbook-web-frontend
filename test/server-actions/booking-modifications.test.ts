@@ -51,11 +51,13 @@ import {
   rejectBookingModification,
 } from '@/app/actions/booking-modifications';
 import { auth } from '@clerk/nextjs/server';
+import { createNotification } from '@/app/actions/notifications';
 
 // Get the mocked instances
 const { default: prisma } = await import('@/lib/prismadb');
 const mockPrisma = vi.mocked(prisma);
 const mockAuth = vi.mocked(auth);
+const mockCreateNotification = vi.mocked(createNotification);
 
 /**
  * Tests for Booking Modification Server Actions
@@ -692,6 +694,215 @@ describe('Booking Modifications', () => {
 
       expect(result.success).toBe(true);
       // Note: All rent payments would need new due dates (not implemented)
+    });
+  });
+
+  describe('Notification Delivery', () => {
+    describe('createBookingModification notifications', () => {
+      beforeEach(() => {
+        mockAuth.mockReturnValue({ userId: mockRenterId });
+        mockPrisma.booking.findUnique.mockResolvedValue(mockBooking as any);
+        mockPrisma.bookingModification.create.mockResolvedValue({
+          id: mockModificationId,
+          bookingId: mockBookingId,
+          requestorId: mockRenterId,
+          recipientId: mockHostId,
+          originalStartDate: mockBooking.startDate,
+          originalEndDate: mockBooking.endDate,
+          newStartDate: localDate(2025, 0, 20),
+          newEndDate: localDate(2025, 1, 20),
+          status: 'pending',
+          requestor: { fullName: 'Test Renter', firstName: 'Test', lastName: 'Renter' },
+          recipient: { fullName: 'Test Host', firstName: 'Test', lastName: 'Host' },
+          booking: { ...mockBooking, listing: { title: 'Test Listing' } },
+        } as any);
+      });
+
+      it('should send booking_change_request notification to recipient', async () => {
+        await createBookingModification({
+          bookingId: mockBookingId,
+          newStartDate: localDate(2025, 0, 20),
+          newEndDate: localDate(2025, 1, 20),
+          recipientId: mockHostId,
+        });
+
+        expect(mockCreateNotification).toHaveBeenCalledWith(
+          expect.objectContaining({
+            userId: mockHostId,
+            actionType: 'booking_change_request',
+            actionId: mockModificationId,
+            emailData: expect.objectContaining({
+              senderName: 'Test Renter',
+              listingTitle: 'Test Listing',
+            }),
+          })
+        );
+      });
+
+      it('should use host URL when recipient is the host', async () => {
+        await createBookingModification({
+          bookingId: mockBookingId,
+          newStartDate: localDate(2025, 0, 20),
+          newEndDate: localDate(2025, 1, 20),
+          recipientId: mockHostId,
+        });
+
+        expect(mockCreateNotification).toHaveBeenCalledWith(
+          expect.objectContaining({
+            url: `/app/host/${mockListingId}/bookings/${mockBookingId}/changes`,
+          })
+        );
+      });
+
+      it('should succeed even when notification creation fails (e.g. email failure)', async () => {
+        mockCreateNotification.mockResolvedValueOnce({ success: false, error: 'Email service unavailable' });
+
+        const result = await createBookingModification({
+          bookingId: mockBookingId,
+          newStartDate: localDate(2025, 0, 20),
+          newEndDate: localDate(2025, 1, 20),
+          recipientId: mockHostId,
+        });
+
+        expect(result.success).toBe(true);
+        expect(mockCreateNotification).toHaveBeenCalled();
+      });
+    });
+
+    describe('approveBookingModification notifications', () => {
+      const mockPendingModification = {
+        id: mockModificationId,
+        bookingId: mockBookingId,
+        requestorId: mockRenterId,
+        recipientId: mockHostId,
+        originalStartDate: localDate(2025, 0, 15),
+        originalEndDate: localDate(2025, 1, 15),
+        newStartDate: localDate(2025, 0, 20),
+        newEndDate: localDate(2025, 1, 20),
+        status: 'pending',
+        viewedAt: null,
+        requestor: { fullName: 'Test Renter', firstName: 'Test', lastName: 'Renter' },
+        booking: {
+          id: mockBookingId,
+          startDate: localDate(2025, 0, 15),
+          endDate: localDate(2025, 1, 15),
+          listingId: mockListingId,
+          monthlyRent: 1000,
+          listing: { id: mockListingId, title: 'Test Listing', userId: mockHostId },
+          rentPayments: [{
+            id: 'payment-1',
+            dueDate: localDate(2025, 0, 15),
+            amount: 56484,
+            totalAmount: 56484,
+            baseAmount: 54839,
+            status: 'PENDING',
+            isPaid: false,
+            stripePaymentMethodId: 'pm_test',
+            cancelledAt: null,
+            type: 'MONTHLY_RENT',
+          }],
+        },
+      };
+
+      beforeEach(() => {
+        mockAuth.mockReturnValue({ userId: mockHostId });
+        mockPrisma.bookingModification.findUnique.mockResolvedValue(mockPendingModification as any);
+        mockPrisma.$transaction.mockResolvedValue([{}, {}]);
+        mockPrisma.user.findUnique.mockResolvedValue({ fullName: 'Test Host', firstName: 'Test', lastName: 'Host' } as any);
+      });
+
+      it('should send booking_change_approved notification to requestor', async () => {
+        await approveBookingModification(mockModificationId);
+
+        expect(mockCreateNotification).toHaveBeenCalledWith(
+          expect.objectContaining({
+            userId: mockRenterId,
+            actionType: 'booking_change_approved',
+            actionId: mockModificationId,
+            emailData: expect.objectContaining({
+              senderName: 'Test Host',
+              listingTitle: 'Test Listing',
+            }),
+          })
+        );
+      });
+
+      it('should use renter URL when requestor is the renter', async () => {
+        await approveBookingModification(mockModificationId);
+
+        expect(mockCreateNotification).toHaveBeenCalledWith(
+          expect.objectContaining({
+            url: `/rent/bookings/${mockBookingId}/changes`,
+          })
+        );
+      });
+
+      it('should succeed even when notification creation fails (e.g. email failure)', async () => {
+        mockCreateNotification.mockResolvedValueOnce({ success: false, error: 'Email service unavailable' });
+
+        const result = await approveBookingModification(mockModificationId);
+
+        expect(result.success).toBe(true);
+        expect(mockCreateNotification).toHaveBeenCalled();
+      });
+    });
+
+    describe('rejectBookingModification notifications', () => {
+      const mockPendingModification = {
+        id: mockModificationId,
+        bookingId: mockBookingId,
+        requestorId: mockRenterId,
+        recipientId: mockHostId,
+        status: 'pending',
+        viewedAt: null,
+        requestor: { fullName: 'Test Renter', firstName: 'Test', lastName: 'Renter' },
+        booking: {
+          listingId: mockListingId,
+          listing: { id: mockListingId, title: 'Test Listing', userId: mockHostId },
+        },
+      };
+
+      beforeEach(() => {
+        mockAuth.mockReturnValue({ userId: mockHostId });
+        mockPrisma.bookingModification.findUnique.mockResolvedValue(mockPendingModification as any);
+        mockPrisma.bookingModification.update.mockResolvedValue({ ...mockPendingModification, status: 'rejected' } as any);
+        mockPrisma.user.findUnique.mockResolvedValue({ fullName: 'Test Host', firstName: 'Test', lastName: 'Host' } as any);
+      });
+
+      it('should send booking_change_declined notification to requestor', async () => {
+        await rejectBookingModification(mockModificationId);
+
+        expect(mockCreateNotification).toHaveBeenCalledWith(
+          expect.objectContaining({
+            userId: mockRenterId,
+            actionType: 'booking_change_declined',
+            actionId: mockModificationId,
+            emailData: expect.objectContaining({
+              senderName: 'Test Host',
+              listingTitle: 'Test Listing',
+            }),
+          })
+        );
+      });
+
+      it('should use renter URL when requestor is the renter', async () => {
+        await rejectBookingModification(mockModificationId);
+
+        expect(mockCreateNotification).toHaveBeenCalledWith(
+          expect.objectContaining({
+            url: `/rent/bookings/${mockBookingId}/changes`,
+          })
+        );
+      });
+
+      it('should succeed even when notification creation fails (e.g. email failure)', async () => {
+        mockCreateNotification.mockResolvedValueOnce({ success: false, error: 'Email service unavailable' });
+
+        const result = await rejectBookingModification(mockModificationId);
+
+        expect(result.success).toBe(true);
+        expect(mockCreateNotification).toHaveBeenCalled();
+      });
     });
   });
 });
