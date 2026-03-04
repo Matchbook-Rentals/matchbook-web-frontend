@@ -1,3 +1,4 @@
+import Image from "next/image"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { BrandButton } from "@/components/ui/brandButton"
 import { Heart, Heart as HeartIcon, ChevronLeft, ChevronRight } from "lucide-react"
@@ -224,22 +225,26 @@ export default function SearchListingCard({ listing, status, className, style, d
             {listing.listingImages.length > 0 ? (
               listing.listingImages.map((image, index) => (
                 <CarouselItem key={image.id || index} className="pl-0">
-                  <div className="aspect-[4/3] w-full overflow-hidden rounded-xl">
-                    <img
-                      className="w-full h-full object-cover"
+                  <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
+                    <Image
+                      className="object-cover"
                       alt={`Property image ${index + 1}`}
                       src={image.url}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                     />
                   </div>
                 </CarouselItem>
               ))
             ) : (
               <CarouselItem className="pl-0">
-                <div className="aspect-[4/3] w-full overflow-hidden rounded-xl">
-                  <img
-                    className="w-full h-full object-cover"
+                <div className="relative aspect-[4/3] w-full overflow-hidden rounded-xl">
+                  <Image
+                    className="object-cover"
                     alt="Property"
                     src="/placeholder-property.jpg"
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                 </div>
               </CarouselItem>

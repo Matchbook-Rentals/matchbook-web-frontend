@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import maplibregl from 'maplibre-gl';
@@ -151,22 +152,26 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
               {listing.listingImages.length > 0 ? (
                 listing.listingImages.map((image, index) => (
                   <CarouselItem key={image.id || index} className="pl-0">
-                    <div className="w-full aspect-[5/4] overflow-hidden">
-                      <img
-                        className="w-full h-full object-cover"
+                    <div className="relative w-full aspect-[5/4] overflow-hidden">
+                      <Image
+                        className="object-cover"
                         alt={`Property image ${index + 1}`}
                         src={image.url}
+                        fill
+                        sizes="280px"
                       />
                     </div>
                   </CarouselItem>
                 ))
               ) : (
                 <CarouselItem className="pl-0">
-                  <div className="w-full aspect-[5/4] overflow-hidden">
-                    <img
-                      className="w-full h-full object-cover"
+                  <div className="relative w-full aspect-[5/4] overflow-hidden">
+                    <Image
+                      className="object-cover"
                       alt="Property"
                       src="/placeholder-property.jpg"
+                      fill
+                      sizes="280px"
                     />
                   </div>
                 </CarouselItem>
