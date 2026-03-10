@@ -9,49 +9,52 @@ import BrandModal from '@/components/BrandModal';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ChevronUp, Minus, Plus, Wifi } from 'lucide-react';
+import { ChevronUp, Minus, Plus } from 'lucide-react';
 import { Slider } from '@/components/ui/slider';
 import {
-  UpdatedSingleFamilyIcon,
-  UpdatedApartmentIcon,
-  UpdatedTownhouseIcon,
-  UpdatedSingleRoomIcon,
-  UpdatedFurnishedIcon,
-  UpdatedUnfurnishedIcon,
-  UpdatedUtilitiesIncludedIcon,
-  UpdatedUtilitiesNotIncludedIcon,
-  UpdatedPetFriendlyIcon,
-  UpdatedPetUnfriendlyIcon,
-  UpdatedAirConditioningIcon,
-  UpdatedHeaterIcon,
-  UpdatedDedicatedWorkspaceIcon,
-  UpdatedSaunaIcon,
-  UpdatedGymIcon,
-  UpdatedSunroomIcon,
-  UpdatedKitchenEssentialsIcon,
-  UpdatedGarbageDisposalIcon,
-  UpdatedDishwasherIcon,
-  UpdatedFridgeIcon,
-  UpdatedOvenIcon,
-  UpdatedBalconyIcon,
-  UpdatedPoolIcon,
-  UpdatedHotTubIcon,
-  UpdatedFireplaceIcon,
-  UpdatedFencedYardIcon,
-  UpdatedGatedEntryIcon,
-  UpdatedParkingIcon,
-  UpdatedEvChargingIcon,
-  UpdatedGarageIcon,
-  UpdatedWheelchairAccessibleIcon,
-  UpdatedKeylessEntryIcon,
-  UpdatedCarbonMonoxideDetectorIcon,
-  UpdatedSmokeDetectorIcon,
-  UpdatedSecurityIcon,
-  UpdatedMountainViewIcon,
-  UpdatedCityViewIcon,
-  UpdatedWaterfrontIcon,
-  UpdatedWaterViewIcon,
-} from '@/components/icons/amenities';
+  SingleFamilyIcon,
+  ApartmentIcon,
+  TownhouseIcon,
+  PrivateRoomIcon,
+  FurnishedIcon,
+  UnfurnishedIcon,
+  UtilitiesIncludedIcon,
+  UtilitiesNotIncludedIcon,
+  PetsAllowedIcon,
+  NoPetsIcon,
+  AirConditioningIcon,
+  HeatingIcon,
+  DedicatedWorkspaceIcon,
+  SaunaIcon,
+  GymIcon,
+  SunroomIcon,
+  KitchenEssentialsIcon,
+  GarbageDisposalIcon,
+  DishwasherIcon,
+  RefrigeratorIcon,
+  OvenStoveIcon,
+  BalconyIcon,
+  PoolIcon,
+  HotTubIcon,
+  FireplaceIcon,
+  FencedYardIcon,
+  GatedEntryIcon,
+  OffStreetParkingIcon,
+  EvChargingIcon,
+  GarageIcon,
+  WheelchairAccessibleIcon,
+  KeylessEntryIcon,
+  CoDetectorIcon,
+  SmokeDetectorIcon,
+  SecuritySystemIcon,
+  MountainViewIcon,
+  CityViewIcon,
+  WaterfrontIcon,
+  WaterViewIcon,
+  WifiIcon,
+  InUnitLaundryIcon,
+  InUnitOrOnSiteLaundryIcon,
+} from '@/components/icons-v3/amenities';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -93,7 +96,7 @@ function FilterPill({ icon, label, selected, onClick }: {
           : 'border-[#d9dadf] bg-gray-50 text-[#344054] hover:bg-gray-100',
       )}
     >
-      {icon && <span className="w-4 h-4 flex-shrink-0">{icon}</span>}
+      {icon && <span className="w-6 h-6 flex-shrink-0">{icon}</span>}
       <span>{label}</span>
     </button>
   );
@@ -148,78 +151,78 @@ function CounterRow({ label, value, onChange }: {
 // Pill data constants
 // ---------------------------------------------------------------------------
 
-const ICON_CLASS = 'w-4 h-4';
+const ICON_CLASS = 'w-6 h-6';
 
 const PROPERTY_TYPE_OPTIONS: PillOption[] = [
-  { label: 'Single Family', value: 'singleFamily', icon: <UpdatedSingleFamilyIcon className={ICON_CLASS} /> },
-  { label: 'Apartment', value: 'apartment', icon: <UpdatedApartmentIcon className={ICON_CLASS} /> },
-  { label: 'Town House', value: 'townhouse', icon: <UpdatedTownhouseIcon className={ICON_CLASS} /> },
-  { label: 'Private Room', value: 'privateRoom', icon: <UpdatedSingleRoomIcon className={ICON_CLASS} /> },
+  { label: 'Single Family', value: 'singleFamily', icon: <SingleFamilyIcon className={ICON_CLASS} /> },
+  { label: 'Apartment', value: 'apartment', icon: <ApartmentIcon className={ICON_CLASS} /> },
+  { label: 'Town House', value: 'townhouse', icon: <TownhouseIcon className={ICON_CLASS} /> },
+  { label: 'Private Room', value: 'privateRoom', icon: <PrivateRoomIcon className={ICON_CLASS} /> },
 ];
 
 const UTILITY_OPTIONS: PillOption[] = [
-  { label: 'Utilities Included', value: 'utilitiesIncluded', icon: <UpdatedUtilitiesIncludedIcon className={ICON_CLASS} /> },
-  { label: 'Utilities Not Included', value: 'utilitiesNotIncluded', icon: <UpdatedUtilitiesNotIncludedIcon className={ICON_CLASS} /> },
+  { label: 'Utilities Included', value: 'utilitiesIncluded', icon: <UtilitiesIncludedIcon className={ICON_CLASS} /> },
+  { label: 'Utilities Not Included', value: 'utilitiesNotIncluded', icon: <UtilitiesNotIncludedIcon className={ICON_CLASS} /> },
 ];
 
 const FURNITURE_OPTIONS: PillOption[] = [
-  { label: 'Furnished', value: 'furnished', icon: <UpdatedFurnishedIcon className={ICON_CLASS} /> },
-  { label: 'Unfurnished', value: 'unfurnished', icon: <UpdatedUnfurnishedIcon className={ICON_CLASS} /> },
+  { label: 'Furnished', value: 'furnished', icon: <FurnishedIcon className={ICON_CLASS} /> },
+  { label: 'Unfurnished', value: 'unfurnished', icon: <UnfurnishedIcon className={ICON_CLASS} /> },
 ];
 
 const PET_OPTIONS: PillOption[] = [
-  { label: 'Pets Welcome', value: 'petsAllowed', icon: <UpdatedPetFriendlyIcon className={ICON_CLASS} /> },
-  { label: 'No Pets', value: 'petsNotAllowed', icon: <UpdatedPetUnfriendlyIcon className={ICON_CLASS} /> },
+  { label: 'Pets Welcome', value: 'petsAllowed', icon: <PetsAllowedIcon className={ICON_CLASS} /> },
+  { label: 'No Pets', value: 'petsNotAllowed', icon: <NoPetsIcon className={ICON_CLASS} /> },
 ];
 
 const LAUNDRY_OPTIONS: PillOption[] = [
-  { label: 'In Unit', value: 'washerInUnit' },
-  { label: 'In Complex', value: 'washerInComplex' },
+  { label: 'In Unit', value: 'washerInUnit', icon: <InUnitLaundryIcon className={ICON_CLASS} /> },
+  { label: 'In Complex', value: 'washerInComplex', icon: <InUnitOrOnSiteLaundryIcon className={ICON_CLASS} /> },
 ];
 
 const INSIDE_AMENITIES: PillOption[] = [
-  { label: 'Air Conditioning', value: 'airConditioner', icon: <UpdatedAirConditioningIcon className={ICON_CLASS} /> },
-  { label: 'Heating', value: 'heater', icon: <UpdatedHeaterIcon className={ICON_CLASS} /> },
-  { label: 'Wifi', value: 'wifi', icon: <Wifi className={ICON_CLASS} /> },
-  { label: 'Sauna', value: 'sauna', icon: <UpdatedSaunaIcon className={ICON_CLASS} /> },
-  { label: 'Gym', value: 'gym', icon: <UpdatedGymIcon className={ICON_CLASS} /> },
-  { label: 'Dedicated Workspace', value: 'dedicatedWorkspace', icon: <UpdatedDedicatedWorkspaceIcon className={ICON_CLASS} /> },
-  { label: 'Sun Room', value: 'sunroom', icon: <UpdatedSunroomIcon className={ICON_CLASS} /> },
-  { label: 'Kitchen Essentials', value: 'kitchenEssentials', icon: <UpdatedKitchenEssentialsIcon className={ICON_CLASS} /> },
-  { label: 'Garbage Disposal', value: 'garbageDisposal', icon: <UpdatedGarbageDisposalIcon className={ICON_CLASS} /> },
-  { label: 'Dishwasher', value: 'dishwasher', icon: <UpdatedDishwasherIcon className={ICON_CLASS} /> },
-  { label: 'Refrigerator', value: 'fridge', icon: <UpdatedFridgeIcon className={ICON_CLASS} /> },
-  { label: 'Oven/Stove', value: 'oven', icon: <UpdatedOvenIcon className={ICON_CLASS} /> },
-  { label: 'Fire Place', value: 'fireplace', icon: <UpdatedFireplaceIcon className={ICON_CLASS} /> },
+  { label: 'Air Conditioning', value: 'airConditioner', icon: <AirConditioningIcon className={ICON_CLASS} /> },
+  { label: 'Heating', value: 'heater', icon: <HeatingIcon className={ICON_CLASS} /> },
+  { label: 'Wifi', value: 'wifi', icon: <WifiIcon className={ICON_CLASS} /> },
+  { label: 'Sauna', value: 'sauna', icon: <SaunaIcon className={ICON_CLASS} /> },
+  { label: 'Gym', value: 'gym', icon: <GymIcon className={ICON_CLASS} /> },
+  { label: 'Dedicated Workspace', value: 'dedicatedWorkspace', icon: <DedicatedWorkspaceIcon className={ICON_CLASS} /> },
+  { label: 'Sun Room', value: 'sunroom', icon: <SunroomIcon className={ICON_CLASS} /> },
+  { label: 'Kitchen Essentials', value: 'kitchenEssentials', icon: <KitchenEssentialsIcon className={ICON_CLASS} /> },
+  { label: 'Garbage Disposal', value: 'garbageDisposal', icon: <GarbageDisposalIcon className={ICON_CLASS} /> },
+  { label: 'Dishwasher', value: 'dishwasher', icon: <DishwasherIcon className={ICON_CLASS} /> },
+  { label: 'Refrigerator', value: 'fridge', icon: <RefrigeratorIcon className={ICON_CLASS} /> },
+  { label: 'Oven/Stove', value: 'oven', icon: <OvenStoveIcon className={ICON_CLASS} /> },
+  { label: 'Fire Place', value: 'fireplace', icon: <FireplaceIcon className={ICON_CLASS} /> },
 ];
 
 const OUTSIDE_AMENITIES: PillOption[] = [
-  { label: 'Balcony', value: 'balcony', icon: <UpdatedBalconyIcon className={ICON_CLASS} /> },
-  { label: 'Pool', value: 'pool', icon: <UpdatedPoolIcon className={ICON_CLASS} /> },
-  { label: 'Hot Tub', value: 'hotTub', icon: <UpdatedHotTubIcon className={ICON_CLASS} /> },
-  { label: 'Fenced Yard', value: 'fencedInYard', icon: <UpdatedFencedYardIcon className={ICON_CLASS} /> },
-  { label: 'Gated Entry', value: 'gatedEntry', icon: <UpdatedGatedEntryIcon className={ICON_CLASS} /> },
+  { label: 'Balcony', value: 'balcony', icon: <BalconyIcon className={ICON_CLASS} /> },
+  { label: 'Pool', value: 'pool', icon: <PoolIcon className={ICON_CLASS} /> },
+  { label: 'Hot Tub', value: 'hotTub', icon: <HotTubIcon className={ICON_CLASS} /> },
+  { label: 'Fenced Yard', value: 'fencedInYard', icon: <FencedYardIcon className={ICON_CLASS} /> },
+  { label: 'Gated Entry', value: 'gatedEntry', icon: <GatedEntryIcon className={ICON_CLASS} /> },
 ];
 
 const PARKING_AMENITIES: PillOption[] = [
-  { label: 'Parking Available', value: 'offStreetParking', icon: <UpdatedParkingIcon className={ICON_CLASS} /> },
-  { label: 'EV Charging', value: 'evCharging', icon: <UpdatedEvChargingIcon className={ICON_CLASS} /> },
-  { label: 'Garage', value: 'garageParking', icon: <UpdatedGarageIcon className={ICON_CLASS} /> },
+  { label: 'Parking Available', value: 'offStreetParking', icon: <OffStreetParkingIcon className={ICON_CLASS} /> },
+  { label: 'EV Charging', value: 'evCharging', icon: <EvChargingIcon className={ICON_CLASS} /> },
+  { label: 'Garage', value: 'garageParking', icon: <GarageIcon className={ICON_CLASS} /> },
 ];
 
 const ACCESSIBILITY_AMENITIES: PillOption[] = [
-  { label: 'Wheelchair', value: 'wheelchairAccess', icon: <UpdatedWheelchairAccessibleIcon className={ICON_CLASS} /> },
-  { label: 'Keyless Entry', value: 'keylessEntry', icon: <UpdatedKeylessEntryIcon className={ICON_CLASS} /> },
-  { label: 'CO Detector', value: 'carbonMonoxide', icon: <UpdatedCarbonMonoxideDetectorIcon className={ICON_CLASS} /> },
-  { label: 'Smoke Detector', value: 'smokeDetector', icon: <UpdatedSmokeDetectorIcon className={ICON_CLASS} /> },
-  { label: 'Security System', value: 'security', icon: <UpdatedSecurityIcon className={ICON_CLASS} /> },
+  { label: 'Wheelchair', value: 'wheelchairAccess', icon: <WheelchairAccessibleIcon className={ICON_CLASS} /> },
+  { label: 'Keyless Entry', value: 'keylessEntry', icon: <KeylessEntryIcon className={ICON_CLASS} /> },
+  { label: 'CO Detector', value: 'carbonMonoxide', icon: <CoDetectorIcon className={ICON_CLASS} /> },
+  { label: 'Smoke Detector', value: 'smokeDetector', icon: <SmokeDetectorIcon className={ICON_CLASS} /> },
+  { label: 'Security System', value: 'security', icon: <SecuritySystemIcon className={ICON_CLASS} /> },
 ];
 
 const LOCATION_AMENITIES: PillOption[] = [
-  { label: 'Mountain View', value: 'mountainView', icon: <UpdatedMountainViewIcon className={ICON_CLASS} /> },
-  { label: 'City View', value: 'cityView', icon: <UpdatedCityViewIcon className={ICON_CLASS} /> },
-  { label: 'Waterfront', value: 'waterfront', icon: <UpdatedWaterfrontIcon className={ICON_CLASS} /> },
-  { label: 'Water View', value: 'waterView', icon: <UpdatedWaterViewIcon className={ICON_CLASS} /> },
+  { label: 'Mountain View', value: 'mountainView', icon: <MountainViewIcon className={ICON_CLASS} /> },
+  { label: 'City View', value: 'cityView', icon: <CityViewIcon className={ICON_CLASS} /> },
+  { label: 'Waterfront', value: 'waterfront', icon: <WaterfrontIcon className={ICON_CLASS} /> },
+  { label: 'Water View', value: 'waterView', icon: <WaterViewIcon className={ICON_CLASS} /> },
 ];
 
 // ---------------------------------------------------------------------------
