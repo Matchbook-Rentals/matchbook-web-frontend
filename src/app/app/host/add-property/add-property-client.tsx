@@ -8,7 +8,7 @@
  * Contains comprehensive tests for all helper functions used by this component.
  */
 'use client';
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { BrandButton } from "@/components/ui/brandButton";
 import { Separator } from "@/components/ui/separator";
@@ -423,7 +423,8 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         {
           onSuccess: (savedDraft) => {
             // Update the URL with the draft ID if it's a new draft
-            if (!draftId && savedDraft.id) {
+            if (!draftIdRef.current && savedDraft.id) {
+              draftIdRef.current = savedDraft.id;
               const newUrl = new URL(window.location.href);
               newUrl.searchParams.set('draftId', savedDraft.id);
               window.history.replaceState({}, '', newUrl.toString());
@@ -438,7 +439,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
             });
           }
         },
-        draftId // Pass the draftId to ensure we update existing draft instead of creating new
+        draftIdRef.current ?? undefined // Pass the draftId to ensure we update existing draft instead of creating new
       );
       
       // Exit to host overview after saving
@@ -448,6 +449,42 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       // This catch block is just for safety
     } finally {
       setIsSavingDraft(false);
+    }
+  };
+
+  // Track mutable draft ID for auto-save (avoids stale closure issues)
+  const draftIdRef = useRef<string | null | undefined>(draftId);
+
+  // Track latest component state in a ref so autoSaveDraft always gets fresh values
+  const componentStateRef = useRef({
+    listingBasics, listingLocation, listingRooms, listingPricing,
+    listingHighlights, listingPhotos, selectedPhotos, listingAmenities
+  });
+  componentStateRef.current = {
+    listingBasics, listingLocation, listingRooms, listingPricing,
+    listingHighlights, listingPhotos, selectedPhotos, listingAmenities
+  };
+
+  const autoSaveDraft = async () => {
+    if (!user?.id) return;
+    const stateSnapshot = componentStateRef.current;
+    try {
+      await handleSaveAndExit(
+        stateSnapshot,
+        {
+          onSuccess: (saved) => {
+            if (!draftIdRef.current && saved.id) {
+              draftIdRef.current = saved.id;
+              const newUrl = new URL(window.location.href);
+              newUrl.searchParams.set('draftId', saved.id);
+              window.history.replaceState({}, '', newUrl.toString());
+            }
+          },
+        },
+        draftIdRef.current ?? undefined
+      );
+    } catch (error) {
+      console.error('Auto-save failed:', error);
     }
   };
 
@@ -519,8 +556,10 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         delete newValidationErrors[currentStep];
         setValidationErrors(newValidationErrors);
       }
-      
-      
+
+      // Auto-save draft in the background (fire-and-forget)
+      autoSaveDraft();
+
       // If coming from review, validate all steps again before returning to review
       if (cameFromReview) {
         // Run current step validation first

@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { handleSaveDraft } from '@/lib/listing-actions-helpers';
+import { UTApi } from 'uploadthing/server';
 
 // Create or update a draft listing
 export async function POST(request: Request) {
@@ -166,11 +167,26 @@ export async function DELETE(request: Request) {
     if (!draft) {
       return NextResponse.json({ error: 'Draft not found' }, { status: 404 });
     }
-    
+
+    // Clean up UploadThing files before deleting the draft (cascade deletes DB records)
+    try {
+      const images = await prisma.listingImage.findMany({
+        where: { listingId: draftId },
+        select: { id: true },
+      });
+      const fileKeys = images.map(img => img.id).filter(Boolean);
+      if (fileKeys.length > 0) {
+        const utapi = new UTApi();
+        await utapi.deleteFiles(fileKeys);
+      }
+    } catch (uploadThingError) {
+      console.warn('[API] Warning: Failed to delete photos from UploadThing:', uploadThingError);
+    }
+
     await prisma.listingInCreation.delete({
       where: { id: draftId }
     });
-    
+
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error('[API] Error deleting draft:', error);
