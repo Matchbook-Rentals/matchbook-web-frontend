@@ -11,6 +11,7 @@ import {
   TallDialogTitle,
 } from '@/constants/styles';
 import { Star as StarIcon } from 'lucide-react';
+
 import { ListingWithRelations } from '@/types';
 import { iconAmenities } from '@/lib/amenities-list';
 
@@ -46,12 +47,12 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
         {showFullAmenities ? (
           /* Full amenities list */
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-            {displayAmenities.map((amenity) => (
-              <div key={amenity.code} className="flex items-start gap-1.5">
-                <div className="relative w-5 h-5">
-                  {React.createElement(amenity.icon || StarIcon, { className: "absolute w-4 h-4 top-0.5 left-0.5" })}
+            {displayAmenities.map((amenity, i) => (
+              <div key={amenity.code} className="flex items-center gap-1.5">
+                <div className="w-6 h-6">
+                  {React.createElement(amenity.icon || StarIcon, { className: "w-6 h-6" })}
                 </div>
-                <span className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
+                <span className="font-['Poppins'] text-[16px] font-normal text-[#484A54] pt-[2px]">
                   {amenity.label}
                 </span>
               </div>
@@ -61,12 +62,12 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
           /* Abbreviated list with modal */
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 w-full">
-              {displayAmenities.slice(0, initialDisplayCount).map((amenity) => (
-                <div key={amenity.code} className="flex items-start gap-1.5">
-                  <div className="relative w-5 h-5">
-                    {React.createElement(amenity.icon || StarIcon, { className: "absolute w-4 h-4 top-0.5 left-0.5" })}
+              {displayAmenities.slice(0, initialDisplayCount).map((amenity, i) => (
+                <div key={amenity.code} className="flex items-center gap-1.5">
+                  <div className="w-6 h-6">
+                    {React.createElement(amenity.icon || StarIcon, { className: "w-6 h-6" })}
                   </div>
-                  <span className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
+                  <span className="font-['Poppins'] text-[16px] font-normal text-[#484A54] pt-[2px]">
                     {amenity.label}
                   </span>
                 </div>
@@ -86,12 +87,12 @@ const AmenitiesSection: React.FC<AmenitiesSectionProps> = ({
                   <h2 className={TallDialogTitle}>All Amenities</h2>
                   <div className="flex-1 overflow-y-auto p-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {displayAmenities.map((amenity) => (
-                        <div key={amenity.code} className="flex items-start gap-1.5 py-2">
-                          <div className="relative w-5 h-5">
-                            {React.createElement(amenity.icon || StarIcon, { className: "absolute w-4 h-4 top-0.5 left-0.5" })}
+                      {displayAmenities.map((amenity, i) => (
+                        <div key={amenity.code} className="flex items-center gap-1.5 py-2">
+                          <div className="w-6 h-6">
+                            {React.createElement(amenity.icon || StarIcon, { className: "w-6 h-6" })}
                           </div>
-                          <span className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
+                          <span className="font-['Poppins'] text-[16px] font-normal text-[#484A54] pt-[2px]">
                             {amenity.label}
                           </span>
                         </div>
