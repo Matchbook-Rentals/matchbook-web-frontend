@@ -3,14 +3,14 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { BrandButton } from "@/components/ui/brandButton"
 import { Heart, Heart as HeartIcon, ChevronLeft, ChevronRight } from "lucide-react"
 import { SearchListing } from "@/types"
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, useMemo } from 'react'
 import { useSearchContext } from '@/contexts/search-context-provider'
 import { RejectIcon } from '@/components/svgs/svg-components'
 import { useListingHoverStore } from '@/store/listing-hover-store'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@clerk/nextjs'
 import { ListingStatus } from '@/constants/enums'
-import { calculateRent, applyServiceFee } from '@/lib/calculate-rent'
+import { computeListingPrice } from '@/lib/calculate-rent'
 import {
   Carousel,
   CarouselContent,
@@ -87,19 +87,16 @@ export default function SearchListingCard({ listing, status, className, style, d
   const canScrollPrev = currentSlide > 0
   const canScrollNext = currentSlide < listing.listingImages.length - 1
 
-  // Calculate trip-specific price using the same logic as authenticated users
-  // calculateRent already applies the service fee when includeServiceFee defaults to true
-  const calculatedPrice = hasTripDates
-    ? calculateRent({ listing, trip })
-    : applyServiceFee(listing.price || 0, listing.monthlyPricing?.length ? Math.min(...listing.monthlyPricing.map(p => p.months)) : 1);
-
-  // When no dates, derive price range from monthlyPricing table (with per-tier service fee)
-  const priceRange = !hasTripDates && listing.monthlyPricing?.length
-    ? {
-        min: Math.min(...listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months))),
-        max: Math.max(...listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months))),
-      }
-    : null;
+  // Use pre-computed prices from search context, with local fallback
+  const { calculatedPrice, priceRange } = useMemo(() => {
+    if ((listing as any).computedPrice !== undefined) {
+      return {
+        calculatedPrice: (listing as any).computedPrice as number,
+        priceRange: (listing as any).computedPriceRange as { min: number; max: number } | null,
+      };
+    }
+    return computeListingPrice(listing as any, trip);
+  }, [listing, trip]);
 
   // Use custom snapshot if provided (from search-page-client), otherwise use auth from context
   // For guests, all like actions should trigger sign-in prompt

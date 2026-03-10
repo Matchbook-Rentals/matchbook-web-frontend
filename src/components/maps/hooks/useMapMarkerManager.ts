@@ -98,7 +98,6 @@ export const useMapMarkerManager = ({
   const createMarkerClickHandler = useCallback((marker: any) => {
     return (e: Event) => {
       e.stopPropagation();
-      
       if (isFullscreenRef?.current) {
         handleFullscreenMarkerClick(marker);
       } else {
@@ -359,8 +358,8 @@ export const useMapMarkerManager = ({
     const svg = element.querySelector('svg');
     if (svg) {
       svg.remove();
-      updateElementText(element, formattedPrice);
     }
+    updateElementText(element, formattedPrice);
   };
 
   const updateElementText = (element: HTMLElement, text: string) => {

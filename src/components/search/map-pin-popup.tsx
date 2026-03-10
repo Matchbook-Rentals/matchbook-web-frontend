@@ -4,7 +4,6 @@ import { useRouter } from 'next/navigation';
 import maplibregl from 'maplibre-gl';
 import { MapMarker } from '@/store/map-selection-store';
 import { Heart, ChevronLeft, ChevronRight } from 'lucide-react';
-import { calculateRent, applyServiceFee } from '@/lib/calculate-rent';
 import {
   Carousel,
   CarouselContent,
@@ -108,10 +107,8 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
   };
 
   const isLiked = customSnapshot?.isLiked(listing.id) ?? false;
-  const hasTripDates = Boolean(trip?.startDate && trip?.endDate);
-  const calculatedPrice = hasTripDates
-    ? calculateRent({ listing, trip } as any)
-    : applyServiceFee(listing.price || 0, (listing as any).monthlyPricing?.length ? Math.min(...(listing as any).monthlyPricing.map((p: any) => p.months)) : 1);
+  const calculatedPrice = (listing as any).computedPrice ?? listing.calculatedPrice ?? 0;
+  const priceRange = (listing as any).computedPriceRange ?? null;
   const displayTitle = listing.title.length > TITLE_MAX_LENGTH
     ? `${listing.title.substring(0, TITLE_MAX_LENGTH)}...`
     : listing.title;
@@ -250,7 +247,9 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
           {/* Price and Rating */}
           <div className="flex items-center justify-between">
             <span className="font-semibold text-gray-700 text-sm">
-              ${calculatedPrice?.toLocaleString() || 0} / Month
+              {priceRange && priceRange.min !== priceRange.max
+                ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()} / Month`
+                : `$${(priceRange?.min ?? calculatedPrice)?.toLocaleString() || 0} / Month`}
             </span>
             {(listing as any).averageRating && (
               <span className="text-gray-500 text-sm">

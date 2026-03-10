@@ -192,6 +192,7 @@ export const useMapMarkerStyles = ({
   // Get formatted price
   const getFormattedPrice = useCallback((correspondingMarker: any) => {
     if (!correspondingMarker) return 'N/A';
+    if (correspondingMarker.listing.priceDisplay) return correspondingMarker.listing.priceDisplay;
     const price = correspondingMarker.listing.calculatedPrice || correspondingMarker.listing.price;
     return (price !== null && price !== undefined) ? `$${price.toLocaleString()}` : 'N/A';
   }, []);

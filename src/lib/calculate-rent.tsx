@@ -96,6 +96,40 @@ export const calculateLengthOfStay = (startDate: Date, endDate: Date) => {
   return { months, days };
 }
 
+/**
+ * Compute the display price and optional price range for a listing.
+ * When trip dates are provided, returns a single calculatedPrice.
+ * When no dates, returns calculatedPrice (based on base price) and a priceRange from monthlyPricing tiers.
+ */
+export function computeListingPrice(
+  listing: ListingWithPricing,
+  trip?: { startDate?: Date | string | null; endDate?: Date | string | null }
+): { calculatedPrice: number; priceRange: { min: number; max: number } | null } {
+  const hasTripDates = Boolean(trip?.startDate && trip?.endDate);
+
+  if (hasTripDates) {
+    const calculatedPrice = calculateRent({
+      listing,
+      trip: trip as any,
+    });
+    return { calculatedPrice, priceRange: null };
+  }
+
+  const monthlyMinimum = listing.monthlyPricing?.length
+    ? Math.min(...listing.monthlyPricing.map(p => p.months))
+    : 1;
+  const calculatedPrice = applyServiceFee(listing.price || 0, monthlyMinimum);
+
+  const priceRange = listing.monthlyPricing?.length
+    ? {
+        min: Math.min(...listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months))),
+        max: Math.max(...listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months))),
+      }
+    : null;
+
+  return { calculatedPrice, priceRange };
+}
+
 export const getUtilitiesIncluded = (
   listing: ListingWithPricing | null,
   trip: Trip | null

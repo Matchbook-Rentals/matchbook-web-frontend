@@ -16,7 +16,7 @@ import { GuestAuthModal } from '@/components/guest-auth-modal';
 import SearchResultsNavbar from '@/components/newnew/search-results-navbar';
 import type { RecentSearch, SuggestedLocationItem } from '@/components/newnew/search-navbar';
 import { useListingsGridLayout } from '@/hooks/useListingsGridLayout';
-import { calculateRent, applyServiceFee } from '@/lib/calculate-rent';
+import { calculateRent, applyServiceFee, computeListingPrice } from '@/lib/calculate-rent';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Map, XIcon } from 'lucide-react';
@@ -634,6 +634,11 @@ export default function SearchPageClient({
     [allListings, visibleBounds]
   );
 
+  const tripForPricing = useMemo(() => ({
+    startDate: localTripData?.startDate ? new Date(localTripData.startDate) : null,
+    endDate: localTripData?.endDate ? new Date(localTripData.endDate) : null,
+  }), [localTripData?.startDate, localTripData?.endDate]);
+
   const showListings = useMemo(() =>
     boundsFilteredListings
       .filter(l => {
@@ -647,8 +652,12 @@ export default function SearchPageClient({
         const minP = prices.length ? Math.min(...prices) : applyServiceFee(l.shortestLeasePrice || 0, 1);
         const maxP = prices.length ? Math.max(...prices) : minP;
         return matchesFilters({ ...l, calculatedPrice: l.price, calculatedPriceMin: minP, calculatedPriceMax: maxP }, filters, false, null);
+      })
+      .map(l => {
+        const { calculatedPrice, priceRange } = computeListingPrice(l as any, tripForPricing);
+        return { ...l, computedPrice: calculatedPrice, computedPriceRange: priceRange };
       }),
-    [boundsFilteredListings, filters, hasDates, filterTrip]
+    [boundsFilteredListings, filters, hasDates, filterTrip, tripForPricing]
   );
 
   const likedListings = useMemo(() => listings.filter(l => favIds.has(l.id)), [listings, favIds]);
@@ -709,29 +718,17 @@ export default function SearchPageClient({
     optimisticRemoveDislike,
   }), [favIds, dislikedIds, isSignedIn, showAuthPrompt, optimisticLike, optimisticDislike, optimisticRemoveLike, optimisticRemoveDislike]);
 
-  // Map markers - use localTripData for dates to enable price calculation
-  const mockTrip = useMemo(() => ({
-    latitude: currentMapCenter.lat,
-    longitude: currentMapCenter.lng,
-    searchRadius: PREFETCH_RADIUS_MILES,
-    startDate: localTripData?.startDate ? new Date(localTripData.startDate) : undefined,
-    endDate: localTripData?.endDate ? new Date(localTripData.endDate) : undefined,
-  }), [currentMapCenter, localTripData]);
-
+  // Map markers - use pre-computed prices from context
   const markers = useMemo(() =>
     showListings
       .filter(l => typeof l.latitude === 'number' && typeof l.longitude === 'number' && !isNaN(l.latitude) && !isNaN(l.longitude))
       .map(listing => {
-        const hasDates = Boolean(mockTrip?.startDate && mockTrip?.endDate);
-        const prices = listing.monthlyPricing?.map((p: any) => applyServiceFee(p.price, p.months)) || [];
-        const minPrice = prices.length ? Math.min(...prices) : applyServiceFee(listing.shortestLeasePrice || 0, 1);
-        const maxPrice = prices.length ? Math.max(...prices) : minPrice;
-        const displayPrice = hasDates
-          ? (calculateRent({ listing, trip: mockTrip } as any) || minPrice)
-          : minPrice;
-        const priceDisplay = hasDates || minPrice === maxPrice
-          ? `$${displayPrice.toLocaleString()}`
-          : `$${minPrice.toLocaleString()}-$${maxPrice.toLocaleString()}`;
+        const priceRange = listing.computedPriceRange;
+        const calculatedPrice = listing.computedPrice ?? 0;
+        const displayPrice = priceRange?.min ?? calculatedPrice;
+        const priceDisplay = priceRange && priceRange.min !== priceRange.max
+          ? `$${priceRange.min.toLocaleString()} - $${priceRange.max.toLocaleString()}`
+          : `$${displayPrice.toLocaleString()}`;
         return {
           title: listing.title || '',
           lat: listing.latitude,
@@ -747,7 +744,7 @@ export default function SearchPageClient({
           color: favIds.has(listing.id) ? 'liked' : dislikedIds.has(listing.id) ? 'disliked' : 'white',
         };
       }),
-    [showListings, mockTrip, favIds, dislikedIds]
+    [showListings, favIds, dislikedIds]
   );
 
   const formatHeight = () => `${Math.max(calculatedHeight, 500)}px`;

@@ -5,6 +5,7 @@ import { ListingAndImages, ListingWithRelations } from '@/types';
 import { GuestSession, GuestSessionService } from '@/utils/guest-session';
 import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
 import { matchesFilters, FilterOptions } from '@/lib/listing-filters';
+import { computeListingPrice } from '@/lib/calculate-rent';
 import {
   guestOptimisticFavorite,
   guestOptimisticRemoveFavorite,
@@ -18,6 +19,8 @@ interface ListingWithAvailability extends ListingWithRelations {
   availableStart?: Date;
   availableEnd?: Date;
   isActuallyAvailable?: boolean;
+  computedPrice?: number;
+  computedPriceRange?: { min: number; max: number } | null;
 }
 
 interface ViewedListing {
@@ -147,13 +150,24 @@ export const GuestTripContextProvider: React.FC<GuestTripContextProviderProps> =
     }));
   }, [sessionData]);
 
+  // Build trip object from session for price computation
+  const tripForPricing = useMemo(() => ({
+    startDate: session?.searchParams?.startDate || null,
+    endDate: session?.searchParams?.endDate || null,
+  }), [session?.searchParams?.startDate, session?.searchParams?.endDate]);
+
   // All listings for map tab (includes liked/disliked)
   const allListings: ListingWithAvailability[] = useMemo(() => {
-    return listings.map(listing => ({
+    return listings.map(listing => {
+      const { calculatedPrice, priceRange } = computeListingPrice(listing as any, tripForPricing);
+      return {
       ...listing,
+      computedPrice: calculatedPrice,
+      computedPriceRange: priceRange,
       isActuallyAvailable: true, // For guests, assume all are available
-    }));
-  }, [listings]);
+    };
+    });
+  }, [listings, tripForPricing]);
 
   // Filter out liked and disliked listings for swipe/match tab to automatically advance
   const swipeListings: ListingWithAvailability[] = useMemo(() => {
