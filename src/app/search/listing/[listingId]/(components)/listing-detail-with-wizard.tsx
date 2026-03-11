@@ -1,0 +1,179 @@
+'use client';
+
+import { useState, useCallback, useMemo } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { SearchListing } from '@/types';
+import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view';
+import { RenterListingActionBoxProvider } from '@/app/guest/listing/[listingId]/(components)/renter-listing-action-box-context';
+import ApplicationWizard from './application-wizard';
+import { CheckCircle2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+
+type WizardState = 'listing' | 'application' | 'success';
+
+interface ListingDetailWithWizardProps {
+  listing: SearchListing;
+  locationString: string;
+  isAuthenticated: boolean;
+  tripContext: {
+    tripId?: string;
+    startDate: Date;
+    endDate: Date;
+    numAdults?: number;
+    numChildren?: number;
+    numPets?: number;
+  } | null;
+  calculatedPrice: number | null;
+  listingState: { hasApplied: boolean; isMatched: boolean } | null;
+  userApplication: any;
+  shouldAutoApply?: boolean;
+  isFavorited?: boolean;
+}
+
+export default function ListingDetailWithWizard({
+  listing,
+  locationString,
+  isAuthenticated,
+  tripContext: initialTripContext,
+  calculatedPrice: initialCalculatedPrice,
+  listingState: initialListingState,
+  userApplication,
+  shouldAutoApply,
+  isFavorited,
+}: ListingDetailWithWizardProps) {
+  const [wizardState, setWizardState] = useState<WizardState>(shouldAutoApply ? 'application' : 'listing');
+  const [collectedDates, setCollectedDates] = useState<{ start: Date; end: Date } | null>(null);
+  const [collectedGuests, setCollectedGuests] = useState<{ adults: number; children: number; pets: number } | null>(null);
+  const [hasAppliedLocal, setHasAppliedLocal] = useState(false);
+
+  const effectiveTripContext = useMemo(() => collectedDates
+    ? {
+        tripId: initialTripContext?.tripId,
+        startDate: collectedDates.start,
+        endDate: collectedDates.end,
+        numAdults: collectedGuests?.adults ?? initialTripContext?.numAdults ?? 1,
+        numChildren: collectedGuests?.children ?? initialTripContext?.numChildren ?? 0,
+        numPets: collectedGuests?.pets ?? initialTripContext?.numPets ?? 0,
+      }
+    : initialTripContext
+    ? {
+        tripId: initialTripContext.tripId,
+        startDate: initialTripContext.startDate,
+        endDate: initialTripContext.endDate,
+        numAdults: initialTripContext.numAdults ?? 1,
+        numChildren: initialTripContext.numChildren ?? 0,
+        numPets: initialTripContext.numPets ?? 0,
+      }
+    : null,
+    [collectedDates, collectedGuests, initialTripContext]
+  );
+
+  const effectiveListingState = hasAppliedLocal
+    ? { hasApplied: true, isMatched: initialListingState?.isMatched ?? false }
+    : initialListingState;
+
+  const handleApplyOverride = useCallback((dates: { start: Date; end: Date }, guests: { adults: number; children: number; pets: number }) => {
+    setCollectedDates(dates);
+    setCollectedGuests(guests);
+    scrollToTopAndTransition('application');
+  }, []);
+
+  const handleBackToListing = () => {
+    scrollToTopAndTransition('listing');
+  };
+
+  const handleApplicationComplete = () => {
+    setHasAppliedLocal(true);
+    scrollToTopAndTransition('success');
+  };
+
+  const handleBackFromSuccess = () => {
+    scrollToTopAndTransition('listing');
+  };
+
+  const scrollToTopAndTransition = (state: WizardState) => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setWizardState(state);
+  };
+
+  return (
+    <AnimatePresence mode="wait">
+      {wizardState === 'listing' && (
+        <motion.div
+          key="listing"
+          initial={false}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: '-100%', opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <RenterListingActionBoxProvider
+            listing={listing}
+            isAuthenticated={isAuthenticated}
+            listingState={effectiveListingState}
+            initialStartDate={effectiveTripContext?.startDate}
+            initialEndDate={effectiveTripContext?.endDate}
+            initialGuests={effectiveTripContext ? {
+              adults: effectiveTripContext.numAdults ?? 0,
+              children: effectiveTripContext.numChildren ?? 0,
+              pets: effectiveTripContext.numPets ?? 0,
+            } : undefined}
+            onApplyOverride={handleApplyOverride}
+          >
+            <PublicListingDetailsView
+              listing={listing}
+              locationString={locationString}
+              isAuthenticated={isAuthenticated}
+              isFavorited={isFavorited}
+            />
+          </RenterListingActionBoxProvider>
+        </motion.div>
+      )}
+
+      {wizardState === 'application' && effectiveTripContext && (
+        <motion.div
+          key="application"
+          initial={shouldAutoApply ? false : { x: '100%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: '100%', opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <ApplicationWizard
+            listing={listing}
+            tripContext={effectiveTripContext}
+            application={userApplication}
+            onBack={handleBackToListing}
+            onComplete={handleApplicationComplete}
+          />
+        </motion.div>
+      )}
+
+      {wizardState === 'success' && (
+        <motion.div
+          key="success"
+          initial={{ x: '100%', opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          exit={{ x: '-100%', opacity: 0 }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
+        >
+          <div className="flex flex-col items-center justify-center py-20 gap-6 text-center">
+            <CheckCircle2 className="w-16 h-16 text-[#3c8787]" />
+            <h2 className="text-2xl font-semibold text-gray-900 font-['Poppins']">
+              Application Submitted!
+            </h2>
+            <p className="text-gray-600 font-['Poppins'] max-w-md">
+              Your application for <span className="font-medium">{listing.title}</span> has been
+              submitted. The host will review it and get back to you.
+            </p>
+            <Button
+              variant="outline"
+              onClick={handleBackFromSuccess}
+              className="border-[#3c8787] text-[#3c8787] hover:bg-[#3c8787] hover:text-white font-semibold px-8"
+            >
+              Back to Listing
+            </Button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>
+  );
+}

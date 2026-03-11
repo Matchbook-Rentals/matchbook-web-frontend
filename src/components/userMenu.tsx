@@ -147,18 +147,17 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     {
       id: 'switch-mode',
       label: 'Switch to Renting',
-      href: '/app/rent/searches',
+      href: '/rent/dashboard',
       section: 3
     },
-    { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
+    { id: 'settings', label: 'Account', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
+    { id: 'renter-dashboard', label: 'Renter Dashboard', href: '/rent/dashboard', adminOnlyVisible: true, section: 4 },
     { id: 'admin-dashboard', label: 'Admin Dashboard', href: '/admin', adminOnlyVisible: true, section: 4 },
   ] : [
     // Renter side menu items - open to all users
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'searches', label: 'Searches', href: '/app/rent/searches', section: 1 },
-    { id: 'application', label: 'Applications', href: '/app/rent/applications', section: 1 },
-    { id: 'bookings', label: 'Bookings', href: '/app/rent/bookings', section: 1 },
+    { id: 'renter-dashboard', label: 'Renter Dashboard', href: '/rent/dashboard', section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', section: 2 },
     {
       id: 'switch-mode',
@@ -166,7 +165,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       href: hasListings === false ? '/app/host/add-property' : '/app/host/dashboard/overview',
       section: 3
     },
-    { id: 'settings', label: 'Settings', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
+    { id: 'settings', label: 'Account', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
     { id: 'verification', label: 'MatchBook Renter Verification', href: '/verification', section: 4 },
     { id: 'refer-host', label: 'Refer a Host - Earn $50', href: '/refer-host', section: 4 },
@@ -401,22 +400,33 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
           <PopoverTrigger data-testid="user-menu-trigger" className={mode === 'header' ? "flex items-center gap-2 rounded-md pl-2 cursor-pointer" : "flex items-center space-x-2 border border-gray-500 rounded-full px-2 py-1 min-w-[80px]"}>
             {mode === 'header' ? (
               <>
-                <div className="flex items-center gap-3">
-                  <Avatar className="h-[38px] w-[38px] transition-transform duration-300 ease-out group-hover:">
+                {/* Mobile: compact hamburger + avatar */}
+                <div className="flex md:hidden items-center gap-3 rounded-[12px] border border-[#4D5761] px-3 py-2">
+                  <MenuIcon className="text-charcoal h-[20px] w-[20px]" />
+                  <Avatar className="h-[28px] w-[28px]">
                     <AvatarImage src={user?.imageUrl} alt={fullName} />
                     <AvatarFallback>{initials}</AvatarFallback>
                   </Avatar>
-
-                  <div className="flex flex-col">
-                    <span className="font-text-text-sm-semibold text-black text-left text-[14px] leading-[22px]">
-                      {fullName}
-                    </span>
-                    <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
-                      {pathname?.includes('host') ? 'Hosting' : 'Renting'}
-                    </span>
-                  </div>
                 </div>
-                <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+                {/* Desktop: avatar + name + chevron */}
+                <div className="hidden md:flex items-center gap-2">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="h-[38px] w-[38px] transition-transform duration-300 ease-out group-hover:">
+                      <AvatarImage src={user?.imageUrl} alt={fullName} />
+                      <AvatarFallback>{initials}</AvatarFallback>
+                    </Avatar>
+
+                    <div className="flex flex-col">
+                      <span className="font-text-text-sm-semibold text-black text-left text-[14px] leading-[22px]">
+                        {fullName}
+                      </span>
+                      <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
+                        {pathname?.includes('host') ? 'Hosting' : 'Renting'}
+                      </span>
+                    </div>
+                  </div>
+                  <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+                </div>
               </>
             ) : (
               <>
@@ -539,19 +549,29 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
       ) : (
         <Popover open={isMenuOpen} onOpenChange={setIsMenuOpen}>
           <PopoverTrigger data-testid="user-menu-trigger" className="flex items-center gap-2 rounded-md p-2 cursor-pointer">
-            <div className="flex items-center gap-3">
-              <div className="relative min-w-[38px] min-h-[38px] rounded-full flex items-end justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110" style={{backgroundColor: '#0B6E6E'}}>
-                <FaUserLarge className="text-white h-[24px] w-[24px]" />
-              </div>
-
-              <div className="flex flex-col">
-                <span className="font-text-text-sm-semibold text-black text-[14px] leading-[22px]">
-                  Sign In                </span>
-                <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
-                </span>
+            {/* Mobile: compact hamburger + user icon */}
+            <div className="flex md:hidden items-center gap-3 rounded-[12px] border border-[#4D5761] px-3 py-2">
+              <MenuIcon className="text-charcoal h-[20px] w-[20px]" />
+              <div className="relative min-w-[28px] min-h-[28px] rounded-full flex items-end justify-center overflow-hidden" style={{backgroundColor: '#0B6E6E'}}>
+                <FaUserLarge className="text-white h-[18px] w-[18px]" />
               </div>
             </div>
-            <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+            {/* Desktop: avatar + name + chevron */}
+            <div className="hidden md:flex items-center gap-2">
+              <div className="flex items-center gap-3">
+                <div className="relative min-w-[38px] min-h-[38px] rounded-full flex items-end justify-center overflow-hidden transition-transform duration-300 ease-out group-hover:scale-110" style={{backgroundColor: '#0B6E6E'}}>
+                  <FaUserLarge className="text-white h-[24px] w-[24px]" />
+                </div>
+
+                <div className="flex flex-col">
+                  <span className="font-text-text-sm-semibold text-black text-[14px] leading-[22px]">
+                    Sign In                </span>
+                  <span className="font-text-text-sm-regular text-black/50 text-left text-[14px] leading-[22px]">
+                  </span>
+                </div>
+              </div>
+              <ChevronDownIcon className="h-6 w-6 text-black/30 transition-colors duration-300 ease-out group-hover:text-black" />
+            </div>
           </PopoverTrigger>
           <PopoverContent className="p-0" onOpenAutoFocus={(e) => e.preventDefault()}>
             <div className="rounded-lg border border-gray-200 bg-white shadow-sm overflow-hidden">
@@ -567,6 +587,13 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                 >
                   Sign In
                 </button>
+                <Link
+                  href="/refer-host"
+                  className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  Refer a Host - Earn $50
+                </Link>
                 <button onClick={() => setIsSupportOpen(true)} className="w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset">
                   Get help
                 </button>

@@ -93,6 +93,32 @@ export async function getUserTripsCount(): Promise<number> {
   }
 }
 
+/**
+ * Gets the user's most recent trip (by creation date).
+ * Returns null if user has no trips or is not authenticated.
+ */
+export async function getMostRecentTrip(): Promise<Trip | null> {
+  const { userId } = auth();
+  if (!userId) {
+    return null;
+  }
+
+  try {
+    const trip = await prisma.trip.findFirst({
+      where: {
+        userId: userId,
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+    });
+    return trip;
+  } catch (error) {
+    console.error('Error fetching most recent trip:', error);
+    return null;
+  }
+}
+
 export async function addParticipant(tripId: string, email: string): Promise<string[]> {
   const { userId } = auth();
   if (!userId) {
@@ -265,8 +291,7 @@ export async function createTrip(tripData: {
   }
 
   try {
-    // Destructure all properties from tripData for clarity and safety
-    let {
+    const {
       startDate,
       endDate,
       locationString,
@@ -276,22 +301,6 @@ export async function createTrip(tripData: {
       numChildren,
       numPets
     } = tripData;
-    const today = new Date();
-
-    // Handle date logic
-    if (!startDate && !endDate) {
-      // If neither date is provided, start next month and end the month after
-      startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-      endDate = new Date(today.getFullYear(), today.getMonth() + 2, 1);
-    } else if (startDate && !endDate) {
-      // If only start date is provided, end date is start date + 1 month
-      endDate = new Date(startDate);
-      endDate.setMonth(endDate.getMonth() + 1);
-    } else if (!startDate && endDate) {
-      // If only end date is provided, start date is end date - 1 month
-      startDate = new Date(endDate);
-      startDate.setMonth(startDate.getMonth() - 1);
-    }
 
     const newTrip = await prisma.trip.create({
       data: {
@@ -336,8 +345,8 @@ export async function editTrip(tripId: string, tripData: {
   locationString?: string;
   latitude?: number;
   longitude?: number;
-  startDate?: Date;
-  endDate?: Date;
+  startDate?: Date | null;
+  endDate?: Date | null;
   numAdults?: number;
   numChildren?: number;
   numPets?: number;
@@ -494,4 +503,149 @@ export async function createTripFromGuestSession(guestSessionData: {
       error: 'Failed to create trip from guest session',
     };
   }
+}
+
+interface GetOrCreateTripResponse {
+  success: boolean;
+  trip?: Trip;
+  error?: string;
+}
+
+/**
+ * Gets or creates a trip for applying to a listing from the search page.
+ * Priority: dates > tripId > default dates
+ *
+ * @param listingId - The listing being applied to (used to get location)
+ * @param options - Optional tripId or date range
+ */
+export async function getOrCreateTripForListing(
+  listingId: string,
+  options?: {
+    tripId?: string;
+    startDate?: Date;
+    endDate?: Date;
+  }
+): Promise<GetOrCreateTripResponse> {
+  const { userId } = auth();
+  if (!userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  try {
+    const { tripId, startDate, endDate } = options || {};
+
+    // Priority 1: If dates are provided, find existing trip with those dates or create new
+    if (startDate && endDate) {
+      return await findOrCreateTripWithDates(userId, listingId, startDate, endDate);
+    }
+
+    // Priority 2: If tripId is provided, verify it belongs to user and return
+    if (tripId) {
+      const existingTrip = await prisma.trip.findUnique({
+        where: { id: tripId },
+      });
+
+      if (!existingTrip) {
+        return { success: false, error: 'Trip not found' };
+      }
+
+      if (existingTrip.userId !== userId) {
+        return { success: false, error: 'Unauthorized to use this trip' };
+      }
+
+      return { success: true, trip: existingTrip };
+    }
+
+    // Priority 3: No context provided, create trip for listing
+    return await createTripForListing(userId, listingId);
+  } catch (error) {
+    console.error('Error in getOrCreateTripForListing:', error);
+    return {
+      success: false,
+      error: 'Failed to get or create trip',
+    };
+  }
+}
+
+async function findOrCreateTripWithDates(
+  userId: string,
+  listingId: string,
+  startDate: Date,
+  endDate: Date
+): Promise<GetOrCreateTripResponse> {
+  // Try to find existing trip with matching dates
+  const existingTrip = await prisma.trip.findFirst({
+    where: {
+      userId,
+      startDate,
+      endDate,
+      tripStatus: 'searching',
+    },
+  });
+
+  if (existingTrip) {
+    return { success: true, trip: existingTrip };
+  }
+
+  // Create new trip with provided dates
+  const listing = await prisma.listing.findUnique({
+    where: { id: listingId },
+    select: { city: true, state: true, latitude: true, longitude: true },
+  });
+
+  if (!listing) {
+    return { success: false, error: 'Listing not found' };
+  }
+
+  const newTrip = await prisma.trip.create({
+    data: {
+      userId,
+      tripStatus: 'searching',
+      locationString: `${listing.city}, ${listing.state}`,
+      latitude: listing.latitude,
+      longitude: listing.longitude,
+      startDate,
+      endDate,
+      numAdults: 1,
+      numChildren: 0,
+      numPets: 0,
+      petsAllowed: false,
+    },
+  });
+
+  await revalidateTag('user-trips');
+
+  return { success: true, trip: newTrip };
+}
+
+async function createTripForListing(
+  userId: string,
+  listingId: string
+): Promise<GetOrCreateTripResponse> {
+  const listing = await prisma.listing.findUnique({
+    where: { id: listingId },
+    select: { city: true, state: true, latitude: true, longitude: true },
+  });
+
+  if (!listing) {
+    return { success: false, error: 'Listing not found' };
+  }
+
+  const newTrip = await prisma.trip.create({
+    data: {
+      userId,
+      tripStatus: 'searching',
+      locationString: `${listing.city}, ${listing.state}`,
+      latitude: listing.latitude,
+      longitude: listing.longitude,
+      numAdults: 1,
+      numChildren: 0,
+      numPets: 0,
+      petsAllowed: false,
+    },
+  });
+
+  await revalidateTag('user-trips');
+
+  return { success: true, trip: newTrip };
 }

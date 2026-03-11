@@ -1,10 +1,22 @@
 import MessagesPageClient from './messages-page-client';
-import { getAllConversations } from '@/app/actions/conversations';
+import { getAllConversations, findOrCreateConversationForListing } from '@/app/actions/conversations';
 import { auth, currentUser } from '@clerk/nextjs/server';
 import { APP_PAGE_MARGIN } from '@/constants/styles';
 import { headers } from 'next/headers';
 
-export default async function MessagePage() {
+export default async function MessagePage({
+  searchParams,
+}: {
+  searchParams: { listingId?: string };
+}) {
+  // If listingId is provided, find or create the conversation first
+  // so it's included in the getAllConversations results
+  let autoSelectConversationId: string | null = null;
+  if (searchParams.listingId) {
+    const result = await findOrCreateConversationForListing(searchParams.listingId);
+    autoSelectConversationId = result.conversationId;
+  }
+
   let conversations = await getAllConversations();
   let authUser = await currentUser();
   let user = {
@@ -34,6 +46,7 @@ export default async function MessagePage() {
           user={user}
           initialIsMobile={isMobileDevice}
           isAdmin={isAdmin}
+          autoSelectConversationId={autoSelectConversationId}
         />
       </div>
     </div>

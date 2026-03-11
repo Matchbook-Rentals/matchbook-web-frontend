@@ -105,7 +105,7 @@ export function ComparisonClient({ htmlContent }: ComparisonClientProps) {
         return (
           <div
             key={doc.id}
-            className="border border-gray-300 rounded-lg overflow-hidden bg-white shadow-sm"
+            className="border border-gray-300 rounded-lg overflow-hidden bg-background shadow-sm"
           >
             {/* Header */}
             <div className="w-full px-6 py-4 flex items-center justify-between bg-gray-50">

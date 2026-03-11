@@ -1,8 +1,27 @@
 'use client';
 
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
-import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
-import { pullListingsFromDb } from '@/app/actions/listings';
+import { ListingAndImages, ListingWithRelations } from '@/types';
+import { GuestSession, GuestSessionService } from '@/utils/guest-session';
+import { DEFAULT_FILTER_OPTIONS } from '@/lib/consts/options';
+import { matchesFilters, FilterOptions } from '@/lib/listing-filters';
+import { computeListingPrice } from '@/lib/calculate-rent';
+import {
+  guestOptimisticFavorite,
+  guestOptimisticRemoveFavorite,
+  guestOptimisticDislike,
+  guestOptimisticRemoveDislike,
+  pullGuestFavoritesFromDb
+} from '@/app/actions/guest-favorites';
+import GuestAuthModal from '@/components/guest-auth-modal';
+
+interface ListingWithAvailability extends ListingWithRelations {
+  availableStart?: Date;
+  availableEnd?: Date;
+  isActuallyAvailable?: boolean;
+  computedPrice?: number;
+  computedPriceRange?: { min: number; max: number } | null;
+}
 
 interface ViewedListing {
   listing: ListingAndImages;
@@ -10,265 +29,370 @@ interface ViewedListing {
   actionId: string;
 }
 
-interface SearchContextType {
+export interface GuestTripContextType {
   state: {
-    activeSearches: TripAndMatches[];
-    currentSearch: TripAndMatches | null;
+    session: GuestSession | null;
     listings: ListingAndImages[];
-    showListings: ListingAndImages[];
+    allListings: ListingWithAvailability[];
+    swipeListings: ListingWithAvailability[];
+    showListings: ListingWithAvailability[];
+    swipeShowListings: ListingWithAvailability[];
     viewedListings: ViewedListing[];
     likedListings: ListingAndImages[];
     dislikedListings: ListingAndImages[];
     requestedListings: ListingAndImages[];
     matchedListings: ListingAndImages[];
     isLoading: boolean;
-    application: ApplicationWithArrays | null;
     lookup: {
       favIds: Set<string>;
       dislikedIds: Set<string>;
       requestedIds: Set<string>;
-      matchIds: Set<string>; // Add this line
+      matchIds: Set<string>;
     };
+    filters: FilterOptions;
+    filteredCount: number;
   };
   actions: {
-    setCurrentSearch: (search: TripAndMatches | null) => void;
     setViewedListings: React.Dispatch<React.SetStateAction<ViewedListing[]>>;
-    fetchListings: (lat: number, lng: number, radius: number) => Promise<void>;
-    setLookup: React.Dispatch<React.SetStateAction<SearchContextType['state']['lookup']>>;
+    setSession: React.Dispatch<React.SetStateAction<GuestSession | null>>;
+    setLookup: React.Dispatch<React.SetStateAction<GuestTripContextType['state']['lookup']>>;
+    showAuthPrompt: (action: 'like' | 'apply' | 'contact', listingId?: string) => void;
+    updateFilter: (key: keyof FilterOptions, value: any) => void;
+    updateFilters: (newFilters: FilterOptions) => void;
+    optimisticLike: (listingId: string) => Promise<void>;
+    optimisticDislike: (listingId: string) => Promise<void>;
+    optimisticRemoveLike: (listingId: string) => Promise<void>;
+    optimisticRemoveDislike: (listingId: string) => Promise<void>;
   };
 }
 
-interface SearchContextProviderProps {
+interface GuestTripContextProviderProps {
   children: ReactNode;
-  activeSearches: TripAndMatches[];
-  application: ApplicationWithArrays | null;
+  sessionId: string;
+  sessionData: GuestSession; // Now passed from server
+  listingData: ListingAndImages[]; // Required - real listing data from database
 }
 
-const SearchContext = createContext<SearchContextType | undefined>(undefined);
+export const GuestTripContext = createContext<GuestTripContextType | undefined>(undefined);
 
-export const useSearchContext = () => {
-  const context = useContext(SearchContext);
+/** @deprecated Use useSearchContext instead */
+export const useGuestTripContext = () => {
+  const context = useContext(GuestTripContext);
   if (!context) {
     throw new Error('useSearchContext must be used within a SearchContextProvider');
   }
   return context;
 };
 
-export const SearchContextProvider: React.FC<SearchContextProviderProps> = ({ children, activeSearches, application }) => {
-  const [currentSearch, setCurrentSearch] = useState<TripAndMatches | null>(null);
-  const [listings, setListings] = useState<ListingAndImages[]>([]);
+// Renamed exports — canonical names for the unified /search context
+export const SearchContext = GuestTripContext;
+export const useSearchContext = useGuestTripContext;
+
+export const GuestTripContextProvider: React.FC<GuestTripContextProviderProps> = ({
+  children,
+  sessionId,
+  sessionData,
+  listingData
+}) => {
+  const [session, setSession] = useState<GuestSession | null>(sessionData);
+  const [listings, setListings] = useState<ListingAndImages[]>(listingData);
   const [viewedListings, setViewedListings] = useState<ViewedListing[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [lookup, setLookup] = useState<SearchContextType['state']['lookup']>({
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authPromptContext, setAuthPromptContext] = useState<{
+    action: 'like' | 'apply' | 'contact';
+    listingId?: string;
+  } | null>(null);
+
+  const [lookup, setLookup] = useState<GuestTripContextType['state']['lookup']>({
     favIds: new Set(),
     dislikedIds: new Set(),
     requestedIds: new Set(),
-    matchIds: new Set() // Add this line
+    matchIds: new Set()
   });
-  const getListingPrice = (listing: ListingAndImages) => {
-    const endDate = currentSearch?.endDate;
-    const startDate = currentSearch?.startDate;
-    if (!endDate || !startDate) return listing.shortestLeasePrice;
 
-    const tripLengthInMonths = Math.round((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24 * 30));
+  // Initialize filters from session data
+  const [filters, setFilters] = useState<FilterOptions>({
+    ...DEFAULT_FILTER_OPTIONS,
+    // Initialize immediately with server data
+    moveInDate: sessionData.searchParams.startDate || new Date(),
+    moveOutDate: sessionData.searchParams.endDate || new Date(),
+    pets: sessionData.searchParams.guests.pets > 0 ? ['petsAllowed'] : [],
+  });
 
-    const shortestLeaseLength = listing.shortestLeaseLength;
-    const shortestLeasePrice = listing.shortestLeasePrice;
-    const longestLeaseLength = listing.longestLeaseLength;
-    const longestLeasePrice = listing.longestLeasePrice;
+  // Load favorites/dislikes from database on mount
+  useEffect(() => {
+    const loadGuestFavorites = async () => {
+      // Load favorites and dislikes from database
+      const favoritesResult = await pullGuestFavoritesFromDb(sessionId);
+      if (favoritesResult.success) {
+        setLookup(prev => ({
+          ...prev,
+          favIds: new Set(favoritesResult.favoriteIds),
+          dislikedIds: new Set(favoritesResult.dislikeIds)
+        }));
+      }
+    };
 
-    // If the trip length is shorter than or equal to the shortest lease, return the shortest lease price
-    if (tripLengthInMonths <= shortestLeaseLength) return shortestLeasePrice;
+    loadGuestFavorites();
+  }, [sessionId]);
 
-    // If the trip length is longer than or equal to the longest lease, return the longest lease price
-    if (tripLengthInMonths >= longestLeaseLength) return longestLeasePrice;
+  // Update session state when sessionData prop changes (if needed)
+  useEffect(() => {
+    setSession(sessionData);
 
-    // Calculate the price difference and lease length difference
-    const priceDifference = longestLeasePrice - shortestLeasePrice;
-    const leaseLengthDifference = longestLeaseLength - shortestLeaseLength;
+    // Update filters when session data changes
+    setFilters(prev => ({
+      ...prev,
+      moveInDate: sessionData.searchParams.startDate || new Date(),
+      moveOutDate: sessionData.searchParams.endDate || new Date(),
+      pets: sessionData.searchParams.guests.pets > 0 ? ['petsAllowed'] : [],
+    }));
+  }, [sessionData]);
 
-    // Calculate the price change per month (can be positive or negative)
-    const priceChangePerMonth = priceDifference / leaseLengthDifference;
+  // Build trip object from session for price computation
+  const tripForPricing = useMemo(() => ({
+    startDate: session?.searchParams?.startDate || null,
+    endDate: session?.searchParams?.endDate || null,
+  }), [session?.searchParams?.startDate, session?.searchParams?.endDate]);
 
-    // Calculate the number of months beyond the shortest lease
-    const monthsBeyondShortest = tripLengthInMonths - shortestLeaseLength;
-
-    // Calculate the total price change
-    const totalPriceChange = priceChangePerMonth * monthsBeyondShortest;
-
-    // Calculate the final price
-    const finalPrice = shortestLeasePrice + totalPriceChange;
-
-    return Math.round(finalPrice);
-  }
-
-  const calculateUScore = (listing: ListingAndImages & { calculatedPrice: number }, lowestPrice: number, highestPrice: number, highestDistance: number, highestSquareFootage: number, highestRoomCount: number, highestBathroomCount: number) => {
-    const priceScore = ((highestPrice - listing.calculatedPrice) / (highestPrice - lowestPrice)) * 10;
-    const distanceScore = (1 - (listing.distance || 0) / highestDistance) * 9;
-    const squareFootageScore = ((listing.squareFootage || 0) / highestSquareFootage) * 8;
-    const roomCountScore = ((listing.roomCount || 0) / highestRoomCount) * 6;
-    const bathroomCountScore = ((listing.bathroomCount || 0) / highestBathroomCount) * 7;
-    return priceScore + distanceScore + squareFootageScore + roomCountScore + bathroomCountScore;
-  }
-
-  const sortListingsByUScore = (listings: ListingAndImages[]) => {
-    // Pre-calculate prices for all listings
-    const listingsWithPrices = listings.map(listing => ({
+  // All listings for map tab (includes liked/disliked)
+  const allListings: ListingWithAvailability[] = useMemo(() => {
+    return listings.map(listing => {
+      const { calculatedPrice, priceRange } = computeListingPrice(listing as any, tripForPricing);
+      return {
       ...listing,
-      calculatedPrice: getListingPrice(listing)
+      computedPrice: calculatedPrice,
+      computedPriceRange: priceRange,
+      isActuallyAvailable: true, // For guests, assume all are available
+    };
+    });
+  }, [listings, tripForPricing]);
+
+  // Filter out liked and disliked listings for swipe/match tab to automatically advance
+  const swipeListings: ListingWithAvailability[] = useMemo(() => {
+    return listings
+      .filter(listing => !lookup.favIds.has(listing.id) && !lookup.dislikedIds.has(listing.id))
+      .map(listing => ({
+        ...listing,
+        isActuallyAvailable: true, // For guests, assume all are available
+      }));
+  }, [listings, lookup.favIds, lookup.dislikedIds]);
+
+  // Filtered listings for map display (includes liked/disliked that match filters)
+  const showListings: ListingWithAvailability[] = useMemo(() => {
+    return allListings.filter(listing =>
+      matchesFilters({
+        ...listing,
+        calculatedPrice: listing.price
+      }, filters, false, session)
+    );
+  }, [allListings, filters, session]);
+
+  // Filtered swipe listings (excludes liked/disliked AND applies filters)
+  const swipeShowListings: ListingWithAvailability[] = useMemo(() => {
+    return showListings.filter(listing =>
+      !lookup.favIds.has(listing.id) && !lookup.dislikedIds.has(listing.id)
+    );
+  }, [showListings, lookup.favIds, lookup.dislikedIds]);
+
+  // Derive liked/disliked listings from the loaded data
+  const likedListings = useMemo(() => {
+    return listings.filter(listing => lookup.favIds.has(listing.id));
+  }, [listings, lookup.favIds]);
+
+  const dislikedListings = useMemo(() => {
+    return listings.filter(listing => lookup.dislikedIds.has(listing.id));
+  }, [listings, lookup.dislikedIds]);
+
+  // Empty arrays for guest context - no applications until auth
+  const requestedListings = useMemo(() => [], []);
+  const matchedListings = useMemo(() => [], []);
+
+  const showAuthPrompt = useCallback((action: 'like' | 'apply' | 'contact', listingId?: string) => {
+    setAuthPromptContext({ action, listingId });
+    setShowAuthModal(true);
+
+    // Store pending action in session
+    if (listingId) {
+      GuestSessionService.addPendingAction({
+        type: action,
+        listingId,
+        timestamp: Date.now()
+      });
+    }
+  }, []);
+
+  const updateFilter = useCallback((key: keyof FilterOptions, value: any) => {
+    setFilters(prev => ({
+      ...prev,
+      [key]: value
+    }));
+  }, []);
+
+  const updateFilters = useCallback((newFilters: FilterOptions) => {
+    setFilters(newFilters);
+  }, []);
+
+  // Real optimistic actions that persist to database
+  const optimisticLike = useCallback(async (listingId: string) => {
+    if (!session) return;
+
+    // Optimistically update UI
+    setLookup(prev => ({
+      ...prev,
+      favIds: new Set([...prev.favIds, listingId]),
+      dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId))
     }));
 
-    let lowestPrice = Infinity;
-    let highestPrice = 0;
-    let highestDistance = 0;
-    let highestSquareFootage = 0;
-    let highestRoomCount = 0;
-    let highestBathroomCount = 0;
-
-    listingsWithPrices.forEach(listing => {
-      if (listing.calculatedPrice < lowestPrice) {
-        lowestPrice = listing.calculatedPrice;
-        console.log('lowestPrice', lowestPrice);
-      }
-      if (listing.calculatedPrice > highestPrice) {
-        highestPrice = listing.calculatedPrice;
-        console.log('highestPrice', highestPrice);
-      }
-      if (listing.distance && listing.distance > highestDistance) {
-        highestDistance = listing.distance;
-      }
-      if (listing.squareFootage && listing.squareFootage > highestSquareFootage) {
-        highestSquareFootage = listing.squareFootage;
-      }
-      if (listing.roomCount && listing.roomCount > highestRoomCount) {
-        highestRoomCount = listing.roomCount;
-      }
-      if (listing.bathroomCount && listing.bathroomCount > highestBathroomCount) {
-        highestBathroomCount = listing.bathroomCount;
-      }
-    });
-    console.log(' final lowestPrice', lowestPrice);
-    console.log(' final highestPrice', highestPrice);
-
-    const updatedListings = listingsWithPrices.map(listing => {
-      const uScore = calculateUScore(listing, lowestPrice, highestPrice, highestDistance, highestSquareFootage, highestRoomCount, highestBathroomCount);
-      return { ...listing, price: listing.calculatedPrice, uScore };
-    });
-
-    return updatedListings.sort((a, b) => b.uScore - a.uScore);
-  }
-
-  const fetchListings = async (lat: number, lng: number, radius: number) => {
-    setIsLoading(true);
     try {
-      const results = await pullListingsFromDb(lat, lng, radius);
-      if (results.length === 0) {
-        console.log(currentSearch);
+      const result = await guestOptimisticFavorite(sessionId, listingId);
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          favIds: new Set([...prev.favIds].filter(id => id !== listingId))
+        }));
       }
-      const sortedResults = sortListingsByUScore(results);
-
-      setListings(sortedResults);
-    } finally {
-      setIsLoading(false);
+    } catch (error) {
+      console.error('Error liking listing:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        favIds: new Set([...prev.favIds].filter(id => id !== listingId))
+      }));
     }
-  };
+  }, [session, sessionId]);
 
-  useEffect(() => {
-    if (currentSearch) {
-      fetchListings(currentSearch.latitude, currentSearch.longitude, currentSearch.radius || 100);
+  const optimisticDislike = useCallback(async (listingId: string) => {
+    if (!session) return;
+
+    // Optimistically update UI
+    setLookup(prev => ({
+      ...prev,
+      dislikedIds: new Set([...prev.dislikedIds, listingId]),
+      favIds: new Set([...prev.favIds].filter(id => id !== listingId))
+    }));
+
+    try {
+      const result = await guestOptimisticDislike(sessionId, listingId);
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId))
+        }));
+      }
+    } catch (error) {
+      console.error('Error disliking listing:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId))
+      }));
     }
-    setLookup({
-      favIds: new Set(currentSearch?.favorites.map(favorite => favorite.listingId).filter((id): id is string => id !== null)),
-      dislikedIds: new Set(currentSearch?.dislikes.map(dislike => dislike.listingId)),
-      requestedIds: new Set(currentSearch?.housingRequests.map(request => request.listingId)),
-      matchIds: new Set(currentSearch?.matches.map(match => match.listingId)) // Add this line
-    });
-  }, [currentSearch]);
+  }, [session, sessionId]);
 
-  const getRank = useCallback((listingId: string) => lookup.favIds.has(listingId) ? 0 : Infinity, [lookup.favIds]);
+  const optimisticRemoveLike = useCallback(async (listingId: string) => {
+    if (!session) return;
 
-  const showListings = useMemo(() =>
-    listings.filter(listing => {
-      const isNotFavorited = !lookup.favIds.has(listing.id);
-      const isNotDisliked = !lookup.dislikedIds.has(listing.id);
-      const isNotRequested = !lookup.requestedIds.has(listing.id);
+    // Optimistically update UI
+    setLookup(prev => ({
+      ...prev,
+      favIds: new Set([...prev.favIds].filter(id => id !== listingId))
+    }));
 
-      const isAvailable = !listing.unavailablePeriods.some(period => {
-        const periodStart = new Date(period.startDate);
-        const periodEnd = new Date(period.endDate);
-        const searchStart = new Date(currentSearch?.startDate || '');
-        const searchEnd = new Date(currentSearch?.endDate || '');
+    try {
+      const result = await guestOptimisticRemoveFavorite(sessionId, listingId);
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          favIds: new Set([...prev.favIds, listingId])
+        }));
+      }
+    } catch (error) {
+      console.error('Error removing like:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        favIds: new Set([...prev.favIds, listingId])
+      }));
+    }
+  }, [session, sessionId]);
 
-        return (
-          (searchStart >= periodStart && searchStart <= periodEnd) ||
-          (searchEnd >= periodStart && searchEnd <= periodEnd) ||
-          (searchStart <= periodStart && searchEnd >= periodEnd)
-        );
-      });
+  const optimisticRemoveDislike = useCallback(async (listingId: string) => {
+    if (!session) return;
 
-      return isNotFavorited && isNotDisliked && isNotRequested && isAvailable;
-    }),
-    [listings, lookup, currentSearch]
-  );
+    // Optimistically update UI
+    setLookup(prev => ({
+      ...prev,
+      dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId))
+    }));
 
-  const likedListings = useMemo(() =>
-    listings
-      .filter(listing => !lookup.requestedIds.has(listing.id))
-      .filter(listing => lookup.favIds.has(listing.id))
-      .sort((a, b) => getRank(a.id) - getRank(b.id)),
-    [listings, lookup.favIds, lookup.requestedIds, getRank]
-  );
+    try {
+      const result = await guestOptimisticRemoveDislike(sessionId, listingId);
+      if (!result.success) {
+        // Rollback on failure
+        setLookup(prev => ({
+          ...prev,
+          dislikedIds: new Set([...prev.dislikedIds, listingId])
+        }));
+      }
+    } catch (error) {
+      console.error('Error removing dislike:', error);
+      // Rollback on error
+      setLookup(prev => ({
+        ...prev,
+        dislikedIds: new Set([...prev.dislikedIds, listingId])
+      }));
+    }
+  }, [session, sessionId]);
 
-  const dislikedListings = useMemo(() =>
-    listings
-      .filter(listing => lookup.dislikedIds.has(listing.id))
-      .sort((a, b) => getRank(a.id) - getRank(b.id)),
-    [listings, lookup.dislikedIds, getRank]
-  );
-
-  const requestedListings = useMemo(() =>
-    listings
-      .filter(listing => lookup.requestedIds.has(listing.id))
-      .sort((a, b) => getRank(a.id) - getRank(b.id)),
-    [listings, lookup.requestedIds, getRank]
-  );
-
-  const matchedListings = useMemo(() =>
-    listings
-      .filter(listing => lookup.matchIds.has(listing.id))
-      .sort((a, b) => getRank(a.id) - getRank(b.id)),
-    [listings, lookup.matchIds, getRank]
-  );
-
-  const contextValue: SearchContextType = {
+  const contextValue: GuestTripContextType = {
     state: {
-      activeSearches,
-      currentSearch,
+      session,
       listings,
+      allListings,
+      swipeListings,
       showListings,
+      swipeShowListings,
+      viewedListings,
       likedListings,
       dislikedListings,
       requestedListings,
-      viewedListings,
+      matchedListings,
       isLoading,
       lookup,
-      application,
-      matchedListings // Add this line
+      filters,
+      filteredCount: allListings.length,
     },
     actions: {
-      setCurrentSearch: (search: TripAndMatches | null) => {
-        setCurrentSearch(search);
-        setListings([]); // Clear listings when changing search
-      },
       setViewedListings,
-      fetchListings,
+      setSession,
       setLookup,
+      showAuthPrompt,
+      updateFilter,
+      updateFilters,
+      optimisticLike,
+      optimisticDislike,
+      optimisticRemoveLike,
+      optimisticRemoveDislike,
     }
   };
 
   return (
-    <SearchContext.Provider value={contextValue}>
+    <GuestTripContext.Provider value={contextValue}>
       {children}
-    </SearchContext.Provider>
+      <GuestAuthModal
+        isOpen={showAuthModal}
+        onOpenChange={(open) => {
+          setShowAuthModal(open);
+          if (!open) {
+            setAuthPromptContext(null);
+          }
+        }}
+      />
+    </GuestTripContext.Provider>
   );
 };

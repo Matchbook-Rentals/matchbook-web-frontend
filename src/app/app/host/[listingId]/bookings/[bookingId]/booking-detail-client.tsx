@@ -21,6 +21,8 @@ interface BookingDetailClientProps {
     guestUserId: string;
     matchId: string;
     leaseDocumentId: string | null;
+    startDate: Date | string;
+    endDate: Date | string;
   };
   paymentsData: {
     upcoming: Array<{
@@ -58,10 +60,13 @@ export default function BookingDetailClient({
   listingId,
   bookingId
 }: BookingDetailClientProps) {
-  const handleModifyDates = () => {
-    console.log('Modify dates for booking:', bookingId);
-    // TODO: Implement modify dates functionality
-  };
+  // Convert dates from strings (serialized from server) to Date objects
+  const startDate = bookingData.startDate instanceof Date
+    ? bookingData.startDate
+    : new Date(bookingData.startDate);
+  const endDate = bookingData.endDate instanceof Date
+    ? bookingData.endDate
+    : new Date(bookingData.endDate);
 
   const handleViewLease = () => {
     if (bookingData.leaseDocumentId) {
@@ -70,11 +75,6 @@ export default function BookingDetailClient({
       // Fallback to lease signing page if no document exists yet
       window.location.href = `/app/host/match/${bookingData.matchId}`;
     }
-  };
-
-  const handleMessageRenter = () => {
-    console.log('Message renter for booking:', bookingId);
-    // TODO: Implement message renter functionality
   };
 
   const handleManageListing = () => {
@@ -101,12 +101,13 @@ export default function BookingDetailClient({
           primaryButtonText="Modify Dates"
           secondaryButtonText="View Lease"
           tertiaryButtonText="Message Renter"
-          onPrimaryAction={handleModifyDates}
           onSecondaryAction={handleViewLease}
-          onTertiaryAction={handleMessageRenter}
           onManageListing={handleManageListing}
           listingId={listingId}
           guestUserId={bookingData.guestUserId}
+          bookingId={bookingId}
+          bookingStartDate={startDate}
+          bookingEndDate={endDate}
           className="w-full"
         />
         

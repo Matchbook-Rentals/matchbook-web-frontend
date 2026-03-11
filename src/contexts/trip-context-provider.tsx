@@ -2,7 +2,7 @@
 //Imports
 import React, { createContext, useState, useContext, useMemo, ReactNode, useEffect, useCallback } from 'react';
 import { subDays, addDays, differenceInDays, isValid } from 'date-fns'; // <-- Import date functions
-import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
+import { ListingAndImages, ListingWithRelations, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
@@ -14,7 +14,7 @@ import { useFilteredListings } from '@/hooks/useFilteredListings';
 import { logger } from '@/lib/logger';
 import { useToast } from '@/components/ui/use-toast';
 
-interface ListingWithAvailability extends ListingAndImages {
+interface ListingWithAvailability extends ListingWithRelations {
   availableStart?: Date;
   availableEnd?: Date;
   isActuallyAvailable?: boolean; // Helper flag from calculation

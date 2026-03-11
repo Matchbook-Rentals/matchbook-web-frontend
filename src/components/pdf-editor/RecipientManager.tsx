@@ -177,6 +177,7 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
             </DropdownMenuItem>
           )}
           
+          {/* Temporarily disabled - multiple recipients
           <DropdownMenuSeparator />
 
           <DropdownMenuItem
@@ -186,6 +187,7 @@ export const RecipientManager: React.FC<RecipientManagerProps> = ({
             <Plus className="w-4 h-4" />
             Add Recipient
           </DropdownMenuItem>
+          */}
         </DropdownMenuContent>
       </DropdownMenu>
       </div>

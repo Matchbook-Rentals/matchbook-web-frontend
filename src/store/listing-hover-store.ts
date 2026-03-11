@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import { ListingAndImages } from '@/types'
+import { SearchListing } from '@/types'
 
 interface ListingHoverState {
-  hoveredListing: ListingAndImages | null
-  setHoveredListing: (listing: ListingAndImages | null) => void
+  hoveredListing: SearchListing | null
+  setHoveredListing: (listing: SearchListing | null) => void
   panToLocation: (lat: number, lng: number) => void
   shouldPanTo: { lat: number, lng: number } | null
   clearPanTo: () => void

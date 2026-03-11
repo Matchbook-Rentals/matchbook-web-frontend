@@ -1,16 +1,28 @@
 /**
  * Booking Flow Test Fixtures
  *
- * Creates test accounts and data needed for the booking flow E2E tests.
- * Uses Clerk's test email format (+clerk_test) which can be verified with code 424242.
+ * Supports two modes:
+ * 1. Permanent test users (default) - Uses TEST_HOST_EMAIL/TEST_RENTER_EMAIL from env
+ * 2. Dynamic test users - Creates new accounts using Clerk's test email format
+ *
+ * To use permanent users, set these in e2e/.env.test:
+ *   TEST_HOST_EMAIL, TEST_HOST_PASSWORD
+ *   TEST_RENTER_EMAIL, TEST_RENTER_PASSWORD
+ *
+ * For dynamic users (signup testing), use generateTestAccounts()
  *
  * See: https://clerk.com/docs/testing/test-emails-and-phones
  */
 
 import { test as base, Page } from '@playwright/test';
 import { setupClerkTestingToken } from '@clerk/testing/playwright';
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 
-// Test account credentials - generated fresh for each test run
+// Load e2e test environment variables
+dotenv.config({ path: path.resolve(__dirname, '..', '.env.test') });
+
+// Test account credentials
 export interface TestAccounts {
   host: {
     email: string;
@@ -24,10 +36,53 @@ export interface TestAccounts {
   };
 }
 
-// Unique test run ID to avoid collisions
-const testRunId = Date.now();
+/**
+ * Get permanent test accounts from environment variables.
+ * These accounts should be created once in Clerk and reused for all tests.
+ */
+export function getPermanentTestAccounts(): TestAccounts {
+  const hostEmail = process.env.TEST_HOST_EMAIL;
+  const hostPassword = process.env.TEST_HOST_PASSWORD;
+  const renterEmail = process.env.TEST_RENTER_EMAIL;
+  const renterPassword = process.env.TEST_RENTER_PASSWORD;
 
-// Generate unique test emails using Clerk's test format
+  if (!hostEmail || !hostPassword || !renterEmail || !renterPassword) {
+    throw new Error(
+      'Missing test account credentials. Please set TEST_HOST_EMAIL, TEST_HOST_PASSWORD, ' +
+      'TEST_RENTER_EMAIL, and TEST_RENTER_PASSWORD in e2e/.env.test\n' +
+      'See e2e/.env.test.example for the expected format.'
+    );
+  }
+
+  return {
+    host: {
+      email: hostEmail,
+      password: hostPassword,
+    },
+    renter: {
+      email: renterEmail,
+      password: renterPassword,
+    },
+  };
+}
+
+/**
+ * Check if permanent test accounts are configured
+ */
+export function hasPermanentTestAccounts(): boolean {
+  return !!(
+    process.env.TEST_HOST_EMAIL &&
+    process.env.TEST_HOST_PASSWORD &&
+    process.env.TEST_RENTER_EMAIL &&
+    process.env.TEST_RENTER_PASSWORD
+  );
+}
+
+/**
+ * Generate unique test emails using Clerk's test format.
+ * Use this only for testing the actual signup flow.
+ * These accounts can be verified with code 424242.
+ */
 export function generateTestAccounts(): TestAccounts {
   const timestamp = Date.now();
   return {
@@ -40,6 +95,25 @@ export function generateTestAccounts(): TestAccounts {
       password: 'TestRenter$2026!SecurePass',
     },
   };
+}
+
+/**
+ * Get test accounts - prefers permanent accounts if configured,
+ * falls back to generating new ones (with a warning)
+ */
+export function getTestAccounts(): TestAccounts {
+  if (hasPermanentTestAccounts()) {
+    console.log('Using permanent test accounts from environment variables');
+    return getPermanentTestAccounts();
+  }
+
+  console.warn(
+    '⚠️  No permanent test accounts configured. Generating new accounts.\n' +
+    '   This will create new users in Clerk on each test run.\n' +
+    '   To use permanent accounts, set TEST_HOST_EMAIL, TEST_HOST_PASSWORD,\n' +
+    '   TEST_RENTER_EMAIL, TEST_RENTER_PASSWORD in e2e/.env.test'
+  );
+  return generateTestAccounts();
 }
 
 /**
@@ -145,6 +219,7 @@ export async function createTestAccount(
 
 /**
  * Sign in to an existing test account
+ * Handles 2FA/verification step if required (uses code 424242 for +clerk_test emails)
  */
 export async function signInTestAccount(
   page: Page,
@@ -167,6 +242,31 @@ export async function signInTestAccount(
     // Fill password
     await page.fill('input[name="password"]', password);
     await page.getByRole('button', { name: /continue|sign in/i }).click();
+
+    // Wait briefly for navigation
+    await page.waitForTimeout(2000);
+
+    // Check if we hit factor-one (2FA/verification step)
+    if (page.url().includes('factor-one')) {
+      console.log('Verification step detected, entering code 424242...');
+
+      // Focus the OTP input
+      const otpContainer = page.locator('[data-otp-input-root]').first();
+      if (await otpContainer.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await otpContainer.click();
+      } else {
+        const firstInput = page.locator('input[inputmode="numeric"], input[type="text"]').first();
+        if (await firstInput.isVisible()) {
+          await firstInput.click();
+        }
+      }
+
+      // Type the verification code
+      await page.keyboard.type('424242', { delay: 100 });
+
+      // Wait for verification to complete
+      await page.waitForTimeout(2000);
+    }
 
     // Wait for navigation away from sign-in
     await page.waitForURL((url) => !url.pathname.includes('/sign-in'), { timeout: 15000 });

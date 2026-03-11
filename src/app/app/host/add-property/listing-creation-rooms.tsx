@@ -23,6 +23,10 @@ export const Rooms: React.FC<RoomsProps> = ({
   onBathroomsChange,
   onSquareFeetChange,
 }) => {
+  // Track focus to defer comma formatting until blur
+  // (reformatting mid-keystroke causes cursor jumps on older Safari)
+  const [isFocused, setIsFocused] = React.useState(false);
+
   return (
     <Card className="w-full border-none shadow-none">
       <CardContent className="p-0">
@@ -64,8 +68,10 @@ export const Rooms: React.FC<RoomsProps> = ({
           <Input
             className="w-full max-w-[135px] h-8 rounded-lg border border-[#8a8a8a] text-base"
             placeholder="1,234 sq ft"
-            value={formatNumberWithCommas(squareFeet)}
+            value={isFocused ? squareFeet : formatNumberWithCommas(squareFeet)}
             onChange={createNumberChangeHandler(onSquareFeetChange, false, 10000000, true)}
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
             type="text"
             inputMode="numeric"
             pattern="[0-9,]*"

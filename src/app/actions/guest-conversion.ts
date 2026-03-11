@@ -92,18 +92,6 @@ export async function getGuestSessionForConversion(guestSessionId: string) {
       };
     }
 
-    // Check if session is expired
-    if (Date.now() > guestSession.expiresAt.getTime()) {
-      return {
-        success: false,
-        guestSessionId,
-        favoritesCount: 0,
-        dislikesCount: 0,
-        hasData: false,
-        error: 'Guest session expired'
-      };
-    }
-
     return {
       success: true,
       guestSessionId,

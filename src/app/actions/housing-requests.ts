@@ -12,6 +12,7 @@ import { sendNotificationEmail } from '@/lib/send-notification-email'
 import { buildNotificationEmailData as buildEmailConfig, getNotificationEmailSubject } from '@/lib/notification-email-config'
 import { buildNotificationEmailData } from '@/lib/notification-builders'
 import { MAX_APPLICATIONS_PER_TRIP, MAX_APPLICATIONS_TOTAL } from '@/constants/search-constants'
+import { getOrCreateTripForListing } from './trips'
 
 type CreateNotificationInput = Omit<Notification, 'id' | 'createdAt' | 'updatedAt'>;
 
@@ -1199,5 +1200,166 @@ export async function updateHousingRequest(housingRequestId: string, data: { lea
   } catch (error) {
     console.error('Error updating housing request:', error);
     return { success: false, error: error instanceof Error ? error.message : 'Unknown error' };
+  }
+}
+
+interface ApplyToListingFromSearchResponse {
+  success: boolean;
+  tripId?: string;
+  housingRequestId?: string;
+  error?: string;
+}
+
+/**
+ * Applies to a listing from the search page.
+ * Handles trip creation/lookup and housing request creation.
+ *
+ * @param listingId - The listing to apply to
+ * @param options - Optional tripId or date range for trip context
+ */
+export async function applyToListingFromSearch(
+  listingId: string,
+  options?: {
+    tripId?: string;
+    startDate?: Date;
+    endDate?: Date;
+  }
+): Promise<ApplyToListingFromSearchResponse> {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    // Get or create the trip
+    const tripResult = await getOrCreateTripForListing(listingId, options);
+    if (!tripResult.success || !tripResult.trip) {
+      return { success: false, error: tripResult.error || 'Failed to get or create trip' };
+    }
+
+    const trip = tripResult.trip;
+
+    // Fetch the listing with required relations
+    const listing = await prismadb.listing.findUnique({
+      where: { id: listingId },
+      include: {
+        listingImages: true,
+        monthlyPricing: true,
+        user: true,
+      },
+    });
+
+    if (!listing) {
+      return { success: false, error: 'Listing not found' };
+    }
+
+    // Prevent users from applying to their own listings
+    if (listing.userId === userId) {
+      return { success: false, error: 'You cannot apply to your own listing' };
+    }
+
+    // Check if user has already applied to this listing for this trip
+    const existingRequest = await prismadb.housingRequest.findUnique({
+      where: {
+        listingId_tripId: {
+          listingId,
+          tripId: trip.id,
+        },
+      },
+    });
+
+    if (existingRequest) {
+      return { success: false, error: 'You have already applied to this listing' };
+    }
+
+    // Check application limits
+    const limitsCheck = await checkApplicationLimits(trip.id, userId);
+    if (!limitsCheck.canApply) {
+      return { success: false, error: limitsCheck.reason };
+    }
+
+    // Create the trip with matches type for createDbHousingRequest
+    const tripWithMatches = {
+      ...trip,
+      favorites: [],
+      matches: [],
+      housingRequests: [],
+      dislikes: [],
+      maybes: [],
+    } as TripAndMatches;
+
+    // Create the housing request
+    const housingRequest = await createDbHousingRequest(tripWithMatches, listing as ListingAndImages);
+
+    return {
+      success: true,
+      tripId: trip.id,
+      housingRequestId: housingRequest.id,
+    };
+  } catch (error) {
+    console.error('Error in applyToListingFromSearch:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to apply to listing',
+    };
+  }
+}
+
+/**
+ * Gets the user's application state for a specific listing.
+ * Returns whether the user has applied and/or matched with this listing.
+ */
+export async function getListingApplicationState(
+  listingId: string,
+  tripId?: string
+): Promise<{
+  hasApplied: boolean;
+  isMatched: boolean;
+  housingRequestId?: string;
+  matchId?: string;
+}> {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return { hasApplied: false, isMatched: false };
+    }
+
+    // Build query based on whether tripId is provided
+    const whereClause = tripId
+      ? { listingId, tripId, trip: { userId } }
+      : { listingId, trip: { userId } };
+
+    // Find any housing request for this listing from this user
+    const housingRequest = await prismadb.housingRequest.findFirst({
+      where: whereClause,
+      select: {
+        id: true,
+        tripId: true,
+        status: true,
+      },
+    });
+
+    if (!housingRequest) {
+      return { hasApplied: false, isMatched: false };
+    }
+
+    // Check if there's a match for this housing request
+    const match = await prismadb.match.findFirst({
+      where: {
+        listingId,
+        tripId: housingRequest.tripId,
+      },
+      select: { id: true },
+    });
+
+    return {
+      hasApplied: true,
+      isMatched: !!match,
+      housingRequestId: housingRequest.id,
+      matchId: match?.id,
+    };
+  } catch (error) {
+    console.error('Error getting listing application state:', error);
+    return { hasApplied: false, isMatched: false };
   }
 }

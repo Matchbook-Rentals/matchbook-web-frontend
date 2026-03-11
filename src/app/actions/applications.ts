@@ -194,12 +194,19 @@ export async function getTripApplication(tripId?: string) {
         include: {
           incomes: true,
           verificationImages: true,
-          identifications: true,
-          residentialHistories: true,
+          identifications: {
+            include: {
+              idPhotos: true,
+            },
+          },
+          residentialHistories: {
+            orderBy: {
+              index: 'asc',
+            },
+          },
         },
       });
     }
-    // Debug residential histories if needed
 
     if (!application) {
       application = await prisma.application.findUnique({
@@ -212,8 +219,16 @@ export async function getTripApplication(tripId?: string) {
         include: {
           incomes: true,
           verificationImages: true,
-          identifications: true,
-          residentialHistories: true,
+          identifications: {
+            include: {
+              idPhotos: true,
+            },
+          },
+          residentialHistories: {
+            orderBy: {
+              index: 'asc',
+            },
+          },
         },
       });
     }
@@ -606,7 +621,7 @@ export async function upsertApplication(data: any) {
       }
 
       // Revalidate paths to clear cached application data
-      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/searches');
       revalidatePath('/app/rent/applications/general');
 
       // Send notifications to listing owners with pending housing requests
@@ -802,7 +817,7 @@ export async function upsertApplication(data: any) {
       }
 
       // Revalidate paths to clear cached application data
-      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/searches');
       revalidatePath('/app/rent/applications/general');
 
       return { success: true, application };
@@ -1301,7 +1316,7 @@ export async function markComplete(applicationId: string) {
       });
 
       // Revalidate paths to clear cached application data
-      revalidatePath('/app/rent/old-search');
+      revalidatePath('/app/rent/searches');
       revalidatePath('/app/rent/applications/general');
 
       return { success: true, application: updatedApplication };

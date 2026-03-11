@@ -1,26 +1,96 @@
 'use client'
-import React, { useRef, useState } from 'react';
-import ListingImageCarousel from '@/app/app/rent/searches/(trips-components)/image-carousel';
-import { ListingAndImages } from '@/types';
-import ListingDescription from '@/app/app/rent/searches/(trips-components)/listing-info';
+import React, { useCallback, useRef, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import ListingImageCarousel from '@/components/listing-details/image-carousel';
+import { ListingWithRelations } from '@/types';
+import ListingDescription from '@/components/listing-details/listing-info';
+import HostInformation from '@/components/listing-details/host-information';
 import PublicListingDetailsBox from './public-listing-details-box';
 import maplibregl from 'maplibre-gl';
 import 'maplibre-gl/dist/maplibre-gl.css';
 import { Card, CardContent } from '@/components/ui/card';
+import ShareButton from '@/components/ui/share-button';
+import { BrandButton } from '@/components/ui/brandButton';
+import { ArrowLeft, Heart, Share } from 'lucide-react';
+import { format } from 'date-fns';
+import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
+import { getOrCreateTripForListing } from '@/app/actions/trips';
+import { useRenterListingActionBox } from './renter-listing-action-box-context';
+import { GuestAuthModal } from '@/components/guest-auth-modal';
+import MobileAvailabilityOverlay from '@/components/newnew/mobile-availability-overlay';
+
 
 interface PublicListingDetailsViewProps {
-  listing: ListingAndImages;
+  listing: ListingWithRelations;
   locationString: string;
+  isAuthenticated?: boolean;
+  isFavorited?: boolean;
+  tripId?: string;
 }
+
+const baseUrl = process.env.NEXT_PUBLIC_URL || "https://matchbookrentals.com";
 
 export default function PublicListingDetailsView({
   listing,
   locationString,
+  isAuthenticated = false,
+  isFavorited: initialIsFavorited = false,
+  tripId: serverTripId,
 }: PublicListingDetailsViewProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const fromUrl = searchParams.get('from');
+  const initialTripId = serverTripId || searchParams.get('tripId');
   const [mapCenter] = useState<[number, number]>([listing.longitude, listing.latitude]);
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<maplibregl.Map | null>(null);
   const locationSectionRef = useRef<HTMLDivElement>(null);
+
+  const { state, actions } = useRenterListingActionBox();
+
+  // Favorite state
+  const [isFavorited, setIsFavorited] = useState(initialIsFavorited);
+  const [resolvedTripId, setResolvedTripId] = useState<string | null>(initialTripId);
+
+  // Build back URL: prefer fromUrl, but inject tripId if we created one
+  const getBackUrl = useCallback(() => {
+    if (fromUrl) return fromUrl;
+    if (resolvedTripId) return `/search?tripId=${resolvedTripId}`;
+    return null;
+  }, [fromUrl, resolvedTripId]);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const handleFavoriteClick = useCallback(async () => {
+    if (!isAuthenticated) {
+      setShowAuthModal(true);
+      return;
+    }
+    const newState = !isFavorited;
+    setIsFavorited(newState);
+
+    let tripId = resolvedTripId;
+    if (!tripId) {
+      const tripResult = await getOrCreateTripForListing(listing.id);
+      if (!tripResult.success || !tripResult.trip) {
+        setIsFavorited(!newState);
+        return;
+      }
+      tripId = tripResult.trip.id;
+      setResolvedTripId(tripId);
+
+      // Silently update URL with new tripId
+      const url = new URL(window.location.href);
+      url.searchParams.set('tripId', tripId);
+      window.history.replaceState({}, '', url.toString());
+    }
+
+    if (newState) {
+      const result = await optimisticFavorite(tripId, listing.id);
+      if (!result.success) setIsFavorited(false);
+    } else {
+      const result = await optimisticRemoveFavorite(tripId, listing.id);
+      if (!result.success) setIsFavorited(true);
+    }
+  }, [isFavorited, isAuthenticated, resolvedTripId, listing.id]);
 
   // Set up the map
   React.useEffect(() => {
@@ -50,14 +120,76 @@ export default function PublicListingDetailsView({
   return (
     <>
       <div className="w-full mx-auto pb-[100px] md:pb-[160px] lg:pb-6">
-        <ListingImageCarousel listingImages={listing.listingImages || []} />
+        {/* Desktop: Title and Share Button - Above Image Carousel */}
+        <div className="hidden lg:flex items-center justify-between mb-4">
+          <h1 className="font-medium text-[#404040] text-[32px] tracking-[-2.00px] font-['Poppins',Helvetica]">
+            {listing.title || "Your Home Away From Home"}
+          </h1>
+          <ShareButton
+            title={`${listing.title} on MatchBook`}
+            text={`Check out this listing on MatchBook!`}
+            url={`${baseUrl}/search/listing/${listing.id}`}
+          />
+        </div>
+
+        <div className="relative">
+          {/* Mobile overlay buttons on image carousel */}
+          {/* Top-left: Back button */}
+          <button
+            onClick={() => { const back = getBackUrl(); back ? router.replace(back) : router.back(); }}
+            className="lg:hidden absolute top-3 left-3 z-10 w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+          >
+            <ArrowLeft className="w-5 h-5 text-gray-700" />
+          </button>
+          {/* Top-right: Share + Heart buttons */}
+          <div className="lg:hidden absolute top-3 right-3 z-10 flex items-center gap-2">
+            <button
+              onClick={() => {
+                const shareData = {
+                  title: `${listing.title} on MatchBook`,
+                  text: 'Check out this listing on MatchBook!',
+                  url: `${baseUrl}/search/listing/${listing.id}`,
+                };
+                if (navigator.share) {
+                  navigator.share(shareData).catch(() => {});
+                } else {
+                  navigator.clipboard.writeText(shareData.url || '');
+                }
+              }}
+              className="w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+            >
+              <Share className="w-[18px] h-[18px] text-gray-700" />
+            </button>
+            <button
+              onClick={handleFavoriteClick}
+              className="w-9 h-9 flex items-center justify-center rounded-[10px] bg-white/80 hover:bg-white shadow-md backdrop-blur-sm transition-colors"
+              data-testid="mobile-favorite-button"
+            >
+              <Heart className={`w-[18px] h-[18px] ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-700'}`} />
+            </button>
+          </div>
+          <ListingImageCarousel listingImages={listing.listingImages || []} maxHeight={420} />
+        </div>
+
+        {/* Mobile: Title below image */}
+        <div className="lg:hidden mt-3">
+          <h2 className="font-medium text-[#404040] text-xl md:text-2xl tracking-[-2.00px] font-['Poppins',Helvetica]">
+            {listing.title || "Your Home Away From Home"}
+          </h2>
+        </div>
 
         <div className="flex justify-between gap-x-8 lg:gap-x-16 relative">
           <div className="w-full lg:w-full">
-            <ListingDescription listing={listing} />
+            <ListingDescription
+              listing={listing}
+            />
+            <HostInformation
+              listing={listing}
+              isAuthenticated={isAuthenticated}
+            />
 
             <Card className="border-none shadow-none rounded-xl mt-5">
-              <CardContent className="flex flex-col items-start gap-[18px] p-5">
+              <CardContent className="flex flex-col items-start gap-[18px] py-5 px-0">
                 <h3 className="font-['Poppins'] text-[20px] font-semibold text-[#373940]">Location</h3>
                 <div className="font-['Poppins'] text-[16px] font-normal text-[#484A54]">
                   {locationString}
@@ -70,7 +202,9 @@ export default function PublicListingDetailsView({
             className="w-1/2 mt-6 h-fit lg:w-full rounded-[12px] shadow-md pr-0 min-w-[375px] max-w-[400px] sticky top-[10%] hidden lg:block"
           >
             <PublicListingDetailsBox
-              listing={listing}
+              isFavorited={isFavorited}
+              onFavoriteClick={handleFavoriteClick}
+              isAuthenticated={isAuthenticated}
             />
           </div>
         </div>
@@ -121,6 +255,77 @@ export default function PublicListingDetailsView({
           </div>
         </div>
       </div>
+
+      {/* Mobile sticky footer */}
+      <footer className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-gray-200 px-4 py-4 pb-[max(env(safe-area-inset-bottom),16px)] lg:hidden">
+        <div className="flex items-center justify-between gap-5">
+          <div className="flex-1 min-w-0 flex flex-col gap-1">
+            {/* Price row */}
+            <div className="flex items-center gap-x-[10px] sm:gap-x-4 md:gap-x-6 gap-y-0 flex-wrap">
+              <div className="flex items-baseline gap-1">
+                <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
+                  {state.hasDates && state.calculatedPrice != null
+                    ? `$${state.calculatedPrice.toLocaleString()}`
+                    : state.priceRange.hasRange
+                      ? `$${state.priceRange.min.toLocaleString()}– ${state.priceRange.max.toLocaleString()}`
+                      : `$${state.priceRange.min.toLocaleString()}`
+                  }
+                </span>
+                <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Per Month</span>
+              </div>
+              <div className="flex items-baseline gap-1">
+                <span className="font-semibold text-[#373940] text-sm font-['Poppins'] whitespace-nowrap">
+                  ${(listing.depositSize || 0).toLocaleString()}
+                </span>
+                <span className="font-normal text-[#373940] text-[8px] font-['Poppins']">Deposit</span>
+              </div>
+            </div>
+            {/* Dates row */}
+            {state.startDate && state.endDate && (
+              <div className="text-[#373940] text-[11px] font-normal font-['Poppins'] leading-normal">
+                {format(state.startDate, 'd MMM yy')} – {format(state.endDate, 'd MMM yyyy')}
+              </div>
+            )}
+            {/* Guests row */}
+            {state.guests.adults > 0 && (
+              <div className="text-[#373940] text-[11px] font-normal font-['Poppins'] leading-normal">
+                {state.guests.adults} Adult{state.guests.adults !== 1 ? 's' : ''}
+                {state.guests.children > 0 && `, ${state.guests.children} Kid${state.guests.children !== 1 ? 's' : ''}`}
+                {state.guests.pets > 0 && `, ${state.guests.pets} Pet${state.guests.pets !== 1 ? 's' : ''}`}
+              </div>
+            )}
+          </div>
+          <BrandButton
+            size="lg"
+            className="shrink-0 font-semibold"
+            onClick={() => {
+              if (state.hasDates) {
+                actions.handleApplyClick();
+              } else {
+                actions.openMobileOverlay();
+              }
+            }}
+          >
+            {state.hasDates ? 'Apply Now' : 'Check Availability'}
+          </BrandButton>
+        </div>
+      </footer>
+
+      <MobileAvailabilityOverlay
+        isOpen={state.showMobileOverlay}
+        onClose={actions.closeMobileOverlay}
+        dateRange={{ start: state.startDate, end: state.endDate }}
+        onDateChange={actions.setDates}
+        guests={state.guests}
+        setGuests={actions.setGuests}
+        onConfirm={actions.closeMobileOverlay}
+        unavailablePeriods={state.unavailablePeriods}
+      />
+
+      <GuestAuthModal
+        isOpen={showAuthModal}
+        onOpenChange={setShowAuthModal}
+      />
     </>
   );
 }

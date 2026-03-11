@@ -7,10 +7,13 @@ import { SendNotificationEmailInput, SendNotificationEmailResponse } from '@/typ
 import { generateEmailTemplateHtml } from '@/lib/email-template-html'
 import { emailQueueClient } from '@/lib/email-queue-client'
 
-const resend = new Resend(process.env.RESEND_API_KEY);
-
-// Toggle between queue mode and direct sending
-const USE_EMAIL_QUEUE = process.env.USE_EMAIL_QUEUE === 'true';
+// Lazily initialize Resend client only when needed and API key is available
+let _resend: Resend | null = null;
+function getResendClient(): Resend | null {
+  if (!process.env.RESEND_API_KEY) return null;
+  if (!_resend) _resend = new Resend(process.env.RESEND_API_KEY);
+  return _resend;
+}
 
 export async function sendNotificationEmail({
   to,
@@ -24,12 +27,7 @@ export async function sendNotificationEmail({
       return { success: false, error: 'Email service not configured' };
     }
 
-    // Route to queue if enabled, otherwise send directly
-    if (USE_EMAIL_QUEUE) {
-      return await sendViaQueue({ to, subject, emailData });
-    } else {
-      return await sendDirectly({ to, subject, emailData });
-    }
+    return await sendViaQueue({ to, subject, emailData });
   } catch (error) {
     console.error('Error in sendNotificationEmail:', error);
     return { success: false, error: 'Failed to send notification email' };
@@ -81,6 +79,12 @@ async function sendDirectly({
   emailData
 }: SendNotificationEmailInput): Promise<SendNotificationEmailResponse> {
   try {
+    const resend = getResendClient();
+    if (!resend) {
+      console.warn('[Email] RESEND_API_KEY not configured, skipping email send');
+      return { success: false, error: 'Email service not configured' };
+    }
+
     console.log(`[Email] Using direct send fallback for ${to}`);
 
     // Send the email using Resend

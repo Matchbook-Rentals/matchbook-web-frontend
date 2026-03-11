@@ -429,11 +429,10 @@ export default function ListingEditForm({ listing }: ListingEditFormProps) {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                      <SelectItem value="singleFamily">Single Family</SelectItem>
                       <SelectItem value="apartment">Apartment</SelectItem>
-                      <SelectItem value="house">House</SelectItem>
-                      <SelectItem value="condo">Condo</SelectItem>
                       <SelectItem value="townhouse">Townhouse</SelectItem>
-                      <SelectItem value="studio">Studio</SelectItem>
+                      <SelectItem value="privateRoom">Private Room</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>

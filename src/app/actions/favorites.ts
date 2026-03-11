@@ -1,10 +1,24 @@
 'use server'
 import prisma from '@/lib/prismadb'
-import { revalidatePath } from 'next/cache'
-import { TripAndMatches } from '@/types';
+import { revalidatePath, revalidateTag } from 'next/cache'
+import { auth } from '@clerk/nextjs/server'
+
+const authenticateAndVerifyTrip = async (tripId: string) => {
+  const { userId } = await auth();
+  if (!userId) throw new Error('Unauthorized');
+
+  const trip = await prisma.trip.findUnique({
+    where: { id: tripId },
+    select: { userId: true },
+  });
+  if (!trip || trip.userId !== userId) throw new Error('Unauthorized');
+
+  return userId;
+};
 
 export const createDbFavorite = async (tripId: string, listingId: string): Promise<string> => {
-  console.log('Creating new favrorite with trip and listing ->', tripId, listingId)
+  await authenticateAndVerifyTrip(tripId);
+
   try {
     // Check if a favorite with the same tripId and listingId already exists
     const existingFavorite = await prisma.favorite.findFirst({
@@ -15,8 +29,7 @@ export const createDbFavorite = async (tripId: string, listingId: string): Promi
     });
 
     if (existingFavorite) {
-      console.log('Favorite already exists, returning existing favorite ID:', existingFavorite.id);
-      return existingFavorite.id; // Return existing favorite instead of throwing error
+      return existingFavorite.id;
     }
 
     // Get the highest rank for the current trip
@@ -37,10 +50,10 @@ export const createDbFavorite = async (tripId: string, listingId: string): Promi
       },
     });
 
-    console.log('Favorite Created', newFavorite)
-
-    // Revalidate the favorites page or any other relevant pages
+    // Revalidate the favorites page and trip cache
     revalidatePath('/favorites');
+    revalidateTag(`trip-${tripId}`);
+    revalidateTag('user-trips');
 
     return newFavorite.id;
   } catch (error) {
@@ -50,17 +63,27 @@ export const createDbFavorite = async (tripId: string, listingId: string): Promi
 }
 
 export const deleteDbFavorite = async (favoriteId: string) => {
-  console.log('Deleting favorite with ID ->', favoriteId)
+  const { userId } = await auth();
+  if (!userId) throw new Error('Unauthorized');
+
   try {
-    // Delete the favorite
+    // Verify ownership through the trip
+    const favorite = await prisma.favorite.findUnique({
+      where: { id: favoriteId },
+      select: { tripId: true, trip: { select: { userId: true } } },
+    });
+    if (!favorite || favorite.trip.userId !== userId) throw new Error('Unauthorized');
+
     const deletedFavorite = await prisma.favorite.delete({
       where: { id: favoriteId },
     });
 
-    console.log('Favorite Deleted', deletedFavorite)
-
-    // Revalidate the favorites page or any other relevant pages
+    // Revalidate the favorites page and trip cache
     revalidatePath('/favorites');
+    if (deletedFavorite.tripId) {
+      revalidateTag(`trip-${deletedFavorite.tripId}`);
+      revalidateTag('user-trips');
+    }
 
     return deletedFavorite;
   } catch (error) {
@@ -74,7 +97,7 @@ export const optimisticFavorite = async (
   listingId: string,
 ): Promise<{ success: boolean, favoriteId?: string, error?: string }> => {
   try {
-    // Perform DB operation - createDbFavorite now handles duplicates gracefully
+    // Auth is handled inside createDbFavorite
     const favoriteId = await createDbFavorite(tripId, listingId);
 
     return {
@@ -82,7 +105,6 @@ export const optimisticFavorite = async (
       favoriteId: favoriteId
     };
   } catch (error) {
-    // For any errors (database issues, etc.)
     console.error('Favorite operation failed:', error);
     return {
       success: false,
@@ -95,17 +117,18 @@ export const optimisticRemoveFavorite = async (
   tripId: string,
   listingId: string,
 ): Promise<{ success: boolean, error?: string }> => {
-  console.log('Starting optimisticRemoveFavorite with:', { tripId, listingId });
   try {
-    const result = await prisma.favorite.deleteMany({
+    await authenticateAndVerifyTrip(tripId);
+
+    await prisma.favorite.deleteMany({
       where: {
         tripId,
         listingId
       }
     });
-
-    console.log('Delete operation result:', result);
     revalidatePath('/favorites');
+    revalidateTag(`trip-${tripId}`);
+    revalidateTag('user-trips');
 
     return { success: true };
   } catch (error) {

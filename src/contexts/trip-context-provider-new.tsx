@@ -2,7 +2,7 @@
 //Imports
 import React, { useState, ReactNode, useEffect, useCallback } from 'react';
 import { subDays, addDays, differenceInDays, isValid } from 'date-fns';
-import { ListingAndImages, TripAndMatches, ApplicationWithArrays } from '@/types';
+import { ListingAndImages, ListingWithRelations, TripAndMatches, ApplicationWithArrays } from '@/types';
 import { calculateRent } from '@/lib/calculate-rent';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { optimisticDislikeDb, optimisticRemoveDislikeDb } from '@/app/actions/dislikes';
@@ -44,7 +44,7 @@ export interface FilterOptions {
   laundry: string[];
 }
 
-export interface ListingWithAvailability extends ListingAndImages {
+export interface ListingWithAvailability extends ListingWithRelations {
   availableStart?: Date;
   availableEnd?: Date;
   isActuallyAvailable?: boolean;

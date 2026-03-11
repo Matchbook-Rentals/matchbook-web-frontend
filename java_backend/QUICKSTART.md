@@ -28,11 +28,10 @@ Add to `.env.local`:
 
 ```bash
 REDIS_URL=redis://localhost:6379
-USE_EMAIL_QUEUE=true
 RESEND_API_KEY=re_your_key_here
 ```
 
-Restart Next.js. All emails now route through the queue!
+Restart Next.js. All emails now route through the queue automatically when `REDIS_URL` is configured!
 
 ## Documentation
 

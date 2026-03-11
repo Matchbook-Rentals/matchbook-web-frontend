@@ -297,7 +297,7 @@ export default function StripeWebhookTester() {
                     {response.event && (
                       <details className="mt-2">
                         <summary className="text-sm font-medium cursor-pointer">View Event JSON</summary>
-                        <pre className="mt-2 p-2 bg-white rounded text-xs overflow-auto max-h-96">
+                        <pre className="mt-2 p-2 bg-background rounded text-xs overflow-auto max-h-96">
                           {JSON.stringify(response.event, null, 2)}
                         </pre>
                       </details>

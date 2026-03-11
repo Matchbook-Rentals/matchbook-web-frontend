@@ -7,20 +7,22 @@ import { BrandButton } from '@/components/ui/brandButton';
 interface GuestAuthModalProps {
   isOpen: boolean;
   onOpenChange: (open: boolean) => void;
+  redirectUrl?: string;
 }
 
 export const GuestAuthModal: React.FC<GuestAuthModalProps> = ({
   isOpen,
-  onOpenChange
+  onOpenChange,
+  redirectUrl,
 }) => {
   const handleCancel = () => {
     onOpenChange(false);
   };
 
   const handleSignIn = () => {
-    const currentPath = window.location.pathname;
-    const redirectUrl = encodeURIComponent(currentPath);
-    window.location.href = `/sign-in?redirect_url=${redirectUrl}`;
+    const url = redirectUrl || (window.location.pathname + window.location.search);
+    const encoded = encodeURIComponent(url);
+    window.location.href = `/sign-in?redirect_url=${encoded}`;
   };
 
   return (
@@ -28,14 +30,16 @@ export const GuestAuthModal: React.FC<GuestAuthModalProps> = ({
       isOpen={isOpen}
       onOpenChange={onOpenChange}
       heightStyle="!top-[30vh]"
-      className="max-w-md"
+      className="max-w-md w-[calc(100vw-2rem)] sm:w-full"
     >
       <div className="px-6">
         <h3 className="text-lg font-semibold mb-4">Sign in required</h3>
         <p className="text-gray-600 mb-6">
-          In order to apply to a listing you must be signed in and create an application. Please sign in to continue.
+          Please sign in to continue.
+          <br />
+          You must have an account to save favorites and apply to listings.
         </p>
-        <div className="flex gap-3">
+        <div className="flex flex-col-reverse sm:flex-row gap-3">
           <BrandButton
             variant="outline"
             onClick={handleCancel}

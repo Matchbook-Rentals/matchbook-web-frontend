@@ -269,7 +269,7 @@ export default function PaymentMigrationPage() {
                     <div>
                       Payment Method ID:{' '}
                       {booking.match?.stripePaymentMethodId ? (
-                        <code className="bg-white px-2 py-0.5 rounded">
+                        <code className="bg-background px-2 py-0.5 rounded">
                           {booking.match.stripePaymentMethodId}
                         </code>
                       ) : (
@@ -279,7 +279,7 @@ export default function PaymentMigrationPage() {
                     <div>
                       Payment Intent ID:{' '}
                       {booking.match?.stripePaymentIntentId ? (
-                        <code className="bg-white px-2 py-0.5 rounded">
+                        <code className="bg-background px-2 py-0.5 rounded">
                           {booking.match.stripePaymentIntentId}
                         </code>
                       ) : (
@@ -301,7 +301,7 @@ export default function PaymentMigrationPage() {
                     {booking.rentPayments.map((payment) => (
                       <div
                         key={payment.id}
-                        className="border rounded p-3 text-sm bg-white"
+                        className="border rounded p-3 text-sm bg-background"
                       >
                         <div className="flex items-start justify-between">
                           <div className="space-y-1">
@@ -365,7 +365,7 @@ export default function PaymentMigrationPage() {
                     <div className="space-y-2 text-sm">
                       <div>
                         <span className="font-medium">ID:</span>{' '}
-                        <code className="bg-white px-2 py-0.5 rounded">
+                        <code className="bg-background px-2 py-0.5 rounded">
                           {viewingTransaction.data.id}
                         </code>
                       </div>
@@ -388,13 +388,13 @@ export default function PaymentMigrationPage() {
                       </div>
                       <div>
                         <span className="font-medium">Payment Method:</span>{' '}
-                        <code className="bg-white px-2 py-0.5 rounded text-xs">
+                        <code className="bg-background px-2 py-0.5 rounded text-xs">
                           {viewingTransaction.data.payment_method || 'N/A'}
                         </code>
                       </div>
                       <div className="pt-2 border-t">
                         <div className="font-medium mb-1">Metadata:</div>
-                        <pre className="bg-white p-2 rounded text-xs overflow-x-auto">
+                        <pre className="bg-background p-2 rounded text-xs overflow-x-auto">
                           {JSON.stringify(
                             viewingTransaction.data.metadata,
                             null,

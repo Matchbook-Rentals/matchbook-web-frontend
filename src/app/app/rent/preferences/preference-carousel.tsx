@@ -38,7 +38,7 @@ export default function PreferenceCarousel({ updateUserPreferences }) {
       let stringifiedPreferences = JSON.stringify(tempPreferences);
       localStorage.setItem('matchbookUserPreferences', stringifiedPreferences);
       let queryString = localStorage.getItem('tripQueryString');
-      router.push(`/guest/trips/${queryString}`)
+      router.push(`/search/${queryString}`)
       return null;
     }
 

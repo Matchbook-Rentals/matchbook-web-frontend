@@ -21,7 +21,6 @@ import { useRouter } from "next/navigation";
 import { calculateRent } from "@/lib/calculate-rent";
 import { SecureFileViewer } from "@/components/secure-file-viewer";
 import BrandModal from "@/components/BrandModal";
-import { getOrCreateListingConversation } from "@/app/actions/housing-requests";
 
 // Centralized styles matching prototype design
 const STYLES = {
@@ -206,20 +205,8 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
   };
 
   // Helper function to handle messaging host
-  const handleMessageHost = async () => {
-    if (!listing.user?.id) return;
-    
-    try {
-      const result = await getOrCreateListingConversation(listing.id, listing.user.id);
-      
-      if (result.success && result.conversationId) {
-        router.push(`/app/rent/messages?convo=${result.conversationId}`);
-      } else {
-        console.error('Failed to create conversation:', result.error);
-      }
-    } catch (error) {
-      console.error('Error messaging host:', error);
-    }
+  const handleMessageHost = () => {
+    router.push(`/app/rent/messages?listingId=${listing.id}`);
   };
 
   // Helper function to get questionnaire data
@@ -286,7 +273,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
 
 
         {/* Dates Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Dates</h2>
@@ -322,7 +309,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
         </Card>
 
         {/* Trip Summary Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Summary</h2>
@@ -350,7 +337,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
         </Card>
 
         {/* Personal Information Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Renters</h2>
@@ -425,7 +412,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
 
         {/* Income Information Section */}
         {getIncomeData().length > 0 && (
-          <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
             <CardContent className="flex flex-col gap-6 p-6">
               <div className="flex items-center justify-between w-full">
                 <h2 className={STYLES.headerText}>Income</h2>
@@ -488,7 +475,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
 
         {/* Residential History Section */}
         {getResidentialHistory().length > 0 && (
-          <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+          <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
             <CardContent className="flex flex-col gap-6 p-6">
               <div className="flex items-center justify-between w-full">
                 <h2 className={STYLES.headerText}>Residential History</h2>
@@ -553,7 +540,7 @@ export function ApplicationDetails({ applicationId, housingRequest, from }: Appl
         )}
 
         {/* Self-Reporting Questionnaire Section */}
-        <Card className="w-full bg-white rounded-xl shadow-[0px_0px_5px_#00000029]">
+        <Card className="w-full rounded-xl shadow-[0px_0px_5px_#00000029]">
           <CardContent className="flex flex-col gap-6 p-6">
             <div className="flex items-center justify-between w-full">
               <h2 className={STYLES.headerText}>Self-Reporting Questionnaire</h2>

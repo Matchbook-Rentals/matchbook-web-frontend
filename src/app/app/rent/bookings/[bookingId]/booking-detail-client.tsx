@@ -89,8 +89,7 @@ export default function BookingDetailClient({
   };
 
   const handleMessageHost = () => {
-    console.log('Message host for booking:', bookingId);
-    // This will be handled by the card component using existing messaging logic
+    router.push(`/app/rent/messages?listingId=${listingId}`);
   };
 
   const handleMakePayment = () => {

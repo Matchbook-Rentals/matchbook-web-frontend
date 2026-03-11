@@ -80,6 +80,7 @@ const MobileLocationSuggest: React.FC<MobileLocationSuggestProps> = ({
                 className="hover:bg-gray-100 p-3 cursor-pointer text-sm rounded-md transition-colors duration-150 text-gray-900"
                 key={suggestion.place_id}
                 onClick={() => handleSelect(suggestion.description, suggestion.place_id)}
+                data-testid="location-suggestion-item"
               >
                 {suggestion.description.slice(0, -5)}
               </li>

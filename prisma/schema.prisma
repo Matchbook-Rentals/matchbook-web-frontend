@@ -636,7 +636,7 @@ model Trip {
   sponsorID      String?
   startDate      DateTime?
   endDate        DateTime?
-  numAdults      Int        @default(1)
+  numAdults      Int        @default(0)
   numPets        Int        @default(0)
   numChildren    Int        @default(0)
   userId         String
@@ -912,7 +912,7 @@ model GuestSession {
   endDate        DateTime?
 
   // Guest counts
-  numAdults      Int       @default(1)
+  numAdults      Int       @default(0)
   numChildren    Int       @default(0)
   numPets        Int       @default(0)
 

@@ -222,16 +222,20 @@ const generateReportData = (payments: any[], previewDate: Date) => {
       paymentMethodType = 'Card (estimated)';
       cardPayments++;
     } else {
-      issues.push(`Payment ${payment.id}: No payment method configured`);
+      const renterName = `${renter.firstName || ''} ${renter.lastName || ''}`.trim() || renter.email;
+      issues.push(`⛔ WILL NOT PROCESS: Payment ${payment.id} ($${centsToDollars(baseAmount).toFixed(2)}) for ${renterName} - Missing payment method`);
       issuesCount++;
+      paymentMethodType = 'MISSING';
     }
 
     // Check for host account issues
     if (!host.stripeAccountId) {
-      issues.push(`Payment ${payment.id}: Host missing Stripe account`);
+      const hostName = `${host.firstName || ''} ${host.lastName || ''}`.trim() || host.email;
+      issues.push(`⛔ WILL NOT PROCESS: Payment ${payment.id} ($${centsToDollars(baseAmount).toFixed(2)}) - Host ${hostName} missing Stripe account`);
       issuesCount++;
     } else if (!host.stripeChargesEnabled) {
-      issues.push(`Payment ${payment.id}: Host charges not enabled`);
+      const hostName = `${host.firstName || ''} ${host.lastName || ''}`.trim() || host.email;
+      issues.push(`⛔ WILL NOT PROCESS: Payment ${payment.id} ($${centsToDollars(baseAmount).toFixed(2)}) - Host ${hostName} charges not enabled`);
       issuesCount++;
     }
 
@@ -318,7 +322,8 @@ const generateEmailContent = (data: any) => {
   if (data.issuesCount > 0) {
     html += `
       <div style="background: #fef2f2; border: 1px solid #fecaca; padding: 20px; border-radius: 8px; margin: 20px 0;">
-        <h2 style="color: #dc2626; margin-top: 0;">⚠️ Issues Requiring Attention (${data.issuesCount})</h2>
+        <h2 style="color: #dc2626; margin-top: 0;">🚨 Payments That Will Be SKIPPED (${data.issuesCount})</h2>
+        <p style="color: #991b1b; margin-bottom: 15px;">The following payments will NOT be processed by the cron job due to missing configuration:</p>
         <ul style="color: #991b1b; margin: 0; padding-left: 20px;">
           ${data.issues.map(issue => `<li style="margin: 5px 0;">${issue}</li>`).join('')}
         </ul>

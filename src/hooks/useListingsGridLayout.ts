@@ -3,7 +3,7 @@ import { useState, useEffect, RefObject } from 'react';
 // Layout constants
 const CARD_WIDTH = 280;
 const GAP_WIDTH = 16;
-const MAX_COLUMNS = 3;
+const MAX_COLUMNS = 2;
 const MIN_MAP_WIDTH = 300;
 const CONTAINER_PADDING = 16; // md:pr-4
 

@@ -334,7 +334,7 @@ export function initializeFormDefaults() {
   return {
     title: "",
     description: "",
-    category: "Single Family",
+    category: "singleFamily",
     petsAllowed: true,
     furnished: true,
     locationString: null,
@@ -368,12 +368,12 @@ export function initializeFormDefaults() {
 export function initializeHighlights(draftData?: any) {
   if (draftData) {
     return {
-      category: draftData.category || "Single Family",
+      category: draftData.category || "singleFamily",
       petsAllowed: draftData.petsAllowed !== null && draftData.petsAllowed !== undefined ? draftData.petsAllowed : true,
       furnished: draftData.furnished !== null && draftData.furnished !== undefined ? draftData.furnished : true
     };
   }
-  return { category: "Single Family", petsAllowed: true, furnished: true };
+  return { category: "singleFamily", petsAllowed: true, furnished: true };
 }
 
 /**

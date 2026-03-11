@@ -44,6 +44,30 @@ test.describe('Add Property Flow', () => {
     await expect(page.getByText('Where is your place located?')).toBeVisible();
     await expect(page).toHaveURL(/.*\/app\/host\/add-property.*/);
     await expect(page.getByTestId('next-button')).toBeVisible();
+
+    // Auto-save should have added draftId to the URL
+    await expect(page).toHaveURL(/.*draftId=/, { timeout: 10000 });
+  });
+
+  test('auto-save: should persist draft on refresh', async () => {
+    const page = sharedPage;
+
+    // Grab the current URL (should have draftId from previous test)
+    const urlBeforeRefresh = page.url();
+    expect(urlBeforeRefresh).toContain('draftId=');
+
+    // Refresh the page
+    await page.reload();
+
+    // Should still have the draftId in the URL
+    await expect(page).toHaveURL(/.*draftId=/, { timeout: 10000 });
+
+    // Page reloads at step 0 with draft data pre-populated
+    // Verify the highlights selections were persisted
+    await expect(page.getByTestId('next-button')).toBeVisible({ timeout: 10000 });
+    await expect(page.getByTestId('card-apartment')).toHaveAttribute('data-selected', 'true', { timeout: 5000 });
+    await expect(page.getByTestId('card-unfurnished')).toHaveAttribute('data-selected', 'true');
+    await expect(page.getByTestId('card-no-pets')).toHaveAttribute('data-selected', 'true');
   });
 
   test('returning user: should navigate back and resume add-property flow', async () => {

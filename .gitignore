@@ -1,5 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+# local scripts
+sync-personal.sh
+
 # dependencies
 /node_modules
 /ts_server/node_modules
@@ -12,6 +15,9 @@
 /test-results
 /playwright-report
 /playwright/.cache
+e2e/fixtures/test-lease.pdf
+e2e/reports/*.pdf
+e2e/screenshots/
 
 # next.js
 /.next/
@@ -78,3 +84,8 @@ isoftpull-response.json
 
 # Dev-only API routes (local testing utilities - never deploy)
 src/app/api/dev/
+
+# Claude Code / agent tooling
+.agents/
+.claude/
+skills-lock.json

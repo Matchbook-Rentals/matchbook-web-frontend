@@ -146,14 +146,28 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
 
   // Format booking data for the card component
   const renterName = booking.user.fullName || `${booking.user.firstName || ''} ${booking.user.lastName || ''}`.trim() || booking.user.email || 'Unknown Renter';
-  
+
+  // Get price from next upcoming payment or most recent past payment
+  // Use baseAmount for hosts (what they receive, excludes service fees)
+  const now = new Date();
+  const sortedPayments = [...booking.rentPayments].sort(
+    (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+  );
+  const nextPayment = sortedPayments.find(p => new Date(p.dueDate) >= now);
+  const mostRecentPayment = [...sortedPayments].reverse().find(p => new Date(p.dueDate) < now);
+  const displayPayment = nextPayment || mostRecentPayment;
+  const displayAmount = displayPayment?.baseAmount ?? displayPayment?.amount;
+  const displayPrice = displayAmount
+    ? `${formatPrice(displayAmount / 100)} / Month`
+    : (booking.monthlyRent ? `${formatPrice(booking.monthlyRent)} / Month` : 'Price TBD');
+
   const bookingData = {
     name: renterName,
     status: formatBookingStatus(booking.status),
     dates: formatDateRange(booking.startDate, booking.endDate),
     address: formatAddress(booking.listing),
     description: `for ${booking.listing.title}`,
-    price: booking.monthlyRent ? `${formatPrice(booking.monthlyRent)} / Month` : 'Price TBD',
+    price: displayPrice,
     occupants: [
       { type: "Adult", count: booking.trip?.numAdults || 1, icon: "/host-dashboard/svg/adult.svg" },
       { type: "Children", count: booking.trip?.numChildren || 0, icon: "/host-dashboard/svg/kid.svg" },
@@ -163,43 +177,50 @@ export default async function BookingDetailPage({ params }: BookingDetailPagePro
     guestUserId: booking.user.id,
     matchId: booking.matchId,
     leaseDocumentId: booking.match?.leaseDocumentId || null,
+    startDate: booking.startDate,
+    endDate: booking.endDate,
   };
 
   // Format payment data for the table
-  const now = new Date();
-  // These are LIVE amounts from booking.rentPayments (real database data, not hardcoded)
+  // Use baseAmount for hosts (what they receive, excludes service fees)
   const upcomingPayments = booking.rentPayments
     .filter((payment: any) => new Date(payment.dueDate) >= now)
-    .map((payment: any) => ({
-      tenant: renterName,
-      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-      type: getPaymentTypeLabel(payment.type),
-      method: "ACH Transfer",
-      bank: "Bank Account",
-      dueDate: formatDate(new Date(payment.dueDate)),
-      status: getPaymentStatus(payment),
-      avatarUrl: booking.user.imageUrl || "/image-35.png",
-      paymentId: payment.id,
-      numericAmount: payment.amount,
-      parsedDueDate: new Date(payment.dueDate)
-    }));
+    .map((payment: any) => {
+      const hostAmount = payment.baseAmount ?? payment.amount;
+      return {
+        tenant: renterName,
+        amount: (hostAmount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        type: getPaymentTypeLabel(payment.type),
+        method: "ACH Transfer",
+        bank: "Bank Account",
+        dueDate: formatDate(new Date(payment.dueDate)),
+        status: getPaymentStatus(payment),
+        avatarUrl: booking.user.imageUrl || "/image-35.png",
+        paymentId: payment.id,
+        numericAmount: hostAmount,
+        parsedDueDate: new Date(payment.dueDate)
+      };
+    });
 
   const pastPayments = booking.rentPayments
     .filter((payment: any) => new Date(payment.dueDate) < now)
     .reverse()
-    .map((payment: any) => ({
-      tenant: renterName,
-      amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
-      type: getPaymentTypeLabel(payment.type),
-      method: "ACH Transfer",
-      bank: "Bank Account",
-      dueDate: formatDate(new Date(payment.dueDate)),
-      status: getPaymentStatus(payment),
-      avatarUrl: booking.user.imageUrl || "/image-35.png",
-      paymentId: payment.id,
-      numericAmount: payment.amount,
-      parsedDueDate: new Date(payment.dueDate)
-    }));
+    .map((payment: any) => {
+      const hostAmount = payment.baseAmount ?? payment.amount;
+      return {
+        tenant: renterName,
+        amount: (hostAmount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        type: getPaymentTypeLabel(payment.type),
+        method: "ACH Transfer",
+        bank: "Bank Account",
+        dueDate: formatDate(new Date(payment.dueDate)),
+        status: getPaymentStatus(payment),
+        avatarUrl: booking.user.imageUrl || "/image-35.png",
+        paymentId: payment.id,
+        numericAmount: hostAmount,
+        parsedDueDate: new Date(payment.dueDate)
+      };
+    });
 
   const paymentsData = {
     upcoming: upcomingPayments,

@@ -1,7 +1,10 @@
 import { create } from 'zustand';
 import { VerificationImage } from '@prisma/client';
 import { markComplete, upsertApplication, updateApplicationField } from '@/app/actions/applications';
-import { ResidentialHistory } from '@prisma/client';
+import { ResidentialHistory as PrismaResidentialHistory } from '@prisma/client';
+
+// Client-side version without database-specific fields
+type ClientResidentialHistory = Omit<PrismaResidentialHistory, 'id' | 'index' | 'applicationId'>;
 import { 
   validatePersonalInfo, 
   validateIdentification, 
@@ -20,7 +23,7 @@ function extractFileKeyFromUrl(url: string | undefined): string | undefined {
   return matches ? matches[1] : undefined;
 }
 
-export const defaultResidentialHistory: ResidentialHistory = {
+export const defaultResidentialHistory: ClientResidentialHistory = {
   street: "",
   apt: "",
   city: "",
@@ -141,6 +144,13 @@ interface ApplicationErrors {
 }
 
 export const initialState = {
+  autoSaveEnabled: true,
+  tripId: undefined as string | undefined,
+  moveInDate: undefined as Date | undefined,
+  moveOutDate: undefined as Date | undefined,
+  numAdults: 1,
+  numChildren: 0,
+  numPets: 0,
   personalInfo: {
     firstName: '',
     lastName: '',
@@ -151,10 +161,10 @@ export const initialState = {
   ids: [{ id: '', idType: '', idNumber: '', isPrimary: true, idPhotos: [] }],
   verificationImages: [] as VerificationImage[],
   residentialHistory: [
-    { ...defaultResidentialHistory, id: 'current' },
-    { ...defaultResidentialHistory, id: 'previous' }
-  ],
-  preservedResidentialHistory: [] as ResidentialHistory[], // Store for preserving data when trimming
+    { ...defaultResidentialHistory },
+    { ...defaultResidentialHistory }
+  ] as ClientResidentialHistory[],
+  preservedResidentialHistory: [] as ClientResidentialHistory[], // Store for preserving data when trimming
   incomes: [{ source: '', monthlyAmount: '', imageUrl: '' }],
   answers: {
     evicted: null,
@@ -173,11 +183,18 @@ export const initialState = {
 };
 
 interface ApplicationState {
+  autoSaveEnabled: boolean;
+  tripId?: string;
+  moveInDate?: Date;
+  moveOutDate?: Date;
+  numAdults: number;
+  numChildren: number;
+  numPets: number;
   personalInfo: PersonalInfo;
   ids: Identification[];
   verificationImages: VerificationImage[];
-  residentialHistory: ResidentialHistory[];
-  preservedResidentialHistory: ResidentialHistory[];
+  residentialHistory: ClientResidentialHistory[];
+  preservedResidentialHistory: ClientResidentialHistory[];
   incomes: Income[];
   answers: QuestionnaireAnswers;
   originalData: typeof initialState;
@@ -192,11 +209,18 @@ interface ApplicationState {
   serverIsComplete: boolean;
 
   // Actions
+  setAutoSaveEnabled: (enabled: boolean) => void;
+  setTripId: (tripId: string) => void;
+  setMoveInDate: (date: Date) => void;
+  setMoveOutDate: (date: Date) => void;
+  setNumAdults: (num: number) => void;
+  setNumChildren: (num: number) => void;
+  setNumPets: (num: number) => void;
   setPersonalInfo: (info: PersonalInfo) => void;
   setIds: (ids: Identification[]) => void;
   setVerificationImages: (images: VerificationImage[]) => void;
-  setResidentialHistory: (history: ResidentialHistory[]) => void;
-  setPreservedResidentialHistory: (history: ResidentialHistory[]) => void;
+  setResidentialHistory: (history: ClientResidentialHistory[]) => void;
+  setPreservedResidentialHistory: (history: ClientResidentialHistory[]) => void;
   setIncomes: (incomes: Income[]) => void;
   setAnswers: (answers: QuestionnaireAnswers) => void;
   resetStore: () => void;
@@ -222,7 +246,7 @@ interface ApplicationState {
   checkCompletion: (applicationId: string) => { complete: boolean; missingFields: string[] };
 
   // New action to add a residential history entry if total duration is less than 24
-  addResidentialHistoryEntry: (newEntry: ResidentialHistory) => void;
+  addResidentialHistoryEntry: (newEntry: ClientResidentialHistory) => void;
 
   // Auto-save actions
   setSaving: (isSaving: boolean) => void;
@@ -275,13 +299,20 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   ...initialState,
   originalData: { ...initialState },
 
+  setAutoSaveEnabled: (enabled) => set({ autoSaveEnabled: enabled }),
+  setTripId: (tripId) => set({ tripId }),
+  setMoveInDate: (date) => set({ moveInDate: date }),
+  setMoveOutDate: (date) => set({ moveOutDate: date }),
+  setNumAdults: (num) => set({ numAdults: num }),
+  setNumChildren: (num) => set({ numChildren: num }),
+  setNumPets: (num) => set({ numPets: num }),
   setPersonalInfo: (info) => set({ personalInfo: info }),
   setIds: (ids) => set({ ids }),
   setVerificationImages: (images) => set({ verificationImages: images }),
-  setResidentialHistory: (history: ResidentialHistory[]) => set({ residentialHistory: history }),
-  setPreservedResidentialHistory: (history: ResidentialHistory[]) => set({ preservedResidentialHistory: history }),
+  setResidentialHistory: (history: ClientResidentialHistory[]) => set({ residentialHistory: history }),
+  setPreservedResidentialHistory: (history: ClientResidentialHistory[]) => set({ preservedResidentialHistory: history }),
   // New action to add a residential history entry if total duration is less than 24
-  addResidentialHistoryEntry: (newEntry: ResidentialHistory) => {
+  addResidentialHistoryEntry: (newEntry: ClientResidentialHistory) => {
     const currentHistory = get().residentialHistory;
     const currentSum = currentHistory.reduce((sum, entry) => sum + ((parseInt(entry.durationOfTenancy || '0')) || 0), 0);
     if (currentSum >= 24) {
@@ -293,23 +324,45 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   setIncomes: (incomes) => set({ incomes: incomes.length === 0 ? [{ source: '', monthlyAmount: '', imageUrl: '' }] : incomes }),
   setAnswers: (answers) => set({ answers }),
 
-  resetStore: () => set(initialState),
+  resetStore: () => set({ ...initialState, autoSaveEnabled: get().autoSaveEnabled }),
 
   initializeFromApplication: (application) => {
     if (!application) return;
 
-    let residences;
+    let residences: ClientResidentialHistory[];
     console.log('application.residentialHistories', application.residentialHistories);
     if (application.residentialHistories.length === 0) {
       residences = [
-        { ...defaultResidentialHistory, id: 'current' },
-        { ...defaultResidentialHistory, id: 'previous' }
+        { ...defaultResidentialHistory },
+        { ...defaultResidentialHistory }
       ];
     } else {
-      residences = application.residentialHistories.sort((a: any, b: any) => a.index - b.index);
+      // Convert Prisma types to client types by omitting database fields
+      residences = application.residentialHistories
+        .sort((a: any, b: any) => a.index - b.index)
+        .map((r: any) => ({
+          street: r.street || '',
+          apt: r.apt || '',
+          city: r.city || '',
+          state: r.state || '',
+          zipCode: r.zipCode || '',
+          monthlyPayment: r.monthlyPayment || '',
+          durationOfTenancy: r.durationOfTenancy || '',
+          housingStatus: r.housingStatus || 'rent',
+          landlordFirstName: r.landlordFirstName || '',
+          landlordLastName: r.landlordLastName || '',
+          landlordEmail: r.landlordEmail || '',
+          landlordPhoneNumber: r.landlordPhoneNumber || ''
+        }));
     }
 
     const newData = {
+      tripId: application.tripId || undefined,
+      moveInDate: application.moveInDate ? new Date(application.moveInDate) : undefined,
+      moveOutDate: application.moveOutDate ? new Date(application.moveOutDate) : undefined,
+      numAdults: application.numAdults || 1,
+      numChildren: application.numChildren || 0,
+      numPets: application.numPets || 0,
       personalInfo: {
         firstName: application.firstName || '',
         lastName: application.lastName || '',
@@ -399,21 +452,26 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
 
   // <<< NEW ACTION: markSynced >>>
   markSynced: () => {
-    const {
-      personalInfo,
-      ids,
-      verificationImages,
-      residentialHistory,
-      incomes,
-      answers,
-    } = get();
+    const state = get();
     const newData = {
-      personalInfo,
-      ids,
-      verificationImages,
-      residentialHistory,
-      incomes,
-      answers,
+      tripId: state.tripId,
+      moveInDate: state.moveInDate,
+      moveOutDate: state.moveOutDate,
+      numAdults: state.numAdults,
+      numChildren: state.numChildren,
+      numPets: state.numPets,
+      personalInfo: state.personalInfo,
+      ids: state.ids,
+      verificationImages: state.verificationImages,
+      residentialHistory: state.residentialHistory,
+      preservedResidentialHistory: state.preservedResidentialHistory,
+      incomes: state.incomes,
+      answers: state.answers,
+      isSaving: state.isSaving,
+      lastSaveTime: state.lastSaveTime,
+      saveError: state.saveError,
+      fieldErrors: state.fieldErrors,
+      serverIsComplete: state.serverIsComplete
     };
     console.log('markSynced invoked. New data to sync:', newData);
     set({ originalData: newData });
@@ -513,7 +571,7 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       state.incomes.forEach((income, index) => {
         if (!income.source) missingFields.push(`incomes[${index}].source`);
         if (!income.monthlyAmount) missingFields.push(`incomes[${index}].monthlyAmount`);
-        if (!income.imageUrl.trim()) {
+        if (!income.imageUrl?.trim()) {
           missingFields.push(`incomes[${index}].imageUrl`);
         }
       });
@@ -652,8 +710,14 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
       if (fieldName === 'zipCode' && !value?.trim()) {
         return 'ZIP Code is required';
       }
-      if (fieldName === 'monthlyPayment' && !value?.trim()) {
-        return 'Monthly Payment is required';
+      if (fieldName === 'monthlyPayment') {
+        if (!value?.trim()) {
+          return 'Monthly Payment is required';
+        }
+        const numValue = parseInt(value);
+        if (isNaN(numValue) || numValue <= 0) {
+          return 'Monthly Payment must be greater than 0';
+        }
       }
     }
     
@@ -663,6 +727,11 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
   // Save a single field with debouncing handled by the component
   saveField: async (fieldPath, value, options) => {
     const state = get();
+
+    // Skip auto-save when disabled (e.g. in the listing submit wizard)
+    if (!state.autoSaveEnabled) {
+      return { success: true, fieldPath, skipped: true };
+    }
     
     // Validate the field first
     const error = get().validateField(fieldPath, value);

@@ -1,0 +1,387 @@
+'use client';
+
+import { useEffect, useState, useCallback, useRef } from 'react';
+import { useIsMobile } from '@/hooks/useIsMobile';
+import { useToast } from '@/components/ui/use-toast';
+import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
+import { cn } from '@/lib/utils';
+import { ListingAndImages } from '@/types';
+import { PersonalInfo } from '@/components/application/application-personal-info';
+import { Identification } from '@/components/application/application-identity';
+import { Income } from '@/components/application/application-income';
+import Questionnaire from '@/components/application/application-questionnaire';
+import { ResidentialLandlordInfo } from '@/components/application/residential-landlord-info';
+import { useApplicationStore } from '@/stores/application-store';
+import { upsertApplication, markComplete, getFullApplication } from '@/app/actions/applications';
+import { applyToListingFromSearch } from '@/app/actions/housing-requests';
+import {
+  validatePersonalInfo,
+  validateIdentification,
+  validateResidentialHistory,
+  validateIncome,
+  validateQuestionnaire,
+} from '@/utils/application-validation';
+import { ApplicationItemHeaderStyles } from '@/constants/styles';
+import { TripContextDisplay } from '@/components/application/trip-context-display';
+
+const INPUT_CLASS_NAME = `
+  flex h-12 items-center gap-2 px-3 py-2
+  relative self-stretch w-full
+  bg-input-background rounded-lg border border-solid border-[#d0d5dd]
+  shadow-shadows-shadow-xs
+  text-gray-900
+  placeholder:text-gray-400
+  focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
+`.trim().replace(/\s+/g, ' ');
+
+interface ApplicationWizardProps {
+  listing: ListingAndImages;
+  tripContext: {
+    tripId?: string;
+    startDate: Date;
+    endDate: Date;
+    numAdults?: number;
+    numChildren?: number;
+    numPets?: number;
+  };
+  application: any;
+  onBack: () => void;
+  onComplete: () => void;
+}
+
+export default function ApplicationWizard({
+  listing,
+  tripContext,
+  application,
+  onBack,
+  onComplete,
+}: ApplicationWizardProps) {
+  const { toast } = useToast();
+  const isMobile = useIsMobile();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const {
+    personalInfo,
+    ids,
+    residentialHistory,
+    incomes,
+    answers,
+    moveInDate,
+    moveOutDate,
+    numAdults,
+    numChildren,
+    numPets,
+    setMoveInDate,
+    setMoveOutDate,
+    setNumAdults,
+    setNumChildren,
+    setNumPets,
+    initializeFromApplication,
+    resetStore,
+    setErrors,
+    markSynced,
+    setAutoSaveEnabled,
+  } = useApplicationStore();
+
+  const hasInitialized = useRef(false);
+
+  useEffect(() => {
+    if (hasInitialized.current) return;
+    hasInitialized.current = true;
+
+    resetStore();
+    setAutoSaveEnabled(false);
+
+    // Initialize trip context from props
+    if (tripContext) {
+      setMoveInDate(tripContext.startDate);
+      setMoveOutDate(tripContext.endDate);
+      setNumAdults(tripContext.numAdults ?? 1);
+      setNumChildren(tripContext.numChildren ?? 0);
+      setNumPets(tripContext.numPets ?? 0);
+    }
+
+    if (application) {
+      initializeFromApplication(application);
+    }
+
+    const fetchFull = async () => {
+      if (application?.id) {
+        const result = await getFullApplication(application.id);
+        if (result.success && result.application) {
+          initializeFromApplication(result.application);
+        }
+      }
+    };
+    fetchFull();
+
+    return () => {
+      setAutoSaveEnabled(true);
+      hasInitialized.current = false;
+    };
+  }, [application, initializeFromApplication, resetStore, tripContext, setMoveInDate, setMoveOutDate, setNumAdults, setNumChildren, setNumPets, setAutoSaveEnabled]);
+
+  const getFirstErrorMessage = (errors: any): string | null => {
+    if (errors.personalInfo) {
+      const first = Object.values(errors.personalInfo)[0];
+      if (first) return first as string;
+    }
+    if (errors.identification) {
+      const first = Object.values(errors.identification)[0];
+      if (first) return first as string;
+    }
+    if (errors.overall) return errors.overall;
+
+    const arrayFields = [
+      'street', 'city', 'state', 'zipCode', 'monthlyPayment', 'durationOfTenancy',
+      'landlordFirstName', 'landlordLastName', 'landlordEmail', 'landlordPhoneNumber',
+    ];
+    for (const field of arrayFields) {
+      if (errors[field] && Array.isArray(errors[field])) {
+        const first = errors[field].find((e: any) => e);
+        if (first) return first;
+      }
+    }
+    if (errors.source && Array.isArray(errors.source)) {
+      const first = errors.source.find((e: any) => e);
+      if (first) return first;
+    }
+    if (errors.monthlyAmount && Array.isArray(errors.monthlyAmount)) {
+      const first = errors.monthlyAmount.find((e: any) => e);
+      if (first) return first;
+    }
+    if (errors.felony) return errors.felony;
+    if (errors.evicted) return errors.evicted;
+
+    const firstString = Object.values(errors).find((e) => typeof e === 'string');
+    if (firstString) return firstString as string;
+    return null;
+  };
+
+  const validateAll = useCallback(
+    (): { isValid: boolean; errorMessage: string | null } => {
+      // Validate basic info
+      const piErrors = validatePersonalInfo(personalInfo);
+      const idErrors = validateIdentification(ids);
+      const basicErrors = { personalInfo: piErrors, identification: idErrors };
+      setErrors('basicInfo', basicErrors);
+
+      // Validate residential history
+      const resErrors = validateResidentialHistory(residentialHistory);
+      setErrors('residentialHistory', resErrors as any);
+
+      // Validate income
+      const incErrors = validateIncome(incomes);
+      setErrors('income', incErrors);
+
+      // Validate questionnaire
+      const qErrors = validateQuestionnaire(answers);
+      setErrors('questionnaire', qErrors);
+
+      const basicValid = Object.keys(piErrors).length === 0 && Object.keys(idErrors).length === 0;
+      const resValid = Object.keys(resErrors).length === 0;
+      const incValid = Object.keys(incErrors).length === 0;
+      const qValid = Object.keys(qErrors).length === 0;
+
+      const isValid = basicValid && resValid && incValid && qValid;
+
+      let errorMessage: string | null = null;
+      if (!basicValid) errorMessage = getFirstErrorMessage(basicErrors);
+      else if (!resValid) errorMessage = getFirstErrorMessage(resErrors);
+      else if (!incValid) errorMessage = getFirstErrorMessage(incErrors);
+      else if (!qValid) errorMessage = getFirstErrorMessage(qErrors);
+
+      return { isValid, errorMessage };
+    },
+    [personalInfo, ids, residentialHistory, incomes, answers, setErrors]
+  );
+
+  const buildApplicationData = () => {
+    const formattedDateOfBirth = personalInfo.dateOfBirth
+      ? new Date(personalInfo.dateOfBirth).toISOString()
+      : undefined;
+
+    return {
+      ...personalInfo,
+      dateOfBirth: formattedDateOfBirth,
+      ...answers,
+      incomes,
+      identifications: ids.map((id) => ({
+        id: id.id,
+        idType: id.idType,
+        idNumber: id.idNumber,
+        isPrimary: id.isPrimary,
+        idPhotos: id.idPhotos?.length
+          ? id.idPhotos.map((photo) => ({
+              url: photo.url,
+              fileKey: photo.fileKey,
+              customId: photo.customId,
+              fileName: photo.fileName,
+              isPrimary: photo.isPrimary,
+            }))
+          : undefined,
+      })),
+      residentialHistories: residentialHistory.filter(
+        (r) => r.street?.trim() || r.city?.trim() || r.state?.trim() || r.zipCode?.trim()
+      ),
+    };
+  };
+
+  const handleSubmit = async () => {
+    // Validate all sections
+    const validation = validateAll();
+    if (!validation.isValid) {
+      toast({
+        title: 'Validation Error',
+        description: validation.errorMessage || 'Please correct errors before submitting.',
+        variant: 'destructive',
+      });
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      // 1. Save the application first — use default (no tripId) if none exists yet
+      const applicationData = buildApplicationData();
+      const upsertResult = await upsertApplication({
+        ...applicationData,
+        ...(tripContext.tripId ? { tripId: tripContext.tripId } : {}),
+      });
+
+      if (!upsertResult.success) {
+        toast({ title: 'Error', description: upsertResult.error || 'Failed to submit application', variant: 'destructive' });
+        setIsSubmitting(false);
+        return;
+      }
+
+      markSynced();
+
+      // 2. Mark as complete so application limit check passes
+      if (upsertResult.application?.id) {
+        const completeResult = await markComplete(upsertResult.application.id);
+        if (!completeResult.success) {
+          toast({
+            title: 'Incomplete Application',
+            description: completeResult.missingRequirements
+              ? `Missing: ${completeResult.missingRequirements.join(', ')}`
+              : completeResult.error || 'Please complete all required fields.',
+            variant: 'destructive',
+          });
+          setIsSubmitting(false);
+          return;
+        }
+      }
+
+      // 3. Now apply to listing (creates trip if needed and housing request)
+      const applyResult = await applyToListingFromSearch(listing.id, {
+        tripId: tripContext.tripId,
+        startDate: tripContext.startDate,
+        endDate: tripContext.endDate,
+      });
+
+      if (!applyResult.success) {
+        toast({
+          title: 'Error',
+          description: applyResult.error || 'Failed to submit application',
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      toast({ title: 'Success', description: 'Application submitted successfully!' });
+      onComplete();
+    } catch (error) {
+      toast({ title: 'Error', description: 'An unexpected error occurred', variant: 'destructive' });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <div className="w-full max-w-3xl mx-auto pb-24">
+      {/* Header Section */}
+      <div className="flex items-center gap-4 w-full mb-10">
+        <BrandButton
+          variant="ghost"
+          size="sm"
+          onClick={onBack}
+          className="text-primaryBrand min-w-0 pl-0"
+        >
+          Back
+        </BrandButton>
+        <h1 className="font-['Poppins'] text-[28px] font-medium text-[#373940]">
+          Your Application
+        </h1>
+      </div>
+
+      {/* Trip Context Display */}
+      <div className="mb-10">
+        <TripContextDisplay
+          startDate={moveInDate || tripContext.startDate}
+          endDate={moveOutDate || tripContext.endDate}
+          numAdults={numAdults}
+          numChildren={numChildren}
+          numPets={numPets}
+          onStartDateChange={setMoveInDate}
+          onEndDateChange={setMoveOutDate}
+          onNumAdultsChange={setNumAdults}
+          onNumChildrenChange={setNumChildren}
+          onNumPetsChange={setNumPets}
+        />
+      </div>
+
+      {/* All form sections */}
+      <div className="space-y-10">
+        <div>
+          <h2 className={ApplicationItemHeaderStyles}>Basic Information</h2>
+          <PersonalInfo inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
+          <div className="mt-8">
+            <Identification inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
+          </div>
+        </div>
+
+        <div>
+          <h2 className={cn(ApplicationItemHeaderStyles, 'mb-1')}>Residential History</h2>
+          <p className="text-sm text-gray-500 mb-4">
+            Please add 24 months of residential history or three previous addresses.
+          </p>
+          <ResidentialLandlordInfo inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
+        </div>
+
+        <div>
+          <h2 className={ApplicationItemHeaderStyles}>Income</h2>
+          <Income inputClassName={INPUT_CLASS_NAME} isMobile={isMobile} />
+        </div>
+
+        <div>
+          <h2 className={ApplicationItemHeaderStyles}>Questionnaire</h2>
+          <Questionnaire isMobile={isMobile} />
+        </div>
+      </div>
+
+      {/* Sticky footer */}
+      <div className="fixed bottom-0 left-0 right-0 bg-background border-t border-gray-200 px-4 py-4 pb-[max(env(safe-area-inset-bottom),16px)] z-20">
+        <div className="max-w-3xl mx-auto flex justify-between items-center gap-3">
+          <BrandButton
+            variant="outline"
+            size="sm"
+            onClick={onBack}
+            className="font-semibold"
+          >
+            <span className="hidden sm:inline">Back to Listing</span>
+            <span className="sm:hidden">Back</span>
+          </BrandButton>
+          <Button
+            onClick={handleSubmit}
+            disabled={isSubmitting}
+            className="bg-[#3c8787] hover:bg-[#2d6b6b] text-white font-semibold px-4 sm:px-8 text-sm sm:text-base"
+          >
+            {isSubmitting ? 'Submitting...' : 'Submit Application'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}

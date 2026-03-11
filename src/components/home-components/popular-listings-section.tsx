@@ -1,45 +1,133 @@
 'use client';
 
-import { ListingAndImages } from '@/types';
+import { ListingWithRelations } from '@/types';
 import HomepageListingCard from './homepage-listing-card';
 import MarketingContainer from '@/components/marketing-landing-components/marketing-container';
-import { ChevronRight, ArrowRight } from 'lucide-react';
-import { useRef } from 'react';
+import { ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { HomepageUserState } from '@/app/actions/homepage-user-state';
+import { useHomepageListingsContext } from '@/contexts/homepage-listings-context';
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  type CarouselApi,
+} from "@/components/ui/carousel";
+
+export interface ListingSection {
+  title: string;
+  listings: ListingWithRelations[];
+  showBadges?: boolean;
+  center?: { lat: number; lng: number };
+  locationString?: string;
+  city?: string;
+  state?: string;
+  sectionTripId?: string;
+}
 
 interface PopularListingsSectionProps {
-  listings: ListingAndImages[];
+  sections: ListingSection[];
+  onExplore?: (section: ListingSection) => void;
 }
 
 type BadgeType = 'matched' | 'liked';
 
 interface ListingRowProps {
   title: string;
-  listings: ListingAndImages[];
+  listings: ListingWithRelations[];
   showBadges?: boolean;
+  onExplore?: () => void;
+  sectionTripId?: string;
+  sectionCenter?: { lat: number; lng: number };
+  sectionLocationString?: string;
 }
 
-const SCROLL_AMOUNT = 440;
+const getListingState = (
+  listingId: string,
+  authUserState?: Partial<HomepageUserState>,
+  guestFavoriteIds?: Set<string>,
+  sectionTripId?: string
+) => {
+  // Matches take priority
+  const matchData = authUserState?.matchedListings?.find(m => m.listingId === listingId);
+  if (matchData) {
+    return {
+      badge: 'matched' as const,
+      initialFavorited: true,
+      matchId: matchData.matchId,
+      tripId: matchData.tripId,
+      isApplied: false
+    };
+  }
 
-const SAMPLE_CITIES = [
-  'Nashville, TN',
-  'Las Vegas, NV',
-  'Austin, TX',
-  'Denver, CO',
-];
+  // Check favorites (auth user OR guest)
+  const isFavorited = authUserState?.favoritedListingIds?.includes(listingId)
+    ?? guestFavoriteIds?.has(listingId)
+    ?? false;
+  const isApplied = authUserState?.appliedListingIds?.includes(listingId) ?? false;
 
-const getBadgeForIndex = (index: number): BadgeType | undefined => {
-  if (index === 0) return 'matched';
-  if (index === 1) return 'liked';
-  return undefined;
+  return {
+    badge: (isFavorited ? 'liked' : undefined) as BadgeType | undefined,
+    initialFavorited: isFavorited,
+    isApplied,
+    tripId: sectionTripId
+  };
 };
 
-function ListingRow({ title, listings, showBadges = false }: ListingRowProps) {
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
+function ListingRow({ title, listings = [], showBadges = false, onExplore, sectionTripId, sectionCenter, sectionLocationString }: ListingRowProps) {
+  const { state, actions } = useHomepageListingsContext();
+  const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
+
+  // Calculate how many slides are visible based on viewport
+  const getSlidesToScroll = () => {
+    if (typeof window === 'undefined') return 1;
+    const width = window.innerWidth;
+    if (width >= 1024) return 5; // lg breakpoint - 5 cards visible
+    if (width >= 768) return 4;  // md breakpoint - 4 cards visible
+    if (width >= 640) return 3;  // sm breakpoint - 3 cards visible
+    return 2; // mobile - 2 cards visible
+  };
+
+  // Update button states when carousel changes
+  useEffect(() => {
+    if (!carouselApi) return;
+
+    const updateButtonStates = () => {
+      setCanScrollLeft(carouselApi.canScrollPrev());
+      setCanScrollRight(carouselApi.canScrollNext());
+    };
+
+    updateButtonStates();
+    carouselApi.on('select', updateButtonStates);
+    carouselApi.on('reInit', updateButtonStates);
+
+    return () => {
+      carouselApi.off('select', updateButtonStates);
+    };
+  }, [carouselApi]);
+
+  const scrollLeft = () => {
+    if (!carouselApi) return;
+    const slidesToScroll = getSlidesToScroll();
+    const targetIndex = Math.max(0, carouselApi.selectedScrollSnap() - slidesToScroll);
+    carouselApi.scrollTo(targetIndex);
+  };
 
   const scrollRight = () => {
-    if (!scrollContainerRef.current) return;
-    scrollContainerRef.current.scrollBy({ left: SCROLL_AMOUNT, behavior: 'smooth' });
+    if (!carouselApi) return;
+    const slidesToScroll = getSlidesToScroll();
+    const targetIndex = Math.min(
+      carouselApi.scrollSnapList().length - 1,
+      carouselApi.selectedScrollSnap() + slidesToScroll
+    );
+    carouselApi.scrollTo(targetIndex);
   };
+
+  const handleFavorite = actions.onFavorite
+    ? (listingId: string, isFavorited: boolean) => actions.onFavorite!(listingId, isFavorited, sectionTripId, sectionCenter, sectionLocationString)
+    : undefined;
 
   const hasListings = listings.length > 0;
 
@@ -48,33 +136,75 @@ function ListingRow({ title, listings, showBadges = false }: ListingRowProps) {
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <h3 className="text-[#404040] text-lg font-medium">{title}</h3>
-          <div className="p-1 rounded-full bg-primaryBrand/10">
-            <ArrowRight className="w-4 h-4 text-primaryBrand" />
-          </div>
+          {onExplore ? (
+            <button
+              onClick={onExplore}
+              className="p-1 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors cursor-pointer"
+            >
+              <ArrowRight className="w-4 h-4 text-primaryBrand" />
+            </button>
+          ) : (
+            <div className="p-1 rounded-full bg-primaryBrand/10">
+              <ArrowRight className="w-4 h-4 text-primaryBrand" />
+            </div>
+          )}
         </div>
-        <button
-          onClick={scrollRight}
-          className="p-2 rounded-full bg-primaryBrand/10 hover:bg-primaryBrand/20 transition-colors"
-          aria-label="Scroll right"
-        >
-          <ChevronRight className="w-5 h-5 text-primaryBrand" />
-        </button>
+        <div className="hidden md:flex items-center gap-2">
+          <button
+            onClick={scrollLeft}
+            disabled={!canScrollLeft}
+            className={`p-2 rounded-full transition-colors flex items-center justify-center ${
+              canScrollLeft
+                ? 'bg-gray-100 hover:bg-gray-200 cursor-pointer'
+                : 'bg-gray-50 cursor-default'
+            }`}
+            aria-label="Scroll left"
+          >
+            <ChevronLeft className={`w-5 h-5 ${canScrollLeft ? 'text-gray-500' : 'text-gray-300'}`} />
+          </button>
+          <button
+            onClick={scrollRight}
+            disabled={!canScrollRight}
+            className={`p-2 rounded-full transition-colors flex items-center justify-center ${
+              canScrollRight
+                ? 'bg-primaryBrand/10 hover:bg-primaryBrand/20 cursor-pointer'
+                : 'bg-gray-50 cursor-default'
+            }`}
+            aria-label="Scroll right"
+          >
+            <ChevronRight className={`w-5 h-5 ${canScrollRight ? 'text-primaryBrand' : 'text-gray-300'}`} />
+          </button>
+        </div>
       </div>
 
       {hasListings ? (
-        <div
-          ref={scrollContainerRef}
-          className="flex gap-6 overflow-x-auto scrollbar-hide pb-2"
-          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        <Carousel
+          opts={{
+            align: "start",
+            slidesToScroll: 1,
+            skipSnaps: false,
+          }}
+          setApi={setCarouselApi}
+          className="w-full"
+          keyboardControls={false}
         >
-          {listings.map((listing, index) => (
-            <HomepageListingCard
-              key={listing.id}
-              listing={listing}
-              badge={showBadges ? getBadgeForIndex(index) : undefined}
-            />
-          ))}
-        </div>
+          <CarouselContent className="-ml-6">
+            {listings.map(listing => {
+              const listingState = getListingState(listing.id, state.authUserState, state.guestFavoriteIds, sectionTripId);
+              return (
+                <CarouselItem key={listing.id} className="pl-6 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/5">
+                  <HomepageListingCard
+                    listing={listing}
+                    initialFavorited={listingState.initialFavorited}
+                    onFavorite={handleFavorite}
+                    onSignInPrompt={actions.onSignInPrompt}
+                    isSignedIn={state.isSignedIn}
+                  />
+                </CarouselItem>
+              );
+            })}
+          </CarouselContent>
+        </Carousel>
       ) : (
         <div className="text-gray-500 text-sm">No listings available</div>
       )}
@@ -82,21 +212,9 @@ function ListingRow({ title, listings, showBadges = false }: ListingRowProps) {
   );
 }
 
-export default function PopularListingsSection({ listings }: PopularListingsSectionProps) {
-  const hasListings = listings.length > 0;
+export default function PopularListingsSection({ sections, onExplore }: PopularListingsSectionProps) {
 
-  const splitListingsIntoRows = () => {
-    if (!hasListings) return [];
-    const rowSize = Math.ceil(listings.length / 4);
-    return [
-      listings.slice(0, rowSize),
-      listings.slice(rowSize, rowSize * 2),
-      listings.slice(rowSize * 2, rowSize * 3),
-      listings.slice(rowSize * 3),
-    ];
-  };
-
-  const rows = splitListingsIntoRows();
+  const hasSections = sections.length > 0;
 
   const renderEmptyState = () => (
     <div className="text-center py-12 text-gray-500">
@@ -107,25 +225,19 @@ export default function PopularListingsSection({ listings }: PopularListingsSect
   return (
     <MarketingContainer>
       <section className="py-8">
-        {hasListings ? (
-          <>
-            <ListingRow
-              title="Your search in Palo Alto"
-              listings={rows[0] || []}
-              showBadges={true}
-            />
-            <ListingRow
-              title="Monthly rentals near me"
-              listings={rows[1] || []}
-            />
-            {SAMPLE_CITIES.slice(0, 2).map((city, index) => (
-              <ListingRow
-                key={city}
-                title={`Explore monthly rentals in ${city}`}
-                listings={rows[index + 2] || rows[0] || []}
-              />
-            ))}
-          </>
+        {hasSections ? (
+          sections.map((section, index) => (
+          <ListingRow
+            key={`${section.title}-${index}`}
+            title={section.title}
+            listings={section.listings}
+            showBadges={section.showBadges}
+            onExplore={onExplore && section.center ? () => onExplore(section) : undefined}
+            sectionTripId={section.sectionTripId}
+            sectionCenter={section.center}
+            sectionLocationString={section.locationString}
+          />
+          ))
         ) : (
           renderEmptyState()
         )}

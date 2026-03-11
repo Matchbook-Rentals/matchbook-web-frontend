@@ -378,19 +378,7 @@ redis://default:abc123xyz789@roundhouse.proxy.rlwy.net:12345
      - ✓ Development
 3. Click **"Save"**
 
-### Step 20: Add USE_EMAIL_QUEUE
-
-1. Click **"Add New"** button again
-2. Enter:
-   - **Name:** `USE_EMAIL_QUEUE`
-   - **Value:** `true`
-   - **Environment:** Check all:
-     - ✓ Production
-     - ✓ Preview
-     - ✓ Development
-3. Click **"Save"**
-
-### Step 21: Add RESEND_API_KEY (if not already set)
+### Step 20: Add RESEND_API_KEY (if not already set)
 
 **Check if already exists:**
 - Look for `RESEND_API_KEY` in environment variables list
@@ -403,7 +391,7 @@ redis://default:abc123xyz789@roundhouse.proxy.rlwy.net:12345
    - **Environment:** Check all three
 3. Click **"Save"**
 
-### Step 22: Redeploy Next.js
+### Step 21: Redeploy Next.js
 
 **Important:** Environment variables only apply after redeployment!
 
@@ -418,7 +406,7 @@ Wait 2-3 minutes for redeployment to complete.
 
 ## Part 8: Test End-to-End (5 minutes)
 
-### Step 23: Send Test Email
+### Step 22: Send Test Email
 
 **Option 1: From Next.js App**
 
@@ -455,7 +443,7 @@ export async function GET() {
 
 Then visit: `https://your-app.vercel.app/api/test-queue`
 
-### Step 24: Monitor Queue Processing
+### Step 23: Monitor Queue Processing
 
 **In browser, refresh this URL every few seconds:**
 ```
@@ -472,7 +460,7 @@ https://matchbook-email-worker-production.up.railway.app/health/queue
 watch -n 1 'curl -s https://your-worker-url/health/queue'
 ```
 
-### Step 25: Check Worker Logs
+### Step 24: Check Worker Logs
 
 **In Railway dashboard:**
 1. Click **"matchbook-email-worker"** service
@@ -486,7 +474,7 @@ Processing email job abc-123-xyz (attempt 1)
 Email sent successfully to your-email@example.com (jobId: abc-123-xyz)
 ```
 
-### Step 26: Verify Email Received
+### Step 25: Verify Email Received
 
 Check your inbox! Email should arrive within 1-2 seconds.
 
@@ -497,7 +485,7 @@ Check your inbox! Email should arrive within 1-2 seconds.
 
 ## Part 9: Set Up Monitoring (Optional, 5 minutes)
 
-### Step 27: Configure Railway Metrics
+### Step 26: Configure Railway Metrics
 
 Railway has built-in monitoring:
 
@@ -515,7 +503,7 @@ Railway has built-in monitoring:
 - CPU should be low (< 20%) when idle
 - Spikes are normal when processing emails
 
-### Step 28: Set Up External Monitoring (Recommended)
+### Step 27: Set Up External Monitoring (Recommended)
 
 **UptimeRobot (Free):**
 
@@ -632,7 +620,6 @@ Railway has built-in monitoring:
 2. **Next.js not enqueuing:**
    - Check Vercel env vars
    - Verify `REDIS_URL` is correct
-   - Verify `USE_EMAIL_QUEUE=true`
 3. **Redis connection from Next.js:**
    - Test: `redis-cli -u $REDIS_URL ping`
    - Should return PONG
@@ -666,7 +653,6 @@ matchbook-email-worker (Project)
 ```
 Production, Preview, Development:
 ├── REDIS_URL=redis://default:pass@host:port (from Railway)
-├── USE_EMAIL_QUEUE=true
 └── RESEND_API_KEY=re_your_key
 ```
 

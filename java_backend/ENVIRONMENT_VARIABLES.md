@@ -16,7 +16,6 @@ RESEND_API_KEY=re_your_actual_key_here
 **Next.js (Vercel/Production):**
 ```bash
 REDIS_URL=redis://default:password@host:port
-USE_EMAIL_QUEUE=true
 RESEND_API_KEY=re_your_actual_key_here  # (if not already set)
 ```
 
@@ -61,7 +60,6 @@ These are **automatically set** when you add Redis to Railway:
 | Variable | Description | Example | Where to Set |
 |----------|-------------|---------|--------------|
 | `REDIS_URL` | Full Redis connection URL | `redis://default:pass@host:port` | Vercel, Local |
-| `USE_EMAIL_QUEUE` | Enable email queue (vs direct send) | `true` | Vercel, Local |
 | `RESEND_API_KEY` | Resend API key (if not already set) | `re_abc123...` | Vercel, Local |
 
 ### Optional
@@ -80,9 +78,6 @@ These are **automatically set** when you add Redis to Railway:
 ```bash
 # Redis (Docker Compose)
 REDIS_URL=redis://localhost:6380
-
-# Enable queue
-USE_EMAIL_QUEUE=true
 
 # Resend (get from https://resend.com/api-keys)
 RESEND_API_KEY=re_your_key_here
@@ -130,9 +125,6 @@ railway variables set EMAIL_QUEUE_ENABLED=true
 # Get Redis URL from Railway dashboard:
 REDIS_URL=redis://default:password@roundhouse.proxy.rlwy.net:12345
 
-# Enable queue
-USE_EMAIL_QUEUE=true
-
 # Resend (if not already set)
 RESEND_API_KEY=re_your_key_here
 ```
@@ -169,9 +161,6 @@ REDIS_USE_SSL=true  # Important for Render!
 # Get Redis URL from Render dashboard
 REDIS_URL=rediss://default:password@host:port  # Note: rediss:// with SSL
 
-# Enable queue
-USE_EMAIL_QUEUE=true
-
 # Resend
 RESEND_API_KEY=re_your_key_here
 ```
@@ -197,7 +186,6 @@ railway variables set EMAIL_QUEUE_ENABLED=true
 # Set for "Preview" environment only
 
 REDIS_URL=redis://...staging-redis-url...
-USE_EMAIL_QUEUE=true
 RESEND_API_KEY=re_your_staging_key_here
 ```
 
@@ -248,10 +236,6 @@ railway variables delete SOME_VAR
 ```bash
 # Set for production
 vercel env add REDIS_URL production
-
-# Set for all environments
-vercel env add USE_EMAIL_QUEUE
-# Then select: Production, Preview, Development
 
 # Pull env vars to local
 vercel env pull .env.local
@@ -333,44 +317,6 @@ redis://localhost:6380
 # Test Redis connection (requires redis-cli)
 redis-cli -u "redis://default:password@host:port" ping
 # Should return: PONG
-```
-
-### `USE_EMAIL_QUEUE`
-
-**Required in:** Next.js
-**Format:** `true` or `false` (string, not boolean)
-**Default:** `false`
-
-**When `true`:**
-- Emails enqueue to Redis
-- Java worker processes them
-- 2 emails/sec rate limiting
-- Automatic retries
-
-**When `false`:**
-- Emails send directly via Resend API
-- No rate limiting
-- No retries
-- No queue visibility
-
-**Testing:**
-```typescript
-// This code path changes based on USE_EMAIL_QUEUE
-await sendNotificationEmail({
-  to: 'test@example.com',
-  subject: 'Test',
-  emailData: {...}
-});
-
-// With USE_EMAIL_QUEUE=true:
-// → Enqueues to Redis
-// → Returns immediately
-// → Worker sends async
-
-// With USE_EMAIL_QUEUE=false:
-// → Sends directly to Resend
-// → Waits for response
-// → Returns after send
 ```
 
 ### `EMAIL_QUEUE_ENABLED`
@@ -529,7 +475,6 @@ REDIS_URL=redis://localhost:6380  # Not 6379
 - [ ] Deploy worker to Railway
 - [ ] Get Redis URL from Railway dashboard
 - [ ] Set `REDIS_URL` in Vercel
-- [ ] Set `USE_EMAIL_QUEUE=true` in Vercel
 - [ ] Redeploy Next.js on Vercel
 
 ### Post-Deployment
@@ -558,13 +503,11 @@ REDIS_URL=redis://localhost:6380  # Not 6379
 │                                                         │
 │  NEXT.JS (Vercel):                                      │
 │    REDIS_URL=redis://default:pass@host:port            │
-│    USE_EMAIL_QUEUE=true                                 │
 │    RESEND_API_KEY=re_your_key                          │
 │                                                         │
 │  LOCAL (Docker Compose):                                │
 │    export RESEND_API_KEY=re_your_key                   │
 │    REDIS_URL=redis://localhost:6380                     │
-│    USE_EMAIL_QUEUE=true                                 │
 │                                                         │
 │  GET REDIS_URL:                                         │
 │    Railway Dashboard → matchbook-redis → Connect       │

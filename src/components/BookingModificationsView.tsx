@@ -364,21 +364,21 @@ export default function BookingModificationsView({
                           </div>
                           
                           {/* Right Column - Action Buttons (bottom aligned) */}
-                          <div className={isMobile ? "flex flex-col items-center justify-center w-full" : "flex items-end justify-end md:justify-start"}>
+                          <div className={isMobile ? "flex flex-col items-center justify-center w-full" : "flex flex-col sm:flex-row items-end justify-end md:justify-start"}>
                             {user?.id === modification.recipientId ? (
-                              <div className={isMobile ? 'flex flex-col gap-2 w-full' : 'flex gap-4'}>
+                              <div className={isMobile ? 'flex flex-col gap-2 w-full' : 'flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto'}>
                                 <Button
                                   variant="outline"
                                   onClick={() => handleReject(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className={`h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : ''}`}
+                                  className={`h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-full sm:w-auto text-sm sm:text-base'}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Decline Change'}
                                 </Button>
                                 <Button
                                   onClick={() => handleApprove(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className={`h-12 bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-[194px]'}`}
+                                  className={`h-12 bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-full sm:w-[194px] text-sm sm:text-base'}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Approve Change'}
                                 </Button>
@@ -549,21 +549,21 @@ export default function BookingModificationsView({
                           </div>
                           
                           {/* Right Column - Action Buttons (bottom aligned) */}
-                          <div className={isMobile ? "flex flex-col items-center justify-center w-full" : "flex items-end justify-end md:justify-start"}>
+                          <div className={isMobile ? "flex flex-col items-center justify-center w-full" : "flex flex-col sm:flex-row items-end justify-end md:justify-start"}>
                             {modification.status === 'pending' && user?.id === modification.recipientId ? (
-                              <div className={isMobile ? 'flex flex-col gap-2 w-full' : 'flex gap-4'}>
+                              <div className={isMobile ? 'flex flex-col gap-2 w-full' : 'flex flex-col sm:flex-row gap-2 sm:gap-4 w-full sm:w-auto'}>
                                 <Button
                                   variant="outline"
                                   onClick={() => handleReject(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className={`h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : ''}`}
+                                  className={`h-12 border-[#3c8787] text-[#3c8787] hover:bg-transparent [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-full sm:w-auto text-sm sm:text-base'}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Decline Change'}
                                 </Button>
                                 <Button
                                   onClick={() => handleApprove(modification.id, modification.type)}
                                   disabled={loadingActions.has(modification.id)}
-                                  className={`h-12 bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-[194px]'}`}
+                                  className={`h-12 bg-[#3c8787] hover:bg-[#2d6666] text-white [font-family:'Poppins',Helvetica] font-semibold ${isMobile ? 'w-full text-sm' : 'w-full sm:w-[194px] text-sm sm:text-base'}`}
                                 >
                                   {loadingActions.has(modification.id) ? 'Processing...' : 'Approve Change'}
                                 </Button>

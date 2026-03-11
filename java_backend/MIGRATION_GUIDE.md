@@ -38,9 +38,9 @@ This guide walks you through migrating your existing cron job email sending from
 ## Migration Strategy Overview
 
 ### Phase 1: Enable Queue for Existing Code (30 minutes)
-✅ **Safe** - No code changes, just flip environment variable
+✅ **Safe** - No code changes needed
 
-Most cron jobs already use `sendNotificationEmail()` which supports the queue!
+Most cron jobs already use `sendNotificationEmail()` which supports the queue. The email queue is always enabled and falls back to direct sending if Redis is unavailable.
 
 ### Phase 2: Migrate Direct Resend Calls (1-2 hours)
 ⚠️ **Requires code changes** - Replace direct Resend calls
@@ -62,7 +62,6 @@ Only affects:
 ```bash
 # In .env.local
 REDIS_URL=redis://localhost:6380
-USE_EMAIL_QUEUE=true
 RESEND_API_KEY=re_your_actual_key
 
 # Start services
@@ -81,7 +80,6 @@ railway up
 # Get Redis URL from Railway dashboard
 # Add to Vercel environment variables:
 REDIS_URL=<redis_url_from_railway>
-USE_EMAIL_QUEUE=true
 ```
 
 ### Step 1.2: Verify Worker Health
@@ -102,7 +100,7 @@ curl https://your-worker-url/health
 }
 ```
 
-### Step 1.3: Enable Queue in Next.js
+### Step 1.3: Configure Redis in Next.js
 
 **Development:**
 Already set in `.env.local` above
@@ -112,8 +110,9 @@ Already set in `.env.local` above
 2. Project Settings → Environment Variables
 3. Add:
    - `REDIS_URL` = (from Railway)
-   - `USE_EMAIL_QUEUE` = `true`
 4. Redeploy
+
+The email queue is always active when `REDIS_URL` is configured. If Redis is unavailable, it falls back to direct sending automatically.
 
 ### Step 1.4: Test with Preview Cron
 
@@ -153,27 +152,9 @@ watch -n 1 'curl -s http://localhost:8080/health/queue | jq'
 
 ### Step 1.6: Rollout to Production
 
-**Gradual Rollout (Recommended):**
+**Rollout:**
 
-1. **Week 1**: Enable queue for preview cron only
-   ```typescript
-   // In preview-rent-payments/route.ts
-   // Force queue for this cron
-   process.env.USE_EMAIL_QUEUE = 'true';
-   ```
-
-2. **Week 2**: Enable queue for low-volume crons
-   - send-move-in-reminders
-   - process-rent-payments (except admin email)
-   - retry-failed-rent-payments
-
-3. **Week 3**: Enable queue for high-volume cron
-   - check-unread-messages
-
-4. **Week 4**: Set `USE_EMAIL_QUEUE=true` globally
-
-**Instant Rollout (All-at-once):**
-Just set `USE_EMAIL_QUEUE=true` in Vercel and redeploy.
+The email queue is always active when `REDIS_URL` is configured. Once you deploy the worker and set `REDIS_URL` in Vercel, all emails will automatically route through the queue. If Redis is unavailable, the system falls back to direct sending.
 
 ### ✅ Phase 1 Complete!
 
@@ -493,43 +474,24 @@ docker exec matchbook-redis-worker redis-cli LRANGE matchbook:emails:dlq 0 -1
 
 ## Rollback Plan
 
-If issues occur, you can instantly rollback:
+If issues occur, the system has a built-in automatic fallback:
 
-### Emergency Rollback (Instant)
+### Automatic Fallback
+
+If Redis becomes unavailable, the system automatically falls back to sending emails directly via the Resend API. No manual intervention is needed.
+
+### Manual Rollback
+
+To fully disable the queue and revert to direct sending:
 
 **In Vercel:**
 ```bash
-# Set environment variable
-USE_EMAIL_QUEUE=false
-
+# Remove the REDIS_URL environment variable
 # Redeploy
 vercel --prod
 ```
 
-All emails immediately go back to direct Resend API.
-
-### Partial Rollback (Specific Cron)
-
-```typescript
-// In specific cron file (e.g., process-rent-payments/route.ts)
-
-// Force direct sending for this cron only
-const originalQueueSetting = process.env.USE_EMAIL_QUEUE;
-process.env.USE_EMAIL_QUEUE = 'false';
-
-// ... cron logic ...
-
-// Restore setting
-process.env.USE_EMAIL_QUEUE = originalQueueSetting;
-```
-
-### Gradual Rollback
-
-Reverse the gradual rollout:
-1. Disable queue for high-volume cron (check-unread-messages)
-2. Disable queue for medium-volume crons
-3. Disable queue for low-volume crons
-4. Set `USE_EMAIL_QUEUE=false` globally
+Without `REDIS_URL`, all emails will be sent directly via the Resend API.
 
 ---
 

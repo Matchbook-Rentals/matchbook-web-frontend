@@ -46,7 +46,7 @@ export default function BookingCardWrapper({
   };
 
   const handleMessageHost = () => {
-    console.log('Message host for booking:', bookingId);
+    router.push(`/app/rent/messages?listingId=${listingId}`);
   };
 
   const handleMakePayment = () => {

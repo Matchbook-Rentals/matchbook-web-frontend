@@ -52,7 +52,7 @@ export async function createGuestTrip(tripData: GuestTripData): Promise<GuestTri
     return {
       success: true,
       sessionId: sessionResult.sessionId,
-      redirectUrl: `/guest/rent/searches/${sessionResult.sessionId}`,
+      redirectUrl: `/search/?sessionId=${sessionResult.sessionId}`,
     };
   } catch (error) {
     console.error('Error creating guest trip:', error);

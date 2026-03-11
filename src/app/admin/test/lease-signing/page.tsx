@@ -345,7 +345,7 @@ export default function LeaseSigningTestPage() {
                   <strong>Note:</strong> This is a simulation using localStorage/memory - no database changes
                 </div>
                 
-                <div className="bg-white rounded-lg overflow-hidden">
+                <div className="bg-background rounded-lg overflow-hidden">
                   {userType === 'host' ? (
                     <HostMatchClient 
                       match={mockMatch} 

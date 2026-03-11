@@ -19,6 +19,9 @@ export * from './match';
 // Lease signing helpers
 export * from './signing';
 
+// Lease PDF generation helpers
+export * from './lease-pdf';
+
 // Booking/Payment helpers
 export * from './booking';
 
@@ -27,3 +30,9 @@ export * from './referral';
 
 // Verification helpers (for credit check, background check flows)
 export * from './verification';
+
+// Guest session helpers (direct Prisma access for guest likes tests)
+export * from './guest-session';
+
+// Booking modification helpers (direct Prisma fixtures for modification tests)
+export * from './booking-modifications';

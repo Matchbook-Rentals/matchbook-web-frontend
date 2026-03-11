@@ -1,4 +1,4 @@
-import { ListingAndImages } from '@/types';
+import { ListingAndImages, ListingWithRelations } from '@/types';
 import { subDays, addDays, differenceInDays, isValid } from 'date-fns';
 import { getUtilitiesIncluded } from './calculate-rent';
 
@@ -23,8 +23,10 @@ export interface FilterOptions {
   laundry: string[];
 }
 
-export interface ListingWithCalculations extends ListingAndImages {
+export interface ListingWithCalculations extends ListingWithRelations {
   calculatedPrice?: number;
+  calculatedPriceMin?: number;
+  calculatedPriceMax?: number;
   isActuallyAvailable?: boolean;
   availableStart?: Date;
   availableEnd?: Date;
@@ -50,11 +52,17 @@ export const matchesFilters = (
   const matchesPropertyType = filters.propertyTypes.length === 0 ||
     filters.propertyTypes.includes(listing.category);
 
-  // Price filter - use calculatedPrice if available
-  const price = listing.calculatedPrice || 0;
-  const matchesPrice =
-    (filters.minPrice === null || price >= filters.minPrice) &&
-    (filters.maxPrice === null || price <= filters.maxPrice);
+  // Price filter - use range overlap when min/max are available (no-dates mode),
+  // otherwise fall back to single calculatedPrice
+  const hasRange = listing.calculatedPriceMin !== undefined && listing.calculatedPriceMax !== undefined;
+  const matchesPrice = hasRange
+    ? (filters.minPrice === null || listing.calculatedPriceMax! >= filters.minPrice) &&
+      (filters.maxPrice === null || listing.calculatedPriceMin! <= filters.maxPrice)
+    : (() => {
+        const price = listing.calculatedPrice || 0;
+        return (filters.minPrice === null || price >= filters.minPrice) &&
+               (filters.maxPrice === null || price <= filters.maxPrice);
+      })();
 
   // Distance filter - treat >= 100 as unlimited, handle null distances gracefully
   const matchesRadius = filters.searchRadius >= 100 ||
@@ -144,7 +152,7 @@ export const matchesFilters = (
  * Calculate availability for a listing based on trip dates and unavailable periods
  */
 export const calculateListingAvailability = (
-  listing: ListingAndImages,
+  listing: ListingWithRelations,
   tripDates: TripDates
 ): {
   isActuallyAvailable: boolean;

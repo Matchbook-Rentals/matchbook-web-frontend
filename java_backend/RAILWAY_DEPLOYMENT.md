@@ -260,10 +260,6 @@ railway variables --service matchbook-redis
 # Value: redis://default:password@roundhouse.proxy.rlwy.net:12345
 # Environment: Production, Preview, Development
 
-# Name: USE_EMAIL_QUEUE
-# Value: true
-# Environment: Production, Preview, Development
-
 # Name: RESEND_API_KEY (if not already set)
 # Value: re_your_key_here
 # Environment: Production, Preview, Development

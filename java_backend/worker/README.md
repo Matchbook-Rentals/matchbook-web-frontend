@@ -34,7 +34,6 @@ Next.js App → Redis Queue → Java Worker → Resend API
    # In project root .env.local
    REDIS_URL=redis://localhost:6379
    RESEND_API_KEY=your_resend_api_key
-   USE_EMAIL_QUEUE=true
    ```
 
 2. **Start services with Docker Compose**:

@@ -32,23 +32,8 @@ interface CreateGuestSessionResponse {
  */
 export async function createGuestSession(data: CreateGuestSessionData): Promise<CreateGuestSessionResponse> {
   try {
-    const today = new Date();
-    let { startDate, endDate } = data;
-
-    // Handle date logic (same as existing guest trip creation)
-    if (!startDate && !endDate) {
-      startDate = new Date(today.getFullYear(), today.getMonth() + 1, 1);
-      endDate = new Date(today.getFullYear(), today.getMonth() + 2, 1);
-    } else if (startDate && !endDate) {
-      endDate = new Date(startDate);
-      endDate.setMonth(endDate.getMonth() + 1);
-    } else if (!startDate && endDate) {
-      startDate = new Date(endDate);
-      startDate.setMonth(startDate.getMonth() - 1);
-    }
-
-    // Set expiration to 24 hours from now
-    const expiresAt = new Date(Date.now() + (24 * 60 * 60 * 1000));
+    // Set expiration to 10 years (effectively permanent)
+    const expiresAt = new Date(Date.now() + (10 * 365 * 24 * 60 * 60 * 1000));
 
     const guestSession = await prisma.guestSession.create({
       data: {
@@ -57,9 +42,9 @@ export async function createGuestSession(data: CreateGuestSessionData): Promise<
         longitude: data.longitude,
         city: data.city,
         state: data.state,
-        startDate,
-        endDate,
-        numAdults: data.numAdults || 1,
+        startDate: data.startDate,
+        endDate: data.endDate,
+        numAdults: data.numAdults ?? 0,
         numChildren: data.numChildren || 0,
         numPets: data.numPets || 0,
         expiresAt,
@@ -76,6 +61,44 @@ export async function createGuestSession(data: CreateGuestSessionData): Promise<
       success: false,
       error: 'Failed to create guest session',
     };
+  }
+}
+
+/**
+ * Get location data from a guest session by ID
+ * Lightweight query returning only location fields for the /newnew page
+ */
+export async function getGuestSessionLocation(sessionId: string): Promise<{
+  city: string | null;
+  state: string | null;
+  locationString: string;
+  latitude: number;
+  longitude: number;
+} | null> {
+  try {
+    const session = await prisma.guestSession.findUnique({
+      where: { id: sessionId },
+      select: {
+        city: true,
+        state: true,
+        locationString: true,
+        latitude: true,
+        longitude: true,
+      },
+    });
+
+    if (!session) return null;
+
+    return {
+      city: session.city,
+      state: session.state,
+      locationString: session.locationString,
+      latitude: session.latitude,
+      longitude: session.longitude,
+    };
+  } catch (error) {
+    console.error('Error fetching guest session location:', error);
+    return null;
   }
 }
 
@@ -97,13 +120,6 @@ export async function getGuestSession(sessionId: string): Promise<GuestSession |
     });
 
     if (!guestSession) {
-      return null;
-    }
-
-    // Check if session is expired
-    if (Date.now() > guestSession.expiresAt.getTime()) {
-      // Optionally clean up expired session
-      await cleanupExpiredSession(sessionId);
       return null;
     }
 
@@ -148,10 +164,6 @@ export async function updateGuestSession(
 
     if (!existingSession) {
       return { success: false, error: 'Session not found' };
-    }
-
-    if (Date.now() > existingSession.expiresAt.getTime()) {
-      return { success: false, error: 'Session expired' };
     }
 
     await prisma.guestSession.update({

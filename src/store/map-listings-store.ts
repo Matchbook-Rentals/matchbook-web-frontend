@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { ListingAndImages } from '@/types';
+import { SearchListing } from '@/types';
 import { MapMarker } from './map-selection-store';
 
 /**

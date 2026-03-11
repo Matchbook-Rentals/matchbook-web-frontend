@@ -31,6 +31,7 @@ interface PaymentMethodsSectionProps {
   hidePaymentMethods?: boolean;
   onPaymentMethodsRefresh?: () => void;
   initialPaymentMethods?: PaymentMethod[];
+  hideHeader?: boolean;
 }
 
 export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
@@ -41,6 +42,7 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
   hidePaymentMethods = false,
   onPaymentMethodsRefresh,
   initialPaymentMethods = [],
+  hideHeader = false,
 }) => {
   const { toast } = useToast();
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>(initialPaymentMethods);
@@ -225,14 +227,16 @@ export const PaymentMethodsSection: React.FC<PaymentMethodsSectionProps> = ({
   return (
     <>
       <section className="flex-col items-start gap-4 md:gap-5 self-stretch w-full flex-[0_0_auto] flex relative">
-      <div className="flex flex-col w-full items-start gap-2 relative">
-        <h2 className="relative self-stretch mt-[-1.00px] font-poppins font-semibold text-[#1a1a1a] text-lg md:text-xl tracking-[0] leading-tight">
-          Payment Methods
-        </h2>
-        <p className="relative self-stretch font-poppins font-normal text-[#333333] text-sm md:text-base tracking-[0] leading-relaxed">
-          Select bank transfer at no cost or pay by card for a 3% processing fee
-        </p>
-      </div>
+      {!hideHeader && (
+        <div className="flex flex-col w-full items-start gap-2 relative">
+          <h2 className="relative self-stretch mt-[-1.00px] font-poppins font-semibold text-[#1a1a1a] text-lg md:text-xl tracking-[0] leading-tight">
+            Payment Methods
+          </h2>
+          <p className="relative self-stretch font-poppins font-normal text-[#333333] text-sm md:text-base tracking-[0] leading-relaxed">
+            Select bank transfer at no cost or pay by card for a 3% processing fee
+          </p>
+        </div>
+      )}
 
       {isLoading ? (
         <div className="flex items-center justify-center py-8">

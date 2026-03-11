@@ -24,6 +24,7 @@ export default defineConfig({
       'e2e/**/*',
       '**/*.integration.test.{js,ts,jsx,tsx}',
     ],
+    envFile: '.env',
     env: {
       NODE_ENV: 'test',
     },

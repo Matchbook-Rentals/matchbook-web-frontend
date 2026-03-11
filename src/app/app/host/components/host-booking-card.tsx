@@ -154,12 +154,12 @@ const HostBookingCardMobile: React.FC<HostBookingCardProps> = ({
 
       if (existing.conversationId) {
         // Navigate to existing conversation
-        router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
+        router.push(`/app/rent/messages?convo=${existing.conversationId}`);
       } else {
         // Create new conversation and navigate
         const result = await createListingConversation(listingId, guestUserId);
         if (result.success && result.conversationId) {
-          router.push(`/app/rent/messages?convoId=${result.conversationId}`);
+          router.push(`/app/rent/messages?convo=${result.conversationId}`);
         } else {
           console.error('Failed to create conversation:', result.error);
         }
@@ -397,10 +397,14 @@ const getStatusBadgeStyle = (status: string) => {
   switch (normalizedStatus) {
     // Green (success): confirmed, completed, active
     case 'confirmed':
-    case 'completed':
     case 'active':
     case 'approved':
       return 'bg-[#e9f7ee] text-[#1ca34e] border-[#1ca34e]';
+
+    // Muted green for past/completed bookings
+    case 'past':
+    case 'completed':
+      return 'bg-[#e9f7ee]/50 text-[#1ca34e] border-[#1ca34e]/50';
 
     // Red (failure): payment_failed, cancelled, issue_reported, move_in_issue
     case 'payment_failed':
@@ -479,12 +483,12 @@ export const HostBookingCard: React.FC<HostBookingCardProps> = ({
 
       if (existing.conversationId) {
         // Navigate to existing conversation
-        router.push(`/app/rent/messages?convoId=${existing.conversationId}`);
+        router.push(`/app/rent/messages?convo=${existing.conversationId}`);
       } else {
         // Create new conversation and navigate
         const result = await createListingConversation(listingId, guestUserId);
         if (result.success && result.conversationId) {
-          router.push(`/app/rent/messages?convoId=${result.conversationId}`);
+          router.push(`/app/rent/messages?convo=${result.conversationId}`);
         } else {
           console.error('Failed to create conversation:', result.error);
         }

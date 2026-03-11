@@ -2,7 +2,7 @@
 //Imports
 import prisma from "@/lib/prismadb";
 import { checkAuth } from '@/lib/auth-utils';
-import { ListingAndImages } from "@/types/";
+import { ListingAndImages, ListingWithRelations } from "@/types/";
 import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
 import { statesInRadiusData } from "@/constants/state-radius-data";
 import { STATE_CODE_MAPPING } from "@/constants/state-code-mapping";
@@ -84,7 +84,7 @@ export const pullListingsFromDb = async (
   state: string,
   startDate: Date, // Add startDate parameter
   endDate: Date    // Add endDate parameter
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   const startTime = performance.now();
 
   const userId = await checkAuth();
@@ -219,6 +219,19 @@ export const pullListingsFromDb = async (
                   AND: [
                     { startDate: { lt: endDate } },
                     { endDate: { gt: startDate } }
+                  ]
+                }
+              }
+            }
+          },
+          { // Add condition to exclude listings with overlapping active bookings
+            NOT: {
+              bookings: {
+                some: {
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } },
+                    { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } }
                   ]
                 }
               }
@@ -984,7 +997,7 @@ export const deleteUnavailability = async (unavailabilityId: string): Promise<vo
 }
 
 // Fetch a single listing by ID, including images, bedrooms, and unavailablePeriods
-export const getListingById = async (listingId: string): Promise<ListingAndImages | null> => {
+export const getListingById = async (listingId: string): Promise<ListingWithRelations | null> => {
   const userId = await checkAuth();
   try {
     const listing = await prisma.listing.findUnique({
@@ -1049,7 +1062,7 @@ export const getUserDraftListings = async () => {
 
 // Get paginated listings for the current host user
 export const getHostListings = async (page: number = 1, itemsPerPage: number = 10): Promise<{
-  listings: ListingAndImages[];
+  listings: ListingWithRelations[];
   totalCount: number;
   totalPages: number;
   currentPage: number;
@@ -1380,7 +1393,7 @@ export const restoreSoftDeletedListing = async (listingId: string) => {
  * Fetches random active listings for homepage display.
  * No authentication required - public endpoint.
  */
-export const getRandomActiveListings = async (count: number = 12): Promise<ListingAndImages[]> => {
+export const getRandomActiveListings = async (count: number = 12): Promise<ListingWithRelations[]> => {
   const fetchRandomListingIds = async () => {
     return prisma.$queryRaw<{ id: string }[]>`
       SELECT id
@@ -1403,7 +1416,7 @@ export const getRandomActiveListings = async (count: number = 12): Promise<Listi
     });
   };
 
-  const formatListingsForDisplay = (listings: any[]): ListingAndImages[] => {
+  const formatListingsForDisplay = (listings: any[]): ListingWithRelations[] => {
     return listings.map(listing => ({
       ...listing,
       displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
@@ -1428,7 +1441,7 @@ export const getRandomActiveListings = async (count: number = 12): Promise<Listi
  * Fetches random test listings for development/preview display.
  * Returns recently imported test listings.
  */
-export const getRandomTestListings = async (count: number = 12): Promise<ListingAndImages[]> => {
+export const getRandomTestListings = async (count: number = 12): Promise<ListingWithRelations[]> => {
   try {
     const listings = await prisma.listing.findMany({
       where: {
@@ -1464,12 +1477,13 @@ export const getListingsByLocation = async (
   city: string | null,
   state: string | null,
   count: number = 12
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   try {
     const whereClause: Prisma.ListingWhereInput = {
       deletedAt: null,
       isTestListing: true,
-      createdAt: { gte: DEV_LISTINGS_CUTOFF }
+      createdAt: { gte: DEV_LISTINGS_CUTOFF },
+      monthlyPricing: { some: {} }
     };
 
     if (city) whereClause.city = city;
@@ -1478,7 +1492,7 @@ export const getListingsByLocation = async (
     const listings = await prisma.listing.findMany({
       where: whereClause,
       include: {
-        listingImages: { orderBy: { rank: 'asc' }, take: 1 },
+        listingImages: { orderBy: { rank: 'asc' } },
         monthlyPricing: true
       },
       orderBy: { createdAt: 'desc' },
@@ -1501,7 +1515,7 @@ export const getListingsByLocation = async (
  */
 export const getPopularListingAreas = async (
   limit: number = 5
-): Promise<{ city: string; state: string; count: number }[]> => {
+): Promise<{ city: string; state: string; count: number; avgLat: number; avgLng: number }[]> => {
   try {
     const result = await prisma.listing.groupBy({
       by: ['city', 'state'],
@@ -1509,19 +1523,23 @@ export const getPopularListingAreas = async (
         deletedAt: null,
         isTestListing: true,
         createdAt: { gte: DEV_LISTINGS_CUTOFF },
-        city: { not: null }
+        city: { not: null },
+        monthlyPricing: { some: {} }
       },
       _count: { id: true },
+      _avg: { latitude: true, longitude: true },
       orderBy: { _count: { id: 'desc' } },
       take: limit
     });
 
     return result
-      .filter(r => r.city && r.state)
+      .filter(r => r.city && r.state && r._avg.latitude != null && r._avg.longitude != null)
       .map(r => ({
         city: r.city as string,
         state: r.state as string,
-        count: r._count.id
+        count: r._count.id,
+        avgLat: r._avg.latitude!,
+        avgLng: r._avg.longitude!,
       }));
   } catch (error) {
     console.error('Error fetching popular listing areas:', error);
@@ -1532,80 +1550,208 @@ export const getPopularListingAreas = async (
 /**
  * Fetches listings near a lat/lng coordinate for "near me" section.
  * Uses Haversine formula for distance calculation.
+ * Filters match pullListingsFromDb: approved, active, not deleted.
  */
 export const getListingsNearLocation = async (
   lat: number,
   lng: number,
   count: number = 12,
   radiusMiles: number = 50
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   try {
     const earthRadiusMiles = 3959;
 
-    // Use raw SQL with Haversine formula for distance-based query
-    const listings = await prisma.$queryRaw<(Listing & { distance: number })[]>`
-      SELECT l.*,
+    // Get listing IDs with distance (matches pullListingsFromDb SQL style)
+    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
+      SELECT l.id,
         (${earthRadiusMiles} * acos(
           cos(radians(${lat})) * cos(radians(l.latitude)) *
           cos(radians(l.longitude) - radians(${lng})) +
           sin(radians(${lat})) * sin(radians(l.latitude))
         )) AS distance
-      FROM "Listing" l
-      WHERE l."deletedAt" IS NULL
-        AND l."isTestListing" = true
-        AND l."createdAt" >= ${DEV_LISTINGS_CUTOFF}
+      FROM Listing l
+      WHERE l.approvalStatus = 'approved'
+        AND l.markedActiveByUser = true
+        AND l.deletedAt IS NULL
         AND l.latitude != 0
         AND l.longitude != 0
-      HAVING (${earthRadiusMiles} * acos(
-          cos(radians(${lat})) * cos(radians(l.latitude)) *
-          cos(radians(l.longitude) - radians(${lng})) +
-          sin(radians(${lat})) * sin(radians(l.latitude))
-        )) <= ${radiusMiles}
-      ORDER BY distance ASC
+        AND EXISTS (
+          SELECT 1 FROM ListingMonthlyPricing lmp
+          WHERE lmp.listingId = l.id
+        )
+      HAVING distance <= ${radiusMiles}
+      ORDER BY distance
       LIMIT ${count}
     `;
 
-    // Fetch images and pricing for the listings
-    const listingIds = listings.map(l => l.id);
+    const listingIds = listingsWithDistance.map(l => l.id);
 
     if (listingIds.length === 0) {
       return [];
     }
 
-    const [images, pricing] = await Promise.all([
-      prisma.listingImage.findMany({
-        where: { listingId: { in: listingIds } },
-        orderBy: { rank: 'asc' }
-      }),
-      prisma.monthlyPricing.findMany({
-        where: { listingId: { in: listingIds } }
-      })
-    ]);
-
-    // Group images and pricing by listing
-    const imagesByListing = new Map<string, typeof images>();
-    const pricingByListing = new Map<string, typeof pricing>();
-
-    images.forEach(img => {
-      const existing = imagesByListing.get(img.listingId) || [];
-      existing.push(img);
-      imagesByListing.set(img.listingId, existing);
+    // Fetch full listings with images
+    const listings = await prisma.listing.findMany({
+      where: { id: { in: listingIds } },
+      include: { listingImages: { orderBy: { rank: 'asc' } }, monthlyPricing: true }
     });
 
-    pricing.forEach(p => {
-      const existing = pricingByListing.get(p.listingId) || [];
-      existing.push(p);
-      pricingByListing.set(p.listingId, existing);
-    });
+    // Create distance map for sorting
+    const distanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
 
-    return listings.map(listing => ({
-      ...listing,
-      listingImages: (imagesByListing.get(listing.id) || []).slice(0, 1),
-      monthlyPricing: pricingByListing.get(listing.id) || [],
-      displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
-    }));
+    // Sort by distance and add displayCategory
+    return listings
+      .sort((a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0))
+      .map(listing => ({
+        ...listing,
+        listingImages: listing.listingImages || [],
+        displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
+      }));
   } catch (error) {
     console.error('Error fetching listings near location:', error);
+    return [];
+  }
+};
+
+/**
+ * Get listings near a location filtered by trip dates.
+ * Used for refetching when dates change to ensure availability
+ * and pricing compatibility with new trip duration.
+ * No authentication required - public endpoint.
+ */
+export const getListingsWithDates = async (
+  lat: number,
+  lng: number,
+  radiusMiles: number,
+  startDate: Date,
+  endDate: Date
+): Promise<ListingWithRelations[]> => {
+  const earthRadiusMiles = 3959;
+  const tripLengthDays = Math.max(1, differenceInDays(endDate, startDate));
+  const tripLengthMonths = Math.max(1, Math.floor(tripLengthDays / 30.44));
+
+  try {
+    // Get listing IDs within radius
+    const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
+      SELECT l.id,
+        (${earthRadiusMiles} * acos(
+          cos(radians(${lat})) * cos(radians(l.latitude)) *
+          cos(radians(l.longitude) - radians(${lng})) +
+          sin(radians(${lat})) * sin(radians(l.latitude))
+        )) AS distance
+      FROM Listing l
+      WHERE l.approvalStatus = 'approved'
+        AND l.markedActiveByUser = true
+        AND l.deletedAt IS NULL
+        AND l.latitude != 0
+        AND l.longitude != 0
+      HAVING distance <= ${radiusMiles}
+      ORDER BY distance
+      LIMIT 100
+    `;
+
+    if (listingsWithDistance.length === 0) {
+      return [];
+    }
+
+    const listingIds = listingsWithDistance.map(l => l.id);
+
+    // Fetch full listing details with availability and pricing filtering
+    const listings = await prisma.listing.findMany({
+      where: {
+        AND: [
+          { id: { in: listingIds } },
+          { deletedAt: null },
+          // Exclude listings with overlapping unavailability
+          {
+            NOT: {
+              unavailablePeriods: {
+                some: {
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } }
+                  ]
+                }
+              }
+            }
+          },
+          // Exclude listings with overlapping active bookings
+          {
+            NOT: {
+              bookings: {
+                some: {
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } },
+                    { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } }
+                  ]
+                }
+              }
+            }
+          },
+          // Include only listings with compatible monthly pricing
+          {
+            monthlyPricing: {
+              some: {
+                months: tripLengthMonths
+              }
+            }
+          }
+        ]
+      },
+      include: {
+        listingImages: { orderBy: { rank: 'asc' } },
+        bedrooms: true,
+        unavailablePeriods: true,
+        user: true,
+        monthlyPricing: true
+      }
+    });
+
+    // Combine distance info with listing details
+    const distanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
+
+    const listingsWithFullDetails = listings.map(listing => {
+      const distance = distanceMap.get(listing.id) ?? Infinity;
+      const normalizedCategory = normalizeCategory(listing.category);
+
+      // Calculate utilities for trip duration
+      const lengthOfStay = calculateLengthOfStay(startDate, endDate);
+      const matchingPricing = listing.monthlyPricing?.find(
+        pricing => pricing.months === lengthOfStay.months
+      );
+
+      let utilitiesIncluded = false;
+      if (matchingPricing?.utilitiesIncluded !== undefined) {
+        utilitiesIncluded = matchingPricing.utilitiesIncluded;
+      } else if (listing.monthlyPricing && listing.monthlyPricing.length > 0) {
+        const closest = listing.monthlyPricing.reduce((prev, curr) => {
+          const prevDiff = Math.abs(prev.months - lengthOfStay.months);
+          const currDiff = Math.abs(curr.months - lengthOfStay.months);
+          if (currDiff < prevDiff) return curr;
+          if (currDiff === prevDiff && curr.months < prev.months) return curr;
+          return prev;
+        });
+        utilitiesIncluded = closest.utilitiesIncluded;
+      }
+
+      return {
+        ...listing,
+        category: normalizedCategory,
+        displayCategory: getCategoryDisplay(normalizedCategory),
+        utilitiesIncluded,
+        distance,
+        listingImages: listing.listingImages,
+        bedrooms: listing.bedrooms,
+        unavailablePeriods: listing.unavailablePeriods
+      };
+    });
+
+    // Sort by distance
+    listingsWithFullDetails.sort((a, b) => a.distance - b.distance);
+    return listingsWithFullDetails;
+  } catch (error) {
+    console.error('Error in getListingsWithDates:', error);
     return [];
   }
 };
@@ -1621,14 +1767,40 @@ export interface MapBounds {
   west: number;
 }
 
-export async function getListingsByBounds(bounds: MapBounds): Promise<ListingAndImages[]> {
+export async function getListingsByBounds(bounds: MapBounds): Promise<ListingWithRelations[]> {
   try {
+    const listingsWithRating = await prisma.$queryRaw<{ id: string; avgRating: number }[]>`
+      SELECT l.id,
+        COALESCE(AVG(r.rating), 0) AS avgRating
+      FROM Listing l
+      LEFT JOIN Review r
+        ON r.reviewedListingId = l.id
+        AND r.reviewType = 'RENTER_TO_LISTING'
+        AND r.isPublished = true
+      WHERE l.latitude BETWEEN ${bounds.south} AND ${bounds.north}
+        AND l.longitude BETWEEN ${bounds.west} AND ${bounds.east}
+        AND l.latitude != 0
+        AND l.longitude != 0
+        AND l.approvalStatus = 'approved'
+        AND l.markedActiveByUser = true
+        AND l.deletedAt IS NULL
+        AND EXISTS (
+          SELECT 1 FROM ListingMonthlyPricing lmp
+          WHERE lmp.listingId = l.id
+        )
+      GROUP BY l.id
+      ORDER BY avgRating DESC
+      LIMIT 100
+    `;
+
+    const listingIds = listingsWithRating.map(listing => listing.id);
+    if (listingIds.length === 0) {
+      return [];
+    }
+
     const listings = await prisma.listing.findMany({
       where: {
-        latitude: { gte: bounds.south, lte: bounds.north },
-        longitude: { gte: bounds.west, lte: bounds.east },
-        approvalStatus: 'approved',
-        markedActiveByUser: true,
+        id: { in: listingIds },
       },
       include: {
         listingImages: {
@@ -1638,16 +1810,18 @@ export async function getListingsByBounds(bounds: MapBounds): Promise<ListingAnd
         monthlyPricing: true,
         bedrooms: true,
       },
-      take: 50,
     });
 
-    return listings.map(listing => ({
-      ...listing,
-      displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
-    })) as ListingAndImages[];
+    const listingById = new Map(listings.map(listing => [listing.id, listing]));
+    return listingIds
+      .map((id) => listingById.get(id))
+      .filter((listing): listing is (typeof listings)[number] => Boolean(listing))
+      .map(listing => ({
+        ...listing,
+        displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
+      })) as ListingWithRelations[];
   } catch (error) {
     console.error('Error fetching listings by bounds:', error);
     return [];
   }
 }
-

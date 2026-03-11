@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from '@/components/ui/button'
 import { Badge } from "@/components/ui/badge"
 import { Upload, FileText, AlertCircle, CheckCircle, Loader2, Database, Image, Trash2 } from 'lucide-react'
-import { importListings, validateImportFile, getImportStats } from './_actions'
+import { getImportStats } from './_actions'
 
 interface ValidationResult {
   isValid: boolean
@@ -66,9 +66,17 @@ export default function ImportListingsPage() {
       const content = await file.text()
       setFileContent(content)
 
-      // Validate file
+      // Validate file via API endpoint (no body size limit)
       setIsValidating(true)
-      const validationResult = await validateImportFile(content)
+      const parsedContent = JSON.parse(content)
+
+      const response = await fetch('/api/admin/validate-import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(parsedContent),
+      })
+
+      const validationResult = await response.json()
 
       if (validationResult.success && validationResult.data) {
         setValidation(validationResult.data)
@@ -129,7 +137,17 @@ export default function ImportListingsPage() {
 
     try {
       const importData = JSON.parse(fileContent)
-      const result = await importListings(importData)
+
+      // Use API endpoint for large payloads (no body size limit)
+      const response = await fetch('/api/admin/import-listings', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(importData),
+      })
+
+      const result = await response.json()
 
       if (result.success && result.data) {
         setImportStatus({

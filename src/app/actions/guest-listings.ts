@@ -2,7 +2,7 @@
 
 import prisma from '@/lib/prismadb';
 import { Prisma } from '@prisma/client';
-import { ListingAndImages } from '@/types/';
+import { ListingAndImages, ListingWithRelations } from '@/types/';
 import { statesInRadiusData } from "@/constants/state-radius-data";
 import { calculateLengthOfStay } from '@/lib/calculate-rent';
 import { normalizeCategory, getCategoryDisplay } from '@/constants/enums';
@@ -18,7 +18,7 @@ export const pullGuestListingsFromDb = async (
   state: string,
   startDate: Date,
   endDate: Date
-): Promise<ListingAndImages[]> => {
+): Promise<ListingWithRelations[]> => {
   const startTime = performance.now();
   const earthRadiusMiles = 3959; // Earth's radius in miles
 
@@ -92,6 +92,19 @@ export const pullGuestListingsFromDb = async (
                   AND: [
                     { startDate: { lt: endDate } },
                     { endDate: { gt: startDate } }
+                  ]
+                }
+              }
+            }
+          },
+          { // Add condition to exclude listings with overlapping active bookings
+            NOT: {
+              bookings: {
+                some: {
+                  AND: [
+                    { startDate: { lt: endDate } },
+                    { endDate: { gt: startDate } },
+                    { status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] } }
                   ]
                 }
               }

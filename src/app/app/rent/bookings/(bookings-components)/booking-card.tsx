@@ -9,11 +9,9 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Popover, PopoverTrigger, PopoverContent } from "@/components/ui/popover";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useRouter } from 'next/navigation';
-import { useUser } from '@clerk/nextjs';
 import BookingDateModificationModal from '@/components/BookingDateModificationModal';
 import BrandModal from '@/components/BrandModal';
 import BookingModificationsView from '@/components/BookingModificationsView';
-import { getOrCreateListingConversation } from '@/app/actions/housing-requests';
 
 // Extended booking type with included relations
 type BookingWithRelations = Booking & {
@@ -73,7 +71,6 @@ interface BookingCardProps {
 
 const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   const router = useRouter();
-  const { user } = useUser();
   const [isDateModificationModalOpen, setIsDateModificationModalOpen] = useState(false);
   const [isModificationsModalOpen, setIsModificationsModalOpen] = useState(false);
   
@@ -227,24 +224,9 @@ const BookingCard: React.FC<BookingCardProps> = ({ booking, onDelete }) => {
   };
 
   // Handle messaging the host
-  const handleMessageHost = async (e: React.MouseEvent) => {
+  const handleMessageHost = (e: React.MouseEvent) => {
     e.stopPropagation();
-    if (!booking.listing?.userId) return;
-
-    try {
-      const result = await getOrCreateListingConversation(
-        booking.listingId,
-        booking.listing.userId
-      );
-
-      if (result.success && result.conversationId) {
-        router.push(`/app/rent/messages?convo=${result.conversationId}`);
-      } else {
-        console.error('Failed to create conversation:', result.error);
-      }
-    } catch (error) {
-      console.error('Error messaging host:', error);
-    }
+    router.push(`/app/rent/messages?listingId=${booking.listingId}`);
   };
 
   // Get listing details
