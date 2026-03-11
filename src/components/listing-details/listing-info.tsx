@@ -31,7 +31,7 @@ const ListingDescription: React.FC<ListingDescriptionProps> = ({
         </CardContent>
       </Card>
 
-      <Card className="border-none bg-transparent rounded-none mt-5 lg:hidden">
+      <Card className="border-none bg-transparent rounded-none mt-5 lg:hidden shadow-none">
         <CardContent className="p-0">
           <PropertyDetails listing={listing} />
         </CardContent>

@@ -41,8 +41,8 @@ const PropertyDetails: React.FC<PropertyDetailsProps> = ({ listing }) => {
       </div>
 
       {/* Mobile Property Details */}
-      <div className="flex items-center gap-3 w-full lg:hidden">
-        <div className="inline-flex items-center gap-2 min-w-0 flex-shrink">
+      <div className="flex items-center gap-3 w-full lg:hidden pl-[2px] min-[400px]:pl-0">
+        <div className="hidden min-[400px]:inline-flex items-center gap-2 min-w-0 flex-shrink">
           <MapPin className="w-5 h-5 text-[#5d606d] flex-shrink-0" />
           <span className="font-normal text-[#5d606d] text-sm font-['Poppins',Helvetica] truncate">
             {listing.city && listing.state ? `${listing.city}, ${listing.state}` : listing.city || listing.address || "Location"}
