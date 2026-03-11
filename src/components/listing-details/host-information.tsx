@@ -35,7 +35,7 @@ const HostInformation: React.FC<HostInformationProps> = ({
   };
 
   return (
-    <Card className="border-none bg-[#FAFAFA] rounded-xl mt-5 lg:hidden">
+    <Card className="border-none shadow-none bg-background rounded-xl mt-5 lg:hidden">
       <CardContent className="flex flex-col items-start gap-3 py-4 px-0">
         {/* Host information */}
         <div className="flex items-center gap-3 w-full pb-2">
