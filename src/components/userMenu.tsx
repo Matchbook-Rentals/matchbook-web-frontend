@@ -157,7 +157,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
   ] : [
     // Renter side menu items - open to all users
     { id: 'home', label: 'Home', href: '/', section: 1 },
-    { id: 'renter-dashboard', label: 'Dashboard', href: '/rent/dashboard', section: 1 },
+    { id: 'renter-dashboard', label: 'Renter Dashboard', href: '/rent/dashboard', section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', section: 2 },
     {
       id: 'switch-mode',
