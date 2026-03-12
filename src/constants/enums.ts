@@ -68,3 +68,24 @@ export function getCategoryDisplay(category: string | null | undefined): string 
       return 'Property';
   }
 }
+
+/**
+ * Converts PropertyType enum value to human-readable display string for listing cards
+ * Uses shorter labels suitable for card UIs (e.g., "House" instead of "Single Family")
+ */
+export function getCategoryDisplayForCards(category: string | null | undefined): string {
+  if (!category) return 'Home';
+
+  switch (category) {
+    case PropertyType.SingleFamily:
+      return 'Home';
+    case PropertyType.Apartment:
+      return 'Apartment';
+    case PropertyType.Townhouse:
+      return 'Townhouse';
+    case PropertyType.PrivateRoom:
+      return 'Private Room';
+    default:
+      return 'Home';
+  }
+}

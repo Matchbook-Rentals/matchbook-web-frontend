@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ListingWithRelations } from '@/types';
+import { getCategoryDisplayForCards, normalizeCategory } from '@/constants/enums';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
@@ -170,7 +171,8 @@ export default function HomepageListingCard({
   const getDetailsString = () => {
     const beds = listing.roomCount || 0;
     const baths = listing.bathroomCount || 0;
-    const type = listing.category || 'Home';
+    const normalizedCategory = normalizeCategory(listing.category);
+    const type = getCategoryDisplayForCards(normalizedCategory);
     return `${beds} Bed, ${baths} bath ${type}`;
   };
 
