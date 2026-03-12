@@ -1511,40 +1511,22 @@ export const getListingsByLocation = async (
 
 /**
  * Gets top areas (city/state) by listing count for homepage sections.
- * Returns areas with the most listings, filtered to dev test listings.
+ * Returns hardcoded top metros for consistent homepage display.
  */
 export const getPopularListingAreas = async (
   limit: number = 5
 ): Promise<{ city: string; state: string; count: number; avgLat: number; avgLng: number }[]> => {
-  try {
-    const result = await prisma.listing.groupBy({
-      by: ['city', 'state'],
-      where: {
-        deletedAt: null,
-        isTestListing: true,
-        createdAt: { gte: DEV_LISTINGS_CUTOFF },
-        city: { not: null },
-        monthlyPricing: { some: {} }
-      },
-      _count: { id: true },
-      _avg: { latitude: true, longitude: true },
-      orderBy: { _count: { id: 'desc' } },
-      take: limit
-    });
+  // Hardcoded top metros to ensure consistent, aggregated homepage display
+  const topMetros = [
+    { city: 'San Antonio', state: 'TX', count: 34, avgLat: 29.6112, avgLng: -98.4720 },
+    { city: 'Indianapolis', state: 'IN', count: 19, avgLat: 39.7797, avgLng: -86.1410 },
+    { city: 'Nashville', state: 'TN', count: 14, avgLat: 36.1478, avgLng: -86.7482 },
+    { city: 'Las Vegas', state: 'NV', count: 8, avgLat: 36.1309, avgLng: -115.2307 },
+    { city: 'Portland', state: 'OR', count: 6, avgLat: 45.5152, avgLng: -122.6784 },
+    { city: 'Salt Lake City', state: 'UT', count: 5, avgLat: 40.7650, avgLng: -111.9010 },
+  ];
 
-    return result
-      .filter(r => r.city && r.state && r._avg.latitude != null && r._avg.longitude != null)
-      .map(r => ({
-        city: r.city as string,
-        state: r.state as string,
-        count: r._count.id,
-        avgLat: r._avg.latitude!,
-        avgLng: r._avg.longitude!,
-      }));
-  } catch (error) {
-    console.error('Error fetching popular listing areas:', error);
-    return [];
-  }
+  return topMetros.slice(0, limit);
 };
 
 /**
