@@ -637,11 +637,27 @@ export async function getUserHousingRequests() {
       throw new Error('Unauthorized');
     }
 
+    // Filter out housing requests with orphaned listings to avoid Prisma null relation error
+    const allRequestIds = await prismadb.housingRequest.findMany({
+      where: { trip: { userId } },
+      select: { id: true, listingId: true },
+    }).then(async (requests) => {
+      const listingIds = [...new Set(requests.map(r => r.listingId))];
+      const existingListings = await prismadb.listing.findMany({
+        where: { id: { in: listingIds } },
+        select: { id: true },
+      });
+      const existingIds = new Set(existingListings.map(l => l.id));
+      const orphaned = requests.filter(r => !existingIds.has(r.listingId));
+      if (orphaned.length > 0) {
+        console.warn('🏠 getUserHousingRequests: Skipping', orphaned.length, 'requests with missing listings:', orphaned.map(r => r.id));
+      }
+      return requests.filter(r => existingIds.has(r.listingId)).map(r => r.id);
+    });
+
     const housingRequests = await prismadb.housingRequest.findMany({
       where: {
-        trip: {
-          userId: userId
-        }
+        id: { in: allRequestIds },
       },
       orderBy: { createdAt: 'desc' },
       include: {

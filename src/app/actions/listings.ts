@@ -1481,13 +1481,16 @@ export const getListingsByLocation = async (
   try {
     const whereClause: Prisma.ListingWhereInput = {
       deletedAt: null,
-      isTestListing: true,
-      createdAt: { gte: DEV_LISTINGS_CUTOFF },
+      approvalStatus: 'approved',
+      markedActiveByUser: true,
       monthlyPricing: { some: {} }
     };
 
     if (city) whereClause.city = city;
     if (state) whereClause.state = state;
+
+    console.log(`[getListingsByLocation] Querying for city=${city}, state=${state}, count=${count}`);
+    console.log(`[getListingsByLocation] Where clause:`, JSON.stringify(whereClause, null, 2));
 
     const listings = await prisma.listing.findMany({
       where: whereClause,
@@ -1499,12 +1502,14 @@ export const getListingsByLocation = async (
       take: count
     });
 
+    console.log(`[getListingsByLocation] Found ${listings.length} listings for ${city}, ${state}`);
+
     return listings.map(listing => ({
       ...listing,
       displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
     }));
   } catch (error) {
-    console.error('Error fetching listings by location:', error);
+    console.error('[getListingsByLocation] Error fetching listings by location:', error);
     return [];
   }
 };
@@ -1526,7 +1531,9 @@ export const getPopularListingAreas = async (
     { city: 'Salt Lake City', state: 'UT', count: 5, avgLat: 40.7650, avgLng: -111.9010 },
   ];
 
-  return topMetros.slice(0, limit);
+  const result = topMetros.slice(0, limit);
+  console.log(`[getPopularListingAreas] Returning ${result.length} popular areas:`, result.map(a => `${a.city}, ${a.state} (${a.count})`));
+  return result;
 };
 
 /**
@@ -1544,6 +1551,8 @@ export const getListingsNearLocation = async (
     const earthRadiusMiles = 3959;
 
     // Get listing IDs with distance (matches pullListingsFromDb SQL style)
+    console.log(`[getListingsNearLocation] Querying near lat=${lat}, lng=${lng}, radius=${radiusMiles}mi, count=${count}`);
+
     const listingsWithDistance = await prisma.$queryRaw<{ id: string, distance: number }[]>`
       SELECT l.id,
         (${earthRadiusMiles} * acos(
@@ -1567,6 +1576,7 @@ export const getListingsNearLocation = async (
     `;
 
     const listingIds = listingsWithDistance.map(l => l.id);
+    console.log(`[getListingsNearLocation] Found ${listingIds.length} listings near (${lat}, ${lng})`);
 
     if (listingIds.length === 0) {
       return [];

@@ -217,8 +217,29 @@ export async function getUserBookings() {
 
   console.log('📚 getUserBookings: Fetching bookings for userId:', userId);
 
-  const bookings = await prisma.booking.findMany({
+  // First find booking IDs that have a valid (existing) listing to avoid
+  // Prisma error when a required relation returns null for orphaned FKs
+  const validBookingIds = await prisma.booking.findMany({
     where: { userId },
+    select: { id: true, listingId: true },
+  }).then(async (allBookings) => {
+    const listingIds = [...new Set(allBookings.map(b => b.listingId))];
+    const existingListings = await prisma.listing.findMany({
+      where: { id: { in: listingIds } },
+      select: { id: true },
+    });
+    const existingIds = new Set(existingListings.map(l => l.id));
+    const orphaned = allBookings.filter(b => !existingIds.has(b.listingId));
+    if (orphaned.length > 0) {
+      console.warn('📚 getUserBookings: Skipping', orphaned.length, 'bookings with missing listings:', orphaned.map(b => b.id));
+    }
+    return allBookings.filter(b => existingIds.has(b.listingId)).map(b => b.id);
+  });
+
+  const bookings = await prisma.booking.findMany({
+    where: {
+      id: { in: validBookingIds },
+    },
     orderBy: { createdAt: 'desc' },
     include: {
       listing: {

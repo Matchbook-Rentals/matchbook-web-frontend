@@ -109,7 +109,7 @@ export async function getMostRecentTrip(): Promise<Trip | null> {
         userId: userId,
       },
       orderBy: {
-        createdAt: 'desc'
+        updatedAt: 'desc'
       },
     });
     return trip;
