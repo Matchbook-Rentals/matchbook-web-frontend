@@ -299,6 +299,16 @@
   color: #373940;
 }
 
+.price-suffix {
+  display: none;
+}
+
+@container (min-width: 200px) {
+  .price-suffix {
+    display: inline;
+  }
+}
+
 /* DEBUG: Container query color borders - uncomment to test
 .listing-card-debug {
   border: 3px solid red;

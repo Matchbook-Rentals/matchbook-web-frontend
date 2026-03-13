@@ -181,19 +181,19 @@ export default function HomepageListingCard({
     return state ? `in ${state}` : '';
   };
 
-  const getDisplayPrice = () => {
+  const getDisplayPrice = (): { price: string; suffix: string; isRange: boolean } => {
     if (listing.monthlyPricing?.length) {
       const prices = listing.monthlyPricing.map(p => p.price);
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
       if (minPrice === maxPrice) {
-        return `$${minPrice.toLocaleString()} / mo`;
+        return { price: `$${minPrice.toLocaleString()}`, suffix: ' / mo', isRange: false };
       }
-      return `$${minPrice.toLocaleString()}-$${maxPrice.toLocaleString()} / mo`;
+      return { price: `$${minPrice.toLocaleString()}-$${maxPrice.toLocaleString()}`, suffix: ' / mo', isRange: true };
     }
     return listing.shortestLeasePrice
-      ? `$${listing.shortestLeasePrice.toLocaleString()} / mo`
-      : 'Price on request';
+      ? { price: `$${listing.shortestLeasePrice.toLocaleString()}`, suffix: ' / mo', isRange: false }
+      : { price: 'Price on request', suffix: '', isRange: false };
   };
 
   const getMockRating = () => {
@@ -360,7 +360,7 @@ export default function HomepageListingCard({
           </p>
           <div className="flex items-center justify-between mt-1">
             <p className="listing-card-details whitespace-nowrap">
-              {getDisplayPrice()}
+              {(() => { const { price, suffix, isRange } = getDisplayPrice(); return <>{price}<span className={isRange ? "price-suffix" : ""}>{suffix}</span></>; })()}
             </p>
             <div className="flex items-center gap-1">
               <Star className="w-3 h-3 fill-[#373940] text-[#373940]" />
