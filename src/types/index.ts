@@ -40,6 +40,8 @@ export interface ListingWithRelations extends Listing {
   monthlyPricing?: ListingMonthlyPricing[];
   distance?: number;        // computed in SQL haversine query
   displayCategory?: string; // computed in action via getCategoryDisplay()
+  averageRating?: number;   // computed from published reviews
+  reviewCount?: number;     // count of published reviews
 }
 
 /** Listing enriched with client-side price calculations */

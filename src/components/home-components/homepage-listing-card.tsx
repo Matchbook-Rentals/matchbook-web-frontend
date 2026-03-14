@@ -196,15 +196,6 @@ export default function HomepageListingCard({
       : { price: 'Price on request', suffix: '', isRange: false };
   };
 
-  const getMockRating = () => {
-    const hash = listing.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return (4.0 + (hash % 10) / 10).toFixed(1);
-  };
-
-  const getMockReviewCount = () => {
-    const hash = listing.id.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    return 10 + (hash % 30);
-  };
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -362,10 +353,12 @@ export default function HomepageListingCard({
             <p className="listing-card-details whitespace-nowrap">
               {(() => { const { price, suffix, isRange } = getDisplayPrice(); return <>{price}<span className={isRange ? "price-suffix" : ""}>{suffix}</span></>; })()}
             </p>
-            <div className="flex items-center gap-1">
-              <Star className="w-3 h-3 fill-[#373940] text-[#373940]" />
-              <span className="listing-card-details">{getMockRating()} ({getMockReviewCount()})</span>
-            </div>
+            {listing.averageRating && (
+              <div className="flex items-center gap-1">
+                <Star className="w-3 h-3 fill-[#373940] text-[#373940]" />
+                <span className="listing-card-details">{listing.averageRating.toFixed(1)} ({listing.reviewCount || 0})</span>
+              </div>
+            )}
           </div>
         </div>
       </div>

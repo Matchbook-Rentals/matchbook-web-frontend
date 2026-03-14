@@ -1496,7 +1496,8 @@ export const getListingsByLocation = async (
       where: whereClause,
       include: {
         listingImages: { orderBy: { rank: 'asc' } },
-        monthlyPricing: true
+        monthlyPricing: true,
+        reviews: { where: { isPublished: true }, select: { rating: true } }
       },
       orderBy: { createdAt: 'desc' },
       take: count
@@ -1504,10 +1505,18 @@ export const getListingsByLocation = async (
 
     console.log(`[getListingsByLocation] Found ${listings.length} listings for ${city}, ${state}`);
 
-    return listings.map(listing => ({
-      ...listing,
-      displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
-    }));
+    return listings.map(({ reviews, ...listing }) => {
+      const reviewCount = reviews.length;
+      const averageRating = reviewCount > 0
+        ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
+        : undefined;
+      return {
+        ...listing,
+        displayCategory: getCategoryDisplay(normalizeCategory(listing.category)),
+        averageRating,
+        reviewCount: reviewCount > 0 ? reviewCount : undefined,
+      };
+    });
   } catch (error) {
     console.error('[getListingsByLocation] Error fetching listings by location:', error);
     return [];
@@ -1582,23 +1591,35 @@ export const getListingsNearLocation = async (
       return [];
     }
 
-    // Fetch full listings with images
+    // Fetch full listings with images and reviews
     const listings = await prisma.listing.findMany({
       where: { id: { in: listingIds } },
-      include: { listingImages: { orderBy: { rank: 'asc' } }, monthlyPricing: true }
+      include: {
+        listingImages: { orderBy: { rank: 'asc' } },
+        monthlyPricing: true,
+        reviews: { where: { isPublished: true }, select: { rating: true } }
+      }
     });
 
     // Create distance map for sorting
     const distanceMap = new Map(listingsWithDistance.map(l => [l.id, l.distance]));
 
-    // Sort by distance and add displayCategory
+    // Sort by distance and add computed fields
     return listings
       .sort((a, b) => (distanceMap.get(a.id) || 0) - (distanceMap.get(b.id) || 0))
-      .map(listing => ({
-        ...listing,
-        listingImages: listing.listingImages || [],
-        displayCategory: getCategoryDisplay(normalizeCategory(listing.category))
-      }));
+      .map(({ reviews, ...listing }) => {
+        const reviewCount = reviews.length;
+        const averageRating = reviewCount > 0
+          ? reviews.reduce((sum, r) => sum + r.rating, 0) / reviewCount
+          : undefined;
+        return {
+          ...listing,
+          listingImages: listing.listingImages || [],
+          displayCategory: getCategoryDisplay(normalizeCategory(listing.category)),
+          averageRating,
+          reviewCount: reviewCount > 0 ? reviewCount : undefined,
+        };
+      });
   } catch (error) {
     console.error('Error fetching listings near location:', error);
     return [];
