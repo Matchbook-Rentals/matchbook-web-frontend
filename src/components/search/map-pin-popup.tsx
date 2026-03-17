@@ -86,6 +86,8 @@ export default function MapPinPopup({ marker, mapRef, onClose, customSnapshot, t
     if (tripId) params.set('tripId', tripId);
     if (trip?.startDate) params.set('startDate', new Date(trip.startDate).toISOString());
     if (trip?.endDate) params.set('endDate', new Date(trip.endDate).toISOString());
+    const fromParam = encodeURIComponent(window.location.pathname + window.location.search);
+    params.set('from', fromParam);
     const qs = params.toString();
     const url = `/search/listing/${listing.id}${qs ? `?${qs}` : ''}`;
     const isMobile = window.innerWidth < 1024;

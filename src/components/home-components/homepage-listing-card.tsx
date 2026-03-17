@@ -238,7 +238,7 @@ export default function HomepageListingCard({
     return null;
   };
 
-  const listingUrl = `/search/listing/${listing.id}`;
+  const listingUrl = `/search/listing/${listing.id}?from=%2F`;
 
   return (
     <Link
