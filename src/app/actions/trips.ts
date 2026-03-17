@@ -3,7 +3,7 @@ import prisma from '@/lib/prismadb';
 import { revalidateTag } from 'next/cache';
 import { TripAndMatches } from '@/types/';
 import { auth } from '@clerk/nextjs/server';
-import { Trip } from '@prisma/client';
+import { Trip, Prisma } from '@prisma/client';
 
 export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
   const { userId } = auth();
@@ -90,6 +90,38 @@ export async function getUserTripsCount(): Promise<number> {
   } catch (error) {
     console.error('Error fetching user trips count:', error);
     return 0;
+  }
+}
+
+/**
+ * Gets the user's N most recent trips with lightweight relations
+ * needed for the homepage (favorites, matches, housingRequests).
+ */
+const recentTripsInclude = {
+  favorites: true,
+  matches: { include: { booking: true } },
+  housingRequests: true,
+} satisfies Prisma.TripInclude;
+
+export type RecentTrip = Prisma.TripGetPayload<{ include: typeof recentTripsInclude }>;
+
+export async function getRecentTrips(count: number = 3): Promise<RecentTrip[]> {
+  const { userId } = auth();
+  if (!userId) {
+    return [];
+  }
+
+  try {
+    const trips = await prisma.trip.findMany({
+      where: { userId },
+      orderBy: { updatedAt: 'desc' },
+      take: count,
+      include: recentTripsInclude,
+    });
+    return trips;
+  } catch (error) {
+    console.error('Error fetching recent trips:', error);
+    return [];
   }
 }
 
