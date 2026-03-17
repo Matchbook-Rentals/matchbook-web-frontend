@@ -244,7 +244,25 @@ export default function SearchPageClient({
   // Local state for favorites/dislikes (initialized from server data if available)
   const [favIds, setFavIds] = useState<Set<string>>(new Set(initialFavoriteIds));
   const [dislikedIds, setDislikedIds] = useState<Set<string>>(new Set(initialDislikeIds));
-  const [filters, setFilters] = useState<FilterOptions>(DEFAULT_FILTER_OPTIONS);
+  const [filters, setFilters] = useState<FilterOptions>({
+    ...DEFAULT_FILTER_OPTIONS,
+    minPrice: tripData?.minPrice ?? null,
+    maxPrice: tripData?.maxPrice ?? null,
+    minBeds: tripData?.minBeds ?? null,
+    minBedrooms: tripData?.minBedrooms ?? 0,
+    minBathrooms: tripData?.minBathrooms ?? 0,
+    furnished: tripData?.furnished ?? false,
+    unfurnished: tripData?.unfurnished ?? false,
+    searchRadius: tripData?.searchRadius ?? DEFAULT_FILTER_OPTIONS.searchRadius,
+    pets: [
+      ...(tripData?.petsAllowed ? ['petsAllowed'] : []),
+      ...(tripData?.petsNotAllowed ? ['petsNotAllowed'] : []),
+    ],
+    utilities: [
+      ...(tripData?.utilitiesIncluded ? ['utilitiesIncluded'] : []),
+      ...(tripData?.utilitiesNotIncluded ? ['utilitiesNotIncluded'] : []),
+    ],
+  });
 
   // Auth modal state
   const [showAuthModal, setShowAuthModal] = useState(false);

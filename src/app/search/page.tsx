@@ -42,6 +42,20 @@ export interface TripData {
   numChildren: number;
   numPets: number;
   locationString: string;
+
+  // Filter fields from DB
+  petsAllowed?: boolean;
+  petsNotAllowed?: boolean;
+  furnished?: boolean;
+  unfurnished?: boolean;
+  utilitiesIncluded?: boolean;
+  utilitiesNotIncluded?: boolean;
+  minPrice?: number | null;
+  maxPrice?: number | null;
+  minBedrooms?: number | null;
+  minBeds?: number | null;
+  minBathrooms?: number | null;
+  searchRadius?: number | null;
 }
 
 export const dynamic = 'force-dynamic';
@@ -90,6 +104,19 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
           numChildren: trip.numChildren ?? 0,
           numPets: trip.numPets ?? 0,
           locationString,
+          // Filter fields
+          petsAllowed: trip.petsAllowed ?? false,
+          petsNotAllowed: trip.petsNotAllowed ?? false,
+          furnished: trip.furnished ?? false,
+          unfurnished: trip.unfurnished ?? false,
+          utilitiesIncluded: trip.utilitiesIncluded ?? false,
+          utilitiesNotIncluded: trip.utilitiesNotIncluded ?? false,
+          minPrice: trip.minPrice ?? null,
+          maxPrice: trip.maxPrice ?? null,
+          minBedrooms: trip.minBedrooms ?? null,
+          minBeds: trip.minBeds ?? null,
+          minBathrooms: trip.minBathrooms ?? null,
+          searchRadius: trip.searchRadius ?? null,
         };
         hasLocationParams = true;
         // Extract favorite and dislike IDs from trip
