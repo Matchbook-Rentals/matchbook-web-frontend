@@ -88,14 +88,14 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
               Hosted by {host?.firstName || 'Host'}
             </div>
 
-            <div className="flex items-center gap-1 h-8">
+            {/* <div className="flex items-center gap-1 h-8">
               <StarIcon className="h-5 w-5 text-[#FFD700] fill-[#FFD700]" />
               <span className="font-normal text-[#717680] text-sm font-['Poppins']">
                 {listing?.averageRating
                   ? `${listing.averageRating.toFixed(1)} (${listing?.numberOfStays || 0})`
                   : `Be ${host?.firstName || 'Host'}'s first booking`}
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
 

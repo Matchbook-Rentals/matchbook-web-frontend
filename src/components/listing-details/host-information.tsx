@@ -66,12 +66,12 @@ const HostInformation: React.FC<HostInformationProps> = ({
               </Badge>
             </div>
 
-            <div className="flex items-center gap-1 h-8">
+            {/* <div className="flex items-center gap-1 h-8">
               <StarIcon className="w-5 h-5 fill-[#FFD700] text-[#FFD700]" />
               <span className="text-[#717680] text-sm">
                 Be {host?.firstName || 'Host'}&apos;s first booking
               </span>
-            </div>
+            </div> */}
           </div>
         </div>
 
