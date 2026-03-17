@@ -293,7 +293,7 @@ export default function HostListingCard({
   const handleShare = async () => {
     setIsPopoverOpen(false); // Close popover if opened from mobile menu
 
-    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/search/listing/${listing.id}`;
     const shareData = {
       title: listing.title || displayAddress,
       text: "Check out this listing",
@@ -327,7 +327,7 @@ export default function HostListingCard({
   };
 
   const handleCopyLink = async () => {
-    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/search/listing/${listing.id}`;
     try {
       await navigator.clipboard.writeText(shareUrl);
       toast.success("Link copied to clipboard!");
@@ -339,7 +339,7 @@ export default function HostListingCard({
   };
 
   const handleEmailShare = () => {
-    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/search/listing/${listing.id}`;
     const subject = `${listing.title || displayAddress} on Matchbook`;
     const body = `Check out this listing on Matchbook!\n\nClick here to view: ${shareUrl}`;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
@@ -347,7 +347,7 @@ export default function HostListingCard({
   };
 
   const handleMessageShare = () => {
-    const shareUrl = `${baseUrl}/guest/listing/${listing.id}`;
+    const shareUrl = `${baseUrl}/search/listing/${listing.id}`;
     const body = `Check out this listing\n\n${shareUrl}`;
     window.location.href = `sms:?body=${encodeURIComponent(body)}`;
     setIsShareDialogOpen(false);
@@ -528,20 +528,22 @@ export default function HostListingCard({
                   </div>
                 )}
                 <div className="absolute top-2.5 right-2.5 flex items-center gap-2">
-                  <BrandButton
-                    variant="default"
-                    size="icon"
-                    onClick={handleShare}
-                    className="w-6 h-6 p-0 min-w-0"
-                  >
-                    <Image
-                      src="/icon_png/share.png"
-                      alt="Share"
-                      width={12}
-                      height={12}
-                      className="w-3 h-3"
-                    />
-                  </BrandButton>
+                  {status !== 'Inactive' && (
+                    <BrandButton
+                      variant="default"
+                      size="icon"
+                      onClick={handleShare}
+                      className="w-6 h-6 p-0 min-w-0"
+                    >
+                      <Image
+                        src="/icon_png/share.png"
+                        alt="Share"
+                        width={12}
+                        height={12}
+                        className="w-3 h-3"
+                      />
+                    </BrandButton>
+                  )}
                   <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                     <PopoverTrigger asChild>
                       <Button
@@ -747,20 +749,22 @@ export default function HostListingCard({
           <div className="flex flex-col justify-between items-end">
             {/* Share and More Options Buttons */}
             <div className="flex items-center gap-2">
-              <BrandButton
-                variant="default"
-                size="icon"
-                onClick={handleShare}
-                className="h-10 w-10 rounded-lg"
-              >
-                <Image
-                  src="/icon_png/share.png"
-                  alt="Share"
-                  width={20}
-                  height={20}
-                  className="w-5 h-5"
-                />
-              </BrandButton>
+              {status !== 'Inactive' && (
+                <BrandButton
+                  variant="default"
+                  size="icon"
+                  onClick={handleShare}
+                  className="h-10 w-10 rounded-lg"
+                >
+                  <Image
+                    src="/icon_png/share.png"
+                    alt="Share"
+                    width={20}
+                    height={20}
+                    className="w-5 h-5"
+                  />
+                </BrandButton>
+              )}
               <Popover open={isPopoverOpen} onOpenChange={setIsPopoverOpen}>
                 <PopoverTrigger asChild>
                   <Button
