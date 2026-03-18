@@ -403,7 +403,18 @@ export default function ApplicationClientComponent({
       setTimeout(() => {
         const firstErrorInfo = findFirstErrorSection(validationResult.errors);
         if (firstErrorInfo) {
-          firstErrorInfo.element.scrollIntoView({
+          // If the error is in the residential history section, scroll to the specific residence card
+          let scrollTarget = firstErrorInfo.element;
+          if (firstErrorInfo.name === 'Residential History' && firstErrorInfo.errorFields?.length) {
+            const firstField = firstErrorInfo.errorFields[0];
+            const isPreviousResidence = firstField.includes('Previous Residence');
+            if (isPreviousResidence) {
+              const previousCard = document.querySelector('[data-residence="previous"]');
+              if (previousCard) scrollTarget = previousCard;
+            }
+          }
+
+          scrollTarget?.scrollIntoView({
             behavior: 'smooth',
             block: 'start'
           });
@@ -563,7 +574,7 @@ export default function ApplicationClientComponent({
             variant="ghost"
             size="sm"
             onClick={handleBack}
-            className="text-primaryBrand min-w-0 pl-0"
+            className="text-primaryBrand min-w-0 px-2"
           >
             Back
           </BrandButton>

@@ -97,6 +97,7 @@ interface HomepageListingCardProps {
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
   onUnlike?: (listingId: string) => void;
   isSignedIn?: boolean;
+  disableSwipe?: boolean;
 }
 
 export default function HomepageListingCard({
@@ -112,6 +113,7 @@ export default function HomepageListingCard({
   onFavorite,
   onUnlike,
   isSignedIn,
+  disableSwipe = false,
 }: HomepageListingCardProps) {
   const router = useRouter();
   const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
@@ -248,7 +250,7 @@ export default function HomepageListingCard({
       <div className="flex flex-col">
         <div className="relative w-full overflow-hidden rounded-xl">
           <Carousel
-            opts={{ loop: false }}
+            opts={{ loop: false, watchDrag: !disableSwipe }}
             setApi={setCarouselApi}
             className="w-full"
             keyboardControls={false}

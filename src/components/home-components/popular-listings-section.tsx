@@ -199,6 +199,7 @@ function ListingRow({ title, listings = [], showBadges = false, onExplore, secti
                     onFavorite={handleFavorite}
                     onSignInPrompt={actions.onSignInPrompt}
                     isSignedIn={state.isSignedIn}
+                    disableSwipe
                   />
                 </CarouselItem>
               );
