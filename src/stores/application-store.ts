@@ -354,6 +354,11 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
           landlordEmail: r.landlordEmail || '',
           landlordPhoneNumber: r.landlordPhoneNumber || ''
         }));
+      // Ensure there are always at least 2 entries so the previous residence
+      // slot is available when the current residence duration is < 24 months
+      while (residences.length < 2) {
+        residences.push({ ...defaultResidentialHistory });
+      }
     }
 
     const newData = {

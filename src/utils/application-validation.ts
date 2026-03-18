@@ -143,11 +143,11 @@ export const validateResidentialHistory = (residentialHistory: ResidentialHistor
                           entry.landlordFirstName || entry.landlordLastName;
 
     // Current residence is always required
-    // Previous residence is required if current duration < 24 months
-    // Other residences only validated if they have partial data
+    // Previous residence is only validated if required (duration < 24 months)
+    // Skip index 1 entirely when not required — the UI hides it, so any data is stale
     const shouldValidate = isCurrentResidence ||
                           (isPreviousResidence && isPreviousResidenceRequired) ||
-                          hasPartialData;
+                          (!isPreviousResidence && hasPartialData);
 
     if (shouldValidate) {
       if (!street.trim()) {

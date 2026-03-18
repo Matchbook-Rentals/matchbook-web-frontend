@@ -66,6 +66,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
   const preservedResidentialHistory = useApplicationStore((state) => state.preservedResidentialHistory);
   const setPreservedResidentialHistory = useApplicationStore((state) => state.setPreservedResidentialHistory);
   const residentialHistoryErrors = useApplicationStore((state) => state.errors.residentialHistory);
+  const setErrors = useApplicationStore((state) => state.setErrors);
   const { fieldErrors, saveField, validateField, setFieldError, clearFieldError } = useApplicationStore();
   const { toast } = useToast();
   const isDevelopment = process.env.NODE_ENV === 'development';
@@ -124,24 +125,34 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
 
   const handleMonthlyPaymentChange = (index: number, value: string) => {
     const strippedValue = value.replace(/[$,]/g, '').split('.')[0];
-    // Directly update the store
+    const fieldPath = `residentialHistory.${index}.monthlyPayment`;
+
+    // Update the store
     setResidentialHistory(
       residentialHistory.map((residence, i) =>
         i === index ? { ...residence, monthlyPayment: strippedValue } : residence
       )
     );
+
+    // Validate and clear/set field error
+    const validationError = validateField(fieldPath, strippedValue);
+    if (validationError) {
+      setFieldError(fieldPath, validationError);
+    } else {
+      clearFieldError(fieldPath);
+    }
   };
 
   const handleDurationChange = (index: number, value: string) => {
     const fieldPath = `residentialHistory.${index}.durationOfTenancy`;
-    
+
     // Update state immediately
     setResidentialHistory(
       residentialHistory.map((residence, i) =>
         i === index ? { ...residence, durationOfTenancy: value } : residence
       )
     );
-    
+
     // Validate immediately
     const validationError = validateField(fieldPath, value);
     if (validationError) {
@@ -155,6 +166,24 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
         console.log(`[ResidentialHistory] Field ${fieldPath} validated successfully (no auto-save)`);
       }
     }
+
+    // When current residence duration changes to >= 24, previous residence is no longer
+    // required — clear any stale previous residence errors from submit-time validation
+    if (index === 0) {
+      const duration = parseInt(value || '0');
+      if (duration >= 24) {
+        const cleaned = { ...residentialHistoryErrors };
+        const fields = ['street', 'city', 'state', 'zipCode', 'durationOfTenancy', 'monthlyPayment', 'landlordFirstName', 'landlordLastName', 'landlordEmail', 'landlordPhoneNumber'] as const;
+        fields.forEach(field => {
+          if (cleaned[field]?.[1]) {
+            cleaned[field] = [...(cleaned[field] || [])];
+            delete cleaned[field]![1];
+          }
+          clearFieldError(`residentialHistory.1.${field}`);
+        });
+        setErrors('residentialHistory', cleaned);
+      }
+    }
   };
 
 
@@ -162,6 +191,15 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
   // Determine if previous residence should be shown
   const currentDuration = parseInt(residentialHistory[0]?.durationOfTenancy || '0');
   const showPreviousResidence = currentDuration > 0 && currentDuration < 24;
+
+  if (isDevelopment) {
+    console.log('[ResidentialHistory] Render:', {
+      entries: residentialHistory.length,
+      showPreviousResidence,
+      currentDuration,
+      residentialHistoryErrors,
+    });
+  }
 
   return (
     <div className="space-y-8 w-full">
@@ -185,7 +223,7 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
           headerText = `Residence ${index + 1}`;
         }
         return (
-          <Card key={index} className="py-6 px-0 rounded-xl border-none shadow-none">
+          <Card key={index} data-residence={index === 0 ? 'current' : 'previous'} className="py-6 px-0 rounded-xl border-none shadow-none">
             <CardContent className="p-0 flex flex-col gap-8">
               <div className="flex flex-col items-start gap-5 w-full">
                 <div className="flex flex-col gap-2 w-full">
@@ -217,8 +255,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           placeholder="Enter Street Address"
                           className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                         />
-                        {fieldErrors[`residentialHistory.${index}.street`] && 
-                          <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.street`]}</p>}
+                        {(fieldErrors[`residentialHistory.${index}.street`] || residentialHistoryErrors?.street?.[index]) &&
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.street`] || residentialHistoryErrors?.street?.[index]}</p>}
                       </div>
                     </div>
                   </div>
@@ -261,8 +299,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                         placeholder="Enter City"
                         className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                       />
-                      {fieldErrors[`residentialHistory.${index}.city`] && 
-                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.city`]}</p>}
+                      {(fieldErrors[`residentialHistory.${index}.city`] || residentialHistoryErrors?.city?.[index]) &&
+                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.city`] || residentialHistoryErrors?.city?.[index]}</p>}
                     </div>
                   </div>
 
@@ -281,8 +319,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                         placeholder="Enter State"
                         className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                       />
-                      {fieldErrors[`residentialHistory.${index}.state`] && 
-                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.state`]}</p>}
+                      {(fieldErrors[`residentialHistory.${index}.state`] || residentialHistoryErrors?.state?.[index]) &&
+                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.state`] || residentialHistoryErrors?.state?.[index]}</p>}
                     </div>
                   </div>
                 </div>
@@ -304,8 +342,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                         placeholder="Enter ZIP Code"
                         className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                       />
-                      {fieldErrors[`residentialHistory.${index}.zipCode`] && 
-                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.zipCode`]}</p>}
+                      {(fieldErrors[`residentialHistory.${index}.zipCode`] || residentialHistoryErrors?.zipCode?.[index]) &&
+                        <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.zipCode`] || residentialHistoryErrors?.zipCode?.[index]}</p>}
                     </div>
                   </div>
 
@@ -333,8 +371,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                           placeholder="Enter months"
                           className={`w-[160px] ${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}`}
                         />
-                        {fieldErrors[`residentialHistory.${index}.durationOfTenancy`] && 
-                          <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.durationOfTenancy`]}</p>}
+                        {(fieldErrors[`residentialHistory.${index}.durationOfTenancy`] || residentialHistoryErrors?.durationOfTenancy?.[index]) &&
+                          <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.durationOfTenancy`] || residentialHistoryErrors?.durationOfTenancy?.[index]}</p>}
 
                         <div className="inline-flex items-center gap-1.5 relative flex-[0_0_auto]">
                           <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
@@ -362,12 +400,12 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                         value={residence.monthlyPayment || ''}
                         onChange={(value) => handleMonthlyPaymentChange(index, value)}
                         className={`${inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`} ${
-                          fieldErrors[`residentialHistory.${index}.monthlyPayment`] ? 'border-red-500' : 'border-[#d0d5dd]'
+                          (fieldErrors[`residentialHistory.${index}.monthlyPayment`] || residentialHistoryErrors?.monthlyPayment?.[index]) ? 'border-red-500' : 'border-[#d0d5dd]'
                         }`}
                       />
-                      {fieldErrors[`residentialHistory.${index}.monthlyPayment`] && (
+                      {(fieldErrors[`residentialHistory.${index}.monthlyPayment`] || residentialHistoryErrors?.monthlyPayment?.[index]) && (
                         <p className="text-red-500 text-xs mt-1">
-                          {fieldErrors[`residentialHistory.${index}.monthlyPayment`]}
+                          {fieldErrors[`residentialHistory.${index}.monthlyPayment`] || residentialHistoryErrors?.monthlyPayment?.[index]}
                         </p>
                       )}
                     </div>
@@ -450,8 +488,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             placeholder="Enter landlord's first name"
                             className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
-                          {fieldErrors[`residentialHistory.${index}.landlordFirstName`] && 
-                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordFirstName`]}</p>}
+                          {(fieldErrors[`residentialHistory.${index}.landlordFirstName`] || residentialHistoryErrors?.landlordFirstName?.[index]) &&
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordFirstName`] || residentialHistoryErrors?.landlordFirstName?.[index]}</p>}
                         </div>
                       </div>
 
@@ -470,8 +508,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             placeholder="Enter landlord's last name"
                             className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
-                          {fieldErrors[`residentialHistory.${index}.landlordLastName`] && 
-                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordLastName`]}</p>}
+                          {(fieldErrors[`residentialHistory.${index}.landlordLastName`] || residentialHistoryErrors?.landlordLastName?.[index]) &&
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordLastName`] || residentialHistoryErrors?.landlordLastName?.[index]}</p>}
                         </div>
                       </div>
                     </div>
@@ -494,8 +532,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             type="email"
                             className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
-                          {fieldErrors[`residentialHistory.${index}.landlordEmail`] && 
-                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordEmail`]}</p>}
+                          {(fieldErrors[`residentialHistory.${index}.landlordEmail`] || residentialHistoryErrors?.landlordEmail?.[index]) &&
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordEmail`] || residentialHistoryErrors?.landlordEmail?.[index]}</p>}
                         </div>
                       </div>
 
@@ -515,8 +553,8 @@ export const ResidentialLandlordInfo: React.FC<ResidentialLandlordInfoProps> = (
                             type="tel"
                             className={inputClassName || `flex ${isMobile ? 'py-3' : 'h-12 py-2'} items-center gap-2 px-3 relative self-stretch w-full bg-input-background rounded-lg border border-solid border-[#d0d5dd] shadow-shadows-shadow-xs text-gray-900 placeholder:text-gray-400`}
                           />
-                          {fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`] && 
-                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`]}</p>}
+                          {(fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`] || residentialHistoryErrors?.landlordPhoneNumber?.[index]) &&
+                            <p className="text-red-500 text-xs mt-1">{fieldErrors[`residentialHistory.${index}.landlordPhoneNumber`] || residentialHistoryErrors?.landlordPhoneNumber?.[index]}</p>}
                         </div>
                       </div>
                     </div>
