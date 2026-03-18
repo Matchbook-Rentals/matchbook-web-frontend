@@ -278,6 +278,9 @@ export default function ApplicationWizard({
         tripId: tripContext.tripId,
         startDate: tripContext.startDate,
         endDate: tripContext.endDate,
+        numAdults: numAdults,
+        numChildren: numChildren,
+        numPets: numPets,
       });
 
       if (!applyResult.success) {
@@ -307,7 +310,7 @@ export default function ApplicationWizard({
           variant="ghost"
           size="sm"
           onClick={onBack}
-          className="text-primaryBrand min-w-0 pl-0"
+          className="text-primaryBrand min-w-0 px-2"
         >
           Back
         </BrandButton>
