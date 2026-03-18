@@ -1,19 +1,16 @@
-import { Suspense } from 'react';
 import { Metadata } from 'next';
 import SearchNavbar from "@/components/newnew/search-navbar";
 import PopularListingsSectionWrapper from "@/components/home-components/popular-listings-section-wrapper";
-import ListingsSkeletonLoader from "@/components/home-components/listings-skeleton-loader";
 import Footer from "@/components/marketing-landing-components/footer";
 import { cookies } from "next/headers";
 import { currentUser } from "@clerk/nextjs/server";
-import { getRecentTrips, type RecentTrip } from "@/app/actions/trips";
+import { getRecentTrips } from "@/app/actions/trips";
 import { getGuestSessionLocation } from "@/app/actions/guest-session-db";
 import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
 import { getPopularListingAreas, getHostListingsCountForUser } from "@/app/actions/listings";
 import { getHomepageUserState, HomepageUserState } from "@/app/actions/homepage-user-state";
 import { getIpLocation } from "@/lib/ip-geolocation";
-import { buildHomepageSections } from "@/lib/homepage-sections";
 
 export const metadata: Metadata = {
   title: 'MatchBook Rentals | Monthly Rentals',
@@ -33,40 +30,6 @@ const serializeUser = (user: any) => {
     publicMetadata: user.publicMetadata
   };
 };
-
-async function HomepageListings({
-  isSignedIn,
-  userTripLocation,
-  popularAreas,
-  userState,
-  recentTripId,
-  ipLocation,
-}: {
-  isSignedIn: boolean;
-  userTripLocation: any;
-  popularAreas: any[];
-  userState: HomepageUserState | null;
-  recentTripId: string | null;
-  ipLocation: any;
-}) {
-  const sections = await buildHomepageSections({
-    isSignedIn,
-    userTripLocation,
-    popularAreas,
-    userState,
-    recentTripId,
-    ipLocation,
-  });
-
-  return (
-    <PopularListingsSectionWrapper
-      isSignedIn={isSignedIn}
-      sections={sections}
-      userState={userState}
-      recentTripId={recentTripId}
-    />
-  );
-}
 
 const HomePage = async () => {
   const [user, popularAreas, ipLocation] = await Promise.all([
@@ -102,7 +65,20 @@ const HomePage = async () => {
     hasListings = hostListingsCount > 0;
     userState = fetchedUserState;
 
-    // Derive recent searches for navbar
+    const recentTrip = recentTrips[0] ?? null;
+    recentTripId = recentTrip?.id || null;
+
+    if (recentTrip?.city || recentTrip?.locationString) {
+      userTripLocation = {
+        city: recentTrip.city,
+        state: recentTrip.state,
+        locationString: recentTrip.locationString,
+        latitude: recentTrip.latitude,
+        longitude: recentTrip.longitude,
+        searchRadius: recentTrip.searchRadius,
+      };
+    }
+
     recentSearches = recentTrips.map((trip) => {
       const formatDate = (d: Date | null | undefined) =>
         d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
@@ -119,22 +95,6 @@ const HomePage = async () => {
         details: `${dateStr} - ${renterStr}`,
       };
     });
-
-    // Derive most recent trip location for listings
-    const mostRecent = recentTrips[0];
-    if (mostRecent) {
-      recentTripId = mostRecent.id;
-      if (mostRecent.city || mostRecent.locationString) {
-        userTripLocation = {
-          city: mostRecent.city,
-          state: mostRecent.state,
-          locationString: mostRecent.locationString,
-          latitude: mostRecent.latitude,
-          longitude: mostRecent.longitude,
-          searchRadius: mostRecent.searchRadius,
-        };
-      }
-    }
   }
 
   if (!user?.id && !userTripLocation) {
@@ -169,16 +129,14 @@ const HomePage = async () => {
           }))}
         />
         <div className="h-[40px]" />
-        <Suspense fallback={<ListingsSkeletonLoader />}>
-          <HomepageListings
-            isSignedIn={!!user?.id}
-            userTripLocation={userTripLocation}
-            popularAreas={popularAreas}
-            userState={userState}
-            recentTripId={recentTripId}
-            ipLocation={ipLocation}
-          />
-        </Suspense>
+        <PopularListingsSectionWrapper
+          isSignedIn={!!user?.id}
+          userTripLocation={userTripLocation}
+          popularAreas={popularAreas}
+          userState={userState}
+          recentTripId={recentTripId}
+          ipLocation={ipLocation}
+        />
         <div className="h-[40px]" />
         <Footer />
       </div>
