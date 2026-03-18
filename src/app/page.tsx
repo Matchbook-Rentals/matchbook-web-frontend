@@ -4,7 +4,7 @@ import PopularListingsSectionWrapper from "@/components/home-components/popular-
 import Footer from "@/components/marketing-landing-components/footer";
 import { cookies } from "next/headers";
 import { currentUser } from "@clerk/nextjs/server";
-import { getRecentTrips } from "@/app/actions/trips";
+import { getMostRecentTrip, getAllUserTrips } from "@/app/actions/trips";
 import { getGuestSessionLocation } from "@/app/actions/guest-session-db";
 import { RecentSearch } from "@/components/newnew/search-navbar";
 import { HomePageWrapper } from "@/components/home-page-wrapper";
@@ -50,22 +50,45 @@ const HomePage = async () => {
   const userObject = serializeUser(user);
 
   let recentSearches: RecentSearch[] = [];
+  if (user?.id) {
+    try {
+      const trips = await getAllUserTrips();
+      recentSearches = trips.slice(0, 3).map((trip) => {
+        const formatDate = (d: Date | null | undefined) =>
+          d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
+        const totalRenters = (trip.numAdults ?? 0) + (trip.numChildren ?? 0);
+        const dateStr = trip.startDate && trip.endDate
+          ? `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`
+          : 'Flexible dates';
+        const renterStr = totalRenters === 0
+          ? 'Add Renters'
+          : `${totalRenters} Renter${totalRenters !== 1 ? 's' : ''}`;
+        return {
+          tripId: trip.id,
+          location: trip.locationString || 'Unknown location',
+          details: `${dateStr} - ${renterStr}`,
+        };
+      });
+    } catch {
+      // User may not be authenticated or trips may fail - that's fine
+    }
+  }
+
   let userTripLocation = null;
   let recentTripId: string | null = null;
   let userState: HomepageUserState | null = null;
+
   let hasListings = false;
 
   if (user?.id) {
-    const [recentTrips, fetchedUserState, hostListingsCount] = await Promise.all([
-      getRecentTrips(3),
+    const [recentTrip, fetchedUserState, hostListingsCount] = await Promise.all([
+      getMostRecentTrip(),
       getHomepageUserState(),
       getHostListingsCountForUser(user.id)
     ]);
 
     hasListings = hostListingsCount > 0;
     userState = fetchedUserState;
-
-    const recentTrip = recentTrips[0] ?? null;
     recentTripId = recentTrip?.id || null;
 
     if (recentTrip?.city || recentTrip?.locationString) {
@@ -78,23 +101,6 @@ const HomePage = async () => {
         searchRadius: recentTrip.searchRadius,
       };
     }
-
-    recentSearches = recentTrips.map((trip) => {
-      const formatDate = (d: Date | null | undefined) =>
-        d ? new Date(d).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '';
-      const totalRenters = (trip.numAdults ?? 0) + (trip.numChildren ?? 0);
-      const dateStr = trip.startDate && trip.endDate
-        ? `${formatDate(trip.startDate)} - ${formatDate(trip.endDate)}`
-        : 'Flexible dates';
-      const renterStr = totalRenters === 0
-        ? 'Add Renters'
-        : `${totalRenters} Renter${totalRenters !== 1 ? 's' : ''}`;
-      return {
-        tripId: trip.id,
-        location: trip.locationString || 'Unknown location',
-        details: `${dateStr} - ${renterStr}`,
-      };
-    });
   }
 
   if (!user?.id && !userTripLocation) {

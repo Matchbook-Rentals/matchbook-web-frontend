@@ -119,29 +119,6 @@ export async function getMostRecentTrip(): Promise<Trip | null> {
   }
 }
 
-export async function getRecentTrips(count: number = 3): Promise<Trip[]> {
-  const { userId } = auth();
-  if (!userId) {
-    return [];
-  }
-
-  try {
-    const trips = await prisma.trip.findMany({
-      where: {
-        userId: userId,
-      },
-      orderBy: {
-        updatedAt: 'desc',
-      },
-      take: count,
-    });
-    return trips;
-  } catch (error) {
-    console.error('Error fetching recent trips:', error);
-    return [];
-  }
-}
-
 export async function addParticipant(tripId: string, email: string): Promise<string[]> {
   const { userId } = auth();
   if (!userId) {
