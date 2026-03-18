@@ -93,7 +93,12 @@ export default function ApplicationWizard({
     resetStore();
     setAutoSaveEnabled(false);
 
-    // Initialize trip context from props
+    if (application) {
+      initializeFromApplication(application);
+    }
+
+    // Initialize trip context from props AFTER application init
+    // so user-entered dates/guests aren't overwritten by stale application data
     if (tripContext) {
       setMoveInDate(tripContext.startDate);
       setMoveOutDate(tripContext.endDate);
@@ -102,15 +107,19 @@ export default function ApplicationWizard({
       setNumPets(tripContext.numPets ?? 0);
     }
 
-    if (application) {
-      initializeFromApplication(application);
-    }
-
     const fetchFull = async () => {
       if (application?.id) {
         const result = await getFullApplication(application.id);
         if (result.success && result.application) {
           initializeFromApplication(result.application);
+          // Re-apply trip context after async fetch so it isn't overwritten
+          if (tripContext) {
+            setMoveInDate(tripContext.startDate);
+            setMoveOutDate(tripContext.endDate);
+            setNumAdults(tripContext.numAdults ?? 1);
+            setNumChildren(tripContext.numChildren ?? 0);
+            setNumPets(tripContext.numPets ?? 0);
+          }
         }
       }
     };
