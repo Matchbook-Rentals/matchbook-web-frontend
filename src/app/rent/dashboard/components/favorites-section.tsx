@@ -27,6 +27,7 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [activeSlide, setActiveSlide] = useState(0);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
   const { toast } = useToast();
 
@@ -139,11 +140,13 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
     api.on('select', () => {
       setCanScrollPrev(api.canScrollPrev());
       setCanScrollNext(api.canScrollNext());
+      setActiveSlide(api.selectedScrollSnap());
     });
 
     api.on('reInit', () => {
       setCanScrollPrev(api.canScrollPrev());
       setCanScrollNext(api.canScrollNext());
+      setActiveSlide(api.selectedScrollSnap());
     });
   }, [api]);
 
@@ -178,34 +181,35 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
                     align: 'start',
                     loop: false,
                     slidesToScroll: 1,
+                    watchDrag: false,
                   }}
                   className="w-full"
                   keyboardControls={false}
                 >
-                  <CarouselContent className="-ml-6">
-                    {favoriteSlides.map((slideFavorites, idx) => (
-                      <CarouselItem key={idx} className="pl-6 basis-full">
-                        <div className="grid grid-cols-2 grid-rows-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-6">
-                          {slideFavorites.map((fav, favIdx) => {
-                            const globalIndex = idx * cardsPerSlide + favIdx;
-                            return (
-                              <HomepageListingCard
-                                key={fav.id}
-                                listing={favoriteListings[globalIndex] as any}
-                                badge="liked"
-                                tripId={fav.tripId}
-                                isApplied={fav.isApplied}
-                                initialFavorited={true}
-                                onUnlike={handleUnlike}
-                                isSignedIn={true}
-                              />
-                            );
-                          })}
-                        </div>
-                      </CarouselItem>
-                    ))}
-                  </CarouselContent>
-                </Carousel>
+                    <CarouselContent className="-ml-6">
+                      {favoriteSlides.map((slideFavorites, idx) => (
+                        <CarouselItem key={idx} className={`pl-6 basis-full ${idx !== activeSlide ? 'h-[280px]' : 'h-auto'}`}>
+                          <div className="flex flex-wrap gap-6 [&>*]:w-[calc(50%-12px)] sm:[&>*]:w-[calc(33.333%-16px)] md:[&>*]:w-[calc(25%-18px)] lg:[&>*]:w-[calc(20%-19.2px)]">
+                            {slideFavorites.map((fav, favIdx) => {
+                              const globalIndex = idx * cardsPerSlide + favIdx;
+                              return (
+                                <HomepageListingCard
+                                  key={fav.id}
+                                  listing={favoriteListings[globalIndex] as any}
+                                  badge="liked"
+                                  tripId={fav.tripId}
+                                  isApplied={fav.isApplied}
+                                  initialFavorited={true}
+                                  onUnlike={handleUnlike}
+                                  isSignedIn={true}
+                                />
+                              );
+                            })}
+                          </div>
+                        </CarouselItem>
+                      ))}
+                    </CarouselContent>
+                  </Carousel>
 
                 {showNavigation && (
                   <div className="flex items-center gap-1 mt-4 ml-[2px]">
