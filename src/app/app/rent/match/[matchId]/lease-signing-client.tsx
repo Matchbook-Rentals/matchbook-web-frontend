@@ -69,7 +69,14 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   const [listingDocuments, setListingDocuments] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
   // Unified step state to replace multiple booleans
-  const [currentStep, setCurrentStep] = useState<LeaseSigningStep>('overview');
+  const [currentStep, setCurrentStep] = useState<LeaseSigningStep>(() => {
+    if (initialStep === 'complete-payment') return 'payment';
+    if (initialStep === 'no-lease-document') return 'no-lease';
+    if (initialStep === 'sign-lease') return 'signing';
+    if (initialStep === 'payment-method-exists') return 'payment-method-exists';
+    if (initialStep === 'completed') return 'completed';
+    return 'overview';
+  });
   const [selectedPaymentMethodType, setSelectedPaymentMethodType] = useState<string>();
   const [leaseCompleted, setLeaseCompleted] = useState(false);
   const [showPaymentInfoModal, setShowPaymentInfoModal] = useState(false);
@@ -82,9 +89,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
   // Responsive PDF width
   const { pdfWidth, isMobile } = useResponsivePDFWidth();
   
-  // Track server-provided initial step (clear after first render to allow client transitions)
-  const [serverInitialStep, setServerInitialStep] = useState(initialStep);
-  
+
   // Track previous step for back navigation
   const [previousStep, setPreviousStep] = useState<LeaseSigningStep | null>(null);
   
@@ -390,7 +395,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
         setCurrentStep('payment');
 
         // Clear server initial step so client-side logic takes over for transitions
-        setServerInitialStep(undefined);
 
       } else {
         throw new Error('Failed to update match record');
@@ -595,19 +599,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     return renterSignerIndex;
   };
 
-  // Initialize current step based on state
-  useEffect(() => {
-    // Only set initial step once based on server or current state
-    if (serverInitialStep && currentStep === 'overview') {
-      if (serverInitialStep === 'no-lease-document') setCurrentStep('no-lease');
-      else if (serverInitialStep === 'overview-lease') setCurrentStep('overview');
-      else if (serverInitialStep === 'sign-lease') setCurrentStep('signing');
-      else if (serverInitialStep === 'payment-method-exists') setCurrentStep('payment-method-exists');
-      else if (serverInitialStep === 'complete-payment') setCurrentStep('payment');
-      else if (serverInitialStep === 'completed') setCurrentStep('completed');
-      setServerInitialStep(undefined);
-    }
-  }, [serverInitialStep, currentStep]);
+
 
   // Determine legacy step for components that still use it
   const currentStepState = (() => {
@@ -1365,7 +1357,6 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                       onClick={() => {
                         setPreviousStep('overview');
                         setCurrentStep('signing');
-                        setServerInitialStep(undefined); // Clear server step to allow client transition
                       }}
                       size="sm"
                       className="bg-[#0a6060] hover:bg-[#0a6060]/90"

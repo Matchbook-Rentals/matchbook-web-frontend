@@ -190,6 +190,7 @@ export async function getMatchById(matchId: string) {
           }
         },
         BoldSignLease: true,
+        booking: true,
         Lease: true,
       },
     })

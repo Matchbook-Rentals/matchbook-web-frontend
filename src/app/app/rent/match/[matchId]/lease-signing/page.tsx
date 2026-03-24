@@ -49,9 +49,9 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
     redirect(`/app/rent/match/${params.matchId}/awaiting-lease`);
   }
   
-  // Redirect if already completed payment
-  if (match.paymentAuthorizedAt) {
-    console.log('⚠️ [Lease Signing Page] Redirecting to complete: payment already authorized');
+  // Redirect if booking already created
+  if (match.booking) {
+    console.log('⚠️ [Lease Signing Page] Redirecting to complete: booking already exists');
     redirect(`/app/rent/match/${params.matchId}/complete`);
   }
   

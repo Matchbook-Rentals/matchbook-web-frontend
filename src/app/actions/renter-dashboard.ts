@@ -156,6 +156,7 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
     prisma.match.findMany({
       where: {
         trip: { userId },
+        booking: null,
       },
       include: {
         listing: {
