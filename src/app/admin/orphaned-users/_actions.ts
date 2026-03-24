@@ -4,8 +4,9 @@ import { clerkClient } from '@clerk/nextjs/server';
 import prismadb from '@/lib/prismadb';
 import { checkAuth } from '@/lib/auth-utils';
 import { logger } from '@/lib/logger';
-import { createNotification } from '@/app/actions/notifications';
-import { buildNotificationEmailData } from '@/lib/notification-builders';
+// Welcome notification imports — disabled until content is refreshed
+// import { createNotification } from '@/app/actions/notifications';
+// import { buildNotificationEmailData } from '@/lib/notification-builders';
 
 interface OrphanedUser {
   clerkId: string;
@@ -118,25 +119,8 @@ export async function createUserFromClerkId(clerkUserId: string): Promise<{
 
     logger.info('Created database user from orphaned Clerk user', { userId: clerkUserId });
 
-    // Send welcome notification
-    try {
-      const emailData = buildNotificationEmailData('welcome_renter', {});
-      await createNotification({
-        userId: clerkUser.id,
-        content: 'Welcome to MatchBook!',
-        actionType: 'welcome_renter',
-        url: '/app/rent/searches',
-        read: false,
-        emailData
-      });
-      logger.info('Welcome notification sent to recovered orphaned user', { userId: clerkUserId });
-    } catch (emailError) {
-      // Don't fail user creation if email fails
-      logger.error('Failed to send welcome notification to orphaned user', {
-        userId: clerkUserId,
-        error: emailError instanceof Error ? emailError.message : 'Unknown error'
-      });
-    }
+    // Welcome notification disabled — content needs updating
+    // TODO: Re-enable once welcome notification is refreshed
 
     return { success: true };
   } catch (error) {

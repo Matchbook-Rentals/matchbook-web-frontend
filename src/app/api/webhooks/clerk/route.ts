@@ -3,8 +3,9 @@ import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { logger } from '@/lib/logger';
-import { createNotification } from '@/app/actions/notifications';
-import { buildNotificationEmailData } from '@/lib/notification-builders';
+// Welcome notification imports — disabled until content is refreshed
+// import { createNotification } from '@/app/actions/notifications';
+// import { buildNotificationEmailData } from '@/lib/notification-builders';
 import { generateReferralCode, findUserByReferralCode, createReferral } from '@/lib/referral';
 
 export async function POST(req: Request) {
@@ -160,29 +161,8 @@ export async function POST(req: Request) {
         }
       }
 
-      // Send welcome notification
-      console.log('📧 [Clerk Webhook] Sending welcome notification...');
-      try {
-        const emailData = buildNotificationEmailData('welcome_renter', {});
-        await createNotification({
-          userId: id,
-          content: 'Welcome to MatchBook!',
-          actionType: 'welcome_renter',
-          actionId: id, // Use user ID as action ID for welcome notifications
-          url: '/',
-          unread: true,
-          emailData
-        });
-        console.log('✅ [Clerk Webhook] Welcome notification sent successfully');
-        logger.info('Welcome notification sent to new user', { userId: id });
-      } catch (emailError) {
-        // Don't fail webhook if email fails
-        console.error('❌ [Clerk Webhook] Error sending welcome notification:', emailError);
-        logger.error('Failed to send welcome notification', {
-          userId: id,
-          error: emailError instanceof Error ? emailError.message : 'Unknown error'
-        });
-      }
+      // Welcome notification disabled — content needs updating
+      // TODO: Re-enable once welcome notification is refreshed
     } catch (error) {
       console.error('❌ [Clerk Webhook] Error creating user:', error);
       console.error('   Error type:', error instanceof Error ? error.name : typeof error);
