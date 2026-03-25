@@ -1816,10 +1816,7 @@ export async function getListingsByBounds(bounds: MapBounds): Promise<ListingWit
         id: { in: listingIds },
       },
       include: {
-        listingImages: {
-          orderBy: { rank: 'asc' },
-          take: 1,
-        },
+        listingImages: { orderBy: { rank: 'asc' } },
         monthlyPricing: true,
         bedrooms: true,
       },
