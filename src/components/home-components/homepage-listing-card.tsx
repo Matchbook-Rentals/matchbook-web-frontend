@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { ListingWithRelations } from '@/types';
 import { getCategoryDisplayForCards, normalizeCategory } from '@/constants/enums';
+import { applyServiceFee } from '@/lib/calculate-rent';
 import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import {
@@ -185,7 +186,7 @@ export default function HomepageListingCard({
 
   const getDisplayPrice = (): { price: string; suffix: string; isRange: boolean } => {
     if (listing.monthlyPricing?.length) {
-      const prices = listing.monthlyPricing.map(p => p.price);
+      const prices = listing.monthlyPricing.map(p => applyServiceFee(p.price, p.months));
       const minPrice = Math.min(...prices);
       const maxPrice = Math.max(...prices);
       if (minPrice === maxPrice) {
@@ -193,9 +194,11 @@ export default function HomepageListingCard({
       }
       return { price: `$${minPrice.toLocaleString()}-$${maxPrice.toLocaleString()}`, suffix: ' / mo', isRange: true };
     }
-    return listing.shortestLeasePrice
-      ? { price: `$${listing.shortestLeasePrice.toLocaleString()}`, suffix: ' / mo', isRange: false }
-      : { price: 'Price on request', suffix: '', isRange: false };
+    if (listing.shortestLeasePrice) {
+      const priceWithFee = applyServiceFee(listing.shortestLeasePrice, 1);
+      return { price: `$${priceWithFee.toLocaleString()}`, suffix: ' / mo', isRange: false };
+    }
+    return { price: 'Price on request', suffix: '', isRange: false };
   };
 
 
