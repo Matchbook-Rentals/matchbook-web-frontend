@@ -129,6 +129,7 @@ interface ApplicationDetailsProps {
   housingRequest: HousingRequestWithUser;
   listingId: string;
   from?: string;
+  isHostActive?: boolean;
 }
 
 // Hardcoded data for the new design sections (keeping other sections)
@@ -166,7 +167,7 @@ const incomeSources = [
   },
 ];
 
-export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from }: ApplicationDetailsProps): JSX.Element => {
+export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId, from, isHostActive }: ApplicationDetailsProps): JSX.Element => {
   const application = housingRequest.user.applications[0];
   const user = housingRequest.user;
   const router = useRouter();
@@ -550,16 +551,27 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
                 </span>
               </Button>
 
-              <Button
-                variant="outline"
-                onClick={handleUploadLease}
-                disabled={isUploadingLease || isDeclining}
-                className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto hover:bg-transparent"
-              >
-                <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                  {getUploadButtonText('Approve')}
-                </span>
-              </Button>
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger asChild>
+                    <span>
+                      <Button
+                        variant="outline"
+                        onClick={handleUploadLease}
+                        disabled={isUploadingLease || isDeclining || isHostActive === false}
+                        className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto hover:bg-transparent"
+                      >
+                        <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                          {getUploadButtonText('Approve')}
+                        </span>
+                      </Button>
+                    </span>
+                  </TooltipTrigger>
+                  {isHostActive === false && (
+                    <TooltipContent>Your Stripe account is inactive. Please resolve account issues first.</TooltipContent>
+                  )}
+                </Tooltip>
+              </TooltipProvider>
             </>
           )}
 
@@ -669,16 +681,27 @@ export const ApplicationDetails = ({ housingRequestId, housingRequest, listingId
               </span>
             </Button>
 
-            <Button
-              variant="outline"
-              onClick={handleUploadLease}
-              disabled={isUploadingLease || isDeclining}
-              className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto hover:bg-transparent"
-            >
-              <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                {getUploadButtonText('Approve')}
-              </span>
-            </Button>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <span>
+                    <Button
+                      variant="outline"
+                      onClick={handleUploadLease}
+                      disabled={isUploadingLease || isDeclining || isHostActive === false}
+                      className="inline-flex items-center justify-center gap-1 px-3.5 py-2.5 relative flex-[0_0_auto] rounded-lg overflow-hidden border border-solid border-[#3c8787] h-auto hover:bg-transparent"
+                    >
+                      <span className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-semibold text-[#3c8787] text-sm tracking-[0] leading-5 whitespace-nowrap">
+                        {getUploadButtonText('Approve')}
+                      </span>
+                    </Button>
+                  </span>
+                </TooltipTrigger>
+                {isHostActive === false && (
+                  <TooltipContent>Your Stripe account is inactive. Please resolve account issues first.</TooltipContent>
+                )}
+              </Tooltip>
+            </TooltipProvider>
           </>
         )}
 

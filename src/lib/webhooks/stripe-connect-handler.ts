@@ -65,24 +65,61 @@ export async function handleAccountUpdated(event: AccountUpdatedEvent): Promise<
       console.warn(`⚠️ Host ${user.id} CANNOT accept charges!`);
       console.warn(`   Reason: ${account.requirements?.disabled_reason || 'Unknown'}`);
 
-      // TODO: Send email notification to host
-      // TODO: Pause all listings for this host
-      // TODO: Notify admin dashboard
+      try {
+        await prismadb.notification.create({
+          data: {
+            userId: user.id,
+            content: 'Your Stripe account has been restricted. Please update your account to continue accepting payments.',
+            url: '/app/host/dashboard/overview',
+            actionType: 'stripe_account_restricted',
+            actionId: accountId,
+            read: false,
+          }
+        });
+      } catch (err) {
+        console.error('Failed to create notification for restricted account:', err);
+      }
     }
 
     if (account.requirements?.currently_due && account.requirements.currently_due.length > 0) {
       console.warn(`📝 Host ${user.id} has missing requirements:`, account.requirements.currently_due);
 
-      // TODO: Send email to host with required documents list
-      // TODO: Show banner in host dashboard
+      // Only notify if charges are still enabled (warning, not critical)
+      if (account.charges_enabled) {
+        try {
+          await prismadb.notification.create({
+            data: {
+              userId: user.id,
+              content: 'Your Stripe account needs attention. Please update your information to keep your account in good standing.',
+              url: '/app/host/dashboard/overview',
+              actionType: 'stripe_requirements_due',
+              actionId: accountId,
+              read: false,
+            }
+          });
+        } catch (err) {
+          console.error('Failed to create notification for due requirements:', err);
+        }
+      }
     }
 
     if (account.requirements?.past_due && account.requirements.past_due.length > 0) {
       console.error(`🚨 Host ${user.id} has OVERDUE requirements:`, account.requirements.past_due);
 
-      // TODO: Mark host as restricted
-      // TODO: Send urgent email
-      // TODO: Pause listings
+      try {
+        await prismadb.notification.create({
+          data: {
+            userId: user.id,
+            content: 'Your Stripe account has overdue requirements. Please update your account immediately to avoid service interruption.',
+            url: '/app/host/dashboard/overview',
+            actionType: 'stripe_requirements_past_due',
+            actionId: accountId,
+            read: false,
+          }
+        });
+      } catch (err) {
+        console.error('Failed to create notification for past due requirements:', err);
+      }
     }
 
   } else {

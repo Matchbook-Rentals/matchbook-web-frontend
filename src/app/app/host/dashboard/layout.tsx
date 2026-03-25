@@ -1,6 +1,7 @@
 import React from "react";
 import { HostSidebar } from "../components/host-sidebar";
 import { HostBreadcrumb } from "../components/host-breadcrumb";
+import { HostAccountBanner } from "../components/host-account-banner";
 import {
   SidebarInset,
   SidebarProvider,
@@ -9,6 +10,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import UserMenu from "@/components/userMenu";
 import { currentUser } from "@clerk/nextjs/server";
+import { getHostUserData } from "@/app/actions/user";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -21,6 +23,13 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
   } catch (error) {
     console.error('Error fetching current user:', error);
     user = null;
+  }
+
+  let hostUserData = null;
+  try {
+    hostUserData = await getHostUserData();
+  } catch (error) {
+    console.error('Error fetching host data for banner:', error);
   }
 
   // Create a serializable user object
@@ -101,6 +110,9 @@ export default async function DashboardLayout({ children }: DashboardLayoutProps
             <UserMenu isSignedIn={!!user?.id} user={serializableUser} color="#000" mode="header" hasListings={undefined} />
           </div>
         </header>
+        {hostUserData?.stripeAccountStatus && hostUserData.stripeAccountStatus !== 'enabled' && (
+          <HostAccountBanner hostUserData={hostUserData as any} />
+        )}
         <div className="flex flex-1 flex-col gap-4">
           {children}
         </div>

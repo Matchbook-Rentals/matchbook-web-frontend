@@ -33,12 +33,22 @@ const hasIncompleteStripeSync = (user: {
  * Determines if we need to check Stripe API for current status
  * True when: user has Stripe account BUT status fields are null (race condition)
  */
+const isStripeDataStale = (lastChecked: Date | null | undefined): boolean => {
+  if (!lastChecked) return true;
+  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  return lastChecked < twentyFourHoursAgo;
+};
+
 const needsStripeSyncCheck = (user: {
   stripeAccountId: string | null,
   stripeChargesEnabled: boolean | null,
-  stripeDetailsSubmitted: boolean | null
+  stripeDetailsSubmitted: boolean | null,
+  stripeAccountLastChecked?: Date | null,
 }) =>
-  hasStripeHostAccount(user) && hasIncompleteStripeSync(user);
+  hasStripeHostAccount(user) && (
+    hasIncompleteStripeSync(user) ||
+    isStripeDataStale(user.stripeAccountLastChecked)
+  );
 
 /**
  * Checks if Stripe API returned valid onboarding status data
@@ -74,16 +84,40 @@ async function updateUserWithStripeStatus(
   stripeAccount: {
     charges_enabled: boolean,
     payouts_enabled: boolean,
-    details_submitted: boolean
+    details_submitted: boolean,
+    requirements?: {
+      currently_due?: string[],
+      past_due?: string[],
+      eventually_due?: string[],
+      disabled_reason?: string | null,
+    } | null,
   }
 ) {
   try {
+    let accountStatus = 'enabled';
+    if (stripeAccount.requirements?.disabled_reason) {
+      accountStatus = 'disabled';
+    } else if (stripeAccount.requirements?.past_due && stripeAccount.requirements.past_due.length > 0) {
+      accountStatus = 'restricted';
+    } else if (stripeAccount.requirements?.currently_due && stripeAccount.requirements.currently_due.length > 0) {
+      accountStatus = 'pending';
+    }
+
+    const requirementsDue = JSON.stringify({
+      currently_due: stripeAccount.requirements?.currently_due || [],
+      past_due: stripeAccount.requirements?.past_due || [],
+      eventually_due: stripeAccount.requirements?.eventually_due || [],
+      disabled_reason: stripeAccount.requirements?.disabled_reason || null,
+    });
+
     await prismadb.user.update({
       where: { id: userId },
       data: {
         stripeChargesEnabled: stripeAccount.charges_enabled,
         stripePayoutsEnabled: stripeAccount.payouts_enabled,
         stripeDetailsSubmitted: stripeAccount.details_submitted,
+        stripeAccountStatus: accountStatus,
+        stripeRequirementsDue: requirementsDue,
         stripeAccountLastChecked: new Date()
       }
     });
@@ -92,13 +126,16 @@ async function updateUserWithStripeStatus(
       userId,
       chargesEnabled: stripeAccount.charges_enabled,
       payoutsEnabled: stripeAccount.payouts_enabled,
-      detailsSubmitted: stripeAccount.details_submitted
+      detailsSubmitted: stripeAccount.details_submitted,
+      accountStatus,
     });
 
     return {
       stripeChargesEnabled: stripeAccount.charges_enabled,
       stripePayoutsEnabled: stripeAccount.payouts_enabled,
-      stripeDetailsSubmitted: stripeAccount.details_submitted
+      stripeDetailsSubmitted: stripeAccount.details_submitted,
+      stripeAccountStatus: accountStatus,
+      stripeRequirementsDue: requirementsDue,
     };
   } catch (error) {
     logger.error('Failed to update user with Stripe status', {
@@ -119,6 +156,9 @@ async function syncStripeStatusIfNeeded(user: {
   stripeChargesEnabled: boolean | null,
   stripePayoutsEnabled: boolean | null,
   stripeDetailsSubmitted: boolean | null,
+  stripeAccountStatus?: string | null,
+  stripeRequirementsDue?: string | null,
+  stripeAccountLastChecked?: Date | null,
   agreedToHostTerms: Date | null,
   medallionIdentityVerified: boolean | null,
   medallionVerificationStatus: string | null
@@ -146,7 +186,8 @@ async function syncStripeStatusIfNeeded(user: {
     const updatedFields = await updateUserWithStripeStatus(user.id, {
       charges_enabled: stripeAccount.charges_enabled,
       payouts_enabled: stripeAccount.payouts_enabled,
-      details_submitted: stripeAccount.details_submitted
+      details_submitted: stripeAccount.details_submitted,
+      requirements: stripeAccount.requirements,
     });
 
     // Return user with updated fields if sync succeeded
@@ -184,6 +225,9 @@ export async function getHostUserData() {
         stripeChargesEnabled: true,
         stripePayoutsEnabled: true,
         stripeDetailsSubmitted: true,
+        stripeAccountStatus: true,
+        stripeRequirementsDue: true,
+        stripeAccountLastChecked: true,
         medallionIdentityVerified: true,
         medallionVerificationStatus: true,
         stripeVerificationStatus: true,

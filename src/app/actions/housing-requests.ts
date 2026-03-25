@@ -7,6 +7,7 @@ import { HousingRequest, Notification } from '@prisma/client'
 import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
 import { calculateRent } from '@/lib/calculate-rent'
+import { isHostAccountActive } from '@/lib/verification-utils'
 import { findConversationBetweenUsers, createListingConversation } from './conversations'
 import { sendNotificationEmail } from '@/lib/send-notification-email'
 import { buildNotificationEmailData as buildEmailConfig, getNotificationEmailSubject } from '@/lib/notification-email-config'
@@ -851,6 +852,16 @@ export async function approveHousingRequest(housingRequestId: string) {
 
     if (housingRequest.listing.userId !== userId) {
       throw new Error('Unauthorized: You can only approve requests for your own listings');
+    }
+
+    // Check if host's Stripe account is active
+    const hostUser = await prismadb.user.findUnique({
+      where: { id: userId },
+      select: { stripeAccountStatus: true, stripeChargesEnabled: true }
+    });
+
+    if (!isHostAccountActive(hostUser)) {
+      throw new Error('Your Stripe account is currently inactive. Please resolve your account issues before approving applications.');
     }
 
     // Start a transaction to ensure both operations succeed or fail together

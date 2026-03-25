@@ -22,6 +22,8 @@ export interface HostUserData {
   stripeChargesEnabled: boolean | null;
   stripePayoutsEnabled: boolean | null;
   stripeDetailsSubmitted: boolean | null;
+  stripeAccountStatus: string | null;
+  stripeRequirementsDue: string | null;
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
   stripeVerificationStatus: string | null;
