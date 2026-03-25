@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -28,6 +29,8 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
   const [activeSlide, setActiveSlide] = useState(0);
+  const [carouselHeight, setCarouselHeight] = useState<number | 'auto'>('auto');
+  const slideRefs = useRef<(HTMLDivElement | null)[]>([]);
   const [cardsPerSlide, setCardsPerSlide] = useState(2);
   const { toast } = useToast();
 
@@ -150,6 +153,16 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
     });
   }, [api]);
 
+  // Measure active slide height
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const activeRef = slideRefs.current[activeSlide];
+      if (!activeRef) return;
+      setCarouselHeight(activeRef.scrollHeight);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, [activeSlide, visibleFavorites.length, cardsPerSlide]);
+
   // Group favorites into slides based on screen size
   const favoriteSlides = [];
   for (let i = 0; i < visibleFavorites.length; i += cardsPerSlide) {
@@ -175,21 +188,29 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
               />
             ) : (
               <>
-                <Carousel
-                  setApi={setApi}
-                  opts={{
-                    align: 'start',
-                    loop: false,
-                    slidesToScroll: 1,
-                    watchDrag: false,
-                  }}
-                  className="w-full"
-                  keyboardControls={false}
+                <motion.div
+                  animate={{ height: carouselHeight }}
+                  transition={{ duration: 0.3, ease: 'easeInOut' }}
+                  style={{ overflow: 'hidden' }}
                 >
+                  <Carousel
+                    setApi={setApi}
+                    opts={{
+                      align: 'start',
+                      loop: false,
+                      slidesToScroll: 1,
+                      watchDrag: false,
+                    }}
+                    className="w-full"
+                    keyboardControls={false}
+                  >
                     <CarouselContent className="-ml-6">
                       {favoriteSlides.map((slideFavorites, idx) => (
-                        <CarouselItem key={idx} className={`pl-6 basis-full ${idx !== activeSlide ? 'h-[280px]' : 'h-auto'}`}>
-                          <div className="flex flex-wrap gap-6 [&>*]:w-[calc(50%-12px)] sm:[&>*]:w-[calc(33.333%-16px)] md:[&>*]:w-[calc(25%-18px)] lg:[&>*]:w-[calc(20%-19.2px)]">
+                        <CarouselItem key={idx} className="pl-6 basis-full">
+                          <div
+                            ref={(el) => { slideRefs.current[idx] = el; }}
+                            className="flex flex-wrap gap-6 [&>*]:w-[calc(50%-12px)] sm:[&>*]:w-[calc(33.333%-16px)] md:[&>*]:w-[calc(25%-18px)] lg:[&>*]:w-[calc(20%-19.2px)]"
+                          >
                             {slideFavorites.map((fav, favIdx) => {
                               const globalIndex = idx * cardsPerSlide + favIdx;
                               return (
@@ -210,6 +231,7 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
                       ))}
                     </CarouselContent>
                   </Carousel>
+                </motion.div>
 
                 {showNavigation && (
                   <div className="flex items-center gap-1 mt-4 ml-[2px]">
