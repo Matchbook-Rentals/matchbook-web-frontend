@@ -158,7 +158,7 @@ export async function upsertNonDefaultApplication(data: any) {
         identifications: { upsert: data.identifications.map((id: any) => ({ where: { id: id.id }, update: id, create: id })) },
         incomes: { upsert: data.incomes.map((income: any) => ({ where: { id: income.id || 'new' }, update: income, create: income })) },
         verificationImages: { upsert: data.verificationImages.map((img: any) => ({ where: { id: img.id }, update: img, create: img })) },
-        isDefault: false,
+        isDefault: null,
       },
       create: {
         ...data,
@@ -166,7 +166,7 @@ export async function upsertNonDefaultApplication(data: any) {
         identifications: { create: data.identifications },
         incomes: { create: data.incomes.map(({ id, ...rest }: any) => rest) },
         verificationImages: { create: data.verificationImages },
-        isDefault: false,
+        isDefault: null,
       },
     });
     return { success: true, data: application };
@@ -464,7 +464,7 @@ export async function upsertApplication(data: any) {
     let whereClause;
     if (tripId) {
       whereClause = { userId_tripId: { userId, tripId } };
-      filteredData.isDefault = false;
+      filteredData.isDefault = null;
     } else {
       whereClause = { userId_isDefault: { userId, isDefault: true } };
       filteredData.isDefault = true;
