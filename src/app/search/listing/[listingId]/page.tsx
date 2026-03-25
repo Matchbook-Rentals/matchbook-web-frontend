@@ -84,7 +84,7 @@ export default async function SearchListingPage({ params, searchParams }: Listin
       markedActiveByUser: true
     },
     include: {
-      listingImages: true,
+      listingImages: { orderBy: { rank: 'asc' } },
       bedrooms: true,
       user: true,
       monthlyPricing: true,
