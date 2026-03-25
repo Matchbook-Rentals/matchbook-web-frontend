@@ -15,25 +15,51 @@ import { FEES } from '@/lib/fee-constants';
  * CRON JOB: Retry Failed Rent Payments
  *
  * Purpose:
- * Automatically retry rent payments that previously failed, with intelligent retry logic.
+ * Automatically retry rent payments that previously failed, with intelligent retry logic
+ * that differentiates between user-fixable errors and vendor/system errors.
  *
  * Schedule:
- * Runs Monday-Friday at 10am Pacific (5pm UTC) - after main payment processing cron
+ * Runs hourly — but applies different retry timing based on failure type.
+ *
+ * Failure Types:
+ * - USER ERRORS (card declined, insufficient funds, payment method unavailable):
+ *   Retry once per day, max 2 retries. User needs time to update payment method.
+ * - VENDOR ERRORS (Stripe outages, network issues, system errors):
+ *   Retry after 1 hour, max 6 retries per day. These often resolve on their own.
  *
  * Business Logic:
- * 1. FIND FAILED PAYMENTS: Identifies past-due payments that failed with retryCount < 2
- * 2. PREVENT SAME-DAY RETRIES: Skips payments already attempted today (via lastRetryAttempt)
- * 3. PAYMENT PROCESSING: Creates Stripe PaymentIntents with automatic capture (same as main cron)
- * 4. RETRY LIMIT: Max 2 retries (3 total attempts including initial)
- * 5. NOTIFICATIONS: Sends appropriate success/failure notifications
- * 6. KEEPS DUE DATE: Original dueDate unchanged to track how late the payment is
- *
- * Retry Flow Example:
- * - Day 1: Initial payment fails (retryCount = 1, lastRetryAttempt = Day 1)
- * - Day 2: Retry #1 fails (retryCount = 2, lastRetryAttempt = Day 2)
- * - Day 3+: No more retries (retryCount = 2 is NOT < 2)
- * - After 2 retries, requires manual intervention (user must update payment method)
+ * 1. FIND FAILED PAYMENTS: Identifies past-due or same-day payments that failed
+ * 2. CLASSIFY FAILURE: Determines if user-fixable or vendor/system error
+ * 3. APPLY TIMING: User errors = daily retry, Vendor errors = hourly retry
+ * 4. RETRY LIMITS: User errors max 2 retries, Vendor errors max 6 retries
+ * 5. PAYMENT PROCESSING: Creates Stripe PaymentIntents with automatic capture
+ * 6. NOTIFICATIONS: Sends appropriate success/failure notifications
+ * 7. KEEPS DUE DATE: Original dueDate unchanged to track how late the payment is
  */
+
+// Retry limits by failure type
+const USER_ERROR_MAX_RETRIES = 2;     // Card declined, insufficient funds — user must fix
+const VENDOR_ERROR_MAX_RETRIES = 6;   // Stripe outage, network errors — usually self-resolving
+const VENDOR_RETRY_INTERVAL_MS = 60 * 60 * 1000; // 1 hour between vendor error retries
+
+// Failure reasons that indicate a user-fixable issue
+const USER_ERROR_PATTERNS = [
+  'card declined',
+  'insufficient funds',
+  'payment method unavailable',
+  'authentication required',
+  'card velocity exceeded',
+  'expired card',
+];
+
+/**
+ * Classify a failure reason as user error or vendor error
+ */
+const isUserError = (failureReason: string | null): boolean => {
+  if (!failureReason) return false;
+  const lower = failureReason.toLowerCase();
+  return USER_ERROR_PATTERNS.some(pattern => lower.includes(pattern));
+};
 
 export async function GET(request: Request) {
   // Authorization check using cron secret
@@ -48,37 +74,73 @@ export async function GET(request: Request) {
   console.log('Cron job: Starting failed payment retry processing...');
 
   try {
+    const now = new Date();
     const todayMidnight = getTodayAtMidnight();
 
-    console.log('📅 Retry cron job date:');
+    console.log('📅 Retry cron job:');
+    console.log(`  - Now: ${now.toISOString()}`);
     console.log(`  - Today (midnight UTC): ${todayMidnight.toISOString()}`);
-    console.log(`  - Looking for failed payments with dueDate < ${todayMidnight.toISOString()}`);
 
-    // Find all failed payments that need retry
-    const failedPayments = await findFailedPaymentsForRetry(todayMidnight);
+    // Find all failed payments that might need retry
+    const allFailedPayments = await findFailedPaymentsForRetry();
 
-    if (failedPayments.length === 0) {
-      console.log('Cron job: No failed payments need retry today.');
+    // Filter by failure type and timing
+    const eligiblePayments = allFailedPayments.filter(payment => {
+      const userErr = isUserError(payment.failureReason);
+      const maxRetries = userErr ? USER_ERROR_MAX_RETRIES : VENDOR_ERROR_MAX_RETRIES;
+
+      // Check retry limit
+      if (payment.retryCount >= maxRetries) {
+        console.log(`  ⏭ Skipping ${payment.id}: retry limit reached (${payment.retryCount}/${maxRetries}, type: ${userErr ? 'user' : 'vendor'})`);
+        return false;
+      }
+
+      // Check timing
+      if (payment.lastRetryAttempt) {
+        if (userErr) {
+          // User errors: wait until the next day
+          if (payment.lastRetryAttempt >= todayMidnight) {
+            console.log(`  ⏭ Skipping ${payment.id}: user error already retried today`);
+            return false;
+          }
+        } else {
+          // Vendor errors: wait at least 1 hour
+          const timeSinceLastRetry = now.getTime() - payment.lastRetryAttempt.getTime();
+          if (timeSinceLastRetry < VENDOR_RETRY_INTERVAL_MS) {
+            console.log(`  ⏭ Skipping ${payment.id}: vendor error, only ${Math.round(timeSinceLastRetry / 60000)}min since last retry`);
+            return false;
+          }
+        }
+      }
+
+      console.log(`  ✅ Eligible: ${payment.id} (type: ${userErr ? 'user' : 'vendor'}, retryCount: ${payment.retryCount}/${maxRetries})`);
+      return true;
+    });
+
+    if (eligiblePayments.length === 0) {
+      console.log(`Cron job: No payments eligible for retry (${allFailedPayments.length} failed total).`);
       return NextResponse.json({
         success: true,
-        message: 'No failed payments to retry',
-        retriedPayments: 0
+        message: 'No failed payments eligible for retry',
+        retriedPayments: 0,
+        totalFailed: allFailedPayments.length
       });
     }
 
-    console.log(`Cron job: Found ${failedPayments.length} failed payments to retry.`);
+    console.log(`Cron job: ${eligiblePayments.length} of ${allFailedPayments.length} failed payments eligible for retry.`);
 
-    // Process each payment
-    const results = await processPayments(failedPayments);
+    // Process eligible payments
+    const results = await processPayments(eligiblePayments);
 
     console.log(`Cron job: Retry processing complete. Success: ${results.successful}, Failed: ${results.failed}`);
 
     return NextResponse.json({
       success: true,
-      retriedPayments: failedPayments.length,
+      retriedPayments: eligiblePayments.length,
+      totalFailed: allFailedPayments.length,
       successfulPayments: results.successful,
       failedPayments: results.failed,
-      message: `Retried ${failedPayments.length} payments: ${results.successful} successful, ${results.failed} failed`
+      message: `Retried ${eligiblePayments.length} of ${allFailedPayments.length} failed payments: ${results.successful} successful, ${results.failed} failed`
     });
 
   } catch (error) {
@@ -105,29 +167,20 @@ const getTodayAtMidnight = (): Date => {
 };
 
 /**
- * Find all failed rent payments that need retry
+ * Find all failed rent payments that might need retry.
+ * Fetches broadly — filtering by failure type and timing happens in processPayments.
  */
-const findFailedPaymentsForRetry = async (todayMidnight: Date) => {
+const findFailedPaymentsForRetry = async () => {
   return await prisma.rentPayment.findMany({
     where: {
-      // Past due (original dueDate has passed)
-      dueDate: {
-        lt: todayMidnight
-      },
       // Failed status
       status: 'FAILED',
       // Not cancelled
       cancelledAt: null,
       // Has payment method
       stripePaymentMethodId: { not: null },
-      // Only retry up to 2 times (retryCount: 0 or 1)
-      // This means max 2 retries after initial attempt = 3 total attempts
-      retryCount: { lt: 2 },
-      // Either never retried, or last retry was before today (prevent same-day retries)
-      OR: [
-        { lastRetryAttempt: null },
-        { lastRetryAttempt: { lt: todayMidnight } }
-      ]
+      // Cap at vendor error max (highest limit) — further filtering done in code
+      retryCount: { lt: VENDOR_ERROR_MAX_RETRIES },
     },
     include: {
       booking: {
@@ -325,17 +378,18 @@ const processIndividualPayment = async (payment: any) => {
     console.error(`❌ Failed to retry payment ${payment.id}:`, error);
 
     // Extract meaningful error message
+    // Check both error.message and error.code (Stripe errors have a .code property)
+    const errorCode = (error as any)?.code || '';
+    const errorMsg = error instanceof Error ? error.message : '';
     let errorMessage = 'Payment retry failed';
-    if (error instanceof Error) {
-      if (error.message.includes('insufficient_funds')) {
-        errorMessage = 'Insufficient funds';
-      } else if (error.message.includes('card_declined')) {
-        errorMessage = 'Card declined';
-      } else if (error.message.includes('payment_method_unavailable')) {
-        errorMessage = 'Payment method unavailable';
-      } else {
-        errorMessage = error.message;
-      }
+    if (errorCode === 'insufficient_funds' || errorMsg.includes('insufficient_funds')) {
+      errorMessage = 'Insufficient funds';
+    } else if (errorCode === 'card_declined' || errorMsg.includes('card_declined') || errorMsg.includes('declined')) {
+      errorMessage = 'Card declined';
+    } else if (errorCode === 'payment_method_unavailable' || errorMsg.includes('payment_method_unavailable')) {
+      errorMessage = 'Payment method unavailable';
+    } else if (error instanceof Error) {
+      errorMessage = error.message;
     }
 
     await updatePaymentFailure(payment.id, errorMessage);
@@ -591,32 +645,37 @@ const sendPaymentFailureNotifications = async (payment: any, errorMessage: strin
   });
 
   // Notify admin (tyler.bennett52@gmail.com) of failure
-  const adminEmailData = buildNotificationEmailData(
-    'rent_payment_failed',
-    {
-      content: `Rent payment retry failed for ${listingTitle} (attempt ${payment.retryCount + 1})`,
-      url: '/admin'
-    },
-    undefined,
-    {
-      amount,
-      listingTitle,
-      failureReason: errorMessage,
-      renterName: `${renter.firstName} ${renter.lastName}`.trim() || renter.email,
-      renterEmail: renter.email,
-      hostName: `${host.firstName} ${host.lastName}`.trim() || host.email,
-      hostEmail: host.email,
-      paymentId: payment.id,
-      retryCount: payment.retryCount + 1,
-      isFinalAttempt,
-    }
-  );
+  try {
+    const adminEmailData = buildNotificationEmailData(
+      'rent_payment_failed',
+      {
+        content: `Rent payment retry failed for ${listingTitle} (attempt ${payment.retryCount + 1})`,
+        url: '/admin'
+      },
+      undefined,
+      {
+        amount,
+        listingTitle,
+        failureReason: errorMessage,
+        renterName: `${renter.firstName} ${renter.lastName}`.trim() || renter.email,
+        renterEmail: renter.email,
+        hostName: `${host.firstName} ${host.lastName}`.trim() || host.email,
+        hostEmail: host.email,
+        paymentId: payment.id,
+        retryCount: payment.retryCount + 1,
+        isFinalAttempt,
+      }
+    );
 
-  await sendNotificationEmail({
-    to: 'tyler.bennett52@gmail.com',
-    subject: `Rent Payment Retry Failed - ${booking.listing.title} (Attempt ${payment.retryCount + 1})`,
-    emailData: adminEmailData,
-  });
+    await sendNotificationEmail({
+      to: 'tyler.bennett52@gmail.com',
+      subject: `Rent Payment Retry Failed - ${booking.listing.title} (Attempt ${payment.retryCount + 1})`,
+      emailData: adminEmailData,
+    });
+  } catch (error) {
+    console.error('Failed to send admin failure notification:', error);
+    // Don't throw — admin email failure shouldn't block payment processing
+  }
 };
 
 /**

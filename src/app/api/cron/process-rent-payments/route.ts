@@ -385,33 +385,35 @@ const processIndividualPayment = async (payment: any) => {
     console.error(`❌ Failed to process payment ${payment.id}:`, error);
 
     // Distinguish between payment failures (sad path) and system errors (error path)
+    // Check both error.message and error.code (Stripe errors have a .code property)
+    const errorMessage = error instanceof Error ? error.message : '';
+    const errorCode = (error as any)?.code || '';
     const isPaymentFailure = error instanceof Error && (
-      error.message.includes('insufficient_funds') ||
-      error.message.includes('card_declined') ||
-      error.message.includes('payment_method_unavailable') ||
-      error.message.includes('authentication_required') ||
-      error.message.includes('card_velocity_exceeded')
+      errorMessage.includes('insufficient_funds') || errorCode === 'insufficient_funds' ||
+      errorMessage.includes('card_declined') || errorCode === 'card_declined' ||
+      errorMessage.includes('payment_method_unavailable') || errorCode === 'payment_method_unavailable' ||
+      errorMessage.includes('authentication_required') || errorCode === 'authentication_required' ||
+      errorMessage.includes('card_velocity_exceeded') || errorCode === 'card_velocity_exceeded' ||
+      (error as any)?.type === 'StripeCardError'
     );
 
     if (isPaymentFailure) {
       // Payment failure (sad path): Update record and notify users
-      let errorMessage = 'Payment processing failed';
-      if (error instanceof Error) {
-        if (error.message.includes('insufficient_funds')) {
-          errorMessage = 'Insufficient funds';
-        } else if (error.message.includes('card_declined')) {
-          errorMessage = 'Card declined';
-        } else if (error.message.includes('payment_method_unavailable')) {
-          errorMessage = 'Payment method unavailable';
-        } else {
-          errorMessage = error.message;
-        }
+      let failureMessage = 'Payment processing failed';
+      if (errorCode === 'insufficient_funds' || errorMessage.includes('insufficient_funds')) {
+        failureMessage = 'Insufficient funds';
+      } else if (errorCode === 'card_declined' || errorMessage.includes('card_declined') || errorMessage.includes('declined')) {
+        failureMessage = 'Card declined';
+      } else if (errorCode === 'payment_method_unavailable' || errorMessage.includes('payment_method_unavailable')) {
+        failureMessage = 'Payment method unavailable';
+      } else if (error instanceof Error) {
+        failureMessage = error.message;
       }
 
-      await updatePaymentFailure(payment.id, errorMessage);
-      await sendPaymentFailureNotifications(payment, errorMessage);
+      await updatePaymentFailure(payment.id, failureMessage);
+      await sendPaymentFailureNotifications(payment, failureMessage);
 
-      return { success: false, error: errorMessage };
+      return { success: false, error: failureMessage };
     } else {
       // System error (error path): Re-throw to be handled at higher level
       // Don't send notifications for bugs/system issues
@@ -735,10 +737,15 @@ const sendAdminFailureSummary = async (failures: Array<{
   // Use sendNotificationEmail to go through the queue with rate limiting and retries
   // Create a simple admin notification email data structure
   const adminEmailData = {
-    recipientName: 'Admin',
-    message: emailBody,
-    actionUrl: undefined,
-    actionText: undefined,
+    companyName: 'MATCHBOOK',
+    headerText: 'Rent Payment Processing Failed',
+    contentTitle: '',
+    contentText: emailBody,
+    buttonText: 'View Admin Dashboard',
+    buttonUrl: `${process.env.NEXT_PUBLIC_URL}/admin`,
+    companyAddress: '123 Main Street',
+    companyCity: 'San Francisco, CA 94105',
+    companyWebsite: 'matchbookrentals.com',
   };
 
   const result = await sendNotificationEmail({
@@ -749,7 +756,8 @@ const sendAdminFailureSummary = async (failures: Array<{
 
   if (!result.success) {
     console.error('Failed to send admin summary email:', result.error);
-    throw new Error(`Admin email failed: ${result.error}`);
+    // Don't throw — admin email failure shouldn't propagate
+    return;
   }
 
   console.log(`Admin failure summary sent successfully (emailId: ${result.emailId})`);
