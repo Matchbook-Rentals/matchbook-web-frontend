@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import {
@@ -188,10 +187,9 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
               />
             ) : (
               <>
-                <motion.div
-                  animate={{ height: carouselHeight }}
-                  transition={{ duration: 0.3, ease: 'easeInOut' }}
-                  style={{ overflow: 'hidden' }}
+                <div
+                  className="overflow-hidden transition-[height] duration-300 ease-in-out"
+                  style={{ height: carouselHeight }}
                 >
                   <Carousel
                     setApi={setApi}
@@ -231,7 +229,7 @@ export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = fa
                       ))}
                     </CarouselContent>
                   </Carousel>
-                </motion.div>
+                </div>
 
                 {showNavigation && (
                   <div className="flex items-center gap-1 mt-4 ml-[2px]">
