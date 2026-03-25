@@ -192,15 +192,28 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
   // 2. Check which ones have applications
   // 3. Fetch the listing data for each favorite
   
-  // Create a set of listing IDs that are now matches (upgraded from favorites)
-  // These should not appear in the Favorites section
+  // Create sets of listing IDs that appear in further-along sections
+  // A listing should only appear in one section — lower in the process gets priority
+  // Priority (highest to lowest): Bookings > Matches > Applications > Favorites
+  const bookedListingIds = new Set(
+    bookingsRaw.map((booking) => booking.listingId)
+  );
   const matchedListingIds = new Set(
     matchesRaw.map((match) => match.listingId)
   );
 
-  // Filter out favorites that have been upgraded to matches
+  const pendingApplications = applicationsRaw
+    .filter((req) => req.status === 'pending' && !req.hasMatch);
+  const appliedListingIds = new Set(
+    pendingApplications.map((req) => req.listingId)
+  );
+
+  // Filter out favorites that appear in any further-along section
   const activeFavorites = favoritesRaw.filter(
-    (fav) => fav.listingId !== null && !matchedListingIds.has(fav.listingId as string)
+    (fav) => fav.listingId !== null
+      && !bookedListingIds.has(fav.listingId as string)
+      && !matchedListingIds.has(fav.listingId as string)
+      && !appliedListingIds.has(fav.listingId as string)
   );
 
   const favoriteListingIds = activeFavorites.map((fav) => fav.listingId as string);
@@ -303,8 +316,7 @@ export async function getRenterDashboardData(): Promise<RenterDashboardData> {
   }));
 
   // Applications: Filter and transform housing requests
-  const applications: DashboardApplication[] = applicationsRaw
-    .filter((req) => req.status === 'pending' && !req.hasMatch)
+  const applications: DashboardApplication[] = pendingApplications
     .map((req) => ({
       id: req.id,
       tripId: req.tripId,
