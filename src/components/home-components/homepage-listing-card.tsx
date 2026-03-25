@@ -6,8 +6,14 @@ import { useRouter } from 'next/navigation';
 import { ListingWithRelations } from '@/types';
 import { getCategoryDisplayForCards, normalizeCategory } from '@/constants/enums';
 import { applyServiceFee } from '@/lib/calculate-rent';
-import { Heart, Star, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Heart, Star, ChevronLeft, ChevronRight, MoreVertical, X } from 'lucide-react';
 import { useState, useEffect, useRef, useCallback } from 'react';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import {
   Carousel,
   CarouselContent,
@@ -97,6 +103,7 @@ interface HomepageListingCardProps {
   initialFavorited?: boolean;
   onFavorite?: (listingId: string, isFavorited: boolean) => void;
   onUnlike?: (listingId: string) => void;
+  onUnmatch?: (matchId: string) => void;
   isSignedIn?: boolean;
   disableSwipe?: boolean;
 }
@@ -113,6 +120,7 @@ export default function HomepageListingCard({
   initialFavorited,
   onFavorite,
   onUnlike,
+  onUnmatch,
   isSignedIn,
   disableSwipe = false,
 }: HomepageListingCardProps) {
@@ -337,14 +345,39 @@ export default function HomepageListingCard({
 
           <MatchedBadge badge={effectiveBadge} />
           {renderActionButton()}
-          <button
-            onClick={handleFavoriteClick}
-            className="absolute top-2 right-2 p-1.5 rounded-[6px] bg-white/80 hover:bg-white transition-colors z-10"
-          >
-            <Heart
-              className={`w-4 h-4 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
-            />
-          </button>
+          {effectiveBadge === 'matched' ? (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button
+                  onClick={(e) => { e.preventDefault(); e.stopPropagation(); }}
+                  className="absolute top-2 right-2 p-1.5 rounded-[6px] bg-white/80 hover:bg-white transition-colors z-10"
+                >
+                  <MoreVertical className="w-4 h-4 text-gray-600" />
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (matchId && onUnmatch) onUnmatch(matchId);
+                  }}
+                  className="text-red-600 focus:text-red-600 cursor-pointer"
+                >
+                  <X className="w-4 h-4 mr-2" />
+                  Withdraw Application
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          ) : (
+            <button
+              onClick={handleFavoriteClick}
+              className="absolute top-2 right-2 p-1.5 rounded-[6px] bg-white/80 hover:bg-white transition-colors z-10"
+            >
+              <Heart
+                className={`w-4 h-4 ${isFavorited ? 'fill-red-500 text-red-500' : 'text-gray-600'}`}
+              />
+            </button>
+          )}
         </div>
 
         <div className="pt-3 flex flex-col gap-0.5">

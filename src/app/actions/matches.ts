@@ -151,6 +151,47 @@ export async function deleteMatch(id: string) {
   }
 }
 
+// TODO: Instead of deleting the match and housing request, we should soft-delete or
+// add a "canceled" status so we can show the user that this match was previously canceled.
+
+// Withdraw from a match: deletes the match and the associated housing request,
+// returning the listing back to favorites.
+export async function withdrawMatch(matchId: string) {
+  try {
+    await checkAuth()
+
+    // Fetch the match to get tripId and listingId for the housing request
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      select: { tripId: true, listingId: true },
+    })
+
+    if (!match) {
+      return { success: false, error: 'Match not found' }
+    }
+
+    // Delete the match
+    await prisma.match.delete({ where: { id: matchId } })
+
+    // Delete the associated housing request so the listing falls back to favorites
+    await prisma.housingRequest.delete({
+      where: {
+        listingId_tripId: {
+          tripId: match.tripId,
+          listingId: match.listingId,
+        },
+      },
+    }).catch(() => {
+      // Housing request may not exist — that's fine
+    })
+
+    return { success: true }
+  } catch (error) {
+    console.error('Error withdrawing match:', error)
+    return { success: false, error: error instanceof Error ? error.message : 'Failed to withdraw match' }
+  }
+}
+
 // Get all matches for a trip
 export async function getMatchesForTrip(tripId: string) {
   try {

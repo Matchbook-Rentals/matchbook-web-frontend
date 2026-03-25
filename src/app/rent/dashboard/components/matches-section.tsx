@@ -13,14 +13,16 @@ import {
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from '@/components/ui/accordion';
 import HomepageListingCard from '@/components/home-components/homepage-listing-card';
 import { SectionEmptyState } from './section-empty-state';
-import type { DashboardMatch } from '@/app/actions/renter-dashboard';
+import type { DashboardMatch, DashboardFavorite } from '@/app/actions/renter-dashboard';
+import { withdrawMatch } from '@/app/actions/matches';
 
 interface MatchesSectionProps {
   matches: DashboardMatch[];
   defaultOpen?: boolean;
+  onWithdraw?: (match: DashboardMatch) => void;
 }
 
-export const MatchesSection = ({ matches, defaultOpen = false }: MatchesSectionProps) => {
+export const MatchesSection = ({ matches, defaultOpen = false, onWithdraw }: MatchesSectionProps) => {
   const router = useRouter();
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
@@ -61,6 +63,16 @@ export const MatchesSection = ({ matches, defaultOpen = false }: MatchesSectionP
 
   const handleBookNow = (matchId: string) => {
     router.push(`/app/rent/match/${matchId}/lease-signing`);
+  };
+
+  const handleUnmatch = async (matchId: string) => {
+    const match = matches.find((m) => m.id === matchId);
+    if (!match) return;
+
+    const result = await withdrawMatch(matchId);
+    if (result.success) {
+      onWithdraw?.(match);
+    }
   };
 
   // Transform matches to listing format for HomepageListingCard
@@ -124,6 +136,7 @@ export const MatchesSection = ({ matches, defaultOpen = false }: MatchesSectionP
                                 matchId={match.id}
                                 tripId={match.tripId}
                                 onBookNow={handleBookNow}
+                                onUnmatch={handleUnmatch}
                                 initialFavorited={true}
                               />
                             );

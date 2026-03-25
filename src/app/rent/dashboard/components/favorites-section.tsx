@@ -23,6 +23,12 @@ interface FavoritesSectionProps {
 
 export const FavoritesSection = ({ favorites: initialFavorites, defaultOpen = false }: FavoritesSectionProps) => {
   const [allFavorites, setAllFavorites] = useState<DashboardFavorite[]>(initialFavorites);
+
+  // Sync with parent when favorites prop changes (e.g. match withdrawn → listing restored to favorites)
+  useEffect(() => {
+    setAllFavorites(initialFavorites);
+  }, [initialFavorites]);
+
   const [hiddenFavoriteIds, setHiddenFavoriteIds] = useState<Set<string>>(new Set());
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
