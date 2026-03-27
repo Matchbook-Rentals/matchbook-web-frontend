@@ -54,10 +54,12 @@ function getPaymentStatus(rentPayment: RentPayment): string {
   if (rentPayment.isPaid) return "Paid";
 
   const now = new Date();
+  const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
   const dueDate = new Date(rentPayment.dueDate);
+  const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
 
-  if (dueDate < now) return "Overdue";
-  if (dueDate.getTime() - now.getTime() <= 7 * 24 * 60 * 60 * 1000) return "Due";
+  if (dueDateUTC < todayUTC) return "Overdue";
+  if (dueDateUTC === todayUTC) return "Due";
   return "Scheduled";
 }
 
@@ -194,9 +196,8 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
   };
 
   const now = new Date();
-  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const todayEnd = new Date(todayStart);
-  todayEnd.setDate(todayEnd.getDate() + 1);
+  const todayStartUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+  const todayEndUTC = todayStartUTC + 24 * 60 * 60 * 1000;
 
   const isPaymentPaid = (payment: any) => {
     return payment.isPaid || payment.status === 'SUCCEEDED' || payment.status === 'REFUNDED';
@@ -248,8 +249,9 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
   const upcomingPayments = booking.rentPayments
     .filter((payment: any) => {
       const dueDate = new Date(payment.dueDate);
-      if (dueDate >= todayEnd) return true;
-      if (dueDate >= todayStart && dueDate < todayEnd && !isPaymentPaid(payment)) return true;
+      const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
+      if (dueDateUTC >= todayEndUTC) return true;
+      if (dueDateUTC >= todayStartUTC && dueDateUTC < todayEndUTC && !isPaymentPaid(payment)) return true;
       return false;
     })
     .map(mapPayment);
@@ -257,8 +259,9 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
   const pastPayments = booking.rentPayments
     .filter((payment: any) => {
       const dueDate = new Date(payment.dueDate);
-      if (dueDate < todayStart) return true;
-      if (dueDate >= todayStart && dueDate < todayEnd && isPaymentPaid(payment)) return true;
+      const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
+      if (dueDateUTC < todayStartUTC) return true;
+      if (dueDateUTC >= todayStartUTC && dueDateUTC < todayEndUTC && isPaymentPaid(payment)) return true;
       return false;
     })
     .reverse()

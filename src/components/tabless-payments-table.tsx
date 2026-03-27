@@ -97,13 +97,8 @@ export const TablessPaymentsTable = ({
 
   // Combine and sort all payments chronologically by due date
   const allPayments = useMemo(() => {
-    const parseDate = (dateStr: string): Date => {
-      const [month, day, year] = dateStr.split('/').map(Number);
-      return new Date(year, month - 1, day);
-    };
-
     const combined = [...paymentsData.upcoming, ...paymentsData.past];
-    return combined.sort((a, b) => parseDate(a.dueDate).getTime() - parseDate(b.dueDate).getTime());
+    return combined.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
   }, [paymentsData]);
 
   // Column headers with responsive visibility classes
