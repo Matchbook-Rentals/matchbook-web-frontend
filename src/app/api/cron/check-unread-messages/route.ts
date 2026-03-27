@@ -111,6 +111,7 @@ export async function GET(request: Request) {
             participants: {
               select: {
                 userId: true,
+                role: true,
               },
             },
             listing: {
@@ -147,6 +148,7 @@ export async function GET(request: Request) {
       senderId: string; // The sender (should be same for all messages in group)
       senderName: string;
       listingTitle: string;
+      url: string;
     };
 
     const messageGroups = new Map<string, MessageGroup>();
@@ -171,6 +173,11 @@ export async function GET(request: Request) {
           continue; // Don't notify the sender
         }
 
+        const isHost = participant.role === 'Host';
+        const messageUrl = isHost
+          ? `/app/host/messages?convo=${message.conversation.id}`
+          : `/app/rent/messages?convo=${message.conversation.id}`;
+
         const groupKey = `${message.conversation.id}:${participant.userId}`;
 
         if (!messageGroups.has(groupKey)) {
@@ -181,6 +188,7 @@ export async function GET(request: Request) {
             senderId: message.senderId,
             senderName: senderName,
             listingTitle: listingTitle,
+            url: messageUrl,
           });
         }
 
@@ -236,7 +244,7 @@ export async function GET(request: Request) {
         actionType: actionType,
         actionId: isNewConversation ? group.conversationId : group.messages[0].id,
         content: content,
-        url: `/app/rent/messages?convo=${group.conversationId}`,
+        url: group.url,
         senderName: group.senderName,
         conversationId: group.conversationId,
         listingTitle: group.listingTitle,
