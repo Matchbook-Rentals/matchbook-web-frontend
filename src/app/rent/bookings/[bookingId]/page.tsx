@@ -8,6 +8,7 @@ import PropertyDetailsSection from "./property-details-section";
 import MapPlaceholder from "./map-placeholder";
 import { TablessPaymentsTable } from "@/components/tabless-payments-table";
 import RenterNavbar from "@/components/renter-navbar";
+import { checkRole } from "@/utils/roles";
 
 interface BookingDetailsPageProps {
   params: {
@@ -269,6 +270,40 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
 
   const paymentsData = { upcoming: upcomingPayments, past: pastPayments };
 
+  // Show debug panel for (admin_dev & IS_STAGING) || development
+  const isDev = process.env.NODE_ENV === 'development';
+  const isAdminDev = await checkRole('admin_dev');
+  const isStaging = process.env.IS_STAGING === 'true';
+  const showDebug = isDev || (isAdminDev && isStaging);
+
+  // Debug info for payment status calculations
+  const debugNow = new Date();
+  const debugTodayUTC = Date.UTC(debugNow.getUTCFullYear(), debugNow.getUTCMonth(), debugNow.getUTCDate());
+  const debugInfo = booking.rentPayments.map((payment: any) => {
+    const dueDate = new Date(payment.dueDate);
+    const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
+    const diffMs = dueDateUTC - debugTodayUTC;
+    const diffDays = diffMs / (24 * 60 * 60 * 1000);
+    return {
+      paymentId: payment.id,
+      rawDueDate: payment.dueDate?.toISOString?.() ?? String(payment.dueDate),
+      dueDateUTC: new Date(dueDateUTC).toISOString(),
+      todayUTC: new Date(debugTodayUTC).toISOString(),
+      diffMs,
+      diffDays: diffDays.toFixed(1),
+      isOverdue: dueDateUTC < debugTodayUTC,
+      isDueToday: dueDateUTC === debugTodayUTC,
+      isScheduled: dueDateUTC > debugTodayUTC,
+      computedStatus: getPaymentStatus(payment),
+      isPaid: payment.isPaid,
+      dbStatus: payment.status ?? 'null',
+      type: payment.type ?? 'unknown',
+      note: payment.isPaid && payment.status === 'PENDING'
+        ? 'isPaid=true overrides DB status PENDING → shows as Paid'
+        : payment.status === 'PENDING' ? 'DB status PENDING is not a terminal state — falls through to date-based logic' : '',
+    };
+  });
+
   const leaseDocumentId = booking.match?.leaseDocumentId ?? null;
 
   const propertyData = {
@@ -323,6 +358,29 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
           />
         </div>
       </div>
+
+      {showDebug && (
+        <div className="mx-6 my-4 p-4 bg-yellow-50 border border-yellow-300 rounded text-xs font-mono overflow-auto max-h-96">
+          <h3 className="font-bold text-sm mb-2">DEBUG: Payment Status Calculations</h3>
+          <p className="mb-2">Server TZ: {Intl.DateTimeFormat().resolvedOptions().timeZone} | Server now: {debugNow.toISOString()} | Today UTC midnight: {new Date(debugTodayUTC).toISOString()}</p>
+          {debugInfo.map((d: any) => (
+            <div key={d.paymentId} className="mb-3 p-2 bg-white border rounded">
+              <div><strong>Payment:</strong> {d.paymentId.slice(0, 8)}... | <strong>Type:</strong> {d.type}</div>
+              <div><strong>DB status:</strong> {d.dbStatus} | <strong>isPaid:</strong> {String(d.isPaid)}</div>
+              <div><strong>Raw dueDate:</strong> {d.rawDueDate}</div>
+              <div><strong>dueDateUTC:</strong> {d.dueDateUTC} | <strong>todayUTC:</strong> {d.todayUTC}</div>
+              <div><strong>Diff:</strong> {d.diffMs}ms = <strong>{d.diffDays} days</strong></div>
+              <div>
+                <strong>isOverdue (before today):</strong> <span className={d.isOverdue ? 'text-red-600 font-bold' : 'text-green-600'}>{String(d.isOverdue)}</span> |{' '}
+                <strong>isDueToday (exact match):</strong> <span className={d.isDueToday ? 'text-yellow-600 font-bold' : ''}>{String(d.isDueToday)}</span> |{' '}
+                <strong>isScheduled (future):</strong> {String(d.isScheduled)}
+              </div>
+              <div><strong>Computed status:</strong> <span className="font-bold text-base">{d.computedStatus}</span></div>
+              {d.note && <div className="text-blue-600 italic">{d.note}</div>}
+            </div>
+          ))}
+        </div>
+      )}
 
       <div className="px-6 py-8">
         <TablessPaymentsTable
