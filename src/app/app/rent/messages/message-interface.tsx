@@ -103,11 +103,14 @@ const addMessageToConversation = (
   conversationId: string,
   message: any
 ) => {
-  return allConversations.map((conv) =>
-    conv.id === conversationId
-      ? { ...conv, messages: [...conv.messages, message] }
-      : conv
-  );
+  return allConversations.map((conv) => {
+    if (conv.id !== conversationId) return conv;
+    // Deduplicate: skip if a message with the same id already exists
+    if (message.id && conv.messages.some((m: any) => m.id === message.id)) {
+      return conv;
+    }
+    return { ...conv, messages: [...conv.messages, message] };
+  });
 };
 
 /**
