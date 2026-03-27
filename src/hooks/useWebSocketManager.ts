@@ -106,6 +106,17 @@ export const useWebSocketManager = ({
   const currentRetryCount = useRef(0);
   const [errorLogs, setErrorLogs] = useState<ErrorLogEntry[]>([]);
 
+  // Store callbacks in refs to avoid triggering reconnections on every render
+  const onMessageReceivedRef = useRef(onMessageReceived);
+  const onTypingReceivedRef = useRef(onTypingReceived);
+  const onReadReceiptReceivedRef = useRef(onReadReceiptReceived);
+  const onConnectionStatusChangeRef = useRef(onConnectionStatusChange);
+
+  useEffect(() => { onMessageReceivedRef.current = onMessageReceived; }, [onMessageReceived]);
+  useEffect(() => { onTypingReceivedRef.current = onTypingReceived; }, [onTypingReceived]);
+  useEffect(() => { onReadReceiptReceivedRef.current = onReadReceiptReceived; }, [onReadReceiptReceived]);
+  useEffect(() => { onConnectionStatusChangeRef.current = onConnectionStatusChange; }, [onConnectionStatusChange]);
+
   const addErrorLog = useCallback((type: ErrorLogEntry['type'], message: string, details?: any) => {
     const entry: ErrorLogEntry = {
       timestamp: new Date().toISOString(),
@@ -129,8 +140,8 @@ export const useWebSocketManager = ({
     setIsConnected(connected);
     circuitOpenRef.current = circuitOpen; // Keep internal ref in sync
     setIsCircuitOpenState(circuitOpen);
-    onConnectionStatusChange?.({ isConnected: connected, circuitOpen: circuitOpen });
-  }, [onConnectionStatusChange]);
+    onConnectionStatusChangeRef.current?.({ isConnected: connected, circuitOpen: circuitOpen });
+  }, []);
 
 
   const resetCircuitBreaker = useCallback(() => {
@@ -278,23 +289,23 @@ export const useWebSocketManager = ({
             socket.on('message', (data: any) => {
                 const dataType = data && typeof data.type !== 'undefined' ? data.type : 'N/A';
                 logger.ws('Message received', { dataType, data });
-                onMessageReceived(data);
+                onMessageReceivedRef.current(data);
             });
 
             socket.on('file', (data: any) => {
                 const dataType = data && typeof data.type !== 'undefined' ? data.type : 'N/A';
                 logger.ws('Message received', { dataType, data });
-                onMessageReceived(data);
+                onMessageReceivedRef.current(data);
             });
 
             socket.on('typing', (data) => {
                 logger.ws('Typing event received', data);
-                onTypingReceived(data);
+                onTypingReceivedRef.current(data);
             });
 
             socket.on('read_receipt', (data) => {
                 logger.ws('Read receipt received', data);
-                onReadReceiptReceived(data);
+                onReadReceiptReceivedRef.current(data);
             });
 
             // For testing, useful to log these
@@ -337,7 +348,6 @@ export const useWebSocketManager = ({
     }, retryCount === 0 ? 0 : jitteredDelay); // No delay for the very first attempt if retryCount is 0
   }, [
     socketUrl, userId, MAX_RETRIES, INITIAL_DELAY, MAX_DELAY,
-    onMessageReceived, onTypingReceived, onReadReceiptReceived,
     updateStatus, checkCircuitBreaker, resetCircuitBreaker, addErrorLog
   ]);
 

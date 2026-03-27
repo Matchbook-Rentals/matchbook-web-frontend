@@ -27,6 +27,7 @@ console.log('REDIS_PORT:', process.env.REDIS_PORT || `(not set, using default ${
 console.log('REDIS_PASSWORD:', process.env.REDIS_PASSWORD ? '(set)' : '(not set)');
 console.log('REDIS_MESSAGE_TTL_SECONDS:', process.env.REDIS_MESSAGE_TTL_SECONDS || `(not set, using default ${REDIS_MESSAGE_TTL_SECONDS})`);
 console.log('NODE_ENV:', process.env.NODE_ENV || '(not set)');
+console.log('NEXT_PUBLIC_URL:', process.env.NEXT_PUBLIC_URL || '(not set, using default http://localhost:3000)');
 console.log('NEXT_PUBLIC_SOCKET_IO_URL:', process.env.NEXT_PUBLIC_GO_SERVER_URL || '(not set)');
 
 // Create Express app and HTTP server
