@@ -219,7 +219,6 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
 
             content.innerHTML = `
               <h2 class="text-xl font-bold mb-4">Email Notification Settings</h2>
-              ${!isAdminDev ? '<p class="text-sm text-gray-600 mb-4">Notification preferences will be available soon.</p>' : ''}
               <div id="loading-state" class="text-center py-4">
                 <div class="flex justify-center">
                   <svg class="animate-spin h-8 w-8 text-blue-600" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -230,58 +229,17 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                 <p class="text-sm text-gray-500 mt-2">Loading preferences...</p>
               </div>
               <div id="notification-settings" class="space-y-6 hidden">
-                ${isAdminDev ? `
-                  <div class="space-y-3">
-                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Messages & Communication</h3>
-                    ${toggleHTML('emailNewMessageNotifications', 'New Message', 'Get notified when you receive new messages')}
-                    ${toggleHTML('emailNewConversationNotifications', 'New Conversation', 'Get notified when someone starts a conversation with you')}
-                  </div>
-
-                  <div class="space-y-3">
-                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Applications & Matching</h3>
-                    ${toggleHTML('emailApplicationReceivedNotifications', 'Application Received', 'Get notified when you receive a new application (hosts)')}
-                    ${toggleHTML('emailApplicationApprovedNotifications', 'Application Approved', 'Get notified when your application is approved')}
-                    ${toggleHTML('emailApplicationDeclinedNotifications', 'Application Declined', 'Get notified when your application is declined')}
-                  </div>
-
-                  <div class="space-y-3">
-                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Bookings & Stays</h3>
-                    ${toggleHTML('emailBookingCompletedNotifications', 'Booking Completed', 'Get notified when a booking is completed')}
-                    ${toggleHTML('emailBookingCanceledNotifications', 'Booking Canceled', 'Get notified when a booking is canceled')}
-                    ${toggleHTML('emailMoveInUpcomingNotifications', 'Move-In Upcoming', 'Get notified about upcoming move-in dates')}
-                    ${toggleHTML('emailMoveOutUpcomingNotifications', 'Move-Out Upcoming', 'Get notified about upcoming move-out dates')}
-                  </div>
-
-                  <div class="space-y-3">
-                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Payments</h3>
-                    ${toggleHTML('emailPaymentSuccessNotifications', 'Payment Success', 'Get notified when payments are successful')}
-                    ${toggleHTML('emailPaymentFailedNotifications', 'Payment Failed', 'Get notified when payments fail')}
-                  </div>
-
-                  <div class="space-y-3">
-                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Reviews & Verification</h3>
-                    ${toggleHTML('emailSubmitHostReviewNotifications', 'Host Review Prompt', 'Get reminded to review your guests')}
-                    ${toggleHTML('emailSubmitRenterReviewNotifications', 'Renter Review Prompt', 'Get reminded to review your host')}
-                    ${toggleHTML('emailLandlordInfoRequestNotifications', 'Landlord Info Request', 'Get notified about landlord info requests')}
-                    ${toggleHTML('emailVerificationCompletedNotifications', 'Verification Completed', 'Get notified when verification is complete')}
-                  </div>
-
-                  <div class="space-y-3">
-                    <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">External Communications</h3>
-                    ${toggleHTML('emailOffPlatformHostNotifications', 'Off Platform Host', 'Get notified about off-platform host communications')}
-                  </div>
-                ` : ''}
+                <div class="space-y-3">
+                  <h3 class="text-md font-semibold text-gray-900 border-b border-gray-200 pb-2">Messages & Communication</h3>
+                  ${toggleHTML('emailNewMessageNotifications', 'New Message', 'Get notified when you receive new messages')}
+                  ${toggleHTML('emailNewConversationNotifications', 'New Conversation', 'Get notified when someone starts a conversation with you')}
+                </div>
               </div>
               <div id="error-state" class="text-center py-4 hidden">
                 <p class="text-sm text-red-500">Failed to load notification preferences. Please try again.</p>
               </div>
             `;
             el.appendChild(content);
-
-            if (!isAdminDev) {
-              content.querySelector('#loading-state')?.classList.add('hidden');
-              return;
-            }
 
             try {
               const response = await fetch('/api/user/notification-preferences');
