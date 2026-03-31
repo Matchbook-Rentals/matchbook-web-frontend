@@ -608,7 +608,7 @@ export default function SearchDateRange({
               {renderMonth(leftYear, leftMonth, leftGrid, true, true)}
             </div>
           </div>
-          {!hideFlexibility && renderFlexibilityBar()}
+          {/* {!hideFlexibility && renderFlexibilityBar()} */}
         </div>
       </div>
     );
@@ -661,7 +661,7 @@ export default function SearchDateRange({
           </div>
         </div>
 
-        {!hideFlexibility && renderFlexibilityBar()}
+        {/* {!hideFlexibility && renderFlexibilityBar()} */}
       </div>
     </div>
   );
