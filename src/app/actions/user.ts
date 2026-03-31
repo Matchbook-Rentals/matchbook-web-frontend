@@ -30,15 +30,44 @@ const hasIncompleteStripeSync = (user: {
   user.stripeDetailsSubmitted === null;
 
 /**
+ * Checks if Stripe data is stale (older than 24 hours or never checked)
+ */
+const isStripeDataStale = (lastChecked: Date | null | undefined): boolean => {
+  if (!lastChecked) return true;
+  const twentyFourHoursAgo = new Date(Date.now() - 24 * 60 * 60 * 1000);
+  return lastChecked < twentyFourHoursAgo;
+};
+
+/**
+ * Checks if the account has an active issue that warrants more frequent re-checks
+ */
+const hasActiveStripeIssue = (user: {
+  stripeAccountStatus?: string | null,
+  stripeChargesEnabled?: boolean | null,
+}) =>
+  user.stripeAccountStatus === 'restricted' ||
+  user.stripeAccountStatus === 'pending' ||
+  user.stripeAccountStatus === 'disabled' ||
+  user.stripeChargesEnabled === false;
+
+/**
  * Determines if we need to check Stripe API for current status
- * True when: user has Stripe account BUT status fields are null (race condition)
+ * - Always sync if status fields are null (never synced)
+ * - Re-check every page load if account has an active issue
+ * - Otherwise re-check if data is >24h old
  */
 const needsStripeSyncCheck = (user: {
   stripeAccountId: string | null,
   stripeChargesEnabled: boolean | null,
-  stripeDetailsSubmitted: boolean | null
+  stripeDetailsSubmitted: boolean | null,
+  stripeAccountStatus?: string | null,
+  stripeAccountLastChecked?: Date | null,
 }) =>
-  hasStripeHostAccount(user) && hasIncompleteStripeSync(user);
+  hasStripeHostAccount(user) && (
+    hasIncompleteStripeSync(user) ||
+    hasActiveStripeIssue(user) ||
+    isStripeDataStale(user.stripeAccountLastChecked)
+  );
 
 /**
  * Checks if Stripe API returned valid onboarding status data
@@ -67,6 +96,51 @@ async function fetchStripeAccountStatus(stripeAccountId: string) {
 }
 
 /**
+ * Derives account status from Stripe account data.
+ * Uses charges_enabled/payouts_enabled as functional indicators,
+ * and requirements to determine the specific issue.
+ */
+function deriveAccountStatus(stripeAccount: {
+  charges_enabled: boolean,
+  payouts_enabled: boolean,
+  requirements?: {
+    disabled_reason?: string | null,
+    past_due?: string[],
+    currently_due?: string[],
+    pending_verification?: string[],
+  } | null,
+}): string {
+  const { requirements } = stripeAccount;
+
+  // Terminal: account rejected by Stripe
+  if (requirements?.disabled_reason?.startsWith('rejected.')) {
+    return 'disabled';
+  }
+
+  // Account is fully disabled (can't charge or pay out)
+  if (!stripeAccount.charges_enabled && !stripeAccount.payouts_enabled) {
+    return 'disabled';
+  }
+
+  // Has overdue requirements — already restricted
+  if (requirements?.past_due && requirements.past_due.length > 0) {
+    return 'restricted';
+  }
+
+  // Has requirements due soon — will be restricted if not addressed
+  if (requirements?.currently_due && requirements.currently_due.length > 0) {
+    return 'pending';
+  }
+
+  // Stripe is reviewing submitted info — no user action needed
+  if (requirements?.pending_verification && requirements.pending_verification.length > 0) {
+    return 'pending';
+  }
+
+  return 'enabled';
+}
+
+/**
  * Updates user record with fresh Stripe onboarding status
  */
 async function updateUserWithStripeStatus(
@@ -74,17 +148,34 @@ async function updateUserWithStripeStatus(
   stripeAccount: {
     charges_enabled: boolean,
     payouts_enabled: boolean,
-    details_submitted: boolean
+    details_submitted: boolean,
+    requirements?: {
+      currently_due?: string[],
+      past_due?: string[],
+      eventually_due?: string[],
+      pending_verification?: string[],
+      disabled_reason?: string | null,
+    } | null,
   }
 ) {
   try {
+    const accountStatus = deriveAccountStatus(stripeAccount);
+    const requirementsDue = JSON.stringify({
+      currently_due: stripeAccount.requirements?.currently_due || [],
+      past_due: stripeAccount.requirements?.past_due || [],
+      eventually_due: stripeAccount.requirements?.eventually_due || [],
+      disabled_reason: stripeAccount.requirements?.disabled_reason || null,
+    });
+
     await prismadb.user.update({
       where: { id: userId },
       data: {
         stripeChargesEnabled: stripeAccount.charges_enabled,
         stripePayoutsEnabled: stripeAccount.payouts_enabled,
         stripeDetailsSubmitted: stripeAccount.details_submitted,
-        stripeAccountLastChecked: new Date()
+        stripeAccountStatus: accountStatus,
+        stripeRequirementsDue: requirementsDue,
+        stripeAccountLastChecked: new Date(),
       }
     });
 
@@ -92,13 +183,16 @@ async function updateUserWithStripeStatus(
       userId,
       chargesEnabled: stripeAccount.charges_enabled,
       payoutsEnabled: stripeAccount.payouts_enabled,
-      detailsSubmitted: stripeAccount.details_submitted
+      detailsSubmitted: stripeAccount.details_submitted,
+      accountStatus,
     });
 
     return {
       stripeChargesEnabled: stripeAccount.charges_enabled,
       stripePayoutsEnabled: stripeAccount.payouts_enabled,
-      stripeDetailsSubmitted: stripeAccount.details_submitted
+      stripeDetailsSubmitted: stripeAccount.details_submitted,
+      stripeAccountStatus: accountStatus,
+      stripeRequirementsDue: requirementsDue,
     };
   } catch (error) {
     logger.error('Failed to update user with Stripe status', {
@@ -119,9 +213,12 @@ async function syncStripeStatusIfNeeded(user: {
   stripeChargesEnabled: boolean | null,
   stripePayoutsEnabled: boolean | null,
   stripeDetailsSubmitted: boolean | null,
+  stripeAccountStatus?: string | null,
+  stripeRequirementsDue?: string | null,
+  stripeAccountLastChecked?: Date | null,
   agreedToHostTerms: Date | null,
   medallionIdentityVerified: boolean | null,
-  medallionVerificationStatus: string | null
+  medallionVerificationStatus: string | null,
 }) {
   // No sync needed if account doesn't exist or data is already present
   if (!needsStripeSyncCheck(user)) {
@@ -146,7 +243,8 @@ async function syncStripeStatusIfNeeded(user: {
     const updatedFields = await updateUserWithStripeStatus(user.id, {
       charges_enabled: stripeAccount.charges_enabled,
       payouts_enabled: stripeAccount.payouts_enabled,
-      details_submitted: stripeAccount.details_submitted
+      details_submitted: stripeAccount.details_submitted,
+      requirements: stripeAccount.requirements,
     });
 
     // Return user with updated fields if sync succeeded
@@ -188,6 +286,9 @@ export async function getHostUserData() {
         medallionVerificationStatus: true,
         stripeVerificationStatus: true,
         stripeVerificationSessionId: true,
+        stripeAccountStatus: true,
+        stripeRequirementsDue: true,
+        stripeAccountLastChecked: true,
       }
     });
 

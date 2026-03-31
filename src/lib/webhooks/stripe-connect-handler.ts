@@ -24,41 +24,50 @@ export async function handleAccountUpdated(event: AccountUpdatedEvent): Promise<
   console.log(`   payouts_enabled: ${account.payouts_enabled}`);
   console.log(`   requirements.currently_due: ${JSON.stringify(account.requirements?.currently_due || [])}`);
 
-  // Find the user with this Stripe account
-  const user = await prismadb.user.findFirst({
+  // Find all users with this Stripe account (multiple users may share one connected account)
+  const users = await prismadb.user.findMany({
     where: { stripeAccountId: accountId }
   });
 
-  if (user) {
-    // Determine account status
+  if (users.length > 0) {
+    // Determine account status using Stripe's recommended priority:
+    // 1. rejected.* = terminal, 2. both flags off = disabled,
+    // 3. past_due = restricted, 4. currently_due/pending_verification = pending
     let accountStatus = 'enabled';
-    if (account.requirements?.disabled_reason) {
+    if (account.requirements?.disabled_reason?.startsWith('rejected.')) {
+      accountStatus = 'disabled';
+    } else if (!account.charges_enabled && !account.payouts_enabled) {
       accountStatus = 'disabled';
     } else if (account.requirements?.past_due && account.requirements.past_due.length > 0) {
       accountStatus = 'restricted';
     } else if (account.requirements?.currently_due && account.requirements.currently_due.length > 0) {
       accountStatus = 'pending';
+    } else if (account.requirements?.pending_verification && account.requirements.pending_verification.length > 0) {
+      accountStatus = 'pending';
     }
 
-    // Update user with latest account information
-    await prismadb.user.update({
-      where: { id: user.id },
-      data: {
-        stripeChargesEnabled: account.charges_enabled,
-        stripePayoutsEnabled: account.payouts_enabled,
-        stripeDetailsSubmitted: account.details_submitted,
-        stripeAccountStatus: accountStatus,
-        stripeRequirementsDue: JSON.stringify({
-          currently_due: account.requirements?.currently_due || [],
-          past_due: account.requirements?.past_due || [],
-          eventually_due: account.requirements?.eventually_due || [],
-          disabled_reason: account.requirements?.disabled_reason || null
-        }),
-        stripeAccountLastChecked: new Date(),
-      },
+    const updateData = {
+      stripeChargesEnabled: account.charges_enabled,
+      stripePayoutsEnabled: account.payouts_enabled,
+      stripeDetailsSubmitted: account.details_submitted,
+      stripeAccountStatus: accountStatus,
+      stripeRequirementsDue: JSON.stringify({
+        currently_due: account.requirements?.currently_due || [],
+        past_due: account.requirements?.past_due || [],
+        eventually_due: account.requirements?.eventually_due || [],
+        disabled_reason: account.requirements?.disabled_reason || null
+      }),
+      stripeAccountLastChecked: new Date(),
+    };
+
+    // Update all users sharing this Stripe account
+    await prismadb.user.updateMany({
+      where: { stripeAccountId: accountId },
+      data: updateData,
     });
 
-    console.log(`✅ Updated user ${user.id} - status: ${accountStatus}`);
+    console.log(`✅ Updated ${users.length} user(s) for account ${accountId} - status: ${accountStatus}`);
+    const user = users[0];
 
     // Handle critical status changes
     if (!account.charges_enabled) {
