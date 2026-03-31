@@ -3,6 +3,7 @@
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
 import { getPaymentTypeLabel } from '@/lib/payment-display-helpers'
+import { processRentPaymentNow } from '@/lib/payment-processing'
 
 interface PaymentTableData {
   tenant: string;
@@ -284,5 +285,60 @@ export async function getListingPayments(listingId: string): Promise<{ paymentsD
         securityDeposits: '0.00'
       }
     };
+  }
+}
+
+/**
+ * Renter self-service: retry a failed, overdue, or due-today payment immediately.
+ */
+export async function retryPaymentNow(paymentId: string): Promise<{ success: boolean; status?: string; error?: string }> {
+  const { userId } = auth();
+  if (!userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  const payment = await prisma.rentPayment.findUnique({
+    where: { id: paymentId },
+    include: {
+      booking: { select: { userId: true } },
+    },
+  });
+
+  if (!payment) {
+    return { success: false, error: 'Payment not found' };
+  }
+
+  // Verify the current user owns this booking
+  if (payment.booking.userId !== userId) {
+    return { success: false, error: 'Unauthorized' };
+  }
+
+  // Check payment is retryable: FAILED, or PENDING with dueDate today or in the past
+  const isRetryable = (() => {
+    if (payment.status === 'FAILED') return true;
+    if (payment.status === 'PENDING' && !payment.isPaid) {
+      const now = new Date();
+      const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+      const dueDate = new Date(payment.dueDate);
+      const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
+      return dueDateUTC <= todayUTC; // Due today or overdue
+    }
+    return false;
+  })();
+
+  if (!isRetryable) {
+    return { success: false, error: 'This payment is not eligible for retry' };
+  }
+
+  if (!payment.stripePaymentMethodId) {
+    return { success: false, error: 'No payment method on file. Please add a payment method first.' };
+  }
+
+  try {
+    const result = await processRentPaymentNow(paymentId);
+    return { success: true, status: result.status };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Payment processing failed';
+    return { success: false, error: message };
   }
 }

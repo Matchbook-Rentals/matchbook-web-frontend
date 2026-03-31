@@ -1,8 +1,9 @@
 "use client";
 
-import { MoreVerticalIcon, PlusIcon } from "lucide-react";
+import { MoreVerticalIcon, PlusIcon, Loader2, CreditCard, Building2, Check } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
+import { retryPaymentNow } from "@/app/actions/payments";
 import {
   Avatar,
   AvatarFallback,
@@ -32,6 +33,8 @@ import {
 import PaymentModificationReviewModal from "@/components/PaymentModificationReviewModal";
 import { PaymentMethodsSection } from "@/components/payment-review/sections/PaymentMethodsSection";
 import { AddPaymentMethodInline } from "@/components/stripe/add-payment-method-inline";
+import BrandModal from "@/components/BrandModal";
+import { BrandButton } from "@/components/ui/brandButton";
 
 interface RentPaymentData {
   amount: string;
@@ -94,12 +97,21 @@ export const TablessPaymentsTable = ({
   const [refreshKey, setRefreshKey] = useState(0);
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState('');
   const [showAddPaymentForm, setShowAddPaymentForm] = useState(false);
+  const [payingNowId, setPayingNowId] = useState<string | null>(null);
+  const [confirmPayment, setConfirmPayment] = useState<RentPaymentData | null>(null);
+  const [assignMethodPayment, setAssignMethodPayment] = useState<RentPaymentData | null>(null);
+  const [assigningMethodId, setAssigningMethodId] = useState<string | null>(null);
+  const [showInlineAdd, setShowInlineAdd] = useState(false);
+  // Local overrides for payment method display after assignment (avoids full refresh)
+  const [methodOverrides, setMethodOverrides] = useState<Record<string, { method: string; bank: string }>>({});
 
   // Combine and sort all payments chronologically by due date
   const allPayments = useMemo(() => {
     const combined = [...paymentsData.upcoming, ...paymentsData.past];
-    return combined.sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime());
-  }, [paymentsData]);
+    return combined
+      .sort((a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime())
+      .map((p) => methodOverrides[p.paymentId] ? { ...p, ...methodOverrides[p.paymentId] } : p);
+  }, [paymentsData, methodOverrides]);
 
   // Column headers with responsive visibility classes
   const headers = [
@@ -211,15 +223,39 @@ export const TablessPaymentsTable = ({
                         View Modification
                       </Button>
                     )}
-                    <Button
-                      variant="ghost"
-                      className="w-full justify-start text-sm"
-                      onClick={() => {
-                        router.push(`/app/rent/bookings/${bookingId}/payments/${row.paymentId}/change-method`);
-                      }}
-                    >
-                      Change Payment Method
-                    </Button>
+                    {row.method === 'Not Set' ? (
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start text-sm"
+                        onClick={() => {
+                          setAssignMethodPayment(row);
+                          setShowInlineAdd(false);
+                        }}
+                      >
+                        Add Payment Method
+                      </Button>
+                    ) : (
+                      <>
+                        <Button
+                          variant="ghost"
+                          className="w-full justify-start text-sm"
+                          onClick={() => {
+                            router.push(`/app/rent/bookings/${bookingId}/payments/${row.paymentId}/change-method`);
+                          }}
+                        >
+                          Change Payment Method
+                        </Button>
+                        {(row.status === 'Failed' || row.status === 'Overdue' || row.status === 'Due') && (
+                          <Button
+                            variant="ghost"
+                            className="w-full justify-start text-sm"
+                            onClick={() => setConfirmPayment(row)}
+                          >
+                            Pay Now
+                          </Button>
+                        )}
+                      </>
+                    )}
                   </PopoverContent>
                 </Popover>
               </TableCell>
@@ -234,7 +270,7 @@ export const TablessPaymentsTable = ({
     setIsModalOpen(false);
     setSelectedModification(null);
     setRefreshKey(prev => prev + 1);
-    window.location.reload();
+    router.refresh();
   };
 
   const handleSelectPaymentMethod = (methodId: string, methodType: 'card' | 'bank') => {
@@ -333,6 +369,169 @@ export const TablessPaymentsTable = ({
           onModificationProcessed={handleModificationProcessed}
         />
       )}
+
+      <BrandModal
+        isOpen={!!confirmPayment}
+        onOpenChange={(open) => { if (!open) setConfirmPayment(null); }}
+        className="max-w-md"
+      >
+        {confirmPayment && (
+          <div className="p-6 flex flex-col gap-4">
+            <h2 className="font-['Poppins'] font-semibold text-lg text-[#0D1B2A]">Confirm Payment</h2>
+            <div className="text-sm text-gray-600 space-y-2">
+              <div className="flex justify-between">
+                <span>Amount</span>
+                <span className="font-medium text-[#0D1B2A]">${confirmPayment.amount}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Type</span>
+                <span className="font-medium text-[#0D1B2A]">{confirmPayment.type}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Due Date</span>
+                <span className="font-medium text-[#0D1B2A]">{confirmPayment.dueDate}</span>
+              </div>
+              <div className="flex justify-between">
+                <span>Payment Method</span>
+                <span className="font-medium text-[#0D1B2A]">{confirmPayment.bank}</span>
+              </div>
+            </div>
+            <div className="flex gap-3 mt-2">
+              <Button
+                variant="outline"
+                className="flex-1"
+                disabled={!!payingNowId}
+                onClick={() => setConfirmPayment(null)}
+              >
+                Cancel
+              </Button>
+              <BrandButton
+                className="flex-1"
+                disabled={!!payingNowId}
+                onClick={async () => {
+                  setPayingNowId(confirmPayment.paymentId);
+                  const result = await retryPaymentNow(confirmPayment.paymentId);
+                  setPayingNowId(null);
+                  if (result.success) {
+                    setConfirmPayment(null);
+                    router.refresh();
+                  } else {
+                    alert(result.error || 'Payment failed');
+                  }
+                }}
+              >
+                {payingNowId ? (
+                  <><Loader2 className="w-4 h-4 mr-2 animate-spin" />Processing...</>
+                ) : (
+                  'Pay Now'
+                )}
+              </BrandButton>
+            </div>
+          </div>
+        )}
+      </BrandModal>
+
+      <BrandModal
+        isOpen={!!assignMethodPayment}
+        onOpenChange={(open) => { if (!open) { setAssignMethodPayment(null); setShowInlineAdd(false); } }}
+        className="max-w-md"
+      >
+        {assignMethodPayment && (
+          <div className="p-6 flex flex-col gap-4">
+            <h2 className="font-['Poppins'] font-semibold text-lg text-[#0D1B2A]">Select Payment Method</h2>
+            <p className="text-sm text-gray-500">
+              Choose a payment method for your ${assignMethodPayment.amount} {assignMethodPayment.type.toLowerCase()} payment due {assignMethodPayment.dueDate}.
+            </p>
+
+            {initialPaymentMethods && initialPaymentMethods.length > 0 && (
+              <div className="flex flex-col gap-2">
+                {initialPaymentMethods.map((pm) => (
+                  <button
+                    key={pm.id}
+                    disabled={!!assigningMethodId}
+                    className="flex items-center gap-3 p-3 rounded-lg border border-gray-200 hover:border-[#0b6969] hover:bg-[#e7f0f0]/30 transition-colors text-left"
+                    onClick={async () => {
+                      setAssigningMethodId(pm.id);
+                      try {
+                        const res = await fetch(`/api/rent-payments/${assignMethodPayment.paymentId}/update-payment-method`, {
+                          method: 'POST',
+                          headers: { 'Content-Type': 'application/json' },
+                          body: JSON.stringify({ paymentMethodId: pm.id }),
+                        });
+                        if (!res.ok) throw new Error('Failed to update');
+                        // Update locally — show the new method immediately
+                        const bankLabel = pm.type === 'card'
+                          ? `${pm.brand?.charAt(0).toUpperCase()}${pm.brand?.slice(1)} ••••${pm.lastFour}`
+                          : pm.bankName || `Bank ••••${pm.lastFour}`;
+                        setMethodOverrides((prev) => ({
+                          ...prev,
+                          [assignMethodPayment.paymentId]: {
+                            method: pm.type === 'card' ? 'Card' : 'ACH Transfer',
+                            bank: bankLabel,
+                          },
+                        }));
+                        setAssignMethodPayment(null);
+                      } catch {
+                        alert('Failed to assign payment method. Please try again.');
+                      } finally {
+                        setAssigningMethodId(null);
+                      }
+                    }}
+                  >
+                    {assigningMethodId === pm.id ? (
+                      <Loader2 className="w-5 h-5 text-[#0b6969] shrink-0 animate-spin" />
+                    ) : pm.type === 'card' ? (
+                      <CreditCard className="w-5 h-5 text-gray-600 shrink-0" />
+                    ) : (
+                      <Building2 className="w-5 h-5 text-gray-600 shrink-0" />
+                    )}
+                    <div className="flex flex-col">
+                      <span className="font-medium text-sm text-gray-800">
+                        {pm.type === 'card'
+                          ? `${pm.brand?.charAt(0).toUpperCase()}${pm.brand?.slice(1)} •••• ${pm.lastFour}`
+                          : pm.bankName || `Bank •••• ${pm.lastFour}`}
+                      </span>
+                      {pm.expiry && <span className="text-xs text-gray-500">Expires {pm.expiry}</span>}
+                    </div>
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {!showInlineAdd ? (
+              <Button
+                variant="ghost"
+                className="flex items-center gap-2 text-teal-600 hover:text-teal-700 h-auto p-0 font-normal"
+                onClick={() => setShowInlineAdd(true)}
+              >
+                <div className="w-5 h-5 rounded-full border-2 border-teal-600 flex items-center justify-center">
+                  <PlusIcon className="w-3.5 h-3.5" />
+                </div>
+                Add New Payment Method
+              </Button>
+            ) : (
+              <div className="min-h-[400px]">
+                <AddPaymentMethodInline
+                  onSuccess={() => {
+                    setShowInlineAdd(false);
+                    setAssignMethodPayment(null);
+                    router.refresh();
+                  }}
+                  onCancel={() => setShowInlineAdd(false)}
+                />
+              </div>
+            )}
+
+            <Button
+              variant="outline"
+              className="w-full mt-2"
+              onClick={() => { setAssignMethodPayment(null); setShowInlineAdd(false); }}
+            >
+              Cancel
+            </Button>
+          </div>
+        )}
+      </BrandModal>
     </>
   );
 };
