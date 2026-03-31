@@ -3,9 +3,9 @@ import { headers } from 'next/headers';
 import { WebhookEvent } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { logger } from '@/lib/logger';
-// Welcome notification imports — disabled until content is refreshed
-// import { createNotification } from '@/app/actions/notifications';
-// import { buildNotificationEmailData } from '@/lib/notification-builders';
+import { buildNotificationEmailData, getNotificationEmailSubject } from '@/lib/notification-email-config';
+import { generateEmailTemplateHtml } from '@/lib/email-template-html';
+import { emailQueueClient } from '@/lib/email-queue-client';
 import { generateReferralCode, findUserByReferralCode, createReferral } from '@/lib/referral';
 
 export async function POST(req: Request) {
@@ -161,8 +161,30 @@ export async function POST(req: Request) {
         }
       }
 
-      // Welcome notification disabled — content needs updating
-      // TODO: Re-enable once welcome notification is refreshed
+      // Send welcome email (no in-app notification — it doesn't link anywhere useful)
+      try {
+        const userEmail = email_addresses[0]?.email_address;
+        if (userEmail) {
+          const actionType = 'welcome_renter';
+          const emailData = buildNotificationEmailData(
+            actionType,
+            { content: 'Welcome to MatchBook!', url: '/' },
+            { firstName: first_name || null, verifiedAt: null }
+          );
+          const subject = getNotificationEmailSubject(actionType);
+          const html = generateEmailTemplateHtml(emailData);
+
+          const jobId = await emailQueueClient.enqueue({
+            to: userEmail,
+            subject,
+            html,
+            from: 'MatchBook Rentals <no-reply@matchbookrentals.com>',
+          });
+          console.log(`✅ [Clerk Webhook] Welcome email enqueued (jobId: ${jobId})`);
+        }
+      } catch (emailError) {
+        console.error('❌ [Clerk Webhook] Failed to send welcome email:', emailError);
+      }
     } catch (error) {
       console.error('❌ [Clerk Webhook] Error creating user:', error);
       console.error('   Error type:', error instanceof Error ? error.name : typeof error);

@@ -611,7 +611,7 @@ export function buildNotificationEmailData(
     
     // Format the email body with CEO message
     emailData.contentText = `Hi ${firstName},\n\nWe founded MatchBook out of a need for a reliable, and trustworthy way to find flexible rentals. Our teams' mission is to make renting as easy and seamless as possible. We truly hope you enjoy it!\n\n— Daniel Resner\nMatchBook CEO`;
-    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/rent/searches`;
+    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/`;
   }
 
   // Add special formatting for payment failed notifications
