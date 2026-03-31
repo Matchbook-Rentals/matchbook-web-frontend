@@ -2,7 +2,7 @@ import React from "react";
 import { getListingById } from '@/app/actions/listings';
 import { getHousingRequestsByListingId } from '@/app/actions/housing-requests';
 import { getBookingsByListingId } from '@/app/actions/bookings';
-import { notFound } from 'next/navigation';
+import { notFound, redirect } from 'next/navigation';
 import { HostSidebar } from "../components/host-sidebar";
 import { HostBreadcrumb } from "../components/host-breadcrumb";
 import {
@@ -38,6 +38,11 @@ async function ListingDataWrapper({ children, listingId }: { children: React.Rea
   } catch (error) {
     console.error('Error fetching current user:', error);
     user = null;
+  }
+
+  // Verify the current user owns this listing
+  if (!user || listing.userId !== user.id) {
+    redirect('/app/host/dashboard/overview');
   }
 
   // Create a serializable user object

@@ -22,7 +22,8 @@ import { getListingDisplayName } from "@/utils/listing-helpers";
 import { HostApplicationCard } from "../../components/host-application-card";
 import { calculateRent } from "@/lib/calculate-rent";
 import { OnboardingModal } from "@/components/onboarding-modal";
-import { isIdentityVerified } from "@/lib/verification-utils";
+import { StripeAccountModal } from "@/components/stripe-account-modal";
+import { isIdentityVerified, isHostAccountActive } from "@/lib/verification-utils";
 
 // Sample housing requests for when no real data exists
 const generateSampleHousingRequests = (listingId: string): RequestWithUser[] => [
@@ -310,6 +311,7 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const [useMockData, setUseMockData] = useState(false);
   const [showOnboardingModal, setShowOnboardingModal] = useState(false);
+  const [showStripeAccountModal, setShowStripeAccountModal] = useState(false);
   const isMobile = useIsMobile();
   const { user } = useUser();
   const isAdmin = user?.publicMetadata?.role === 'admin';
@@ -343,10 +345,16 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
   };
 
   const onboardingComplete = isOnboardingComplete(hostUserData);
+  const hostActive = isHostAccountActive(hostUserData);
 
   const handleViewApplicationDetails = async (applicationId: string) => {
     if (!onboardingComplete) {
       setShowOnboardingModal(true);
+      return;
+    }
+
+    if (!hostActive) {
+      setShowStripeAccountModal(true);
       return;
     }
 
@@ -483,6 +491,10 @@ const ApplicationsTab: React.FC<ApplicationsTabProps> = ({
         onClose={() => setShowOnboardingModal(false)}
         hostUserData={hostUserData}
         isAdminDev={isAdminDev}
+      />
+      <StripeAccountModal
+        isOpen={showStripeAccountModal}
+        onClose={() => setShowStripeAccountModal(false)}
       />
     </TabLayout>
   );

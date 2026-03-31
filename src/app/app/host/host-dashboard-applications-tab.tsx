@@ -19,6 +19,8 @@ import { useNavigationContent } from "./[listingId]/useNavigationContent";
 import { useUser } from "@clerk/nextjs";
 import HostApplicationCards from "./host-application-cards";
 import { calculateRent } from "@/lib/calculate-rent";
+import { StripeAccountModal } from "@/components/stripe-account-modal";
+import { isHostAccountActive } from "@/lib/verification-utils";
 
 // Base filter options
 const baseFilterOptions = [
@@ -300,6 +302,7 @@ export default function HostDashboardApplicationsTab({
   const [searchTerm, setSearchTerm] = useState("");
   const [loadingApplicationId, setLoadingApplicationId] = useState<string | null>(null);
   const [useMockData, setUseMockData] = useState(false);
+  const [showStripeAccountModal, setShowStripeAccountModal] = useState(false);
   const isMobile = useIsMobile();
   const { user } = useUser();
   const isAdmin = user?.publicMetadata?.role === 'admin';
@@ -321,7 +324,14 @@ export default function HostDashboardApplicationsTab({
     setLoadingApplicationId(null);
   }, [pathname]);
 
+  const hostActive = isHostAccountActive(hostUserData);
+
   const handleViewApplicationDetails = async (listingId: string, applicationId: string) => {
+    if (!hostActive) {
+      setShowStripeAccountModal(true);
+      return;
+    }
+
     try {
       setLoadingApplicationId(applicationId);
       
@@ -488,6 +498,10 @@ export default function HostDashboardApplicationsTab({
           isAdminDev={isAdminDev}
         />
       ) : null}
+      <StripeAccountModal
+        isOpen={showStripeAccountModal}
+        onClose={() => setShowStripeAccountModal(false)}
+      />
     </TabLayout>
   );
 }

@@ -6,7 +6,8 @@ import {
   Card,
   CardContent,
 } from "@/components/ui/card";
-import { isIdentityVerified } from "@/lib/verification-utils";
+import { isIdentityVerified, isHostOnboardingComplete } from "@/lib/verification-utils";
+export { isHostOnboardingComplete };
 import { loadStripe } from '@stripe/stripe-js';
 import { createStripeVerificationSession } from '@/app/actions/stripe-identity';
 import { useRouter } from "next/navigation";
@@ -25,6 +26,8 @@ export interface HostUserData {
   medallionIdentityVerified: boolean | null;
   medallionVerificationStatus: string | null;
   stripeVerificationStatus: string | null;
+  stripeAccountStatus: string | null;
+  stripeRequirementsDue: string | null;
 }
 
 export interface OnboardingChecklistCardProps {
@@ -36,18 +39,6 @@ export interface OnboardingChecklistCardProps {
 }
 
 const FCRA_CONTENT_ENDPOINT = "/api/legal/fcra";
-
-// Utility function to check if host onboarding is complete
-export function isHostOnboardingComplete(hostUserData: HostUserData | null): boolean {
-  if (!hostUserData) return false;
-
-  const hasStripeAccount = !!hostUserData.stripeAccountId;
-  const stripeComplete = hostUserData.stripeChargesEnabled && hostUserData.stripeDetailsSubmitted;
-  const identityVerified = isIdentityVerified(hostUserData);
-  const fcraAcknowledged = !!hostUserData.agreedToHostTerms;
-
-  return hasStripeAccount && stripeComplete && identityVerified && fcraAcknowledged;
-}
 
 export const OnboardingChecklistCard = ({
   hostUserData,

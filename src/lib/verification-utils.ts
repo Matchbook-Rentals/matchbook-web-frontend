@@ -46,3 +46,81 @@ export interface UserWithVerification {
   medallionIdentityVerified?: boolean | null;
   stripeVerificationStatus?: string | null;
 }
+
+// ============================================================================
+// Host Onboarding
+// ============================================================================
+
+export const isHostOnboardingComplete = (hostUserData: {
+  stripeAccountId: string | null;
+  stripeChargesEnabled: boolean | null;
+  stripeDetailsSubmitted: boolean | null;
+  medallionIdentityVerified?: boolean | null;
+  stripeVerificationStatus?: string | null;
+  agreedToHostTerms: Date | null;
+} | null): boolean => {
+  if (!hostUserData) return false;
+
+  const hasStripeAccount = !!hostUserData.stripeAccountId;
+  const stripeComplete = hostUserData.stripeChargesEnabled && hostUserData.stripeDetailsSubmitted;
+  const identityVerified = isIdentityVerified(hostUserData);
+  const fcraAcknowledged = !!hostUserData.agreedToHostTerms;
+
+  return hasStripeAccount && !!stripeComplete && identityVerified && fcraAcknowledged;
+};
+
+// ============================================================================
+// Host Stripe Account Health
+// ============================================================================
+
+interface UserWithStripeAccount {
+  stripeAccountStatus?: string | null;
+  stripeChargesEnabled?: boolean | null;
+}
+
+export const isHostAccountActive = (user: UserWithStripeAccount | null): boolean => {
+  if (!user) return false;
+  if (user.stripeAccountStatus === null || user.stripeAccountStatus === undefined) {
+    return user.stripeChargesEnabled === true;
+  }
+  return user.stripeAccountStatus === 'enabled' && user.stripeChargesEnabled !== false;
+};
+
+export type AccountIssueSeverity = 'none' | 'warning' | 'critical';
+
+export interface HostAccountIssues {
+  isActive: boolean;
+  severity: AccountIssueSeverity;
+  status: string | null;
+  requirementsDue: {
+    currently_due: string[];
+    past_due: string[];
+    eventually_due: string[];
+    disabled_reason: string | null;
+  } | null;
+  disabledReason: string | null;
+}
+
+export const getHostAccountIssues = (user: UserWithStripeAccount & {
+  stripeRequirementsDue?: string | null;
+} | null): HostAccountIssues => {
+  const defaultResult: HostAccountIssues = {
+    isActive: true, severity: 'none', status: null, requirementsDue: null, disabledReason: null,
+  };
+  if (!user) return defaultResult;
+
+  const isActive = isHostAccountActive(user);
+  const status = user.stripeAccountStatus ?? null;
+
+  let requirementsDue: HostAccountIssues['requirementsDue'] = null;
+  if (user.stripeRequirementsDue) {
+    try { requirementsDue = JSON.parse(user.stripeRequirementsDue); } catch { requirementsDue = null; }
+  }
+
+  let severity: AccountIssueSeverity = 'none';
+  if (status === 'disabled' || status === 'restricted') severity = 'critical';
+  else if (status === 'pending') severity = 'warning';
+  else if (!isActive) severity = 'critical';
+
+  return { isActive, severity, status, requirementsDue, disabledReason: requirementsDue?.disabled_reason ?? null };
+};
