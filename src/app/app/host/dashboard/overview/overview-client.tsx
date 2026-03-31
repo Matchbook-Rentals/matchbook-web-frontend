@@ -32,6 +32,7 @@ import {
 } from "recharts";
 import { StatisticsCard } from "./statistics-card";
 import { OnboardingChecklistCard, HostUserData, isHostOnboardingComplete } from "../../components/onboarding-checklist-card";
+import { HostAccountBanner } from "../../components/host-account-banner";
 
 // Icon mapping for serializable icon names
 const iconMap = {
@@ -439,6 +440,7 @@ export default function OverviewClient({ cards, chartData, userFirstName, hostUs
   return (
     <div className="flex flex-col gap-6 p-6 bg-gray-50 h-full min-h-screen">
       <OverviewSection userFirstName={userFirstName} />
+      {hostUserData && <HostAccountBanner hostUserData={hostUserData} />}
       {shouldShowOnboardingChecklist && (
         <OnboardingChecklistCard hostUserData={hostUserData} isAdminDev={isAdminDev} />
       )}
