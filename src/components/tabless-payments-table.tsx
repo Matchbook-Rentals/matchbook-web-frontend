@@ -114,7 +114,8 @@ export const TablessPaymentsTable = ({
       const brand = pm.brand ? pm.brand.charAt(0).toUpperCase() + pm.brand.slice(1) : 'Card';
       return `${brand} ••••${pm.lastFour || '????'}`;
     }
-    return pm.bankName || `Bank ••••${pm.lastFour || '????'}`;
+    const bankName = pm.bankName || 'Bank';
+    return `${bankName} ••••${pm.lastFour || '????'}`;
   };
   // Local overrides for payment method display after assignment (avoids full refresh)
   const [methodOverrides, setMethodOverrides] = useState<Record<string, { method: string; bank: string; amount?: string; hasCardFee?: boolean; cardFeeAmountCents?: number }>>({});
@@ -254,7 +255,6 @@ export const TablessPaymentsTable = ({
                           className="w-full justify-start text-sm"
                           onClick={() => {
                             setAssignMethodPayment(row);
-                            setShowInlineAdd(false);
                           }}
                         >
                           Change Payment Method

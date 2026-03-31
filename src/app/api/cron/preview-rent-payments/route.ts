@@ -177,6 +177,7 @@ const generateReportData = (payments: any[], previewDate: Date) => {
   let totalFees = 0;
   let cardPayments = 0;
   let achPayments = 0;
+  let noMethodCount = 0;
   let issuesCount = 0;
   const paymentDetails: any[] = [];
   const issues: string[] = [];
@@ -225,6 +226,7 @@ const generateReportData = (payments: any[], previewDate: Date) => {
       const renterName = `${renter.firstName || ''} ${renter.lastName || ''}`.trim() || renter.email;
       issues.push(`⛔ WILL NOT PROCESS: Payment ${payment.id} ($${centsToDollars(baseAmount).toFixed(2)}) for ${renterName} - Missing payment method`);
       issuesCount++;
+      noMethodCount++;
       paymentMethodType = 'MISSING';
     }
 
@@ -258,6 +260,7 @@ const generateReportData = (payments: any[], previewDate: Date) => {
       paymentMethodType,
       bookingId: payment.bookingId,
       hasPaymentMethod: !!payment.stripePaymentMethodId,
+      stripePaymentMethodId: payment.stripePaymentMethodId || null,
       hostAccountReady: !!(host.stripeAccountId && host.stripeChargesEnabled),
       retryCount: payment.retryCount || 0,
     });
@@ -271,6 +274,7 @@ const generateReportData = (payments: any[], previewDate: Date) => {
     totalNetToHosts: totalAmount - totalFees,
     cardPayments,
     achPayments,
+    noMethodCount,
     issuesCount,
     paymentDetails,
     issues,
@@ -315,6 +319,20 @@ const generateEmailContent = (data: any) => {
             <div style="color: #6b7280;">Net to Hosts</div>
           </div>
         </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-top: 15px;">
+          <div style="background: white; padding: 12px; border-radius: 6px; border-left: 4px solid #6b7280;">
+            <div style="font-size: 18px; font-weight: bold; color: #374151;">${data.cardPayments}</div>
+            <div style="font-size: 12px; color: #6b7280;">Card Payments</div>
+          </div>
+          <div style="background: white; padding: 12px; border-radius: 6px; border-left: 4px solid #6b7280;">
+            <div style="font-size: 18px; font-weight: bold; color: #374151;">${data.achPayments}</div>
+            <div style="font-size: 12px; color: #6b7280;">ACH Payments</div>
+          </div>
+          <div style="background: white; padding: 12px; border-radius: 6px; border-left: 4px solid ${data.noMethodCount > 0 ? '#dc2626' : '#10b981'};">
+            <div style="font-size: 18px; font-weight: bold; color: ${data.noMethodCount > 0 ? '#dc2626' : '#10b981'};">${data.noMethodCount}</div>
+            <div style="font-size: 12px; color: #6b7280;">No Payment Method</div>
+          </div>
+        </div>
       </div>
   `;
 
@@ -343,6 +361,7 @@ const generateEmailContent = (data: any) => {
               <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; color: #374151; font-weight: 600;">Property</th>
               <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; color: #374151; font-weight: 600;">Renter</th>
               <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; color: #374151; font-weight: 600;">Host</th>
+              <th style="padding: 12px; text-align: left; border-bottom: 1px solid #e5e7eb; color: #374151; font-weight: 600;">Method</th>
               <th style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb; color: #374151; font-weight: 600;">Amount</th>
               <th style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb; color: #374151; font-weight: 600;">Fee</th>
               <th style="padding: 12px; text-align: right; border-bottom: 1px solid #e5e7eb; color: #374151; font-weight: 600;">Net</th>
@@ -371,6 +390,12 @@ const generateEmailContent = (data: any) => {
         <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;">
           <div style="font-weight: 500; color: #111827;">${payment.hostName}</div>
           <div style="font-size: 12px; color: #6b7280;">${payment.hostEmail}</div>
+        </td>
+        <td style="padding: 12px; border-bottom: 1px solid #e5e7eb;">
+          <span style="font-size: 12px; color: ${payment.hasPaymentMethod ? '#374151' : '#dc2626'}; font-weight: 500;">
+            ${payment.hasPaymentMethod ? payment.paymentMethodType : '⛔ MISSING'}
+          </span>
+          ${payment.stripePaymentMethodId ? `<div style="font-size: 11px; color: #9ca3af;">${payment.stripePaymentMethodId.slice(0, 15)}...</div>` : ''}
         </td>
         <td style="padding: 12px; border-bottom: 1px solid #e5e7eb; text-align: right; font-weight: 500; color: #111827;">
           ${formatCurrency(payment.amount)}
