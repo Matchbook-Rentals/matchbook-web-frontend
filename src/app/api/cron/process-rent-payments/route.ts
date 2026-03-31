@@ -430,6 +430,7 @@ const updatePaymentSuccess = async (payment: any, paymentIntent: any, platformFe
   await prisma.rentPayment.update({
     where: { id: payment.id },
     data: {
+      status: 'SUCCEEDED',
       isPaid: true,
       paymentCapturedAt: new Date(),
       stripePaymentIntentId: paymentIntent.id,
@@ -463,10 +464,11 @@ const updatePaymentSuccess = async (payment: any, paymentIntent: any, platformFe
  * Update payment record for processing status (ACH)
  */
 const updatePaymentProcessing = async (payment: any, paymentIntent: any, platformFeeAmount: number) => {
-  // Update rent payment - mark as processing
+  // Update rent payment - mark as processing (ACH takes 3-5 business days)
   await prisma.rentPayment.update({
     where: { id: payment.id },
     data: {
+      status: 'PROCESSING',
       paymentAuthorizedAt: new Date(),
       stripePaymentIntentId: paymentIntent.id,
       updatedAt: new Date(),

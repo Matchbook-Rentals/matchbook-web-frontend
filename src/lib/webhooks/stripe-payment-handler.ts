@@ -58,7 +58,7 @@ export async function handlePaymentIntentProcessing(event: PaymentIntentProcessi
     console.log(`✓ Rent payment ${rentPaymentId} marked as PROCESSING`);
   }
 
-  if (type === 'security_deposit_direct' && matchId) {
+  if ((type === 'security_deposit_direct' || type === 'lease_deposit_and_rent') && matchId) {
     console.log(`⏳ ACH payment processing for match ${matchId}`);
 
     const match = await prismadb.match.findUnique({
@@ -86,6 +86,20 @@ export async function handlePaymentIntentProcessing(event: PaymentIntentProcessi
             paymentStatus: 'processing',
           },
         });
+
+        // Mark deposit rent payment(s) as PROCESSING
+        const updated = await prismadb.rentPayment.updateMany({
+          where: {
+            bookingId: match.booking.id,
+            stripePaymentIntentId: paymentIntent.id,
+          },
+          data: {
+            status: 'PROCESSING',
+          },
+        });
+        if (updated.count > 0) {
+          console.log(`✓ ${updated.count} deposit payment(s) marked as PROCESSING for booking ${match.booking.id}`);
+        }
       }
 
       console.log(`✓ ACH payment marked as processing for match ${matchId}`);
@@ -262,6 +276,23 @@ export async function handlePaymentIntentSucceeded(event: PaymentIntentSucceeded
             paymentSettledAt: new Date(),
           },
         });
+      }
+
+      // Settle any PROCESSING deposit rent payments (ACH has cleared)
+      const settledDeposits = await prismadb.rentPayment.updateMany({
+        where: {
+          bookingId: booking.id,
+          stripePaymentIntentId: paymentIntent.id,
+          status: 'PROCESSING',
+        },
+        data: {
+          status: 'SUCCEEDED',
+          isPaid: true,
+          paymentCapturedAt: new Date(),
+        },
+      });
+      if (settledDeposits.count > 0) {
+        console.log(`✅ ${settledDeposits.count} deposit payment(s) settled for booking ${booking.id}`);
       }
 
       // Send success notification

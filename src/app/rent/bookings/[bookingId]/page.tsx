@@ -23,7 +23,8 @@ function formatDate(date: Date): string {
   return date.toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'short',
-    day: 'numeric'
+    day: 'numeric',
+    timeZone: 'UTC'
   });
 }
 
@@ -363,6 +364,13 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
         <div className="mx-6 my-4 p-4 bg-yellow-50 border border-yellow-300 rounded text-xs font-mono overflow-auto max-h-96">
           <h3 className="font-bold text-sm mb-2">DEBUG: Payment Status Calculations</h3>
           <p className="mb-2">Server TZ: {Intl.DateTimeFormat().resolvedOptions().timeZone} | Server now: {debugNow.toISOString()} | Today UTC midnight: {new Date(debugTodayUTC).toISOString()}</p>
+          <div className="mb-3 p-2 bg-blue-50 border border-blue-300 rounded">
+            <div><strong>Booking ID:</strong> {booking.id}</div>
+            <div><strong>Booking startDate:</strong> {booking.startDate?.toISOString()} | <strong>endDate:</strong> {booking.endDate?.toISOString()}</div>
+            <div><strong>Trip startDate:</strong> {booking.trip?.startDate?.toISOString()} | <strong>endDate:</strong> {booking.trip?.endDate?.toISOString()}</div>
+            <div><strong>Dates match trip?</strong> <span className={booking.startDate?.toISOString() === booking.trip?.startDate?.toISOString() ? 'text-green-600 font-bold' : 'text-red-600 font-bold'}>{booking.startDate?.toISOString() === booking.trip?.startDate?.toISOString() ? 'YES' : 'NO — MISMATCH'}</span></div>
+            <div><strong>Rent payments count:</strong> {booking.rentPayments.length}</div>
+          </div>
           {debugInfo.map((d: any) => (
             <div key={d.paymentId} className="mb-3 p-2 bg-white border rounded">
               <div><strong>Payment:</strong> {d.paymentId.slice(0, 8)}... | <strong>Type:</strong> {d.type}</div>

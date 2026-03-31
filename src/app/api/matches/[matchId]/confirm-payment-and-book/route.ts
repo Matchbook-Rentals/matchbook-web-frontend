@@ -82,6 +82,34 @@ export async function POST(
       }, { status: 400 });
     }
 
+    // Verify payment is captured (or processing for ACH)
+    const isACHProcessing = match.paymentStatus === 'processing' && match.stripePaymentIntentId;
+    if (!match.stripePaymentIntentId || (!match.paymentCapturedAt && !isACHProcessing)) {
+      console.log('❌ [Confirm Payment & Book] Payment not captured or processing');
+      return NextResponse.json({
+        error: 'Payment not confirmed. Please complete payment first.'
+      }, { status: 400 });
+    }
+
+    // Verify with Stripe that payment is successful
+    // ACH payments may be in 'processing' for 3-5 business days before succeeding
+    let isPaymentProcessing = false;
+    try {
+      const paymentIntent = await stripe.paymentIntents.retrieve(match.stripePaymentIntentId);
+      isPaymentProcessing = paymentIntent.status === 'processing';
+
+      // For ACH payments in 'processing' status, we still allow booking creation
+      if (paymentIntent.status !== 'succeeded' && paymentIntent.status !== 'processing') {
+        console.log('❌ [Confirm Payment & Book] Payment not acceptable:', paymentIntent.status);
+        return NextResponse.json({
+          error: `Payment not successful. Status: ${paymentIntent.status}`
+        }, { status: 400 });
+      }
+    } catch (stripeError) {
+      console.error('⚠️ [Confirm Payment & Book] Could not verify with Stripe:', stripeError);
+      // Continue anyway if we have paymentCapturedAt
+    }
+
     // Check if booking already exists
     if (match.booking) {
       console.log('✅ [Confirm Payment & Book] Booking already exists:', match.booking.id);
@@ -172,6 +200,8 @@ export async function POST(
           });
 
           // Create the deposit RentPayment
+          // Card (succeeded): mark as SUCCEEDED/isPaid immediately
+          // ACH (processing): mark as PROCESSING — webhook will upgrade to SUCCEEDED
           const depositPayment = await prisma.rentPayment.create({
             data: {
               bookingId: match.booking.id,
@@ -179,8 +209,9 @@ export async function POST(
               totalAmount: depositChargeBreakdown.totalAmount,
               baseAmount: depositChargeBreakdown.baseAmount,
               dueDate: new Date(),
-              isPaid: true,
-              paymentCapturedAt: match.paymentCapturedAt || new Date(),
+              isPaid: !isPaymentProcessing,
+              status: isPaymentProcessing ? 'PROCESSING' : 'SUCCEEDED',
+              paymentCapturedAt: isPaymentProcessing ? null : (match.paymentCapturedAt || new Date()),
               stripePaymentIntentId: match.stripePaymentIntentId,
               stripePaymentMethodId: match.stripePaymentMethodId,
               type: 'SECURITY_DEPOSIT'
@@ -259,30 +290,6 @@ export async function POST(
       });
     }
 
-    // Verify payment is captured
-    if (!match.paymentCapturedAt || !match.stripePaymentIntentId) {
-      console.log('❌ [Confirm Payment & Book] Payment not captured');
-      return NextResponse.json({ 
-        error: 'Payment not confirmed. Please complete payment first.' 
-      }, { status: 400 });
-    }
-
-    // Verify with Stripe that payment is successful (optional extra verification)
-    try {
-      const paymentIntent = await stripe.paymentIntents.retrieve(match.stripePaymentIntentId);
-      
-      // For ACH payments in 'processing' status, we still allow booking creation
-      if (paymentIntent.status !== 'succeeded' && paymentIntent.status !== 'processing') {
-        console.log('❌ [Confirm Payment & Book] Payment not acceptable:', paymentIntent.status);
-        return NextResponse.json({ 
-          error: `Payment not successful. Status: ${paymentIntent.status}` 
-        }, { status: 400 });
-      }
-    } catch (stripeError) {
-      console.error('⚠️ [Confirm Payment & Book] Could not verify with Stripe:', stripeError);
-      // Continue anyway if we have paymentCapturedAt
-    }
-
     // Verify lease is fully signed
     // TODO: We might bring back the lease signing requirement later
     // For now, we're allowing booking creation without requiring lease signatures
@@ -326,11 +333,11 @@ export async function POST(
           endDate: match.trip.endDate!,
           monthlyRent: match.monthlyRent,
           totalPrice: totalPrice,
-          status: 'confirmed'
+          status: 'confirmed',
         }
       });
 
-      console.log('✅ [Confirm Payment & Book] Booking created:', booking.id);
+      console.log('✅ [Confirm Payment & Book] Booking created:', booking.id, 'tripStart:', match.trip.startDate);
 
       // Create RentPayment for initial deposit payment (already paid)
       console.log('💰 [Confirm Payment & Book] Creating deposit payment record...');
@@ -355,16 +362,19 @@ export async function POST(
         chargeCount: depositChargeBreakdown.charges.length
       });
 
-      // Create the deposit RentPayment (already paid via processDirectPayment)
+      // Create the deposit RentPayment
+      // Card (succeeded): mark as SUCCEEDED/isPaid immediately
+      // ACH (processing): mark as PROCESSING — webhook will upgrade to SUCCEEDED when it settles
       const depositPayment = await tx.rentPayment.create({
         data: {
           bookingId: booking.id,
           amount: depositChargeBreakdown.totalAmount, // Legacy field
           totalAmount: depositChargeBreakdown.totalAmount,
           baseAmount: depositChargeBreakdown.baseAmount,
-          dueDate: new Date(), // Due immediately (already paid)
-          isPaid: true,
-          paymentCapturedAt: match.paymentCapturedAt || new Date(),
+          dueDate: new Date(),
+          isPaid: !isPaymentProcessing,
+          status: isPaymentProcessing ? 'PROCESSING' : 'SUCCEEDED',
+          paymentCapturedAt: isPaymentProcessing ? null : (match.paymentCapturedAt || new Date()),
           stripePaymentIntentId: match.stripePaymentIntentId,
           stripePaymentMethodId: match.stripePaymentMethodId,
           type: 'SECURITY_DEPOSIT'

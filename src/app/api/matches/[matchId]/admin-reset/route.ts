@@ -85,10 +85,10 @@ export async function POST(
     } else if (resetType === 'updateTripDates') {
       // Update trip dates (we'll update the trip separately)
       if (startDate !== undefined) {
-        tripUpdateData.startDate = new Date(startDate);
+        tripUpdateData.startDate = new Date(startDate + 'T05:00:00.000Z');
       }
       if (endDate !== undefined) {
-        tripUpdateData.endDate = new Date(endDate);
+        tripUpdateData.endDate = new Date(endDate + 'T05:00:00.000Z');
       }
       console.log(`🔄 ADMIN: Updating trip dates for match ${matchId} - startDate: ${startDate}, endDate: ${endDate}`);
     }
