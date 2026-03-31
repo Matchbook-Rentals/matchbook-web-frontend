@@ -1,9 +1,11 @@
 "use client";
 
-import { MoreVerticalIcon, PlusIcon, Loader2, CreditCard, Building2, Check } from "lucide-react";
+import { MoreVerticalIcon, PlusIcon, Loader2, CreditCard, Building2 } from "lucide-react";
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { retryPaymentNow } from "@/app/actions/payments";
+import { calculateCreditCardFee } from "@/lib/fee-constants";
+import { BrandCheckbox } from "@/app/brandCheckbox";
 import {
   Avatar,
   AvatarFallback,
@@ -45,6 +47,9 @@ interface RentPaymentData {
   dueDate: string;
   status: string;
   paymentId: string;
+  baseAmountCents?: number;
+  hasCardFee?: boolean;
+  cardFeeAmountCents?: number;
   hasPendingModification?: boolean;
   pendingModificationCount?: number;
   modificationData?: {
@@ -101,9 +106,18 @@ export const TablessPaymentsTable = ({
   const [confirmPayment, setConfirmPayment] = useState<RentPaymentData | null>(null);
   const [assignMethodPayment, setAssignMethodPayment] = useState<RentPaymentData | null>(null);
   const [assigningMethodId, setAssigningMethodId] = useState<string | null>(null);
-  const [showInlineAdd, setShowInlineAdd] = useState(false);
+  const [applyToAll, setApplyToAll] = useState(true);
+
+  // Build display label for a payment method from props
+  const buildMethodLabel = (pm: { type: string; brand?: string; lastFour?: string; bankName?: string }) => {
+    if (pm.type === 'card') {
+      const brand = pm.brand ? pm.brand.charAt(0).toUpperCase() + pm.brand.slice(1) : 'Card';
+      return `${brand} ••••${pm.lastFour || '????'}`;
+    }
+    return pm.bankName || `Bank ••••${pm.lastFour || '????'}`;
+  };
   // Local overrides for payment method display after assignment (avoids full refresh)
-  const [methodOverrides, setMethodOverrides] = useState<Record<string, { method: string; bank: string }>>({});
+  const [methodOverrides, setMethodOverrides] = useState<Record<string, { method: string; bank: string; amount?: string; hasCardFee?: boolean; cardFeeAmountCents?: number }>>({});
 
   // Combine and sort all payments chronologically by due date
   const allPayments = useMemo(() => {
@@ -229,7 +243,6 @@ export const TablessPaymentsTable = ({
                         className="w-full justify-start text-sm"
                         onClick={() => {
                           setAssignMethodPayment(row);
-                          setShowInlineAdd(false);
                         }}
                       >
                         Add Payment Method
@@ -240,7 +253,8 @@ export const TablessPaymentsTable = ({
                           variant="ghost"
                           className="w-full justify-start text-sm"
                           onClick={() => {
-                            router.push(`/app/rent/bookings/${bookingId}/payments/${row.paymentId}/change-method`);
+                            setAssignMethodPayment(row);
+                            setShowInlineAdd(false);
                           }}
                         >
                           Change Payment Method
@@ -433,7 +447,7 @@ export const TablessPaymentsTable = ({
 
       <BrandModal
         isOpen={!!assignMethodPayment}
-        onOpenChange={(open) => { if (!open) { setAssignMethodPayment(null); setShowInlineAdd(false); } }}
+        onOpenChange={(open) => { if (!open) setAssignMethodPayment(null); }}
         className="max-w-md"
       >
         {assignMethodPayment && (
@@ -456,21 +470,25 @@ export const TablessPaymentsTable = ({
                         const res = await fetch(`/api/rent-payments/${assignMethodPayment.paymentId}/update-payment-method`, {
                           method: 'POST',
                           headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({ paymentMethodId: pm.id }),
+                          body: JSON.stringify({ paymentMethodId: pm.id, applyToAll, bookingId }),
                         });
                         if (!res.ok) throw new Error('Failed to update');
-                        // Update locally — show the new method immediately
-                        const bankLabel = pm.type === 'card'
-                          ? `${pm.brand?.charAt(0).toUpperCase()}${pm.brand?.slice(1)} ••••${pm.lastFour}`
-                          : pm.bankName || `Bank ••••${pm.lastFour}`;
+                        const data = await res.json();
+                        const newAmount = data.payment?.totalAmount
+                          ? (data.payment.totalAmount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                          : undefined;
                         setMethodOverrides((prev) => ({
                           ...prev,
                           [assignMethodPayment.paymentId]: {
                             method: pm.type === 'card' ? 'Card' : 'ACH Transfer',
-                            bank: bankLabel,
+                            bank: buildMethodLabel(pm),
+                            amount: newAmount,
+                            hasCardFee: data.payment?.hasCardFee,
+                            cardFeeAmountCents: data.payment?.cardFeeAmount,
                           },
                         }));
                         setAssignMethodPayment(null);
+                        if (applyToAll) router.refresh();
                       } catch {
                         alert('Failed to assign payment method. Please try again.');
                       } finally {
@@ -485,47 +503,40 @@ export const TablessPaymentsTable = ({
                     ) : (
                       <Building2 className="w-5 h-5 text-gray-600 shrink-0" />
                     )}
-                    <div className="flex flex-col">
+                    <div className="flex flex-col flex-1">
                       <span className="font-medium text-sm text-gray-800">
-                        {pm.type === 'card'
-                          ? `${pm.brand?.charAt(0).toUpperCase()}${pm.brand?.slice(1)} •••• ${pm.lastFour}`
-                          : pm.bankName || `Bank •••• ${pm.lastFour}`}
+                        {buildMethodLabel(pm)}
                       </span>
                       {pm.expiry && <span className="text-xs text-gray-500">Expires {pm.expiry}</span>}
+                      {pm.type === 'card' && !assignMethodPayment.hasCardFee && assignMethodPayment.baseAmountCents && (
+                        <span className="text-xs text-amber-600 mt-0.5">
+                          +${(calculateCreditCardFee(assignMethodPayment.baseAmountCents / 100)).toFixed(2)} card fee
+                        </span>
+                      )}
+                      {pm.type !== 'card' && assignMethodPayment.hasCardFee && assignMethodPayment.cardFeeAmountCents && (
+                        <span className="text-xs text-green-600 mt-0.5">
+                          -${(assignMethodPayment.cardFeeAmountCents / 100).toFixed(2)} card fee removed
+                        </span>
+                      )}
                     </div>
                   </button>
                 ))}
               </div>
             )}
 
-            {!showInlineAdd ? (
-              <Button
-                variant="ghost"
-                className="flex items-center gap-2 text-teal-600 hover:text-teal-700 h-auto p-0 font-normal"
-                onClick={() => setShowInlineAdd(true)}
-              >
-                <div className="w-5 h-5 rounded-full border-2 border-teal-600 flex items-center justify-center">
-                  <PlusIcon className="w-3.5 h-3.5" />
-                </div>
-                Add New Payment Method
-              </Button>
-            ) : (
-              <div className="min-h-[400px]">
-                <AddPaymentMethodInline
-                  onSuccess={() => {
-                    setShowInlineAdd(false);
-                    setAssignMethodPayment(null);
-                    router.refresh();
-                  }}
-                  onCancel={() => setShowInlineAdd(false)}
-                />
-              </div>
-            )}
+            <div className="mt-1">
+              <BrandCheckbox
+                name="apply-to-all"
+                checked={applyToAll}
+                onChange={(e) => setApplyToAll(e.target.checked)}
+                label="Apply to all future payments"
+              />
+            </div>
 
             <Button
               variant="outline"
               className="w-full mt-2"
-              onClick={() => { setAssignMethodPayment(null); setShowInlineAdd(false); }}
+              onClick={() => setAssignMethodPayment(null)}
             >
               Cancel
             </Button>

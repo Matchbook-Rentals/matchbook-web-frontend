@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import prisma from "@/lib/prismadb";
 import stripe from "@/lib/stripe";
+import { FEES } from "@/lib/fee-constants";
 
 export async function POST(
   request: NextRequest,
@@ -16,7 +17,7 @@ export async function POST(
       );
     }
 
-    const { paymentMethodId } = await request.json();
+    const { paymentMethodId, applyToAll, bookingId } = await request.json();
 
     if (!paymentMethodId) {
       return NextResponse.json(
@@ -38,7 +39,8 @@ export async function POST(
           select: {
             userId: true
           }
-        }
+        },
+        charges: true,
       }
     });
 
@@ -72,19 +74,132 @@ export async function POST(
       );
     }
 
-    // Update the payment method for this rent payment
+    const isCard = paymentMethod.type === 'card';
+    const existingCardFee = rentPayment.charges.find(
+      (c) => c.category === 'CREDIT_CARD_FEE' && c.isApplied
+    );
+
+    // Calculate base amount (all applied charges except credit card fee)
+    const baseAmountCents = rentPayment.charges
+      .filter((c) => c.category !== 'CREDIT_CARD_FEE' && c.isApplied)
+      .reduce((sum, c) => sum + c.amount, 0) || Number(rentPayment.baseAmount || rentPayment.amount);
+
+    let newTotalAmount = baseAmountCents;
+    let cardFeeAmount = 0;
+
+    if (isCard && !existingCardFee) {
+      // Switching TO card — add credit card fee
+      const totalWithFee = baseAmountCents / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
+      cardFeeAmount = Math.round(totalWithFee - baseAmountCents);
+      newTotalAmount = baseAmountCents + cardFeeAmount;
+
+      await prisma.rentPaymentCharge.create({
+        data: {
+          rentPaymentId: params.paymentId,
+          category: 'CREDIT_CARD_FEE',
+          amount: cardFeeAmount,
+          isApplied: true,
+          metadata: {
+            rate: FEES.CREDIT_CARD_FEE.PERCENTAGE * 100,
+            baseAmount: baseAmountCents,
+            calculation: 'self_inclusive',
+          },
+        },
+      });
+    } else if (!isCard && existingCardFee) {
+      // Switching TO bank — remove credit card fee
+      await prisma.rentPaymentCharge.update({
+        where: { id: existingCardFee.id },
+        data: {
+          isApplied: false,
+          removedAt: new Date(),
+        },
+      });
+      newTotalAmount = baseAmountCents;
+    } else if (isCard && existingCardFee) {
+      // Card to card — fee stays, total unchanged
+      newTotalAmount = baseAmountCents + existingCardFee.amount;
+      cardFeeAmount = existingCardFee.amount;
+    }
+
+    // Update the payment method and recalculate totals
     const updatedPayment = await prisma.rentPayment.update({
-      where: {
-        id: params.paymentId
-      },
+      where: { id: params.paymentId },
       data: {
-        stripePaymentMethodId: paymentMethodId
-      }
+        stripePaymentMethodId: paymentMethodId,
+        totalAmount: newTotalAmount,
+        amount: newTotalAmount, // Legacy field
+      },
     });
+
+    // Apply to all future unpaid payments in this booking
+    let updatedFutureCount = 0;
+    if (applyToAll && bookingId) {
+      const futurePayments = await prisma.rentPayment.findMany({
+        where: {
+          bookingId,
+          id: { not: params.paymentId },
+          isPaid: false,
+          status: { in: ['PENDING', 'FAILED'] },
+        },
+        include: { charges: true },
+      });
+
+      for (const fp of futurePayments) {
+        const fpExistingCardFee = fp.charges.find(
+          (c) => c.category === 'CREDIT_CARD_FEE' && c.isApplied
+        );
+        const fpBaseAmount = fp.charges
+          .filter((c) => c.category !== 'CREDIT_CARD_FEE' && c.isApplied)
+          .reduce((sum, c) => sum + c.amount, 0) || Number(fp.baseAmount || fp.amount);
+
+        let fpNewTotal = fpBaseAmount;
+        if (isCard && !fpExistingCardFee) {
+          // Add card fee
+          const fpTotalWithFee = fpBaseAmount / (1 - FEES.CREDIT_CARD_FEE.PERCENTAGE);
+          const fpCardFee = Math.round(fpTotalWithFee - fpBaseAmount);
+          fpNewTotal = fpBaseAmount + fpCardFee;
+          await prisma.rentPaymentCharge.create({
+            data: {
+              rentPaymentId: fp.id,
+              category: 'CREDIT_CARD_FEE',
+              amount: fpCardFee,
+              isApplied: true,
+              metadata: { rate: FEES.CREDIT_CARD_FEE.PERCENTAGE * 100, baseAmount: fpBaseAmount, calculation: 'self_inclusive' },
+            },
+          });
+        } else if (!isCard && fpExistingCardFee) {
+          // Remove card fee
+          await prisma.rentPaymentCharge.update({
+            where: { id: fpExistingCardFee.id },
+            data: { isApplied: false, removedAt: new Date() },
+          });
+        } else if (isCard && fpExistingCardFee) {
+          fpNewTotal = fpBaseAmount + fpExistingCardFee.amount;
+        }
+
+        await prisma.rentPayment.update({
+          where: { id: fp.id },
+          data: {
+            stripePaymentMethodId: paymentMethodId,
+            totalAmount: fpNewTotal,
+            amount: fpNewTotal,
+          },
+        });
+        updatedFutureCount++;
+      }
+    }
 
     return NextResponse.json({
       success: true,
-      payment: updatedPayment
+      payment: {
+        id: updatedPayment.id,
+        totalAmount: newTotalAmount,
+        baseAmount: baseAmountCents,
+        cardFeeAmount: isCard ? cardFeeAmount : 0,
+        hasCardFee: isCard,
+      },
+      updatedFuturePayments: updatedFutureCount,
     });
 
   } catch (error) {

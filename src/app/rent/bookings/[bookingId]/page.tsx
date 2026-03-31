@@ -79,6 +79,7 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
       rentPayments: {
         orderBy: { dueDate: 'asc' },
         include: {
+          charges: true,
           paymentModifications: {
             where: {
               recipientId: userId,
@@ -234,6 +235,12 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
 
     const paymentMethodDisplay = getPaymentMethodDisplay(payment);
 
+    const charges = payment.charges || [];
+    const cardFeeCharge = charges.find((c: any) => c.category === 'CREDIT_CARD_FEE' && c.isApplied);
+    const baseAmountCents = charges
+      .filter((c: any) => c.category !== 'CREDIT_CARD_FEE' && c.isApplied)
+      .reduce((sum: number, c: any) => sum + c.amount, 0);
+
     return {
       amount: (payment.amount / 100).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
       type: getPaymentTypeLabel(payment.type),
@@ -244,7 +251,10 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
       paymentId: payment.id,
       hasPendingModification,
       pendingModificationCount: payment.paymentModifications.length,
-      modificationData
+      modificationData,
+      baseAmountCents: baseAmountCents || payment.amount,
+      hasCardFee: !!cardFeeCharge,
+      cardFeeAmountCents: cardFeeCharge ? cardFeeCharge.amount : 0,
     };
   };
 
