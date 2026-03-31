@@ -321,6 +321,31 @@ export const NOTIFICATION_EMAIL_CONFIGS: Record<string, NotificationEmailConfig>
     }
   },
 
+  // Stripe account notifications (host-side)
+  stripe_account_restricted: {
+    subject: 'Action Required: Your Stripe Account Has Been Restricted',
+    headerText: 'Stripe Account Restricted',
+    contentTitle: '',
+    buttonText: 'Go to Dashboard',
+    getContentText: (content) => content
+  },
+
+  stripe_requirements_past_due: {
+    subject: 'Action Required: Stripe Account Has Overdue Requirements',
+    headerText: 'Stripe Requirements Overdue',
+    contentTitle: '',
+    buttonText: 'Go to Dashboard',
+    getContentText: (content) => content
+  },
+
+  stripe_requirements_due: {
+    subject: 'Your Stripe Account Needs Attention',
+    headerText: 'Stripe Account Update Needed',
+    contentTitle: '',
+    buttonText: 'Go to Dashboard',
+    getContentText: (content) => content
+  },
+
   // Admin notifications
   ADMIN_INFO: {
     subject: 'Information - MatchBook Rentals',
@@ -765,6 +790,30 @@ export function buildNotificationEmailData(
     } else {
       emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/payment-methods`;
     }
+  }
+
+  // Add special formatting for Stripe account restricted notifications
+  if (actionType === 'stripe_account_restricted') {
+    const firstName = user?.firstName || 'there';
+
+    emailData.contentText = `Hi ${firstName},\n\nYour Stripe account has been restricted and you are currently unable to accept payments.\n\nPlease visit your dashboard and click "Go to Stripe" to resolve the issue.`;
+    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host/dashboard/overview`;
+  }
+
+  // Add special formatting for Stripe requirements past due notifications
+  if (actionType === 'stripe_requirements_past_due') {
+    const firstName = user?.firstName || 'there';
+
+    emailData.contentText = `Hi ${firstName},\n\nYour Stripe account has overdue requirements that need to be resolved immediately.\n\nIf these are not addressed, your ability to accept payments may be suspended.\n\nPlease visit your dashboard and click "Go to Stripe" to provide the required information.`;
+    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host/dashboard/overview`;
+  }
+
+  // Add special formatting for Stripe requirements due notifications
+  if (actionType === 'stripe_requirements_due') {
+    const firstName = user?.firstName || 'there';
+
+    emailData.contentText = `Hi ${firstName},\n\nStripe requires additional information for your account. Your account is still active, but please provide the requested information soon to avoid any interruption.\n\nPlease visit your dashboard and click "Go to Stripe" to update your account.`;
+    emailData.buttonUrl = `${process.env.NEXT_PUBLIC_URL}/app/host/dashboard/overview`;
   }
 
   return emailData;
