@@ -528,7 +528,7 @@ export default function HostListingCard({
                   </div>
                 )}
                 <div className="absolute top-2.5 right-2.5 flex items-center gap-2">
-                  {status !== 'Inactive' && (
+                  {status !== 'Inactive' && !isDraft && (
                     <BrandButton
                       variant="default"
                       size="icon"
@@ -749,7 +749,7 @@ export default function HostListingCard({
           <div className="flex flex-col justify-between items-end">
             {/* Share and More Options Buttons */}
             <div className="flex items-center gap-2">
-              {status !== 'Inactive' && (
+              {status !== 'Inactive' && !isDraft && (
                 <BrandButton
                   variant="default"
                   size="icon"
