@@ -259,7 +259,7 @@ export default function PublicListingDetailsView({
       {/* Mobile sticky footer */}
       <footer className="fixed bottom-0 left-0 right-0 z-50 bg-background border-t border-gray-200 px-4 py-4 pb-[max(env(safe-area-inset-bottom),16px)] lg:hidden">
         <div className="flex items-center justify-between gap-5">
-          <div className="flex-1 min-w-0 flex flex-col gap-1">
+          <div className="flex-1 min-w-0 flex flex-col gap-1 cursor-pointer" onClick={actions.openMobileOverlay} role="button" tabIndex={0}>
             {/* Price row */}
             <div className="flex items-center gap-x-[10px] sm:gap-x-4 md:gap-x-6 gap-y-0 flex-wrap">
               <div className="flex items-baseline gap-1">
