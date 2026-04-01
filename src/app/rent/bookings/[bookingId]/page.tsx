@@ -55,14 +55,16 @@ function getPaymentStatus(rentPayment: RentPayment): string {
 
   if (rentPayment.isPaid) return "Paid";
 
-  const now = new Date();
-  const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  const dueDate = new Date(rentPayment.dueDate);
-  const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
+  // Compare calendar dates in Central Time (matches how dates are stored)
+  const toChicagoDate = (d: Date) => {
+    const s = d.toLocaleDateString('en-CA', { timeZone: 'America/Chicago' }); // YYYY-MM-DD
+    return s;
+  };
+  const todayStr = toChicagoDate(new Date());
+  const dueDateStr = toChicagoDate(new Date(rentPayment.dueDate));
 
-  if (dueDateUTC < todayUTC) return "Overdue";
-  if (dueDateUTC === todayUTC) return "Due";
-  return "Scheduled";
+  if (dueDateStr < todayStr) return "Overdue";
+  return "Pending";
 }
 
 export default async function BookingDetailsPage({ params, searchParams }: BookingDetailsPageProps) {
@@ -198,9 +200,9 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
     }
   };
 
-  const now = new Date();
-  const todayStartUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-  const todayEndUTC = todayStartUTC + 24 * 60 * 60 * 1000;
+  // Compare dates in Central Time (matches how dates are stored as midnight CDT)
+  const toChicagoDateStr = (d: Date) => d.toLocaleDateString('en-CA', { timeZone: 'America/Chicago' });
+  const todayStr = toChicagoDateStr(new Date());
 
   const isPaymentPaid = (payment: any) => {
     return payment.isPaid || payment.status === 'SUCCEEDED' || payment.status === 'REFUNDED';
@@ -260,20 +262,18 @@ export default async function BookingDetailsPage({ params, searchParams }: Booki
 
   const upcomingPayments = booking.rentPayments
     .filter((payment: any) => {
-      const dueDate = new Date(payment.dueDate);
-      const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
-      if (dueDateUTC >= todayEndUTC) return true;
-      if (dueDateUTC >= todayStartUTC && dueDateUTC < todayEndUTC && !isPaymentPaid(payment)) return true;
+      const dueDateStr = toChicagoDateStr(new Date(payment.dueDate));
+      if (dueDateStr > todayStr) return true;
+      if (dueDateStr === todayStr && !isPaymentPaid(payment)) return true;
       return false;
     })
     .map(mapPayment);
 
   const pastPayments = booking.rentPayments
     .filter((payment: any) => {
-      const dueDate = new Date(payment.dueDate);
-      const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
-      if (dueDateUTC < todayStartUTC) return true;
-      if (dueDateUTC >= todayStartUTC && dueDateUTC < todayEndUTC && isPaymentPaid(payment)) return true;
+      const dueDateStr = toChicagoDateStr(new Date(payment.dueDate));
+      if (dueDateStr < todayStr) return true;
+      if (dueDateStr === todayStr && isPaymentPaid(payment)) return true;
       return false;
     })
     .reverse()

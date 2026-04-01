@@ -4,6 +4,7 @@ import { MoreVerticalIcon, PlusIcon, Loader2, CreditCard, Building2 } from "luci
 import React, { useState, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { retryPaymentNow } from "@/app/actions/payments";
+import { useToast } from "@/components/ui/use-toast";
 import { calculateCreditCardFee } from "@/lib/fee-constants";
 import { BrandCheckbox } from "@/app/brandCheckbox";
 import {
@@ -97,6 +98,7 @@ export const TablessPaymentsTable = ({
   initialPaymentMethods
 }: TablessPaymentsTableProps): JSX.Element => {
   const router = useRouter();
+  const { toast } = useToast();
   const [selectedModification, setSelectedModification] = useState<RentPaymentData['modificationData'] | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
@@ -199,9 +201,9 @@ export const TablessPaymentsTable = ({
                       ? 'bg-green-50 text-green-600 border border-green-200'
                       : row.status === 'Failed' || row.status === 'Overdue' || row.status === 'Move-In Failed'
                       ? 'bg-red-50 text-red-600 border border-red-200'
-                      : row.status === 'Scheduled' || row.status === 'Pending Move-In'
+                      : row.status === 'Pending' || row.status === 'Pending Move-In'
                       ? 'bg-[#e7f0f0] text-[#0b6969] border border-[#3c8787]'
-                      : row.status === 'Due' || row.status === 'Processing'
+                      : row.status === 'Processing'
                       ? 'bg-yellow-50 text-yellow-600 border border-yellow-200'
                       : 'bg-gray-50 text-gray-600 border border-gray-200'
                   }`}
@@ -259,7 +261,7 @@ export const TablessPaymentsTable = ({
                         >
                           Change Payment Method
                         </Button>
-                        {(row.status === 'Failed' || row.status === 'Overdue' || row.status === 'Due') && (
+                        {(row.status === 'Failed' || row.status === 'Overdue') && (
                           <Button
                             variant="ghost"
                             className="w-full justify-start text-sm"
@@ -430,7 +432,13 @@ export const TablessPaymentsTable = ({
                     setConfirmPayment(null);
                     router.refresh();
                   } else {
-                    alert(result.error || 'Payment failed');
+                    const title = result.code === 'NO_PAYMENT_METHOD' ? 'No payment method'
+                      : result.code === 'NOT_RETRYABLE' ? 'Payment not eligible'
+                      : result.code === 'MAX_RETRIES_EXCEEDED' ? 'Too many failures'
+                      : result.code === 'PAYMENT_FAILED' ? 'Payment failed'
+                      : 'Error';
+                    toast({ title, description: result.error || 'Please try again.', variant: "destructive" });
+                    setConfirmPayment(null);
                   }
                 }}
               >

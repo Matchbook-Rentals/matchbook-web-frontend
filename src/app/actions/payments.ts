@@ -291,10 +291,10 @@ export async function getListingPayments(listingId: string): Promise<{ paymentsD
 /**
  * Renter self-service: retry a failed, overdue, or due-today payment immediately.
  */
-export async function retryPaymentNow(paymentId: string): Promise<{ success: boolean; status?: string; error?: string }> {
+export async function retryPaymentNow(paymentId: string): Promise<{ success: boolean; status?: string; error?: string; code?: string }> {
   const { userId } = auth();
   if (!userId) {
-    return { success: false, error: 'Unauthorized' };
+    return { success: false, error: 'Unauthorized', code: 'UNAUTHORIZED' };
   }
 
   const payment = await prisma.rentPayment.findUnique({
@@ -305,33 +305,36 @@ export async function retryPaymentNow(paymentId: string): Promise<{ success: boo
   });
 
   if (!payment) {
-    return { success: false, error: 'Payment not found' };
+    return { success: false, error: 'Payment not found', code: 'NOT_FOUND' };
   }
 
-  // Verify the current user owns this booking
   if (payment.booking.userId !== userId) {
-    return { success: false, error: 'Unauthorized' };
+    return { success: false, error: 'Unauthorized', code: 'UNAUTHORIZED' };
   }
 
-  // Check payment is retryable: FAILED, or PENDING with dueDate today or in the past
+  // Check payment is retryable: FAILED, or PENDING and overdue (strictly before today)
+  // Compare dates in Central Time (matches how dates are stored as midnight CDT)
+  const toChicagoDateStr = (d: Date) => d.toLocaleDateString('en-CA', { timeZone: 'America/Chicago' });
   const isRetryable = (() => {
     if (payment.status === 'FAILED') return true;
     if (payment.status === 'PENDING' && !payment.isPaid) {
-      const now = new Date();
-      const todayUTC = Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-      const dueDate = new Date(payment.dueDate);
-      const dueDateUTC = Date.UTC(dueDate.getUTCFullYear(), dueDate.getUTCMonth(), dueDate.getUTCDate());
-      return dueDateUTC <= todayUTC; // Due today or overdue
+      const todayStr = toChicagoDateStr(new Date());
+      const dueDateStr = toChicagoDateStr(new Date(payment.dueDate));
+      return dueDateStr < todayStr; // Strictly overdue in Central Time
     }
     return false;
   })();
 
   if (!isRetryable) {
-    return { success: false, error: 'This payment is not eligible for retry' };
+    return { success: false, error: 'This payment is not eligible for retry', code: 'NOT_RETRYABLE' };
   }
 
   if (!payment.stripePaymentMethodId) {
-    return { success: false, error: 'No payment method on file. Please add a payment method first.' };
+    return { success: false, error: 'No payment method on file. Please add a payment method first.', code: 'NO_PAYMENT_METHOD' };
+  }
+
+  if (payment.retryCount >= 10) {
+    return { success: false, error: 'This payment method has failed too many times. Please try a different payment method.', code: 'MAX_RETRIES_EXCEEDED' };
   }
 
   try {
@@ -339,6 +342,6 @@ export async function retryPaymentNow(paymentId: string): Promise<{ success: boo
     return { success: true, status: result.status };
   } catch (error) {
     const message = error instanceof Error ? error.message : 'Payment processing failed';
-    return { success: false, error: message };
+    return { success: false, error: message, code: 'PAYMENT_FAILED' };
   }
 }
