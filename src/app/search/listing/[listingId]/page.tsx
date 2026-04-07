@@ -5,7 +5,7 @@ import ListingDetailNavbar from "@/components/listing-detail-navbar";
 import { PAGE_MARGIN } from '@/constants/styles'
 import { currentUser } from "@clerk/nextjs/server";
 import { Metadata } from 'next';
-import { getHostListingsCountForUser } from "@/app/actions/listings";
+import { getHostListingsCountForUser, getUserListingRelationships } from "@/app/actions/listings";
 import { getListingApplicationState } from "@/app/actions/housing-requests";
 import { getTripApplication } from '@/app/actions/applications';
 import { calculateRent } from '@/lib/calculate-rent';
@@ -178,14 +178,19 @@ export default async function SearchListingPage({ params, searchParams }: Listin
     }
   }
 
-  // Get user's application state and application data (if authenticated)
-  let listingState: { hasApplied: boolean; isMatched: boolean } | null = null;
+  // Get user's application state, application data, and listing relationships (if authenticated)
+  let listingState: { hasApplied: boolean; isMatched: boolean; matchId?: string } | null = null;
   let userApplication: any = null;
+  let userRelationships: Awaited<ReturnType<typeof getUserListingRelationships>> | null = null;
   if (user) {
-    listingState = await getListingApplicationState(params.listingId, tripId);
-    // Load trip-specific application if exists, otherwise fall back to default
-    const appResult = await getTripApplication(tripId);
+    const [listingStateResult, appResult, relationshipsResult] = await Promise.all([
+      getListingApplicationState(params.listingId, tripId),
+      getTripApplication(tripId),
+      getUserListingRelationships(params.listingId),
+    ]);
+    listingState = listingStateResult;
     userApplication = appResult.success ? appResult.application : null;
+    userRelationships = relationshipsResult;
   }
 
   // Check if listing is favorited
@@ -234,6 +239,7 @@ export default async function SearchListingPage({ params, searchParams }: Listin
           calculatedPrice={calculatedPrice}
           listingState={listingState}
           userApplication={userApplication}
+          userRelationships={userRelationships}
           shouldAutoApply={shouldAutoApply}
           isFavorited={isFavorited}
         />

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { SearchListing } from '@/types';
+import { SearchListing, UserListingRelationships } from '@/types';
 import PublicListingDetailsView from '@/app/guest/listing/[listingId]/(components)/public-listing-details-view';
 import { RenterListingActionBoxProvider } from '@/app/guest/listing/[listingId]/(components)/renter-listing-action-box-context';
 import ApplicationWizard from './application-wizard';
@@ -24,8 +24,9 @@ interface ListingDetailWithWizardProps {
     numPets?: number;
   } | null;
   calculatedPrice: number | null;
-  listingState: { hasApplied: boolean; isMatched: boolean } | null;
+  listingState: { hasApplied: boolean; isMatched: boolean; matchId?: string } | null;
   userApplication: any;
+  userRelationships?: UserListingRelationships | null;
   shouldAutoApply?: boolean;
   isFavorited?: boolean;
 }
@@ -38,6 +39,7 @@ export default function ListingDetailWithWizard({
   calculatedPrice: initialCalculatedPrice,
   listingState: initialListingState,
   userApplication,
+  userRelationships,
   shouldAutoApply,
   isFavorited,
 }: ListingDetailWithWizardProps) {
@@ -69,7 +71,7 @@ export default function ListingDetailWithWizard({
   );
 
   const effectiveListingState = hasAppliedLocal
-    ? { hasApplied: true, isMatched: initialListingState?.isMatched ?? false }
+    ? { hasApplied: true, isMatched: initialListingState?.isMatched ?? false, matchId: initialListingState?.matchId }
     : initialListingState;
 
   const handleApplyOverride = useCallback((dates: { start: Date; end: Date }, guests: { adults: number; children: number; pets: number }) => {
@@ -117,6 +119,7 @@ export default function ListingDetailWithWizard({
               children: effectiveTripContext.numChildren ?? 0,
               pets: effectiveTripContext.numPets ?? 0,
             } : undefined}
+            userRelationships={userRelationships}
             onApplyOverride={handleApplyOverride}
           >
             <PublicListingDetailsView

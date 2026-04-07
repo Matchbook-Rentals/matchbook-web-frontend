@@ -2,7 +2,7 @@
 
 import React, { createContext, useState, useContext, useMemo, useCallback, useTransition, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { ListingAndImages } from '@/types';
+import { ListingAndImages, UserListingRelationship, UserListingRelationships } from '@/types';
 import { calculateRent, applyServiceFee } from '@/lib/calculate-rent';
 import { applyToListingFromSearch } from '@/app/actions/housing-requests';
 import { Trip } from '@prisma/client';
@@ -23,6 +23,7 @@ export interface RenterListingActionBoxState {
   authRedirectUrl: string | undefined;
   hasApplied: boolean;
   isMatched: boolean;
+  matchId: string | null;
   isApplying: boolean;
   applyError: string | null;
   // Derived
@@ -32,6 +33,8 @@ export interface RenterListingActionBoxState {
   calculatedPrice: number | null;
   priceRange: { min: number; max: number; hasRange: boolean };
   unavailablePeriods: Array<{ startDate: Date; endDate: Date }>;
+  overlappingRelationship: UserListingRelationship | null;
+  overlappingRelationshipUrl: string | null;
 }
 
 export interface RenterListingActionBoxActions {
@@ -75,12 +78,13 @@ interface RenterListingActionBoxProviderProps {
   children: ReactNode;
   listing: ListingAndImages;
   isAuthenticated: boolean;
-  listingState?: { hasApplied: boolean; isMatched: boolean } | null;
+  listingState?: { hasApplied: boolean; isMatched: boolean; matchId?: string } | null;
   initialStartDate?: Date | null;
   initialEndDate?: Date | null;
   initialGuests?: Guests;
   /** If true, automatically trigger apply on mount (used after auth redirect). */
   autoApply?: boolean;
+  userRelationships?: UserListingRelationships | null;
   /** If provided, called instead of the default server-action apply after auth check. Receives current dates + guests. */
   onApplyOverride?: (dates: { start: Date; end: Date }, guests: Guests) => void;
 }
@@ -88,7 +92,7 @@ interface RenterListingActionBoxProviderProps {
 export function RenterListingActionBoxProvider({
   children, listing, isAuthenticated, listingState = null,
   initialStartDate = null, initialEndDate = null, initialGuests,
-  autoApply = false, onApplyOverride,
+  userRelationships = null, autoApply = false, onApplyOverride,
 }: RenterListingActionBoxProviderProps) {
   const router = useRouter();
   const [isPending, startTransition] = useTransition();
@@ -104,6 +108,7 @@ export function RenterListingActionBoxProvider({
   const [authRedirectUrl, setAuthRedirectUrl] = useState<string | undefined>(undefined);
   const [hasApplied, setHasApplied] = useState(listingState?.hasApplied ?? false);
   const [isMatched, setIsMatched] = useState(listingState?.isMatched ?? false);
+  const matchId = listingState?.matchId ?? null;
   const [applyError, setApplyError] = useState<string | null>(null);
 
   // Derived values
@@ -147,6 +152,44 @@ export function RenterListingActionBoxProvider({
     }
     return periods;
   }, [listing.unavailablePeriods, listing.bookings]);
+
+  // Find the highest-priority relationship whose dates overlap the selected range
+  const overlappingRelationship = useMemo(() => {
+    if (!startDate || !endDate || !userRelationships) return null;
+
+    const checkOverlap = (rel: UserListingRelationship): boolean => {
+      const relStart = new Date(rel.startDate);
+      const relEnd = new Date(rel.endDate);
+      return startDate < relEnd && endDate > relStart;
+    };
+
+    // Priority: booking > match > application
+    const booking = userRelationships.bookings.find(checkOverlap);
+    if (booking) return booking;
+
+    const match = userRelationships.matches.find(checkOverlap);
+    if (match) return match;
+
+    const application = userRelationships.applications.find(checkOverlap);
+    if (application) return application;
+
+    return null;
+  }, [startDate, endDate, userRelationships]);
+
+  // URL to direct the user to their existing relationship
+  const overlappingRelationshipUrl = useMemo(() => {
+    if (!overlappingRelationship) return null;
+    switch (overlappingRelationship.type) {
+      case 'booking':
+        return `/app/rent/bookings`;
+      case 'match':
+        return `/booking/create/${overlappingRelationship.id}`;
+      case 'application':
+        return `/app/rent/applications/${overlappingRelationship.id}`;
+      default:
+        return null;
+    }
+  }, [overlappingRelationship]);
 
   // Actions
   const setDates = useCallback((start: Date | null, end: Date | null) => {
@@ -254,6 +297,7 @@ export function RenterListingActionBoxProvider({
     authRedirectUrl,
     hasApplied,
     isMatched,
+    matchId,
     isApplying: isPending,
     applyError,
     hasDates,
@@ -262,6 +306,8 @@ export function RenterListingActionBoxProvider({
     calculatedPrice,
     priceRange,
     unavailablePeriods,
+    overlappingRelationship,
+    overlappingRelationshipUrl,
   };
 
   const actions: RenterListingActionBoxActions = {
@@ -285,7 +331,7 @@ export function RenterListingActionBoxProvider({
     startDate, endDate, guests, showDatesPopover, showRentersPopover,
     showMobileOverlay, showAuthModal, authRedirectUrl, hasApplied,
     isMatched, isPending, applyError, calculatedPrice, priceRange,
-    unavailablePeriods, listing,
+    unavailablePeriods, overlappingRelationship, overlappingRelationshipUrl, listing,
     // actions are stable via useCallback
     setDates, clearDates, setGuests, clearGuests, openDatesPopover,
     closeDatesPopover, openRentersPopover, closeRentersPopover,

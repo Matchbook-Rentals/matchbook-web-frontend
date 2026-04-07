@@ -39,12 +39,17 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
   }, []);
 
   const getApplyButtonText = () => {
-    if (state.isMatched) return 'Matched';
-    if (state.hasApplied) return 'Applied';
+    if (state.overlappingRelationship) {
+      switch (state.overlappingRelationship.type) {
+        case 'booking': return 'View Booking';
+        case 'match': return 'Book Now';
+        case 'application': return 'View Application';
+      }
+    }
     return 'Apply Now';
   };
 
-  const isApplyButtonDisabled = state.hasApplied || state.isMatched || state.isApplying;
+  const hasActionableLink = !!state.overlappingRelationship;
 
   return (
     <Card className="w-full border border-[#0000001a] rounded-xl">
@@ -235,14 +240,11 @@ const PublicListingDetailsBox: React.FC<PublicListingDetailsBoxProps> = ({
             {/* Apply button - visible when both dates and renters are filled */}
             {state.hasDates && state.hasRenterInfo && (
               <BrandButton
-                variant={state.hasApplied || state.isMatched ? "secondary" : "default"}
-                className={`w-full min-w-0 font-semibold transition-colors ${
-                  state.hasApplied || state.isMatched
-                    ? 'bg-gray-200 text-gray-600 cursor-not-allowed'
-                    : ''
-                }`}
-                onClick={actions.handleApplyClick}
-                disabled={isApplyButtonDisabled}
+                variant="default"
+                className="w-full min-w-0 font-semibold transition-colors"
+                href={state.overlappingRelationshipUrl ?? undefined}
+                onClick={hasActionableLink ? undefined : actions.handleApplyClick}
+                disabled={state.isApplying}
               >
                 {state.isApplying ? 'Applying...' : getApplyButtonText()}
               </BrandButton>

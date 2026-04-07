@@ -107,3 +107,19 @@ export interface SendNotificationEmailInput {
 export type SendNotificationEmailResponse =
   | { success: true; emailId: string }
   | { success: false; error: string };
+
+// User's existing relationships with a listing (bookings, matches, applications)
+export interface UserListingRelationship {
+  type: 'booking' | 'match' | 'application';
+  id: string;
+  tripId: string;
+  startDate: string; // ISO string for server/client serialization
+  endDate: string;
+  status?: string;
+}
+
+export interface UserListingRelationships {
+  bookings: UserListingRelationship[];
+  matches: UserListingRelationship[];
+  applications: UserListingRelationship[];
+}

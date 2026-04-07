@@ -2,7 +2,8 @@
 //Imports
 import prisma from "@/lib/prismadb";
 import { checkAuth } from '@/lib/auth-utils';
-import { ListingAndImages, ListingWithRelations } from "@/types/";
+import { auth } from '@clerk/nextjs/server';
+import { ListingAndImages, ListingWithRelations, UserListingRelationships } from "@/types/";
 import { Listing, ListingUnavailability, Prisma } from "@prisma/client"; // Import Prisma namespace
 import { statesInRadiusData } from "@/constants/state-radius-data";
 import { STATE_CODE_MAPPING } from "@/constants/state-code-mapping";
@@ -1833,5 +1834,95 @@ export async function getListingsByBounds(bounds: MapBounds): Promise<ListingWit
   } catch (error) {
     console.error('Error fetching listings by bounds:', error);
     return [];
+  }
+}
+
+/**
+ * Gets all of a user's existing relationships (bookings, matches, applications)
+ * with a specific listing. Used on the listing detail page to detect overlapping
+ * date ranges and direct users to their existing booking/match/application.
+ */
+export async function getUserListingRelationships(
+  listingId: string
+): Promise<UserListingRelationships> {
+  const empty: UserListingRelationships = { bookings: [], matches: [], applications: [] };
+
+  try {
+    const { userId } = auth();
+    if (!userId) return empty;
+
+    const [rawBookings, rawMatches, rawApplications] = await Promise.all([
+      // Active bookings for this user + listing
+      prisma.booking.findMany({
+        where: {
+          userId,
+          listingId,
+          status: { in: ['reserved', 'pending_payment', 'confirmed', 'active'] },
+        },
+        select: { id: true, tripId: true, startDate: true, endDate: true, status: true },
+      }),
+      // Matches for this user + listing (via trip), excluding those that already have a booking
+      prisma.match.findMany({
+        where: {
+          listingId,
+          trip: { userId },
+          booking: { is: null }, // no booking yet
+        },
+        select: {
+          id: true,
+          tripId: true,
+          trip: { select: { startDate: true, endDate: true } },
+        },
+      }),
+      // Open housing requests (applications) for this user + listing
+      prisma.housingRequest.findMany({
+        where: {
+          listingId,
+          trip: { userId },
+          status: { in: ['pending', 'approved'] },
+        },
+        select: { id: true, tripId: true, startDate: true, endDate: true, status: true },
+      }),
+    ]);
+
+    // Collect tripIds that appear at higher priority levels for de-duplication
+    const bookingTripIds = new Set(rawBookings.map((b) => b.tripId).filter(Boolean));
+    const matchTripIds = new Set(rawMatches.map((m) => m.tripId));
+
+    const bookings = rawBookings.map((b) => ({
+      type: 'booking' as const,
+      id: b.id,
+      tripId: b.tripId!,
+      startDate: b.startDate.toISOString(),
+      endDate: b.endDate.toISOString(),
+      status: b.status,
+    }));
+
+    const matches = rawMatches
+      .filter((m) => !bookingTripIds.has(m.tripId) && m.trip.startDate && m.trip.endDate)
+      .map((m) => ({
+        type: 'match' as const,
+        id: m.id,
+        tripId: m.tripId,
+        startDate: m.trip.startDate!.toISOString(),
+        endDate: m.trip.endDate!.toISOString(),
+      }));
+
+    const excludedTripIds = new Set([...bookingTripIds, ...matchTripIds]);
+    const applications = rawApplications
+      .filter((a) => !excludedTripIds.has(a.tripId))
+      .map((a) => ({
+        type: 'application' as const,
+        id: a.id,
+        tripId: a.tripId,
+        startDate: a.startDate.toISOString(),
+        endDate: a.endDate.toISOString(),
+        status: a.status,
+      }));
+
+    return { bookings, matches, applications };
+  } catch (error) {
+    console.error('Error fetching user listing relationships:', error);
+    return empty;
   }
 }
