@@ -45,13 +45,12 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
-  // Use our clean calculation functions
-  const transferFee = getTransferFee();
   const totalDeposits = calculateTotalDeposits(
     paymentBreakdown.securityDeposit,
     paymentBreakdown.petDeposit || 0
   );
-  
+  const transferFee = totalDeposits > 0 ? getTransferFee() : 0;
+
   // Calculate base amount (deposits + deposit transfer fee)
   const baseAmount = totalDeposits + transferFee;
 

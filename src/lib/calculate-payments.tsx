@@ -38,8 +38,8 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
   let monthlyRent = 0;
   let utilitiesIncluded = false;
   
-  // First try to use override if provided and valid (but not if it's the fallback value)
-  if (monthlyRentOverride && monthlyRentOverride > 0 && monthlyRentOverride !== 77777) {
+  // First try to use override if provided and valid
+  if (monthlyRentOverride != null && monthlyRentOverride >= 0) {
     monthlyRent = monthlyRentOverride;
     console.log('🔍 [calculatePayments] Using monthlyRentOverride:', monthlyRentOverride);
     // When using override, check if there's a matching monthly pricing for utilities info
@@ -49,18 +49,18 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
       utilitiesIncluded = monthlyPricing?.utilitiesIncluded ?? false;
     }
   } else if (listing) {
-    console.log('🔍 [calculatePayments] monthlyRentOverride invalid (77777), trying calculateRent with listing');
+    console.log('🔍 [calculatePayments] No monthlyRentOverride, trying calculateRent with listing');
     // Otherwise calculate from listing pricing
     const calculatedRent = calculateRent({ listing, trip });
-    if (calculatedRent && calculatedRent !== 77777) {
+    if (calculatedRent != null && calculatedRent > 0) {
       monthlyRent = calculatedRent;
       // Check if there's a matching monthly pricing for utilities info
       const lengthOfStay = calculateLengthOfStay(trip.startDate, trip.endDate);
       const monthlyPricing = listing.monthlyPricing?.find(pricing => pricing.months === lengthOfStay.months);
       utilitiesIncluded = monthlyPricing?.utilitiesIncluded ?? false;
     } else {
-      console.log('🔍 [calculatePayments] calculateRent returned 77777, using ListingMonthlyPricing fallback');
-      // If we get the fallback value, try to find a suitable price from monthlyPricing
+      console.log('🔍 [calculatePayments] calculateRent returned no valid price, using ListingMonthlyPricing fallback');
+      // No valid rent from calculateRent, try to find a suitable price from monthlyPricing
       const lengthOfStayMonths = Math.ceil(
         (new Date(trip.endDate).getTime() - new Date(trip.startDate).getTime()) / (1000 * 60 * 60 * 24 * 30.44)
       );
@@ -119,7 +119,7 @@ export function calculatePayments({ listing, trip, monthlyRentOverride, petRentO
     : 0;
   
   // Get deposits
-  const securityDeposit = listing?.depositSize || monthlyRent; // Default to one month's rent if not specified
+  const securityDeposit = listing?.depositSize ?? 0;
   
   // Calculate pet deposit
   // Use override from match if available (preserved at lease approval), otherwise use listing's current value

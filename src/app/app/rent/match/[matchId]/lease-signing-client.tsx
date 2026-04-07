@@ -489,7 +489,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
 
   // Calculate total due today ONCE - this is the single source of truth
   const totalDeposits = paymentDetails.securityDeposit + (paymentDetails.petDeposit || 0);
-  const transferFee = FEES.TRANSFER_FEE_DOLLARS; // Fixed $7 deposit transfer fee
+  const transferFee = totalDeposits > 0 ? FEES.TRANSFER_FEE_DOLLARS : 0;
   const baseAmountDue = totalDeposits + transferFee;
   
   // Calculate with/without card fee
@@ -854,7 +854,7 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
                   petRent: paymentDetails.monthlyPetRent, // Pass pet rent separately
                   securityDeposit: paymentDetails.securityDeposit, // Pass only security deposit, not total
                   petDeposit: paymentDetails.petDeposit || 0,
-                  transferFee: FEES.TRANSFER_FEE_DOLLARS, // Fixed $7 deposit transfer fee for deposits
+                  transferFee: transferFee,
                   processingFee: selectedPaymentMethodType === 'card' 
                     ? getTotalDueToday('card') - getTotalDueToday() // Difference between card and non-card total
                     : undefined,

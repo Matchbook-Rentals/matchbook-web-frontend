@@ -16,7 +16,7 @@ import { SecurityDepositPolicySection } from './sections/SecurityDepositPolicySe
 import { CancellationPolicySection } from './sections/CancellationPolicySection';
 import { EmbeddedCheckoutModal } from '@/components/stripe/embedded-checkout-modal';
 import { AddPaymentMethodInline } from '@/components/stripe/add-payment-method-inline';
-import { processDirectPayment } from '@/app/actions/process-payment';
+import { processDirectPayment, confirmZeroDepositBooking } from '@/app/actions/process-payment';
 import { useToast } from '@/components/ui/use-toast';
 import BrandModal from '@/components/BrandModal';
 
@@ -66,6 +66,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
   initialPaymentMethods = [],
 }) => {
   const { toast } = useToast();
+  const isNoDeposit = (paymentBreakdown.securityDeposit + (paymentBreakdown.petDeposit || 0)) === 0;
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState<string>('');
   const [selectedPaymentMethodType, setSelectedPaymentMethodType] = useState<'card' | 'bank' | null>(null);
   const [showEmbeddedCheckout, setShowEmbeddedCheckout] = useState(false);
@@ -95,18 +96,18 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
         setProcessingStatus('processing');
         setProcessingError(null);
 
-        console.log('💳 Processing direct payment with method:', selectedPaymentMethod);
+        if (isNoDeposit) {
+          console.log('✅ Zero-deposit booking, confirming with payment method:', selectedPaymentMethod);
+        } else {
+          console.log('💳 Processing direct payment with method:', selectedPaymentMethod);
+        }
 
-        const result = await processDirectPayment({
-          matchId,
-          paymentMethodId: selectedPaymentMethod,
-          amount,
-          includeCardFee
-        });
+        const result = isNoDeposit
+          ? await confirmZeroDepositBooking({ matchId, paymentMethodId: selectedPaymentMethod })
+          : await processDirectPayment({ matchId, paymentMethodId: selectedPaymentMethod });
 
         if (result.success) {
-          // Confirm payment and create booking
-          console.log('💳 Payment successful, confirming booking...');
+          console.log(isNoDeposit ? '✅ Zero-deposit confirmed, creating booking...' : '💳 Payment successful, confirming booking...');
 
           const bookingResponse = await fetch(`/api/matches/${matchId}/confirm-payment-and-book`, {
             method: 'POST',
@@ -119,19 +120,15 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
             const bookingData = await bookingResponse.json();
             console.log('✅ Booking confirmed:', bookingData.booking.id);
             setProcessingStatus('success');
-            // Wait a moment to show success state
             setTimeout(() => {
               setShowProcessingDialog(false);
               onSuccess();
             }, 1500);
           } else {
-            // Payment succeeded but booking creation failed
-            console.error('Failed to create booking after payment');
-            setProcessingStatus('success'); // Still show payment success
-            setTimeout(() => {
-              setShowProcessingDialog(false);
-              onSuccess();
-            }, 1500);
+            const errorData = await bookingResponse.json().catch(() => ({}));
+            console.error('Failed to create booking:', bookingResponse.status, errorData);
+            setProcessingStatus('error');
+            setProcessingError(errorData?.error || 'Failed to create booking.');
           }
         } else {
           setProcessingStatus('error');
@@ -221,7 +218,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
 
   return (
     <>
-      <div className="flex flex-col w-full max-w-3xl items-start gap-6 md:gap-8 relative pb-8">
+      <div className="flex flex-col w-full max-w-3xl items-start gap-6 md:gap-8 relative pb-20 md:pb-24">
         <header className="relative self-stretch mt-[-1.00px] font-poppins font-bold text-[#1a1a1a] text-2xl md:text-3xl tracking-[0] leading-tight">
           REVIEW PAYMENTS
         </header>
@@ -318,17 +315,29 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
           </div>
 
           {/* Right side - Complete booking button */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 relative group">
             <Button
               onClick={() => {
+                if (!selectedPaymentMethod && !isProcessing) {
+                  toast({
+                    title: "Payment method required",
+                    description: "Please select a payment method to schedule future payments.",
+                  });
+                  return;
+                }
                 handleProceedToPayment(selectedPaymentMethodType === 'card');
               }}
-              disabled={!selectedPaymentMethod || isProcessing}
-              className="bg-[#0a6060] hover:bg-[#063a3a] text-white px-6 py-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              disabled={isProcessing}
+              className={`px-6 py-2 ${!selectedPaymentMethod && !isProcessing ? 'bg-[#0a6060]/50 hover:bg-[#0a6060]/50 cursor-pointer' : 'bg-[#0a6060] hover:bg-[#063a3a]'} text-white disabled:opacity-50 disabled:cursor-not-allowed`}
               size="lg"
             >
-              {isProcessing ? 'Processing...' : 'Pay and Book'}
+              {isProcessing ? 'Processing...' : isNoDeposit ? 'Confirm Booking' : 'Pay and Book'}
             </Button>
+            {!selectedPaymentMethod && !isProcessing && (
+              <div className="absolute bottom-full right-0 mb-2 px-3 py-2 bg-gray-900 text-white text-xs rounded-md whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                Select a payment method to schedule future payments
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -354,9 +363,9 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
       >
         <div className="p-6">
           <h2 className="text-xl font-semibold mb-6 text-center">
-            {processingStatus === 'processing' && 'Processing Payment'}
-            {processingStatus === 'success' && 'Payment Successful!'}
-            {processingStatus === 'error' && 'Payment Failed'}
+            {processingStatus === 'processing' && (isNoDeposit ? 'Confirming Booking' : 'Processing Payment')}
+            {processingStatus === 'success' && (isNoDeposit ? 'Booking Confirmed!' : 'Payment Successful!')}
+            {processingStatus === 'error' && (isNoDeposit ? 'Confirmation Failed' : 'Payment Failed')}
           </h2>
 
           <div className="flex flex-col items-center">
@@ -364,7 +373,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
               <>
                 <Loader2 className="h-12 w-12 animate-spin text-blue-600 mb-4" />
                 <p className="text-center text-gray-600">
-                  Processing your payment of ${amount.toFixed(2)}...
+                  {isNoDeposit ? 'Confirming your booking...' : `Processing your payment of $${amount.toFixed(2)}...`}
                 </p>
                 <p className="text-center text-sm text-gray-500 mt-2">
                   Please do not close this window.
@@ -376,7 +385,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
               <>
                 <CheckCircle className="h-12 w-12 text-green-600 mb-4" />
                 <p className="text-center text-gray-600">
-                  Your payment has been processed successfully!
+                  {isNoDeposit ? 'Your booking has been confirmed!' : 'Your payment has been processed successfully!'}
                 </p>
                 <p className="text-center text-sm text-gray-500 mt-2">
                   Redirecting to confirmation...

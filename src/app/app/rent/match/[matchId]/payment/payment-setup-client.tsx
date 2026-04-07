@@ -44,8 +44,8 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
     petDepositOverride: match.petDeposit
   });
 
-  // Fixed deposit transfer fee for deposits
-  const TRANSFER_FEE = FEES.TRANSFER_FEE_DOLLARS;
+  const totalDeposits = paymentDetails.securityDeposit + (paymentDetails.petDeposit || 0);
+  const TRANSFER_FEE = totalDeposits > 0 ? FEES.TRANSFER_FEE_DOLLARS : 0;
 
   // Get security deposit amount (NOT including pet deposit)
   const getSecurityDeposit = () => {
@@ -143,8 +143,6 @@ export function PaymentSetupClient({ match, matchId, isAdminDev = false, payment
       const result = await processDirectPayment({
         matchId,
         paymentMethodId: match.stripePaymentMethodId,
-        amount: calculatePaymentAmount(),
-        includeCardFee: false // Existing payment method, fee already determined
       });
 
       if (result.success) {

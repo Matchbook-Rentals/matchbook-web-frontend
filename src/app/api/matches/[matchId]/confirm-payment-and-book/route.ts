@@ -82,32 +82,39 @@ export async function POST(
       }, { status: 400 });
     }
 
-    // Verify payment is captured (or processing for ACH)
-    const isACHProcessing = match.paymentStatus === 'processing' && match.stripePaymentIntentId;
-    if (!match.stripePaymentIntentId || (!match.paymentCapturedAt && !isACHProcessing)) {
-      console.log('❌ [Confirm Payment & Book] Payment not captured or processing');
-      return NextResponse.json({
-        error: 'Payment not confirmed. Please complete payment first.'
-      }, { status: 400 });
-    }
-
-    // Verify with Stripe that payment is successful
-    // ACH payments may be in 'processing' for 3-5 business days before succeeding
+    // Zero-deposit bookings skip Stripe verification
+    const isZeroDeposit = match.paymentStatus === 'zero_deposit';
     let isPaymentProcessing = false;
-    try {
-      const paymentIntent = await stripe.paymentIntents.retrieve(match.stripePaymentIntentId);
-      isPaymentProcessing = paymentIntent.status === 'processing';
 
-      // For ACH payments in 'processing' status, we still allow booking creation
-      if (paymentIntent.status !== 'succeeded' && paymentIntent.status !== 'processing') {
-        console.log('❌ [Confirm Payment & Book] Payment not acceptable:', paymentIntent.status);
+    if (!isZeroDeposit) {
+      // Verify payment is captured (or processing for ACH)
+      const isACHProcessing = match.paymentStatus === 'processing' && match.stripePaymentIntentId;
+      if (!match.stripePaymentIntentId || (!match.paymentCapturedAt && !isACHProcessing)) {
+        console.log('❌ [Confirm Payment & Book] Payment not captured or processing');
         return NextResponse.json({
-          error: `Payment not successful. Status: ${paymentIntent.status}`
+          error: 'Payment not confirmed. Please complete payment first.'
         }, { status: 400 });
       }
-    } catch (stripeError) {
-      console.error('⚠️ [Confirm Payment & Book] Could not verify with Stripe:', stripeError);
-      // Continue anyway if we have paymentCapturedAt
+
+      // Verify with Stripe that payment is successful
+      // ACH payments may be in 'processing' for 3-5 business days before succeeding
+      try {
+        const paymentIntent = await stripe.paymentIntents.retrieve(match.stripePaymentIntentId!);
+        isPaymentProcessing = paymentIntent.status === 'processing';
+
+        // For ACH payments in 'processing' status, we still allow booking creation
+        if (paymentIntent.status !== 'succeeded' && paymentIntent.status !== 'processing') {
+          console.log('❌ [Confirm Payment & Book] Payment not acceptable:', paymentIntent.status);
+          return NextResponse.json({
+            error: `Payment not successful. Status: ${paymentIntent.status}`
+          }, { status: 400 });
+        }
+      } catch (stripeError) {
+        console.error('⚠️ [Confirm Payment & Book] Could not verify with Stripe:', stripeError);
+        // Continue anyway if we have paymentCapturedAt
+      }
+    } else {
+      console.log('✅ [Confirm Payment & Book] Zero-deposit booking — skipping Stripe verification');
     }
 
     // Check if booking already exists
@@ -320,7 +327,7 @@ export async function POST(
                       paymentDetails.totalDeposit;
 
 
-    // Create booking and payment schedule in a transaction
+    // Create booking and payment schedule in a transaction (15s timeout for many DB writes)
     const result = await prisma.$transaction(async (tx) => {
       // Create the booking
       const booking = await tx.booking.create({
@@ -339,64 +346,68 @@ export async function POST(
 
       console.log('✅ [Confirm Payment & Book] Booking created:', booking.id, 'tripStart:', match.trip.startDate);
 
-      // Create RentPayment for initial deposit payment (already paid)
-      console.log('💰 [Confirm Payment & Book] Creating deposit payment record...');
+      // Create RentPayment for initial deposit payment (already paid) — skip for zero-deposit
+      if (!isZeroDeposit) {
+        console.log('💰 [Confirm Payment & Book] Creating deposit payment record...');
 
-      // Get payment method to determine if card fee was charged
-      const paymentMethod = await stripe.paymentMethods.retrieve(match.stripePaymentMethodId);
-      const isCard = paymentMethod.type === 'card';
+        // Get payment method to determine if card fee was charged
+        const paymentMethod = await stripe.paymentMethods.retrieve(match.stripePaymentMethodId);
+        const isCard = paymentMethod.type === 'card';
 
-      // Build deposit charges using centralized function
-      const depositChargeBreakdown = buildDepositCharges({
-        securityDeposit: dollarsToCents(paymentDetails.securityDeposit),
-        petDeposit: paymentDetails.petDeposit ? dollarsToCents(paymentDetails.petDeposit) : 0,
-        includeCardFee: isCard
-      });
+        // Build deposit charges using centralized function
+        const depositChargeBreakdown = buildDepositCharges({
+          securityDeposit: dollarsToCents(paymentDetails.securityDeposit),
+          petDeposit: paymentDetails.petDeposit ? dollarsToCents(paymentDetails.petDeposit) : 0,
+          includeCardFee: isCard
+        });
 
-      console.log('💰 [Confirm Payment & Book] Deposit breakdown:', {
-        securityDeposit: paymentDetails.securityDeposit,
-        petDeposit: paymentDetails.petDeposit || 0,
-        baseAmount: depositChargeBreakdown.baseAmount / 100,
-        totalAmount: depositChargeBreakdown.totalAmount / 100,
-        isCard,
-        chargeCount: depositChargeBreakdown.charges.length
-      });
+        console.log('💰 [Confirm Payment & Book] Deposit breakdown:', {
+          securityDeposit: paymentDetails.securityDeposit,
+          petDeposit: paymentDetails.petDeposit || 0,
+          baseAmount: depositChargeBreakdown.baseAmount / 100,
+          totalAmount: depositChargeBreakdown.totalAmount / 100,
+          isCard,
+          chargeCount: depositChargeBreakdown.charges.length
+        });
 
-      // Create the deposit RentPayment
-      // Card (succeeded): mark as SUCCEEDED/isPaid immediately
-      // ACH (processing): mark as PROCESSING — webhook will upgrade to SUCCEEDED when it settles
-      const depositPayment = await tx.rentPayment.create({
-        data: {
-          bookingId: booking.id,
-          amount: depositChargeBreakdown.totalAmount, // Legacy field
-          totalAmount: depositChargeBreakdown.totalAmount,
-          baseAmount: depositChargeBreakdown.baseAmount,
-          dueDate: new Date(),
-          isPaid: !isPaymentProcessing,
-          status: isPaymentProcessing ? 'PROCESSING' : 'SUCCEEDED',
-          paymentCapturedAt: isPaymentProcessing ? null : (match.paymentCapturedAt || new Date()),
-          stripePaymentIntentId: match.stripePaymentIntentId,
-          stripePaymentMethodId: match.stripePaymentMethodId,
-          type: 'SECURITY_DEPOSIT'
-        }
-      });
+        // Create the deposit RentPayment
+        // Card (succeeded): mark as SUCCEEDED/isPaid immediately
+        // ACH (processing): mark as PROCESSING — webhook will upgrade to SUCCEEDED when it settles
+        const depositPayment = await tx.rentPayment.create({
+          data: {
+            bookingId: booking.id,
+            amount: depositChargeBreakdown.totalAmount, // Legacy field
+            totalAmount: depositChargeBreakdown.totalAmount,
+            baseAmount: depositChargeBreakdown.baseAmount,
+            dueDate: new Date(),
+            isPaid: !isPaymentProcessing,
+            status: isPaymentProcessing ? 'PROCESSING' : 'SUCCEEDED',
+            paymentCapturedAt: isPaymentProcessing ? null : (match.paymentCapturedAt || new Date()),
+            stripePaymentIntentId: match.stripePaymentIntentId,
+            stripePaymentMethodId: match.stripePaymentMethodId,
+            type: 'SECURITY_DEPOSIT'
+          }
+        });
 
-      // Create itemized charges for deposit
-      await Promise.all(
-        depositChargeBreakdown.charges.map((charge) =>
-          tx.rentPaymentCharge.create({
-            data: {
-              rentPaymentId: depositPayment.id,
-              category: charge.category,
-              amount: charge.amount,
-              isApplied: charge.isApplied,
-              metadata: charge.metadata ? charge.metadata : undefined
-            }
-          })
-        )
-      );
+        // Create itemized charges for deposit
+        await Promise.all(
+          depositChargeBreakdown.charges.map((charge) =>
+            tx.rentPaymentCharge.create({
+              data: {
+                rentPaymentId: depositPayment.id,
+                category: charge.category,
+                amount: charge.amount,
+                isApplied: charge.isApplied,
+                metadata: charge.metadata ? charge.metadata : undefined
+              }
+            })
+          )
+        );
 
-      console.log('✅ [Confirm Payment & Book] Deposit payment created:', depositPayment.id);
+        console.log('✅ [Confirm Payment & Book] Deposit payment created:', depositPayment.id);
+      } else {
+        console.log('✅ [Confirm Payment & Book] Zero-deposit — skipping deposit payment record');
+      }
 
       // Generate payment schedule using centralized calculation
       const paymentSchedule = generatePaymentSchedule(
@@ -462,14 +473,14 @@ export async function POST(
       );
 
 
-      // Update trip status to booked
+      // Update trip status to reserved
       await tx.trip.update({
         where: { id: match.tripId },
-        data: { tripStatus: 'booked' }
+        data: { tripStatus: 'reserved' }
       });
 
       return { booking, rentPayments };
-    });
+    }, { timeout: 15000 });
 
     console.log('🎉 [Confirm Payment & Book] Successfully created booking and payment schedule');
 

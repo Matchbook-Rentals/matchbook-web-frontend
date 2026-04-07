@@ -178,7 +178,7 @@ export function BookingSummarySidebar({ match, paymentBreakdown, paymentDetails,
       );
     }
     
-    const transferFee = FEES.TRANSFER_FEE_DOLLARS;
+    const transferFee = subtotal > 0 ? FEES.TRANSFER_FEE_DOLLARS : 0;
     items.push(
       { label: 'Deposit Transfer Fee', amount: formatCurrency(transferFee) }
     );

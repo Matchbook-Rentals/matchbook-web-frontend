@@ -125,8 +125,8 @@ const PaymentSummarySection = ({ match, paymentMethodType }: { match: MatchWithR
     petDepositOverride: match.petDeposit
   });
 
-  // Fixed deposit transfer fee
-  const TRANSFER_FEE = FEES.TRANSFER_FEE_DOLLARS;
+  // Transfer fee only when deposits exist
+  const TRANSFER_FEE = paymentDetails.totalDeposit > 0 ? FEES.TRANSFER_FEE_DOLLARS : 0;
 
   // Determine if card was used - check payment method type, not just existence of payment method ID
   const isCardPayment = paymentMethodType === 'card';
@@ -143,11 +143,13 @@ const PaymentSummarySection = ({ match, paymentMethodType }: { match: MatchWithR
     creditCardFee = totalAmount - baseAmount;
   }
 
+  const isNoDeposit = paymentDetails.totalDeposit === 0;
+
   // Build payment items array
   const paymentItems = [
     {
       label: 'Security Deposit',
-      amount: `$${paymentDetails.securityDeposit.toFixed(2)}`,
+      amount: isNoDeposit ? 'N/A' : `$${paymentDetails.securityDeposit.toFixed(2)}`,
       hasChevron: false,
       isIndented: false,
       isMain: true
@@ -161,7 +163,7 @@ const PaymentSummarySection = ({ match, paymentMethodType }: { match: MatchWithR
     }] : []),
     {
       label: 'Deposit Transfer Fee',
-      amount: `$${TRANSFER_FEE.toFixed(2)}`,
+      amount: isNoDeposit ? 'N/A' : `$${TRANSFER_FEE.toFixed(2)}`,
       hasChevron: false,
       isIndented: false,
       isMain: false
@@ -175,7 +177,7 @@ const PaymentSummarySection = ({ match, paymentMethodType }: { match: MatchWithR
     }] : []),
     {
       label: 'Total Paid',
-      amount: `$${totalAmount.toFixed(2)}`,
+      amount: isNoDeposit ? '$0.00' : `$${totalAmount.toFixed(2)}`,
       hasChevron: false,
       isIndented: false,
       isMain: true

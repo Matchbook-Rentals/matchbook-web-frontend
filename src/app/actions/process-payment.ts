@@ -9,21 +9,18 @@
 import { auth } from '@clerk/nextjs/server';
 import stripe from '@/lib/stripe';
 import prisma from '@/lib/prismadb';
-import { reverseCalculateBaseAmount, FEES } from '@/lib/fee-constants';
+import { calculateTotalWithStripeCardFee, FEES } from '@/lib/fee-constants';
 import { sendBookingCreatedAlert } from '@/lib/sms-alerts';
+import { calculatePayments } from '@/lib/calculate-payments';
 
 interface ProcessPaymentParams {
   matchId: string;
   paymentMethodId: string;
-  amount: number;
-  includeCardFee: boolean;
 }
 
 export async function processDirectPayment({
   matchId,
   paymentMethodId,
-  amount,
-  includeCardFee
 }: ProcessPaymentParams): Promise<{
   success: boolean;
   paymentIntentId?: string;
@@ -40,7 +37,7 @@ export async function processDirectPayment({
       where: { id: matchId },
       include: {
         trip: { include: { user: true } },
-        listing: { include: { user: true } }
+        listing: { include: { user: true, monthlyPricing: true } }
       }
     });
 
@@ -123,65 +120,43 @@ export async function processDirectPayment({
     }
 
     /**
-     * Payment Amount Calculation:
-     *
-     * The 'amount' parameter already includes the credit card fee if applicable.
-     * This is calculated on the client using the self-inclusive 3% formula:
-     *   totalAmount = baseAmount / (1 - 0.03)
-     *
-     * This ensures that after the 3% fee is deducted,
-     * we receive the exact amount we intended (deposits + deposit transfer fee).
-     *
-     * Example:
-     *   Base amount (deposits + $7 deposit transfer): $227
-     *   Total charged to card: $234.02
-     *   Credit card fee (3%): $7.02
-     *   Amount we receive: $227 ✓
-     *
-     * See /docs/payment-spec.md for complete payment specification
+     * Server-authoritative payment calculation.
+     * All amounts are computed here from match/listing data — never trust client values.
      */
-    const totalAmount = Math.round(amount * 100); // Convert to cents
-    
-    let baseAmountBeforeCardFee = totalAmount;
-    let cardProcessingFee = 0;
-    
-    if (isCard && includeCardFee) {
-      // Extract the base amount from the total that includes Stripe fees
-      // Using our centralized reverse calculation function
-      baseAmountBeforeCardFee = Math.round(reverseCalculateBaseAmount(amount) * 100); // Convert to cents
-      cardProcessingFee = totalAmount - baseAmountBeforeCardFee;
-    }
-    
-    /**
-     * Fee Structure:
-     *
-     * TRANSFER FEE: Fixed $7 for all deposit transactions
-     *   - MatchBook keeps this fee
-     *   - Landlord receives: deposits - $7
-     *
-     * CREDIT CARD FEE: 3% self-inclusive (if using card)
-     *   - Paid by the tenant on top of the base amount
-     *   - Covers payment processing costs
-     *
-     * NO RENT COLLECTED: This transaction is for deposits only
-     *   - Rent payments are scheduled separately
-     *   - Service fees (3% or 1.5%) apply to rent, not deposits
-     *
-     * See /docs/payment-spec.md for complete fee structure details
-     */
-    const TRANSFER_FEE_CENTS = FEES.TRANSFER_FEE_CENTS;
-    
-    // Landlord receives the deposit amount minus our $7 deposit transfer fee
-    const landlordAmount = baseAmountBeforeCardFee - TRANSFER_FEE_CENTS;
+    const paymentDetails = calculatePayments({
+      listing: match.listing,
+      trip: match.trip,
+      monthlyRentOverride: match.monthlyRent,
+      petRentOverride: match.petRent,
+      petDepositOverride: match.petDeposit
+    });
 
-    console.log('💰 Payment calculation:', {
-      baseAmountBeforeCardFee: baseAmountBeforeCardFee / 100,
-      transferFee: TRANSFER_FEE_CENTS / 100,
-      cardProcessingFee: cardProcessingFee / 100,
-      totalAmount: totalAmount / 100,
+    const totalDeposits = paymentDetails.totalDeposit;
+    const transferFeeDollars = totalDeposits > 0 ? FEES.TRANSFER_FEE_DOLLARS : 0;
+    const baseAmountDollars = totalDeposits + transferFeeDollars;
+
+    // Add card processing fee if paying by card
+    const totalChargeDollars = isCard
+      ? calculateTotalWithStripeCardFee(baseAmountDollars)
+      : baseAmountDollars;
+    const cardProcessingFeeDollars = totalChargeDollars - baseAmountDollars;
+
+    // Convert to cents for Stripe
+    const totalAmount = Math.round(totalChargeDollars * 100);
+    const baseAmountCents = Math.round(baseAmountDollars * 100);
+    const cardProcessingFee = Math.round(cardProcessingFeeDollars * 100);
+    const transferFeeCents = Math.round(transferFeeDollars * 100);
+
+    // Landlord receives deposits only — we keep the transfer fee
+    const landlordAmount = baseAmountCents - transferFeeCents;
+
+    console.log('💰 Server-calculated payment:', {
+      totalDeposits,
+      transferFee: transferFeeDollars,
+      cardProcessingFee: cardProcessingFeeDollars,
+      totalCharge: totalChargeDollars,
       landlordAmount: landlordAmount / 100,
       paymentMethodType: paymentMethod.type,
-      includeCardFee
     });
 
     // Create payment intent with automatic confirmation and capture
@@ -204,10 +179,10 @@ export async function processDirectPayment({
         hostUserId: match.listing.userId,
         type: 'security_deposit_direct',
         paymentMethodType: paymentMethod.type,
-        transferFee: (TRANSFER_FEE_CENTS / 100).toString(),
-        cardProcessingFee: (cardProcessingFee / 100).toString(),
+        transferFee: transferFeeDollars.toString(),
+        cardProcessingFee: cardProcessingFeeDollars.toFixed(2),
         landlordAmount: (landlordAmount / 100).toString(),
-        totalAmount: (totalAmount / 100).toString(),
+        totalAmount: totalChargeDollars.toFixed(2),
       },
       receipt_email: match.trip.user?.email || undefined,
     });
@@ -329,7 +304,7 @@ export async function processDirectPayment({
           matchId: matchId,
           listingAddress: match.listing.locationString || 'Unknown location',
           renterName: `${match.trip.user.firstName || ''} ${match.trip.user.lastName || ''}`.trim() || 'Unknown renter',
-          totalAmount: amount,
+          totalAmount: totalChargeDollars,
           startDate: confirmedStartDate,
           endDate: confirmedEndDate,
         });
@@ -430,9 +405,90 @@ export async function processDirectPayment({
       };
     }
     
-    return { 
-      success: false, 
-      error: 'Failed to process payment. Please try again.' 
+    return {
+      success: false,
+      error: 'Failed to process payment. Please try again.'
+    };
+  }
+}
+
+/**
+ * Confirm a zero-deposit booking.
+ * Saves the payment method on the match for future rent charges,
+ * sets paymentAuthorizedAt, but skips Stripe payment entirely.
+ */
+export async function confirmZeroDepositBooking({
+  matchId,
+  paymentMethodId,
+}: {
+  matchId: string;
+  paymentMethodId: string;
+}): Promise<{ success: boolean; error?: string }> {
+  try {
+    const { userId } = auth();
+    if (!userId) {
+      return { success: false, error: 'Unauthorized' };
+    }
+
+    const match = await prisma.match.findUnique({
+      where: { id: matchId },
+      include: {
+        trip: { include: { user: true } },
+        listing: { include: { user: true, monthlyPricing: true } },
+        booking: true
+      }
+    });
+
+    if (!match) {
+      return { success: false, error: 'Match not found' };
+    }
+
+    if (match.trip.userId !== userId) {
+      return { success: false, error: 'Unauthorized - not renter' };
+    }
+
+    if (match.paymentAuthorizedAt) {
+      return { success: false, error: 'Booking already confirmed' };
+    }
+
+    if (match.booking) {
+      return { success: false, error: 'Booking already exists' };
+    }
+
+    // Server-side validation: deposits must be $0
+    const paymentDetails = calculatePayments({
+      listing: match.listing,
+      trip: match.trip,
+      monthlyRentOverride: match.monthlyRent,
+      petRentOverride: match.petRent,
+      petDepositOverride: match.petDeposit
+    });
+
+    if (paymentDetails.totalDeposit > 0) {
+      console.error('❌ confirmZeroDepositBooking called but deposits are not $0:', paymentDetails.totalDeposit);
+      return { success: false, error: 'Deposits are not $0 — payment is required' };
+    }
+
+    // Save payment method and mark as authorized (no Stripe charge)
+    await prisma.match.update({
+      where: { id: matchId },
+      data: {
+        stripePaymentMethodId: paymentMethodId,
+        paymentAuthorizedAt: new Date(),
+        paymentCapturedAt: new Date(),
+        paymentAmount: 0,
+        paymentStatus: 'zero_deposit',
+      },
+    });
+
+    console.log('✅ Zero-deposit match confirmed:', matchId, 'with payment method:', paymentMethodId);
+
+    return { success: true };
+  } catch (error) {
+    console.error('❌ Error confirming zero-deposit booking:', error);
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : 'Failed to confirm booking'
     };
   }
 }
