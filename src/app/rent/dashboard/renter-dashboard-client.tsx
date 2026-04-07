@@ -12,11 +12,9 @@ import type { RenterDashboardData, DashboardMatch, DashboardFavorite } from '@/a
 
 interface RenterDashboardClientProps {
   data: RenterDashboardData;
-  isAdmin: boolean;
-  currentMode?: string;
 }
 
-export default function RenterDashboardClient({ data, isAdmin, currentMode }: RenterDashboardClientProps) {
+export default function RenterDashboardClient({ data }: RenterDashboardClientProps) {
   const { recentSearches, bookings, applications } = data;
 
   const [matches, setMatches] = useState(data.matches);
@@ -43,7 +41,7 @@ export default function RenterDashboardClient({ data, isAdmin, currentMode }: Re
 
   return (
     <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto overflow-x-hidden`}>
-      <DashboardHeader isAdmin={isAdmin} currentMode={currentMode} />
+      <DashboardHeader />
       <RecentSearchesSection searches={recentSearches} defaultOpen />
       <FavoritesSection favorites={favorites} defaultOpen={!hasActionableMatches} />
       <ApplicationsSection applications={applications} />
