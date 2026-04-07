@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { ListingWithRelations } from '@/types';
 import { getCategoryDisplayForCards, normalizeCategory } from '@/constants/enums';
 import { applyServiceFee } from '@/lib/calculate-rent';
@@ -125,6 +125,7 @@ export default function HomepageListingCard({
   disableSwipe = false,
 }: HomepageListingCardProps) {
   const router = useRouter();
+  const pathname = usePathname();
   const [isFavorited, setIsFavorited] = useState(initialFavorited ?? false);
   const prevInitialFavorited = useRef(initialFavorited);
   if (prevInitialFavorited.current !== initialFavorited) {
@@ -249,7 +250,7 @@ export default function HomepageListingCard({
     return null;
   };
 
-  const listingUrl = `/search/listing/${listing.id}?from=%2F`;
+  const listingUrl = `/search/listing/${listing.id}?from=${encodeURIComponent(pathname)}${tripId ? `&tripId=${tripId}` : ''}`;
 
   return (
     <Link
