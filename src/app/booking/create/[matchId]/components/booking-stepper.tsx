@@ -39,13 +39,14 @@ export function BookingStepper({ steps, dotBgColor = 'hsl(var(--background))' }:
                   step.active ? 'booking-review__step-dot--active' :
                   step.completed ? 'booking-review__step-dot--completed' : ''
                 }`}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
                 animate={{
                   borderColor: step.active || step.completed ? '#0e7c6b' : '#d0d0d0',
-                  backgroundColor: step.completed ? '#0e7c6b' : step.active ? '#e6f5f2' : dotBgColor,
-                  scale: step.active ? 1.15 : 1,
+                  backgroundColor: step.completed ? '#0e7c6b' : step.active ? '#0e7c6b' : dotBgColor,
+                  scale: step.active ? 1.1 : 1,
                   boxShadow: step.active
-                    ? '0 0 0 6px rgba(14, 124, 107, 0.15)'
-                    : '0 0 0 0px rgba(14, 124, 107, 0)',
+                    ? 'inset 0 0 0 1.5px #fff'
+                    : 'inset 0 0 0 0px #fff',
                 }}
                 transition={{
                   type: 'spring',

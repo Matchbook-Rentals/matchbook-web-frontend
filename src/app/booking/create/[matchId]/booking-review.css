@@ -125,10 +125,10 @@
 }
 
 .booking-review__step-dot-inner {
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
-  background: #0e7c6b;
+  background: #fff;
 }
 
 .booking-review__step-label {
