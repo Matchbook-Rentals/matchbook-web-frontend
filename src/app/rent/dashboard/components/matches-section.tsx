@@ -118,6 +118,7 @@ export const MatchesSection = ({ matches, defaultOpen = false, onWithdraw }: Mat
                     align: 'start',
                     loop: false,
                     slidesToScroll: 1,
+                    watchDrag: false,
                   }}
                   className="w-full"
                   keyboardControls={false}

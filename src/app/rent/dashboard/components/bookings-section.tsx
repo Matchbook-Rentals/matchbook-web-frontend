@@ -76,6 +76,7 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
                       align: 'start',
                       loop: false,
                       slidesToScroll: 1,
+                      watchDrag: false,
                     }}
                     className="w-full"
                     keyboardControls={false}
