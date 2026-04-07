@@ -1,0 +1,12 @@
+/* Override stepper and chip backgrounds to be transparent on the #fafafa page */
+.newnew-booking .booking-review__stepper-wrap {
+  background: transparent;
+}
+
+.newnew-booking .booking-review__chip--pill {
+  background: #fafafa;
+}
+
+.newnew-booking .booking-review__step-dot {
+  background: #fafafa;
+}

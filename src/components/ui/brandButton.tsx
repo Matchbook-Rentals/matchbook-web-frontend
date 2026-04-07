@@ -22,6 +22,8 @@ const brandButtonVariants = cva(
           "border border-primaryBrand bg-background text-primaryBrand hover:bg-primaryBrand hover:text-white disabled:hover:bg-background disabled:hover:text-primaryBrand transition-all duration-300",
         secondary:
           "bg-secondaryBrand text-white hover:bg-secondaryBrand/80 disabled:hover:bg-secondaryBrand",
+        tertiary:
+          "bg-[#eee] text-[#333] hover:bg-[#ddd] disabled:hover:bg-[#eee] transition-colors",
         ghost: "hover:bg-accent hover:text-accent-foreground disabled:hover:bg-transparent disabled:hover:text-current",
         link: "bg-transparent text-secondaryBrand hover:text-primaryBrand disabled:hover:text-secondaryBrand transition-none  rounded-none px-0 py-0 min-w-0",
       },
@@ -90,6 +92,8 @@ const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>(
             return "group-hover:bg-primaryBrand group-hover:text-white"
           case "secondary":
             return "group-hover:bg-secondaryBrand/80"
+          case "tertiary":
+            return "group-hover:bg-[#ddd]"
           case "ghost":
             return "group-hover:bg-accent group-hover:text-accent-foreground"
           case "link":

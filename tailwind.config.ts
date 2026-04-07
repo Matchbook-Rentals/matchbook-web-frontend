@@ -103,6 +103,14 @@ const config = {
   				'80': '#0B6E6Ecc',
   				DEFAULT: '#0B6E6E'
   			},
+  			brandBrown: {
+  				50: '#f5f0e8',
+  				100: '#e8e0d0',
+  				200: '#e8ddd0',
+  				300: '#c9bfb2',
+  				400: '#a09080',
+  				DEFAULT: '#f5f0e8'
+  			},
   			blueBrand: {
   				'80': '#5c9ac5cc',
   				DEFAULT: '#5c9ac5'
