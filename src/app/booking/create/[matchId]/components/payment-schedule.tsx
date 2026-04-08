@@ -5,7 +5,6 @@ import {
   BrandAccordionItem,
   BrandAccordionTrigger,
   BrandAccordionContent,
-  BrandAccordionDetailRow,
 } from '@/components/ui/brand-accordion';
 
 interface PaymentDetail {
@@ -31,22 +30,50 @@ interface PaymentScheduleProps {
   defaultExpandedId?: string;
 }
 
+/* ── Text Styles ── */
+// "Monthly Rent Payments" header, "Due today" header — 20px, 500
+const sectionHeaderTextStyle = "font-['Poppins'] text-xl font-medium leading-[150%] text-[#1a1a1a]";
+// Line item labels — 18px, 400, lighter color
+const paymentLineItemTextStyle = "font-['Poppins'] text-lg font-normal leading-[120%] text-[#545454]";
+// Dollar amounts on accordion controls & subtotals — 18px, 600
+const payAmountSubTotalTextStyle = "font-['Poppins'] text-lg font-semibold leading-[120%] text-[#333]";
+
+const contentStyle = "bg-white border-b-0 !pl-5 !gap-y-6 flex flex-col";
+
+function DetailRow({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) {
+  return (
+    <div className="flex px-8 justify-between items-end self-stretch">
+      <span className={paymentLineItemTextStyle}>{label}</span>
+      <span className={bold ? payAmountSubTotalTextStyle : paymentLineItemTextStyle}>{value}</span>
+    </div>
+  );
+}
+
 export function PaymentSchedule({ monthlyPayments, dueToday, defaultExpandedId }: PaymentScheduleProps) {
   return (
-    <>
+    <div className="rounded-lg bg-white">
+      <div className="flex h-[50px] px-5 justify-between items-center self-stretch rounded-lg bg-[#F9F9F9]">
+        <h3 className={`${sectionHeaderTextStyle} m-0`}>
+          Monthly Rent Payments
+        </h3>
+      </div>
+
       <BrandAccordionGroup
-        title="Monthly Rent Payments"
         type="multiple"
         defaultValue={defaultExpandedId ? [defaultExpandedId] : []}
+        className="border-0 rounded-none bg-transparent"
       >
         {monthlyPayments.map((payment) => (
-          <BrandAccordionItem key={payment.id} value={payment.id}>
-            <BrandAccordionTrigger rightContent={payment.total}>
+          <BrandAccordionItem key={payment.id} value={payment.id} className="border-b-0">
+            <BrandAccordionTrigger
+              rightContent={<span className={payAmountSubTotalTextStyle}>{payment.total}</span>}
+              className={paymentLineItemTextStyle}
+            >
               {payment.date}
             </BrandAccordionTrigger>
-            <BrandAccordionContent>
+            <BrandAccordionContent className={contentStyle}>
               {payment.details.map((d, i) => (
-                <BrandAccordionDetailRow key={i} label={d.label} value={d.amount} />
+                <DetailRow key={i} label={d.label} value={d.amount} />
               ))}
             </BrandAccordionContent>
           </BrandAccordionItem>
@@ -57,20 +84,23 @@ export function PaymentSchedule({ monthlyPayments, dueToday, defaultExpandedId }
         <BrandAccordionGroup
           type="multiple"
           defaultValue={['due-today']}
-          className="mt-4 bg-[#F9F9F9] border-[#eee]"
+          className="border-0 rounded-none bg-transparent"
         >
-          <BrandAccordionItem value="due-today">
-            <BrandAccordionTrigger rightContent={dueToday.total} className="font-bold">
-              <span className="font-bold text-[15px]">Due today</span>
+          <BrandAccordionItem value="due-today" className="border-b-0">
+            <BrandAccordionTrigger
+              rightContent={<span className={sectionHeaderTextStyle}>{dueToday.total}</span>}
+              className={`${sectionHeaderTextStyle} h-[50px] rounded-lg bg-[#F9F9F9]`}
+            >
+              Due today
             </BrandAccordionTrigger>
-            <BrandAccordionContent className="bg-[#F9F9F9]">
+            <BrandAccordionContent className={`${contentStyle} pt-4`}>
               {dueToday.details.map((d, i) => (
-                <BrandAccordionDetailRow key={i} label={d.label} value={d.amount} />
+                <DetailRow key={i} label={d.label} value={d.amount} bold />
               ))}
             </BrandAccordionContent>
           </BrandAccordionItem>
         </BrandAccordionGroup>
       )}
-    </>
+    </div>
   );
 }

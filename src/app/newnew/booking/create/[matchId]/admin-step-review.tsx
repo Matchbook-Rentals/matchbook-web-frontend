@@ -81,7 +81,7 @@ export function AdminStepReview() {
             <BrandAccordionTrigger rightContent={dueToday.total} className="font-bold">
               <span className="font-bold text-[15px]">Due today</span>
             </BrandAccordionTrigger>
-            <BrandAccordionContent className="bg-brandBrown-50 border-b-0">
+            <BrandAccordionContent className="bg-white border-b-0">
               {dueToday.details.map((d, i) => (
                 <BrandAccordionDetailRow key={i} label={d.label} value={d.amount} />
               ))}

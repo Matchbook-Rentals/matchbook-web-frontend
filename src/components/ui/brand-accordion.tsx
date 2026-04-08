@@ -16,7 +16,7 @@ const BrandAccordionGroup = React.forwardRef<
     footer?: React.ReactNode;
   }
 >(({ className, title, footer, children, ...props }, ref) => (
-  <div className={cn('rounded-xl border border-[#eee] overflow-hidden bg-[hsl(var(--background))]', className)}>
+  <div className={cn('rounded-xl border border-[#eee] overflow-hidden bg-white', className)}>
     {title && (
       <>
         <h3 className="text-base font-semibold m-0 px-5 pt-[18px] text-[#1a1a1a]" style={{ fontFamily: "'DM Sans', sans-serif" }}>
@@ -97,7 +97,7 @@ const BrandAccordionContent = React.forwardRef<
     className="overflow-hidden text-sm transition-all data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
     {...props}
   >
-    <div className={cn('px-5 pl-9 py-1 pb-3 bg-[#fafafa] border-b border-[#f0f0f0]', className)}>
+    <div className={cn('px-5 pl-9 py-1 pb-3 border-b border-[#f0f0f0] bg-white', className)}>
       {children}
     </div>
   </AccordionPrimitive.Content>

@@ -19,7 +19,7 @@ const CheckIcon = () => (
   </svg>
 );
 
-export function BookingStepper({ steps, dotBgColor = 'hsl(var(--background))' }: BookingStepperProps) {
+export function BookingStepper({ steps, dotBgColor = '#fff' }: BookingStepperProps) {
   // Find which step index is active so we can stagger delays
   const activeIndex = steps.findIndex((s) => s.active);
 

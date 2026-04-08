@@ -3,7 +3,7 @@
 
 .booking-review {
   font-family: 'DM Sans', sans-serif;
-  background: #fafafa;
+  background: #fff;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@
   justify-content: space-between;
   padding: 12px 28px;
   border-bottom: 1px solid #e8e8e8;
-  background: hsl(var(--background));
+  background: #fff;
 }
 
 .booking-review__header-left {
@@ -84,7 +84,7 @@
   display: flex;
   justify-content: center;
   padding: 28px 20px 20px;
-  background: hsl(var(--background));
+  background: transparent;
 }
 
 .booking-review__stepper {
@@ -107,7 +107,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: hsl(var(--background));
+  background: #fff;
 }
 
 .booking-review__step-dot--active {
@@ -240,7 +240,7 @@
 .booking-review__chip--pill {
   border-radius: 24px;
   border: 1px solid #ddd;
-  background: hsl(var(--background));
+  background: #fff;
   padding: 8px 16px;
   gap: 10px;
 }
@@ -258,7 +258,7 @@
 
 /* ── Payments Section ── */
 .booking-review__section {
-  background: hsl(var(--background));
+  background: #fff;
   border-radius: 12px;
   border: 1px solid #eee;
   overflow: hidden;
@@ -312,7 +312,7 @@
 
 .booking-review__payment-details {
   padding: 4px 20px 12px 36px;
-  background: #fafafa;
+  background: #fff;
   border-bottom: 1px solid #f0f0f0;
 }
 
@@ -392,7 +392,7 @@
   display: flex;
   justify-content: space-between;
   padding: 16px 28px;
-  background: hsl(var(--background));
+  background: #fff;
   border-top: 1px solid #e8e8e8;
 }
 
