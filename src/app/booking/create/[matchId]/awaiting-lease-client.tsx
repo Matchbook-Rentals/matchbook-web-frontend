@@ -7,23 +7,26 @@ import { StepReviewBooking } from './components/step-review-booking';
 import { StepSignLease } from './components/step-sign-lease';
 import { StepPayAndBook } from './components/step-pay-and-book';
 import { StepConfirmation } from './components/step-confirmation';
+import type { StepProps, LeaseDocument } from './components/types';
 
 interface AwaitingLeaseClientProps {
   match: MatchWithRelations;
   matchId: string;
   isAdminDev?: boolean;
+  currentUserEmail: string;
+  leaseDocument?: LeaseDocument | null;
 }
 
 const STEP_LABELS = ["Review Booking", "Sign Lease", "Pay and Book", "Confirmation"];
 
-const STEP_COMPONENTS = [
+const STEP_COMPONENTS: React.ComponentType<StepProps>[] = [
   StepReviewBooking,
   StepSignLease,
   StepPayAndBook,
   StepConfirmation,
 ];
 
-export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: AwaitingLeaseClientProps) {
+export function AwaitingLeaseClient({ match, matchId, isAdminDev = false, currentUserEmail, leaseDocument }: AwaitingLeaseClientProps) {
   const [currentStep, setCurrentStep] = useState(0);
 
   const steps = STEP_LABELS.map((label, i) => ({
@@ -36,6 +39,8 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: Awai
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === STEP_LABELS.length - 1;
 
+  const stepProps: StepProps = { match, matchId, currentUserEmail, isAdminDev, leaseDocument };
+
   return (
     <BookingLayout
       steps={steps}
@@ -44,7 +49,7 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false }: Awai
       backLabel={isFirstStep ? undefined : 'Back'}
       continueLabel={isLastStep ? 'Done' : 'Continue'}
     >
-      <StepContent />
+      <StepContent {...stepProps} />
     </BookingLayout>
   );
 }

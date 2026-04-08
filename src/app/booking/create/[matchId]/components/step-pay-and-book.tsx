@@ -1,6 +1,8 @@
 'use client';
 
-export function StepPayAndBook() {
+import type { StepProps } from './types';
+
+export function StepPayAndBook({ match, matchId, currentUserEmail }: StepProps) {
   return (
     <div className="booking-review__step-shell">
       <h2 className="booking-review__step-shell-title">Pay and Book</h2>

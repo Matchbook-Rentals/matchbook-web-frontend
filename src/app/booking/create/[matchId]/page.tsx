@@ -10,6 +10,36 @@ interface LeaseSigningPageProps {
   params: { matchId: string };
 }
 
+async function getLeaseDocument(leaseDocumentId: string | null) {
+  if (!leaseDocumentId) return null;
+
+  const document = await prisma.documentInstance.findUnique({
+    where: { id: leaseDocumentId },
+    include: {
+      template: true,
+      signingSessions: true,
+      fieldValues: true,
+    },
+  });
+
+  if (!document) return null;
+
+  return {
+    id: document.id,
+    pdfFileUrl: document.pdfFileUrl,
+    pdfFileName: document.pdfFileName,
+    documentData: document.documentData as any,
+    fieldValues: document.fieldValues.map(fv => ({
+      fieldId: fv.fieldId,
+      value: fv.value,
+      signerIndex: fv.signerIndex,
+      signedAt: fv.signedAt?.toISOString() ?? null,
+    })),
+    template: document.template,
+    signingSessions: document.signingSessions,
+  };
+}
+
 export default async function LeaseSigningPage({ params }: LeaseSigningPageProps) {
   const { userId } = await auth();
 
@@ -34,13 +64,8 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
 
   const match = result.match;
 
-  console.log('🔍 [Lease Signing Page] Match state:', {
-    matchId: params.matchId,
-    hasLeaseDocument: !!match.leaseDocumentId,
-    tenantSignedAt: match.tenantSignedAt,
-    paymentAuthorizedAt: match.paymentAuthorizedAt,
-    paymentCapturedAt: match.paymentCapturedAt
-  });
+  // Prefetch lease document server-side
+  const leaseDocument = await getLeaseDocument(match.leaseDocumentId);
 
   // TODO: temporarily always show the new booking review UI for development
   // Original condition: if (!match.leaseDocumentId)
@@ -49,6 +74,8 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
       match={match}
       matchId={params.matchId}
       isAdminDev={await checkRole('admin_dev')}
+      currentUserEmail={dbUser.email}
+      leaseDocument={leaseDocument}
     />
   );
 

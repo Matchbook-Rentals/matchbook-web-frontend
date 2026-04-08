@@ -80,8 +80,7 @@ export function PaymentSchedule({ monthlyPayments, dueToday, defaultExpandedId }
         ))}
       </BrandAccordionGroup>
 
-      {dueToday.details.length > 0 && (
-        <BrandAccordionGroup
+      <BrandAccordionGroup
           type="multiple"
           defaultValue={['due-today']}
           className="border-0 rounded-none bg-transparent"
@@ -100,7 +99,6 @@ export function PaymentSchedule({ monthlyPayments, dueToday, defaultExpandedId }
             </BrandAccordionContent>
           </BrandAccordionItem>
         </BrandAccordionGroup>
-      )}
     </div>
   );
 }
