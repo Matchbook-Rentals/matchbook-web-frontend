@@ -62,7 +62,7 @@ export const MatchesSection = ({ matches, defaultOpen = false, onWithdraw }: Mat
   }, [api]);
 
   const handleBookNow = (matchId: string) => {
-    router.push(`/app/rent/match/${matchId}/lease-signing`);
+    router.push(`/booking/create/${matchId}`);
   };
 
   const handleUnmatch = async (matchId: string) => {
