@@ -51,7 +51,7 @@ export function StepReviewBooking({ match }: StepProps) {
       const dateLabel = cursor.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
       const details = [
-        { label: isProrated ? 'Prorated Rent' : 'Rent', amount: fmt(rent) },
+        { label: isProrated ? `Prorated Rent (${daysInMonth - dayOfMonth + 1} days)` : 'Rent', amount: fmt(rent) },
       ];
       if (paymentDetails.monthlyPetRent > 0) {
         details.push({ label: 'Pet Rent', amount: fmt(paymentDetails.monthlyPetRent) });
