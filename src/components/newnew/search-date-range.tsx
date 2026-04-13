@@ -183,6 +183,15 @@ export default function SearchDateRange({
       if (d.getTime() === s.getTime()) return null;
       if (d < s) return 'End date cannot be before start date.';
 
+      // Check if the range would span over any unavailable period
+      if (unavailablePeriods) {
+        for (const period of unavailablePeriods) {
+          const pStart = normalizeDate(period.startDate);
+          const pEnd = normalizeDate(period.endDate);
+          if (pStart > s && pStart < d) return 'Range would span an unavailable period';
+        }
+      }
+
       if (minimumDateRange) {
         const minEnd = normalizeDate(add(s, minimumDateRange));
         if (d < minEnd) return 'Searches must be for at least one month.';
@@ -623,7 +632,7 @@ export default function SearchDateRange({
           <input
             type="text"
             inputMode="numeric"
-            placeholder="mm/dd/yy"
+            placeholder="Select Dates"
             value={startInputRaw}
             className={`h-12 w-full bg-background rounded-lg border px-3 text-base text-[#344054] outline-none focus:ring-2 ${startError ? 'border-red-500 focus:ring-red-300 focus:border-red-500' : 'border-[#d0d5dd] focus:ring-[#3c8787] focus:border-[#3c8787]'}`}
             onChange={(e) => handleTextChange(e, 'start')}
@@ -638,7 +647,7 @@ export default function SearchDateRange({
           <input
             type="text"
             inputMode="numeric"
-            placeholder="mm/dd/yy"
+            placeholder="Select Dates"
             value={endInputRaw}
             className={`h-12 w-full bg-background rounded-lg border px-3 text-base text-[#344054] outline-none focus:ring-2 ${endError ? 'border-red-500 focus:ring-red-300 focus:border-red-500' : 'border-[#d0d5dd] focus:ring-[#3c8787] focus:border-[#3c8787]'}`}
             onChange={(e) => handleTextChange(e, 'end')}
