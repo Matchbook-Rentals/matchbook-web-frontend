@@ -494,7 +494,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
 
                       <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
                         <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                          Supported formats: PNG, JPG, DOC
+                          Supported formats: PNG, JPG, DOC, PDF
                         </div>
 
                         <div className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
