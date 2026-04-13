@@ -426,7 +426,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                     mode: "auto",
                     ...(isMobile && {
                       input: {
-                        accept: "image/*",
+                        accept: "image/*,.pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                         capture: "environment"
                       }
                     })
@@ -490,7 +490,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                     }
 
                     // Validate file
-                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+                    const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
                     const maxSize = 50 * 1024 * 1024; // 50MB
 
                     const file = files[0];
@@ -499,7 +499,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
                       const fileExtension = file.name.split('.').pop()?.toUpperCase() || 'unknown';
                       toast({
                         title: "Upload Error",
-                        description: `File has unsupported type "${fileExtension}". Please use PNG or JPG files only.`,
+                        description: `File has unsupported type "${fileExtension}". Please use PNG, JPG, PDF, or DOC files only.`,
                         variant: "destructive"
                       });
                       return [];
@@ -532,7 +532,7 @@ export const Identification: React.FC<IdentificationProps> = ({ inputClassName, 
 
                 <div className="flex items-center gap-1 w-full">
                   <div className="flex-1 font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                    Supported formats: PNG, JPG
+                    Supported formats: PNG, JPG, DOC, PDF
                   </div>
                   <div className="font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-gray-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
                     Maximum size: 50MB
