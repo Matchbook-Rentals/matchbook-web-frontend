@@ -7,6 +7,7 @@ import { useSignedFieldsStore } from '@/stores/signed-fields-store-v2';
 import { useBookingSidebarStore } from '@/stores/booking-sidebar-store';
 import { useBookingStepFooterStore } from '@/stores/booking-step-footer-store';
 import { useResponsivePDFWidth } from '@/hooks/useResponsivePDFWidth';
+import { navigateToNextField as navigateToFieldUtil } from '@/utils/fieldNavigationUtils-v2';
 import dynamic from 'next/dynamic';
 import { BrandAlertProvider } from '@/hooks/useBrandAlert';
 import type { StepProps } from './types';
@@ -317,6 +318,12 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
                       onClick={() => {
                         setActiveFieldId(field.formId);
                         if (isMobile) setSidebarOpen(false);
+                        // Scroll the PDF to this field and flash it.
+                        // On mobile, wait for the drawer close animation so the
+                        // PDF area has reflowed before we scroll.
+                        const run = () => navigateToFieldUtil({ nextField: field });
+                        if (isMobile) setTimeout(run, 300);
+                        else run();
                       }}
                     />
                   );
