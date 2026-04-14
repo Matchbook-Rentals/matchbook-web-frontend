@@ -12,8 +12,8 @@ export default function Footer() {
         </div>
 
         {/* Links Section */}
-        <div className="flex justify-between w-full pt-3 lg:w-3/5 gap-2 lg:gap-0 ">
-          {/* Navigation + Resources */}
+        <div className="[container-type:inline-size] flex justify-between w-full pt-3 lg:w-3/5 gap-2 lg:gap-0 ">
+          {/* Navigation + inline Resources (inline copy hides when container is wide enough for a standalone Resources column) */}
           <div className="text-lg mx-auto ">
             <h3 className="text-xl font-semibold">Navigation</h3>
             <nav className="flex flex-col gap-1.5 mt-2">
@@ -39,7 +39,28 @@ export default function Footer() {
                 Contact
               </Link>
             </nav>
-            <h3 className="text-xl font-semibold mt-4">Resources</h3>
+            <h3 className="text-xl font-semibold mt-4 [@container(min-width:640px)]:hidden">Resources</h3>
+            <nav className="flex flex-col gap-1.5 mt-2 [@container(min-width:640px)]:hidden">
+              <Link
+                href="/articles"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Articles
+              </Link>
+              <Link
+                href="/faq"
+                className="text-gray-500 hover:text-black"
+                prefetch={true}
+              >
+                FAQ
+              </Link>
+            </nav>
+          </div>
+
+          {/* Standalone Resources column (only shown when container is wide enough) */}
+          <div className="text-lg mx-auto hidden [@container(min-width:640px)]:block">
+            <h3 className="text-xl font-semibold">Resources</h3>
             <nav className="flex flex-col gap-1.5 mt-2">
               <Link
                 href="/articles"
