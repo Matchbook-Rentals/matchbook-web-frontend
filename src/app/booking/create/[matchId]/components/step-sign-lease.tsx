@@ -5,9 +5,10 @@ import { Check } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store-v2';
 import { useBookingSidebarStore } from '@/stores/booking-sidebar-store';
-import { useBookingStepFooterStore } from '@/stores/booking-step-footer-store';
+import { useBookingFooterControl } from '@/stores/booking-step-footer-store';
 import { useResponsivePDFWidth } from '@/hooks/useResponsivePDFWidth';
 import { navigateToNextField as navigateToFieldUtil } from '@/utils/fieldNavigationUtils-v2';
+import { handleSignerCompletion } from '@/app/actions/documents';
 import dynamic from 'next/dynamic';
 import { BrandAlertProvider } from '@/hooks/useBrandAlert';
 import type { StepProps } from './types';
@@ -68,7 +69,6 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
   const sidebarOpen = useBookingSidebarStore((s) => s.open);
   const setSidebarOpen = useBookingSidebarStore((s) => s.setOpen);
   const setSidebarVisible = useBookingSidebarStore((s) => s.setVisible);
-  const setFooterOverride = useBookingStepFooterStore((s) => s.setOverride);
 
   // Register the header toggle while this step is mounted
   useEffect(() => {
@@ -84,11 +84,6 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
     if (!isMobile && sidebarOpen) setSidebarOpen(false);
   }, [isMobile, sidebarOpen, setSidebarOpen]);
 
-  // Clear the footer override when leaving this step
-  useEffect(() => {
-    return () => setFooterOverride(null);
-  }, [setFooterOverride]);
-
   const [documentPdfFile, setDocumentPdfFile] = useState<File | null>(null);
   const [isLoadingPdf, setIsLoadingPdf] = useState(true);
   const [initialized, setInitialized] = useState(false);
@@ -96,6 +91,10 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
 
   // Captured from PDFEditor via onSigningActionReady — navigates to next field or completes
   const signingActionRef = useRef<(() => Promise<void>) | null>(null);
+
+  // Guards against double-clicks on the Continue/Next Field button
+  const continueInFlightRef = useRef(false);
+  const [isContinuing, setIsContinuing] = useState(false);
 
   // Derived from prefetched leaseDocument
   const documentFields = (() => {
@@ -159,29 +158,82 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
   const tenantTotalCount = renterSignFields.length;
   const tenantUnsignedCount = tenantTotalCount - tenantCompletedCount;
 
-  // Wire up the outer footer's Continue button to "Next Field" / "Continue" behavior
-  useEffect(() => {
-    setFooterOverride({
-      continueLabel: tenantUnsignedCount > 0 ? 'Next Field' : 'Continue',
-      continueDisabled: false,
-      continueHandler: async () => {
-        // Determine state at click time, not render time
-        const latestSigned = useSignedFieldsStore.getState().signedFields;
-        const wasAllSigned = renterSignFields.length > 0 &&
-          renterSignFields.every((f: any) => latestSigned[f.formId]);
+  const handleSigningComplete = async () => {
+    try {
+      const response = await fetch(`/api/matches/${matchId}/tenant-signed`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (!response.ok) throw new Error('Failed to update match record');
+    } catch (error) {
+      console.error('Error updating match record:', error);
+      toast({
+        title: 'Warning',
+        description: 'Lease signed but failed to update records. Please contact support.',
+        variant: 'destructive',
+      });
+    }
+  };
 
-        // PDFEditor's signing action: navigates to next field OR completes
-        if (signingActionRef.current) {
-          await signingActionRef.current();
-        }
+  // Handler for the outer footer button. Two branches:
+  //   1. Fields still unsigned → delegate to PDFEditor (scrolls + flashes next field)
+  //   2. All signed → fast path: fire server-side completion work in parallel,
+  //      then advance. We intentionally bypass PDFEditor's completeCurrentStep
+  //      because it re-saves every field value — we already persist each field
+  //      as it's signed, so that path is pure redundancy.
+  const handleFooterContinue = async () => {
+    // Ref guard against double-clicks before React re-renders with disabled=true
+    if (continueInFlightRef.current) return;
+    continueInFlightRef.current = true;
+    setIsContinuing(true);
 
-        // If everything was already signed before the click, also advance the outer step
-        if (wasAllSigned && onAdvanceStep) {
-          onAdvanceStep();
+    try {
+      const latestSigned = useSignedFieldsStore.getState().signedFields;
+      const wasAllSigned = renterSignFields.length > 0 &&
+        renterSignFields.every((f: any) => latestSigned[f.formId]);
+
+      if (!wasAllSigned) {
+        // Navigation branch — let PDFEditor pick the next field and flash it
+        if (signingActionRef.current) await signingActionRef.current();
+        return;
+      }
+
+      // Fast path: field values are already persisted, so skip the PDFEditor
+      // completeCurrentStep dance entirely and call only the essential work.
+      if (leaseDocument?.id) {
+        try {
+          await Promise.all([
+            handleSignerCompletion(
+              leaseDocument.id,
+              renterIndex,
+              documentRecipients.map((r: any) => ({
+                id: r.id,
+                name: r.name,
+                email: r.email,
+                role: r.role || '',
+              })),
+              undefined, // housingRequestId only used for host signer, not tenant
+            ),
+            handleSigningComplete(),
+          ]);
+        } catch (err) {
+          console.error('Error finalizing tenant signing:', err);
         }
-      },
-    });
-  }, [tenantUnsignedCount, tenantTotalCount, onAdvanceStep, setFooterOverride]);
+      }
+
+      if (onAdvanceStep) onAdvanceStep();
+    } finally {
+      continueInFlightRef.current = false;
+      setIsContinuing(false);
+    }
+  };
+
+  // Register the button override with the outer footer
+  useBookingFooterControl({
+    nextStepButtonText: tenantUnsignedCount > 0 ? 'Next Field' : 'Continue',
+    nextStepButtonDisabled: isContinuing,
+    nextStepButtonAction: handleFooterContinue,
+  });
 
   // Fetch PDF binary client-side
   useEffect(() => {
@@ -207,24 +259,6 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
 
     fetchPdf();
   }, [leaseDocument?.pdfFileUrl]);
-
-  const handleSigningComplete = async () => {
-    try {
-      const response = await fetch(`/api/matches/${matchId}/tenant-signed`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      if (!response.ok) throw new Error('Failed to update match record');
-      toast({ title: 'Lease Signed', description: 'Your lease has been signed successfully.' });
-    } catch (error) {
-      console.error('Error updating match record:', error);
-      toast({
-        title: 'Warning',
-        description: 'Lease signed but failed to update records. Please contact support.',
-        variant: 'destructive',
-      });
-    }
-  };
 
   // No lease document
   if (!leaseDocument) {

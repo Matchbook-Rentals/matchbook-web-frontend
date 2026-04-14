@@ -1,9 +1,10 @@
+import { useEffect, useRef } from 'react';
 import { create } from 'zustand';
 
 export interface FooterOverride {
-  continueLabel?: string;
-  continueHandler?: () => void | Promise<void>;
-  continueDisabled?: boolean;
+  nextStepButtonText?: string;
+  nextStepButtonAction?: () => void | Promise<void>;
+  nextStepButtonDisabled?: boolean;
 }
 
 interface BookingStepFooterState {
@@ -15,3 +16,39 @@ export const useBookingStepFooterStore = create<BookingStepFooterState>((set) =>
   override: null,
   setOverride: (override) => set({ override }),
 }));
+
+/**
+ * Step components use this to control the outer BookingFooter's Continue button.
+ *
+ * Takes primitive text + disabled flag (stable deps) and an action function.
+ * The action is kept in a ref so the registered handler always invokes the
+ * latest closure without re-registering the override every render.
+ *
+ * Automatically clears the override on unmount.
+ */
+export function useBookingFooterControl({
+  nextStepButtonText,
+  nextStepButtonDisabled,
+  nextStepButtonAction,
+}: {
+  nextStepButtonText?: string;
+  nextStepButtonDisabled?: boolean;
+  nextStepButtonAction?: () => void | Promise<void>;
+}) {
+  const setOverride = useBookingStepFooterStore((s) => s.setOverride);
+
+  const actionRef = useRef(nextStepButtonAction);
+  actionRef.current = nextStepButtonAction;
+
+  useEffect(() => {
+    setOverride({
+      nextStepButtonText,
+      nextStepButtonDisabled,
+      nextStepButtonAction: () => actionRef.current?.(),
+    });
+  }, [nextStepButtonText, nextStepButtonDisabled, setOverride]);
+
+  useEffect(() => {
+    return () => setOverride(null);
+  }, [setOverride]);
+}

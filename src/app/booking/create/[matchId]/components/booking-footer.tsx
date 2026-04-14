@@ -12,9 +12,9 @@ interface BookingFooterProps {
 
 export function BookingFooter({ onBack, onContinue, backLabel = 'Back', continueLabel = 'Continue' }: BookingFooterProps) {
   const override = useBookingStepFooterStore((s) => s.override);
-  const effectiveLabel = override?.continueLabel ?? continueLabel;
-  const effectiveHandler = override?.continueHandler ?? onContinue;
-  const effectiveDisabled = override?.continueDisabled ?? false;
+  const effectiveLabel = override?.nextStepButtonText ?? continueLabel;
+  const effectiveHandler = override?.nextStepButtonAction ?? onContinue;
+  const effectiveDisabled = override?.nextStepButtonDisabled ?? false;
 
   return (
     <footer className="booking-review__footer">
