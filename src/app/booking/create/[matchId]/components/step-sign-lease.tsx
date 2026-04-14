@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Check } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store-v2';
+import { useBookingSidebarStore } from '@/stores/booking-sidebar-store';
 import { useResponsivePDFWidth } from '@/hooks/useResponsivePDFWidth';
 import dynamic from 'next/dynamic';
 import { BrandAlertProvider } from '@/hooks/useBrandAlert';
@@ -61,6 +62,24 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
   const { initializeSignedFields } = useSignedFieldsStore();
   const signedFields = useSignedFieldsStore((s) => s.signedFields);
   const { isMobile } = useResponsivePDFWidth();
+
+  const sidebarOpen = useBookingSidebarStore((s) => s.open);
+  const setSidebarOpen = useBookingSidebarStore((s) => s.setOpen);
+  const setSidebarVisible = useBookingSidebarStore((s) => s.setVisible);
+
+  // Register the header toggle while this step is mounted
+  useEffect(() => {
+    setSidebarVisible(true);
+    return () => {
+      setSidebarVisible(false);
+      setSidebarOpen(false);
+    };
+  }, [setSidebarVisible, setSidebarOpen]);
+
+  // Close the mobile drawer when crossing into desktop
+  useEffect(() => {
+    if (!isMobile && sidebarOpen) setSidebarOpen(false);
+  }, [isMobile, sidebarOpen, setSidebarOpen]);
 
   const [documentPdfFile, setDocumentPdfFile] = useState<File | null>(null);
   const [isLoadingPdf, setIsLoadingPdf] = useState(true);
@@ -198,58 +217,80 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
     return (
       <BrandAlertProvider>
         <div className="flex min-h-[700px] w-screen max-w-[1400px] relative left-1/2 -translate-x-1/2">
-          {/* Sidebar */}
-          {!isMobile && (
-            <aside className="w-[340px] bg-white border-r border-zinc-200 p-8 flex-shrink-0 overflow-y-auto">
-              <div className="mb-8">
-                <h2 className="text-2xl font-bold tracking-tight text-zinc-900">Sign Lease</h2>
-                <p className="text-zinc-500 mt-1 text-sm">
-                  Complete required fields ({completedCount}/{totalCount})
-                </p>
+          {/* Mobile drawer backdrop */}
+          <div
+            onClick={() => setSidebarOpen(false)}
+            aria-hidden="true"
+            className={`md:hidden fixed inset-0 bg-black/40 z-40 transition-opacity duration-200 ${
+              sidebarOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
+          />
+
+          {/* Sidebar — fixed drawer on mobile, sticky column on desktop */}
+          <aside
+            className={`
+              fixed md:sticky top-0 left-0 md:left-auto z-50 md:z-auto
+              w-[340px] max-w-[85vw] md:max-w-none
+              h-[100dvh] md:h-auto md:max-h-screen
+              bg-white md:border-r md:border-zinc-200
+              p-8 overflow-y-auto
+              md:self-start md:flex-shrink-0
+              transform transition-transform duration-300 ease-out
+              ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'}
+              md:translate-x-0
+            `}
+          >
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold tracking-tight text-zinc-900">Sign Lease</h2>
+              <p className="text-zinc-500 mt-1 text-sm">
+                Complete required fields ({completedCount}/{totalCount})
+              </p>
+            </div>
+
+            {/* Progress Bar */}
+            {totalCount > 0 && (
+              <div className="w-full bg-zinc-200 rounded-full h-2 mb-6">
+                <div
+                  className="bg-[#0e7c6b] h-2 rounded-full transition-all duration-300"
+                  style={{ width: `${totalCount > 0 ? (completedCount / totalCount) * 100 : 0}%` }}
+                />
               </div>
+            )}
 
-              {/* Progress Bar */}
-              {totalCount > 0 && (
-                <div className="w-full bg-zinc-200 rounded-full h-2 mb-6">
-                  <div
-                    className="bg-[#0e7c6b] h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${totalCount > 0 ? (completedCount / totalCount) * 100 : 0}%` }}
-                  />
-                </div>
-              )}
+            <div className="mb-6">
+              <h4 className="uppercase text-xs font-bold tracking-widest text-zinc-500 mb-4">
+                Required Fields
+              </h4>
 
-              <div className="mb-6">
-                <h4 className="uppercase text-xs font-bold tracking-widest text-zinc-500 mb-4">
-                  Required Fields
-                </h4>
+              <div className="space-y-2">
+                {renterSignFields.map((field: any) => {
+                  const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
+                  const friendlyType = fieldType === 'SIGNATURE' ? 'Signature' : 'Initials';
+                  const isSigned = !!signedFields[field.formId];
 
-                <div className="space-y-2">
-                  {renterSignFields.map((field: any) => {
-                    const fieldType = typeof field.type === 'string' ? field.type : (field.type?.type || field.type?.value || '');
-                    const friendlyType = fieldType === 'SIGNATURE' ? 'Signature' : 'Initials';
-                    const isSigned = !!signedFields[field.formId];
+                  return (
+                    <FieldItem
+                      key={field.formId}
+                      type={friendlyType}
+                      page={field.pageNumber || field.page || 1}
+                      status={isSigned ? 'signed' : 'pending'}
+                      isActive={activeFieldId === field.formId}
+                      onClick={() => {
+                        setActiveFieldId(field.formId);
+                        if (isMobile) setSidebarOpen(false);
+                      }}
+                    />
+                  );
+                })}
 
-                    return (
-                      <FieldItem
-                        key={field.formId}
-                        type={friendlyType}
-                        page={field.pageNumber || field.page || 1}
-                        status={isSigned ? 'signed' : 'pending'}
-                        isActive={activeFieldId === field.formId}
-                        onClick={() => setActiveFieldId(field.formId)}
-                      />
-                    );
-                  })}
-
-                  {renterSignFields.length === 0 && (
-                    <p className="text-sm text-zinc-500 py-4">
-                      No signature fields required. You may review and proceed.
-                    </p>
-                  )}
-                </div>
+                {renterSignFields.length === 0 && (
+                  <p className="text-sm text-zinc-500 py-4">
+                    No signature fields required. You may review and proceed.
+                  </p>
+                )}
               </div>
-            </aside>
-          )}
+            </div>
+          </aside>
 
           {/* Document Area */}
           <main className="flex-1 bg-[#8a9a94] flex items-start justify-center p-6 md:p-10 overflow-auto">
