@@ -15,6 +15,7 @@ interface PDFEditorSignerProps {
   onCancel?: () => void;
   onFinish?: (stepName: string) => void;
   onFieldSign?: (fieldId: string, value: any) => void;
+  onSigningActionReady?: (signingActionFn: () => Promise<void>) => void;
   isMobile?: boolean;
   hideDefaultSidebar?: boolean;
   showFooter?: boolean;
@@ -30,6 +31,7 @@ export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({
   onCancel,
   onFinish,
   onFieldSign,
+  onSigningActionReady,
   isMobile = false,
   hideDefaultSidebar = false,
   showFooter = true
@@ -45,6 +47,7 @@ export const PDFEditorSigner: React.FC<PDFEditorSignerProps> = ({
       onCancel={onCancel}
       onFinish={onFinish}
       onFieldSign={onFieldSign}
+      onSigningActionReady={onSigningActionReady}
       isMobile={isMobile}
       hideDefaultSidebar={hideDefaultSidebar}
       showFooter={showFooter}

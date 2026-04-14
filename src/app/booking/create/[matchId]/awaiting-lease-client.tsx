@@ -39,7 +39,14 @@ export function AwaitingLeaseClient({ match, matchId, isAdminDev = false, curren
   const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === STEP_LABELS.length - 1;
 
-  const stepProps: StepProps = { match, matchId, currentUserEmail, isAdminDev, leaseDocument };
+  const stepProps: StepProps = {
+    match,
+    matchId,
+    currentUserEmail,
+    isAdminDev,
+    leaseDocument,
+    onAdvanceStep: isLastStep ? undefined : () => setCurrentStep((s) => s + 1),
+  };
 
   return (
     <BookingLayout

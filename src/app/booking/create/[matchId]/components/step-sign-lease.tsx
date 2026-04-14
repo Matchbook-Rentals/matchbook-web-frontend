@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Check } from 'lucide-react';
 import { useToast } from '@/components/ui/use-toast';
 import { useSignedFieldsStore } from '@/stores/signed-fields-store-v2';
 import { useBookingSidebarStore } from '@/stores/booking-sidebar-store';
+import { useBookingStepFooterStore } from '@/stores/booking-step-footer-store';
 import { useResponsivePDFWidth } from '@/hooks/useResponsivePDFWidth';
 import dynamic from 'next/dynamic';
 import { BrandAlertProvider } from '@/hooks/useBrandAlert';
@@ -57,7 +58,7 @@ function FieldItem({
   );
 }
 
-export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument }: StepProps) {
+export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument, onAdvanceStep }: StepProps) {
   const { toast } = useToast();
   const { initializeSignedFields } = useSignedFieldsStore();
   const signedFields = useSignedFieldsStore((s) => s.signedFields);
@@ -66,6 +67,7 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
   const sidebarOpen = useBookingSidebarStore((s) => s.open);
   const setSidebarOpen = useBookingSidebarStore((s) => s.setOpen);
   const setSidebarVisible = useBookingSidebarStore((s) => s.setVisible);
+  const setFooterOverride = useBookingStepFooterStore((s) => s.setOverride);
 
   // Register the header toggle while this step is mounted
   useEffect(() => {
@@ -81,10 +83,18 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
     if (!isMobile && sidebarOpen) setSidebarOpen(false);
   }, [isMobile, sidebarOpen, setSidebarOpen]);
 
+  // Clear the footer override when leaving this step
+  useEffect(() => {
+    return () => setFooterOverride(null);
+  }, [setFooterOverride]);
+
   const [documentPdfFile, setDocumentPdfFile] = useState<File | null>(null);
   const [isLoadingPdf, setIsLoadingPdf] = useState(true);
   const [initialized, setInitialized] = useState(false);
   const [activeFieldId, setActiveFieldId] = useState<string | null>(null);
+
+  // Captured from PDFEditor via onSigningActionReady — navigates to next field or completes
+  const signingActionRef = useRef<(() => Promise<void>) | null>(null);
 
   // Derived from prefetched leaseDocument
   const documentFields = (() => {
@@ -142,6 +152,35 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
 
     setInitialized(true);
   }, [leaseDocument]);
+
+  // Tenant-side progress
+  const tenantCompletedCount = renterSignFields.filter((f: any) => signedFields[f.formId]).length;
+  const tenantTotalCount = renterSignFields.length;
+  const tenantUnsignedCount = tenantTotalCount - tenantCompletedCount;
+
+  // Wire up the outer footer's Continue button to "Next Field" / "Continue" behavior
+  useEffect(() => {
+    setFooterOverride({
+      continueLabel: tenantUnsignedCount > 0 ? 'Next Field' : 'Continue',
+      continueDisabled: false,
+      continueHandler: async () => {
+        // Determine state at click time, not render time
+        const latestSigned = useSignedFieldsStore.getState().signedFields;
+        const wasAllSigned = renterSignFields.length > 0 &&
+          renterSignFields.every((f: any) => latestSigned[f.formId]);
+
+        // PDFEditor's signing action: navigates to next field OR completes
+        if (signingActionRef.current) {
+          await signingActionRef.current();
+        }
+
+        // If everything was already signed before the click, also advance the outer step
+        if (wasAllSigned && onAdvanceStep) {
+          onAdvanceStep();
+        }
+      },
+    });
+  }, [tenantUnsignedCount, tenantTotalCount, onAdvanceStep, setFooterOverride]);
 
   // Fetch PDF binary client-side
   useEffect(() => {
@@ -208,9 +247,9 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
     );
   }
 
-  // Completed + signed count
-  const completedCount = renterSignFields.filter((f: any) => signedFields[f.formId]).length;
-  const totalCount = renterSignFields.length;
+  // Alias to existing template variables in sidebar
+  const completedCount = tenantCompletedCount;
+  const totalCount = tenantTotalCount;
 
   // Ready to sign
   if (documentPdfFile) {
@@ -303,12 +342,15 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
                 currentUserEmail={currentUserEmail}
                 isMobile={isMobile}
                 hideDefaultSidebar={true}
-                showFooter={true}
+                showFooter={false}
                 onSave={() => {}}
                 onCancel={() => {}}
                 onFinish={handleSigningComplete}
                 onFieldSign={(fieldId, value) => {
                   useSignedFieldsStore.getState().setSignedField(fieldId, value ? 'signed' : undefined);
+                }}
+                onSigningActionReady={(fn) => {
+                  signingActionRef.current = fn;
                 }}
               />
             </div>

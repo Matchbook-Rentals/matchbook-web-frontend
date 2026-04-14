@@ -1499,13 +1499,24 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
   }, [legacyWorkflowState]);
 
-  // Expose signing action function to parent component during signing states
+  // Expose signing action function to parent component during signing states.
+  // The actual ref wiring happens after handleSigningAction is defined below.
   const onSigningActionReadyRef = useRef(onSigningActionReady);
   onSigningActionReadyRef.current = onSigningActionReady;
 
+  const latestHandleSigningActionRef = useRef<() => Promise<void>>();
+  const stableSigningActionRef = useRef<() => Promise<void>>();
+  if (!stableSigningActionRef.current) {
+    stableSigningActionRef.current = async () => {
+      if (latestHandleSigningActionRef.current) {
+        await latestHandleSigningActionRef.current();
+      }
+    };
+  }
+
   useEffect(() => {
-    if (onSigningActionReadyRef.current && workflow.isSigningPhase()) {
-      onSigningActionReadyRef.current(handleSigningAction);
+    if (onSigningActionReadyRef.current && workflow.isSigningPhase() && stableSigningActionRef.current) {
+      onSigningActionReadyRef.current(stableSigningActionRef.current);
     }
   }, [legacyWorkflowState]);
 
@@ -1589,6 +1600,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
       await completeCurrentStep();
     }
   };
+
+  // Keep the latest handleSigningAction closure available to the stable
+  // wrapper exposed via onSigningActionReady.
+  latestHandleSigningActionRef.current = handleSigningAction;
 
   // Signature management functions
   const fetchSavedSignatures = async () => {

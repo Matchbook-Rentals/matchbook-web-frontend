@@ -24,4 +24,5 @@ export interface StepProps {
   currentUserEmail: string;
   isAdminDev?: boolean;
   leaseDocument?: LeaseDocument | null;
+  onAdvanceStep?: () => void;
 }
