@@ -347,7 +347,7 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
                 onCancel={() => {}}
                 onFinish={handleSigningComplete}
                 onFieldSign={(fieldId, value) => {
-                  useSignedFieldsStore.getState().setSignedField(fieldId, value ? 'signed' : undefined);
+                  useSignedFieldsStore.getState().setSignedField(fieldId, value);
                 }}
                 onSigningActionReady={(fn) => {
                   signingActionRef.current = fn;
