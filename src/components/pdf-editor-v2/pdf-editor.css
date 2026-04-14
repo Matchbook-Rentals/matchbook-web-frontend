@@ -2,18 +2,15 @@
 
 /* PDF Viewer Container */
 .pdf-viewer-container {
-  background: white;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  background: transparent;
   margin: 0 auto;
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 .pdf-document {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 1.5rem;
+  gap: 1.5rem;
 }
 
 .pdf-page-wrapper {
@@ -450,10 +447,6 @@
 
 /* Dark Mode Support */
 @media (prefers-color-scheme: dark) {
-  .pdf-viewer-container {
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-  }
-  
   .field-item {
     backdrop-filter: blur(2px);
   }

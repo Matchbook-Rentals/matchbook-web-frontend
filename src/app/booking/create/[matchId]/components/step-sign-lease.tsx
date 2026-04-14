@@ -197,10 +197,10 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument 
   if (documentPdfFile) {
     return (
       <BrandAlertProvider>
-        <div className="flex min-h-[700px] w-screen relative left-1/2 -translate-x-1/2">
+        <div className="flex min-h-[700px] w-screen max-w-[1400px] relative left-1/2 -translate-x-1/2">
           {/* Sidebar */}
           {!isMobile && (
-            <aside className="w-[340px] bg-white border-r border-zinc-200 p-8 flex-shrink-0 overflow-y-auto border-4 border-blue-500">
+            <aside className="w-[340px] bg-white border-r border-zinc-200 p-8 flex-shrink-0 overflow-y-auto">
               <div className="mb-8">
                 <h2 className="text-2xl font-bold tracking-tight text-zinc-900">Sign Lease</h2>
                 <p className="text-zinc-500 mt-1 text-sm">
