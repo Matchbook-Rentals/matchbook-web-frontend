@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { ListingCreationCard } from './listing-creation-card';
 import * as AmenitiesIcons from '@/components/icons/amenities';
+import { SingleFamilyIcon, ApartmentIcon, TownhouseIcon, PrivateRoomIcon, FurnishedIcon, UnfurnishedIcon, PetsAllowedIcon, NoPetsIcon } from '@/components/icons-v3/amenities';
 import Image from 'next/image';
 
 // Using the same interface as in add-property-client.tsx
@@ -55,25 +56,25 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
       id: "single-family",
       name: "Single Family",
       value: "singleFamily",
-      icon: <Image src="/host-dashboard/svg/single-family.svg" alt="Single Family" width={24} height={24} />
+      icon: <SingleFamilyIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
     {
       id: "apartment",
       name: "Apartment",
       value: "apartment",
-      icon: <Image src="/host-dashboard/svg/apartment.svg" alt="Apartment" width={24} height={24} />
+      icon: <ApartmentIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
     {
       id: "townhouse",
       name: "Townhouse",
       value: "townhouse",
-      icon: <Image src="/host-dashboard/svg/townhouse-2.svg" alt="Townhouse" width={28} height={28} />
+      icon: <TownhouseIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
     {
       id: "private-room",
       name: "Private Room",
       value: "privateRoom",
-      icon: <Image src="/host-dashboard/svg/private-room.svg" alt="Private Room" width={28} height={28} />
+      icon: <PrivateRoomIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
   ];
 
@@ -82,12 +83,12 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "furnished",
       name: "Furnished",
-      icon: <AmenitiesIcons.UpdatedFurnishedIcon className="w-6 h-6" />
+      icon: <FurnishedIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
     {
       id: "unfurnished",
       name: "Unfurnished",
-      icon: <AmenitiesIcons.UpdatedUnfurnishedIcon className="w-6 h-6" />
+      icon: <UnfurnishedIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
   ];
 
@@ -97,12 +98,12 @@ const ListingUploadHighlights: React.FC<ListingUploadHighlightsProps> = ({
     {
       id: "pets-welcome",
       name: "Pets Welcome",
-      icon: <Image src="/host-dashboard/svg/pets-welcome.svg" alt="Pets Welcome" width={24} height={24} />
+      icon: <PetsAllowedIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
     {
       id: "no-pets",
       name: "No Pets",
-      icon: <Image src="/host-dashboard/svg/pets-not-welcome.svg" alt="No Pets" width={24} height={24} />
+      icon: <NoPetsIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
     },
   ];
 
