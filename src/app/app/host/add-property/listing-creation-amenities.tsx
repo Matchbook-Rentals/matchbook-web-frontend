@@ -63,49 +63,49 @@ const AMENITY_GROUPS = [
     group: 'Location & Views',
     items: [
       { value: 'mountainView', label: 'Mountain View', icon: <MountainViewIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'cityView', label: 'City View', icon: <AmenitiesIcons.UpdatedCityViewIcon className="p-1 mt-0" /> },
+      { value: 'cityView', label: 'City View', icon: <CityViewIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'waterfront', label: 'Waterfront', icon: <WaterfrontIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'waterView', label: 'Water View', icon: <AmenitiesIcons.UpdatedWaterViewIcon className="p-1 mt-0" /> },
+      { value: 'waterView', label: 'Water View', icon: <WaterViewIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
     group: 'Parking',
     items: [
       { value: 'offStreetParking', label: 'Off Street Parking', icon: <OffStreetParkingIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'evCharging', label: 'EV Charging', icon: <AmenitiesIcons.UpdatedEvChargingIcon className="p-1 mt-0 ml-0" /> },
+      { value: 'evCharging', label: 'EV Charging', icon: <EvChargingIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'garageParking', label: 'Garage Parking', icon: <GarageIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
     group: 'Kitchen',
     items: [
-      { value: 'garbageDisposal', label: 'Garbage Disposal', icon: <AmenitiesIcons.UpdatedGarbageDisposalIcon className="p-1 my-0" /> },
+      { value: 'garbageDisposal', label: 'Garbage Disposal', icon: <GarbageDisposalIcon className="w-full h-full scale-[1.25] md:scale-[1.33] -translate-x-[5px]" /> },
       { value: 'dishwasher', label: 'Dishwasher', icon: <DishwasherIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'fridge', label: 'Refrigerator', icon: <AmenitiesIcons.UpdatedFridgeIcon className="p-1 mt-0" /> },
+      { value: 'fridge', label: 'Refrigerator', icon: <RefrigeratorIcon className="w-full h-full scale-[1.25] md:scale-[1.33] -translate-x-[2px]" /> },
       { value: 'oven', label: 'Oven/Stove', icon: <OvenStoveIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'grill', label: 'Grill', icon: <AmenitiesIcons.UpdatedGrillIcon className="p-1" /> },
+      { value: 'grill', label: 'Grill', icon: <GrillIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'kitchenEssentials', label: 'Kitchen Essentials', icon: <KitchenEssentialsIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
     group: 'Climate Control & Workspace',
     items: [
-      { value: 'fireplace', label: 'Fireplace', icon: <AmenitiesIcons.UpdatedFireplaceIcon className="p-1 mt-0" /> },
+      { value: 'fireplace', label: 'Fireplace', icon: <FireplaceIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'heater', label: 'Heater', icon: <HeatingIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'dedicatedWorkspace', label: 'Workspace', icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" /> },
+      { value: 'dedicatedWorkspace', label: 'Workspace', icon: <DedicatedWorkspaceIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'airConditioner', label: 'Air Conditioning', icon: <AirConditioningIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
     group: 'Luxury & Recreation',
     items: [
-      { value: 'gym', label: 'Gym', icon: <AmenitiesIcons.UpdatedGymIcon className="p-1 mt-0" /> },
+      { value: 'gym', label: 'Gym', icon: <GymIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'sauna', label: 'Sauna', icon: <SaunaIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'balcony', label: 'Balcony', icon: <AmenitiesIcons.UpdatedBalconyIcon className="p-1 mt-0" /> },
+      { value: 'balcony', label: 'Balcony', icon: <BalconyIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'pool', label: 'Pool', icon: <PoolIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'hotTub', label: 'Hot Tub', icon: <AmenitiesIcons.UpdatedHotTubIcon className="p-1 mt-0" /> },
+      { value: 'hotTub', label: 'Hot Tub', icon: <HotTubIcon className="w-full h-full scale-[1.25] md:scale-[1.33] translate-x-[2px]" /> },
       { value: 'patio', label: 'Patio', icon: <PatioIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'sunroom', label: 'Sunroom', icon: <AmenitiesIcons.UpdatedSunroomIcon className="p-1 mt-0" /> },
+      { value: 'sunroom', label: 'Sunroom', icon: <SunroomIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
 ];
