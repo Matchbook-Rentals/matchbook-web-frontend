@@ -10,6 +10,27 @@ interface LeaseSigningPageProps {
   params: { matchId: string };
 }
 
+/**
+ * Determine which step of the booking flow a user should land on based on
+ * the current match state. Runs server-side so the client mounts directly
+ * at the correct step without any redirect/scroll flash.
+ *
+ * Steps (kept in sync with awaiting-lease-client.tsx STEP_LABELS):
+ *   0 — Review Booking
+ *   1 — Sign Lease
+ *   2 — Pay and Book
+ *   3 — Confirmation
+ */
+function computeInitialBookingStep(match: {
+  tenantSignedAt: Date | null;
+  paymentAuthorizedAt: Date | null;
+  booking: { id: string } | null;
+}): number {
+  if (match.booking || match.paymentAuthorizedAt) return 3; // Confirmation
+  if (match.tenantSignedAt) return 2; // Pay and Book
+  return 0; // Review Booking (default entry point)
+}
+
 async function getLeaseDocument(leaseDocumentId: string | null) {
   if (!leaseDocumentId) return null;
 
@@ -69,6 +90,8 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
 
   // TODO: temporarily always show the new booking review UI for development
   // Original condition: if (!match.leaseDocumentId)
+  const initialStep = computeInitialBookingStep(match);
+
   return (
     <AwaitingLeaseClient
       match={match}
@@ -76,6 +99,7 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
       isAdminDev={await checkRole('admin_dev')}
       currentUserEmail={dbUser.email}
       leaseDocument={leaseDocument}
+      initialStep={initialStep}
     />
   );
 

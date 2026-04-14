@@ -16,10 +16,18 @@ export function BookingFooter({ onBack, onContinue, backLabel = 'Back', continue
   const effectiveHandler = override?.nextStepButtonAction ?? onContinue;
   const effectiveDisabled = override?.nextStepButtonDisabled ?? false;
   const effectiveLoading = override?.nextStepButtonLoading ?? false;
+  const footerHint = override?.footerHint;
 
   return (
     <footer className="booking-review__footer">
-      <BrandButton variant="tertiary" onClick={onBack}>{backLabel}</BrandButton>
+      <div className="flex items-center gap-4 min-w-0">
+        <BrandButton variant="tertiary" onClick={onBack}>{backLabel}</BrandButton>
+        {footerHint && (
+          <div className="hidden md:flex items-center text-sm text-gray-600 min-w-0 truncate">
+            {footerHint}
+          </div>
+        )}
+      </div>
       <BrandButton
         variant="default"
         onClick={effectiveHandler}

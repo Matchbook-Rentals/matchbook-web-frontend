@@ -15,6 +15,8 @@ interface AwaitingLeaseClientProps {
   isAdminDev?: boolean;
   currentUserEmail: string;
   leaseDocument?: LeaseDocument | null;
+  /** Step index to mount the flow on, computed server-side from match state */
+  initialStep?: number;
 }
 
 const STEP_LABELS = ["Review Booking", "Sign Lease", "Pay and Book", "Confirmation"];
@@ -26,8 +28,15 @@ const STEP_COMPONENTS: React.ComponentType<StepProps>[] = [
   StepConfirmation,
 ];
 
-export function AwaitingLeaseClient({ match, matchId, isAdminDev = false, currentUserEmail, leaseDocument }: AwaitingLeaseClientProps) {
-  const [currentStep, setCurrentStep] = useState(0);
+export function AwaitingLeaseClient({
+  match,
+  matchId,
+  isAdminDev = false,
+  currentUserEmail,
+  leaseDocument,
+  initialStep = 0,
+}: AwaitingLeaseClientProps) {
+  const [currentStep, setCurrentStep] = useState(initialStep);
 
   const steps = STEP_LABELS.map((label, i) => ({
     label,

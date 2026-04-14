@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, type ReactNode } from 'react';
 import { create } from 'zustand';
 
 export interface FooterOverride {
@@ -6,6 +6,8 @@ export interface FooterOverride {
   nextStepButtonAction?: () => void | Promise<void>;
   nextStepButtonDisabled?: boolean;
   nextStepButtonLoading?: boolean;
+  /** Optional hint rendered to the right of the Back button */
+  footerHint?: ReactNode;
 }
 
 interface BookingStepFooterState {
@@ -32,11 +34,13 @@ export function useBookingFooterControl({
   nextStepButtonDisabled,
   nextStepButtonLoading,
   nextStepButtonAction,
+  footerHint,
 }: {
   nextStepButtonText?: string;
   nextStepButtonDisabled?: boolean;
   nextStepButtonLoading?: boolean;
   nextStepButtonAction?: () => void | Promise<void>;
+  footerHint?: ReactNode;
 }) {
   const setOverride = useBookingStepFooterStore((s) => s.setOverride);
 
@@ -49,8 +53,9 @@ export function useBookingFooterControl({
       nextStepButtonDisabled,
       nextStepButtonLoading,
       nextStepButtonAction: () => actionRef.current?.(),
+      footerHint,
     });
-  }, [nextStepButtonText, nextStepButtonDisabled, nextStepButtonLoading, setOverride]);
+  }, [nextStepButtonText, nextStepButtonDisabled, nextStepButtonLoading, footerHint, setOverride]);
 
   useEffect(() => {
     return () => setOverride(null);

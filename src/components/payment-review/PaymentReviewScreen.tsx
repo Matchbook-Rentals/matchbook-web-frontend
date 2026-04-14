@@ -7,7 +7,7 @@
 'use client';
 
 import { PlusIcon, ArrowLeft, Loader2, CheckCircle, AlertCircle } from 'lucide-react';
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { PaymentMethodsSection } from './sections/PaymentMethodsSection';
 import { TotalDueSection } from './sections/TotalDueSection';
@@ -50,6 +50,14 @@ interface PaymentReviewScreenProps {
   tripEndDate: Date;
   hidePaymentMethods?: boolean;
   initialPaymentMethods?: PaymentMethod[];
+  /** Expose the "proceed to payment" action so an outer controller (e.g. BookingFooter) can trigger it */
+  onProceedReady?: (fn: (isCreditCard: boolean) => Promise<void>) => void;
+  /** Notify parent when the internal processing state changes */
+  onProcessingChange?: (processing: boolean) => void;
+  /** Notify parent of processing errors so the caller can surface them */
+  onProcessingError?: (message: string) => void;
+  /** Suppress the internal BrandModal processing dialog — caller will show its own progress */
+  hideProcessingDialog?: boolean;
 }
 
 export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
@@ -64,6 +72,10 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
   tripEndDate,
   hidePaymentMethods = false,
   initialPaymentMethods = [],
+  onProceedReady,
+  onProcessingChange,
+  onProcessingError,
+  hideProcessingDialog = false,
 }) => {
   const { toast } = useToast();
   const isNoDeposit = (paymentBreakdown.securityDeposit + (paymentBreakdown.petDeposit || 0)) === 0;
@@ -85,6 +97,25 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
       onPaymentMethodChange(methodType);
     }
   };
+
+  // Mirror isProcessing to the parent so external controllers can reflect it
+  useEffect(() => {
+    onProcessingChange?.(isProcessing);
+  }, [isProcessing, onProcessingChange]);
+
+  // Keep a stable wrapper around handleProceedToPayment and expose it to the parent
+  const latestProceedRef = useRef<(isCreditCard: boolean) => Promise<void>>();
+  const stableProceedRef = useRef<(isCreditCard: boolean) => Promise<void>>();
+  if (!stableProceedRef.current) {
+    stableProceedRef.current = async (isCreditCard: boolean) => {
+      await latestProceedRef.current?.(isCreditCard);
+    };
+  }
+  useEffect(() => {
+    if (onProceedReady && stableProceedRef.current) {
+      onProceedReady(stableProceedRef.current);
+    }
+  }, [onProceedReady]);
 
   const handleProceedToPayment = async (includeCardFee: boolean) => {
     setIsProcessing(true);
@@ -128,17 +159,23 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
             const errorData = await bookingResponse.json().catch(() => ({}));
             console.error('Failed to create booking:', bookingResponse.status, errorData);
             setProcessingStatus('error');
-            setProcessingError(errorData?.error || 'Failed to create booking.');
+            const msg = errorData?.error || 'Failed to create booking.';
+            setProcessingError(msg);
+            onProcessingError?.(msg);
           }
         } else {
           setProcessingStatus('error');
-          setProcessingError(result.error || 'Payment failed. Please try again.');
+          const msg = result.error || 'Payment failed. Please try again.';
+          setProcessingError(msg);
+          onProcessingError?.(msg);
           console.error('Payment failed:', result.error);
         }
       } catch (error) {
         console.error('Error processing payment:', error);
         setProcessingStatus('error');
-        setProcessingError('An unexpected error occurred. Please try again.');
+        const msg = 'An unexpected error occurred. Please try again.';
+        setProcessingError(msg);
+        onProcessingError?.(msg);
       } finally {
         setIsProcessing(false);
       }
@@ -204,6 +241,9 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
     setShowEmbeddedCheckout(false);
     setCheckoutClientSecret(null);
   };
+
+  // Keep the latest handleProceedToPayment closure available to the stable wrapper
+  latestProceedRef.current = handleProceedToPayment;
 
   // Get selected payment method details
   const getSelectedPaymentMethod = () => {
@@ -352,7 +392,7 @@ export const PaymentReviewScreen: React.FC<PaymentReviewScreenProps> = ({
 
       {/* Payment Processing Modal */}
       <BrandModal
-        isOpen={showProcessingDialog}
+        isOpen={!hideProcessingDialog && showProcessingDialog}
         onOpenChange={(open) => {
           // Only allow closing if there's an error
           if (!open && processingStatus === 'error') {

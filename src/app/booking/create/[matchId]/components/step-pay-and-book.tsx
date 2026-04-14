@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useToast } from '@/components/ui/use-toast';
 import { PaymentReviewScreen } from '@/components/payment-review/PaymentReviewScreen';
 import { calculatePayments } from '@/lib/calculate-payments';
 import { FEES } from '@/lib/fee-constants';
 import { calculateCreditCardFee } from '@/lib/payment-calculations';
+import { useBookingFooterControl } from '@/stores/booking-step-footer-store';
 import type { StepProps } from './types';
 
 const formatDate = (date: string | Date) =>
@@ -49,10 +50,12 @@ function PropertyHeader({ match }: { match: StepProps['match'] }) {
   );
 }
 
-export function StepPayAndBook({ match, matchId }: StepProps) {
+export function StepPayAndBook({ match, matchId, onAdvanceStep }: StepProps) {
   const { toast } = useToast();
   const router = useRouter();
   const [selectedPaymentMethodType, setSelectedPaymentMethodType] = useState<string>();
+  const [isProcessing, setIsProcessing] = useState(false);
+  const proceedRef = useRef<((isCreditCard: boolean) => Promise<void>) | null>(null);
 
   const paymentDetails = calculatePayments({
     listing: match.listing,
@@ -70,13 +73,61 @@ export function StepPayAndBook({ match, matchId }: StepProps) {
   const getTotalDueToday = (methodType?: string) =>
     methodType === 'card' ? baseAmountDue + creditCardFee : baseAmountDue;
 
+  const baseTotal = getTotalDueToday();
+  const isNoDeposit = baseTotal === 0;
+  const hasPaymentMethod = !!selectedPaymentMethodType;
+
   const handlePaymentSuccess = () => {
-    toast({
-      title: 'Payment Successful',
-      description: 'Your booking is confirmed!',
-    });
+    // Pull fresh match data from the server so the next step sees match.booking
+    // + paymentAuthorizedAt. router.refresh() re-runs the server component in
+    // page.tsx; client state like currentStep survives the re-render.
     router.refresh();
+    onAdvanceStep?.();
   };
+
+  const handlePaymentError = (message: string) => {
+    toast({
+      title: 'Payment failed',
+      description: message,
+      variant: 'destructive',
+    });
+  };
+
+  // Wire the outer BookingFooter button to payment/confirmation behavior
+  const defaultLabel = isNoDeposit ? 'Confirm booking' : 'Pay & Book';
+  // Memoize so the store override only re-registers when the hint actually changes
+  const footerHint = useMemo(() => {
+    if (selectedPaymentMethodType === 'card') {
+      return (
+        <>
+          <span className="font-medium">Credit Card Selected</span>
+          <span className="text-xs text-red-500 ml-2">• Processing fee applies</span>
+        </>
+      );
+    }
+    if (selectedPaymentMethodType === 'bank') {
+      return (
+        <>
+          <span className="font-medium">Bank Account Selected</span>
+          <span className="text-xs text-green-600 ml-2">• No additional fees</span>
+        </>
+      );
+    }
+    return <span className="font-medium">Select a payment method to continue</span>;
+  }, [selectedPaymentMethodType]);
+
+  useBookingFooterControl({
+    nextStepButtonText: isProcessing ? 'Processing…' : defaultLabel,
+    // Always require a payment method — even zero-deposit bookings need one
+    // on file so future rent payments can be collected.
+    nextStepButtonDisabled: !hasPaymentMethod,
+    nextStepButtonLoading: isProcessing,
+    nextStepButtonAction: async () => {
+      if (!proceedRef.current) return;
+      await proceedRef.current(selectedPaymentMethodType === 'card');
+    },
+    footerHint,
+  });
 
   return (
     <div className="space-y-6 [&_header:first-of-type]:hidden">
@@ -102,6 +153,12 @@ export function StepPayAndBook({ match, matchId }: StepProps) {
         onPaymentMethodChange={(methodType) => {
           setSelectedPaymentMethodType(methodType || undefined);
         }}
+        onProceedReady={(fn) => {
+          proceedRef.current = fn;
+        }}
+        onProcessingChange={setIsProcessing}
+        onProcessingError={handlePaymentError}
+        hideProcessingDialog
         tripStartDate={match.trip.startDate}
         tripEndDate={match.trip.endDate}
       />
