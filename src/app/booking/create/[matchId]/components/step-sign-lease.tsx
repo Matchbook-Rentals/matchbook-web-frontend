@@ -346,8 +346,50 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
                 onSave={() => {}}
                 onCancel={() => {}}
                 onFinish={handleSigningComplete}
-                onFieldSign={(fieldId, value) => {
+                onFieldSign={async (fieldId, value) => {
+                  // Remember the previous store value so we can revert on failure
+                  const previousValue = useSignedFieldsStore.getState().signedFields[fieldId];
+
+                  // Optimistic: update the local store immediately so the UI reflects the sign
                   useSignedFieldsStore.getState().setSignedField(fieldId, value);
+
+                  // Persist server-side right now — signature events are first-class
+                  if (!value || !leaseDocument?.id) return;
+
+                  const field = documentFields.find((f: any) => f.formId === fieldId);
+                  if (!field) return;
+
+                  const fieldType = typeof field.type === 'string'
+                    ? field.type
+                    : (field.type?.type || field.type?.value || '');
+
+                  try {
+                    const res = await fetch('/api/field-values', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                        documentId: leaseDocument.id,
+                        fieldId,
+                        fieldType,
+                        signerIndex: renterIndex,
+                        signerEmail: renterEmail,
+                        value,
+                      }),
+                    });
+                    if (!res.ok) {
+                      const errText = await res.text().catch(() => '');
+                      throw new Error(`${res.status} ${errText}`);
+                    }
+                  } catch (err) {
+                    console.error('Failed to persist signature:', err);
+                    // Revert the optimistic update so UI matches server state
+                    useSignedFieldsStore.getState().setSignedField(fieldId, previousValue);
+                    toast({
+                      title: 'Signature save failed',
+                      description: 'Please try signing again.',
+                      variant: 'destructive',
+                    });
+                  }
                 }}
                 onSigningActionReady={(fn) => {
                   signingActionRef.current = fn;
