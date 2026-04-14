@@ -15,6 +15,7 @@ export function BookingFooter({ onBack, onContinue, backLabel = 'Back', continue
   const effectiveLabel = override?.nextStepButtonText ?? continueLabel;
   const effectiveHandler = override?.nextStepButtonAction ?? onContinue;
   const effectiveDisabled = override?.nextStepButtonDisabled ?? false;
+  const effectiveLoading = override?.nextStepButtonLoading ?? false;
 
   return (
     <footer className="booking-review__footer">
@@ -23,6 +24,7 @@ export function BookingFooter({ onBack, onContinue, backLabel = 'Back', continue
         variant="default"
         onClick={effectiveHandler}
         disabled={effectiveDisabled}
+        isLoading={effectiveLoading}
       >
         {effectiveLabel}
       </BrandButton>

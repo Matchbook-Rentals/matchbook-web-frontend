@@ -95,6 +95,8 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
   // Guards against double-clicks on the Continue/Next Field button
   const continueInFlightRef = useRef(false);
   const [isContinuing, setIsContinuing] = useState(false);
+  // True while the fast-path fires — drives the "Sending lease" overlay
+  const [isSendingLease, setIsSendingLease] = useState(false);
 
   // Derived from prefetched leaseDocument
   const documentFields = (() => {
@@ -200,28 +202,58 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
 
       // Fast path: field values are already persisted, so skip the PDFEditor
       // completeCurrentStep dance entirely and call only the essential work.
-      if (leaseDocument?.id) {
-        try {
-          await Promise.all([
-            handleSignerCompletion(
-              leaseDocument.id,
-              renterIndex,
-              documentRecipients.map((r: any) => ({
-                id: r.id,
-                name: r.name,
-                email: r.email,
-                role: r.role || '',
-              })),
-              undefined, // housingRequestId only used for host signer, not tenant
-            ),
-            handleSigningComplete(),
-          ]);
-        } catch (err) {
-          console.error('Error finalizing tenant signing:', err);
-        }
-      }
+      if (!leaseDocument?.id) return;
 
-      if (onAdvanceStep) onAdvanceStep();
+      setIsSendingLease(true);
+      try {
+        // First verify the server actually has every tenant field value.
+        // Any individual per-field save could have raced or silently failed —
+        // advancing the step without confirming the DB truth would let a
+        // half-signed lease slip through.
+        const verifyRes = await fetch(`/api/documents/${leaseDocument.id}`, { cache: 'no-store' });
+        if (!verifyRes.ok) throw new Error(`Verify request failed: ${verifyRes.status}`);
+        const { document: serverDoc } = await verifyRes.json();
+        const serverValues: any[] = serverDoc?.fieldValues ?? [];
+        const serverSignedIds = new Set(serverValues.map((fv: any) => fv.fieldId));
+        const missing = renterSignFields.filter((f: any) => !serverSignedIds.has(f.formId));
+
+        if (missing.length > 0) {
+          console.error('Signature verification found missing fields:', missing.map((f: any) => f.formId));
+          toast({
+            title: 'Signature verification failed',
+            description: `${missing.length} field${missing.length === 1 ? '' : 's'} did not save. Please sign them again.`,
+            variant: 'destructive',
+          });
+          return;
+        }
+
+        // All signatures confirmed server-side — fire the finalization calls in parallel
+        await Promise.all([
+          handleSignerCompletion(
+            leaseDocument.id,
+            renterIndex,
+            documentRecipients.map((r: any) => ({
+              id: r.id,
+              name: r.name,
+              email: r.email,
+              role: r.role || '',
+            })),
+            undefined, // housingRequestId only used for host signer, not tenant
+          ),
+          handleSigningComplete(),
+        ]);
+
+        if (onAdvanceStep) onAdvanceStep();
+      } catch (err) {
+        console.error('Error finalizing tenant signing:', err);
+        toast({
+          title: 'Something went wrong',
+          description: 'Could not finalize your lease. Please try again.',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsSendingLease(false);
+      }
     } finally {
       continueInFlightRef.current = false;
       setIsContinuing(false);
@@ -229,9 +261,15 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
   };
 
   // Register the button override with the outer footer
+  const footerButtonText = isSendingLease
+    ? 'Saving lease…'
+    : tenantUnsignedCount > 0
+      ? 'Next Field'
+      : 'Continue';
   useBookingFooterControl({
-    nextStepButtonText: tenantUnsignedCount > 0 ? 'Next Field' : 'Continue',
+    nextStepButtonText: footerButtonText,
     nextStepButtonDisabled: isContinuing,
+    nextStepButtonLoading: isSendingLease,
     nextStepButtonAction: handleFooterContinue,
   });
 

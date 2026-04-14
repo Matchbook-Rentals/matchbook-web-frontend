@@ -5,6 +5,7 @@ export interface FooterOverride {
   nextStepButtonText?: string;
   nextStepButtonAction?: () => void | Promise<void>;
   nextStepButtonDisabled?: boolean;
+  nextStepButtonLoading?: boolean;
 }
 
 interface BookingStepFooterState {
@@ -29,10 +30,12 @@ export const useBookingStepFooterStore = create<BookingStepFooterState>((set) =>
 export function useBookingFooterControl({
   nextStepButtonText,
   nextStepButtonDisabled,
+  nextStepButtonLoading,
   nextStepButtonAction,
 }: {
   nextStepButtonText?: string;
   nextStepButtonDisabled?: boolean;
+  nextStepButtonLoading?: boolean;
   nextStepButtonAction?: () => void | Promise<void>;
 }) {
   const setOverride = useBookingStepFooterStore((s) => s.setOverride);
@@ -44,9 +47,10 @@ export function useBookingFooterControl({
     setOverride({
       nextStepButtonText,
       nextStepButtonDisabled,
+      nextStepButtonLoading,
       nextStepButtonAction: () => actionRef.current?.(),
     });
-  }, [nextStepButtonText, nextStepButtonDisabled, setOverride]);
+  }, [nextStepButtonText, nextStepButtonDisabled, nextStepButtonLoading, setOverride]);
 
   useEffect(() => {
     return () => setOverride(null);
