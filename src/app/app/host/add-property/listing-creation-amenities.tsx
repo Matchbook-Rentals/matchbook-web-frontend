@@ -50,13 +50,13 @@ const AMENITY_GROUPS = [
     group: 'Accessibility & Safety',
     items: [
       { value: 'wheelchairAccess', label: 'Accessible', icon: <WheelchairAccessibleIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'fencedInYard', label: 'Fenced Yard', icon: <AmenitiesIcons.UpdatedFencedYardIcon className="p-1 mt-0" /> },
+      { value: 'fencedInYard', label: 'Fenced Yard', icon: <FencedYardIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'keylessEntry', label: 'Keyless Entry', icon: <KeylessEntryIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'alarmSystem', label: 'Alarm System', icon: <AmenitiesIcons.UpdatedAlarmSystemIcon className="p-1 mt-0" /> },
-      { value: 'gatedEntry', label: 'Gated Entry', icon: <GatedEntryIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'smokeDetector', label: 'Smoke Detector', icon: <AmenitiesIcons.UpdatedSmokeDetectorIcon className="p-1 mt-0" /> },
+      { value: 'alarmSystem', label: 'Alarm System', icon: <AlarmSystemIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'gatedEntry', label: 'Gated Entry', icon: <GatedEntryIcon className="w-full h-full scale-[1.25] md:scale-[1.33] translate-x-[2px]" /> },
+      { value: 'smokeDetector', label: 'Smoke Detector', icon: <SmokeDetectorIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
       { value: 'carbonMonoxide', label: 'CO Detector', icon: <CoDetectorIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'security', label: 'Security System', icon: <AmenitiesIcons.UpdatedSecurityIcon className="p-1 mt-0" /> },
+      { value: 'security', label: 'Security System', icon: <SecuritySystemIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
