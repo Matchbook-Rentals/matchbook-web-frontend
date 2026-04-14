@@ -13,7 +13,7 @@ export default function Footer() {
 
         {/* Links Section */}
         <div className="flex justify-between w-full pt-3 lg:w-3/5 gap-2 lg:gap-0 ">
-          {/* Navigation Links */}
+          {/* Navigation + Resources */}
           <div className="text-lg mx-auto ">
             <h3 className="text-xl font-semibold">Navigation</h3>
             <nav className="flex flex-col gap-1.5 mt-2">
@@ -39,11 +39,7 @@ export default function Footer() {
                 Contact
               </Link>
             </nav>
-          </div>
-
-          {/* Resource Links */}
-          <div className="text-lg mx-auto">
-            <h3 className="text-xl font-semibold">Resources</h3>
+            <h3 className="text-xl font-semibold mt-4">Resources</h3>
             <nav className="flex flex-col gap-1.5 mt-2">
               <Link
                 href="/articles"
@@ -58,6 +54,48 @@ export default function Footer() {
                 prefetch={true}
               >
                 FAQ
+              </Link>
+            </nav>
+          </div>
+
+          {/* Legal Links - hidden on small, shown on sm+ */}
+          <div className="text-lg mx-auto hidden sm:block">
+            <h3 className="text-xl font-semibold">Legal</h3>
+            <nav className="flex flex-col gap-1.5 mt-2">
+              <Link
+                href="/terms-of-service"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/privacy-policy"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/acceptable-use-policy"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Acceptable Use
+              </Link>
+              <Link
+                href="/california-privacy-notice"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                CA Privacy Notice
+              </Link>
+              <Link
+                href="/cookie-notice"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Cookie Notice
               </Link>
             </nav>
           </div>
@@ -89,6 +127,18 @@ export default function Footer() {
               </Link>
             </div>
           </div>
+        </div>
+
+        {/* Legal Links - mobile only row */}
+        <div className="sm:hidden flex flex-col items-start pt-6 px-4">
+          <h3 className="text-xl font-semibold mb-2">Legal</h3>
+          <nav className="flex flex-wrap gap-x-4 gap-y-1">
+            <Link href="/terms-of-service" className="text-gray-500 hover:text-black" prefetch={false}>Terms of Service</Link>
+            <Link href="/privacy-policy" className="text-gray-500 hover:text-black" prefetch={false}>Privacy Policy</Link>
+            <Link href="/acceptable-use-policy" className="text-gray-500 hover:text-black" prefetch={false}>Acceptable Use</Link>
+            <Link href="/california-privacy-notice" className="text-gray-500 hover:text-black" prefetch={false}>CA Privacy Notice</Link>
+            <Link href="/cookie-notice" className="text-gray-500 hover:text-black" prefetch={false}>Cookie Notice</Link>
+          </nav>
         </div>
       </div>
     </footer>
