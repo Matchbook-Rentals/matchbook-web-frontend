@@ -35,6 +35,9 @@ import {
   HotTubIcon,
   PatioIcon,
   SunroomIcon,
+  InUnitLaundryIcon,
+  InUnitOrOnSiteLaundryIcon,
+  NoLaundryPreferenceIcon,
 } from '@/components/icons-v3/amenities';
 import InComplexIcon from '@/lib/icons/in-complex';
 import NotAvailableIcon from '@/lib/icons/not-available';
@@ -47,62 +50,62 @@ const AMENITY_GROUPS = [
     group: 'Accessibility & Safety',
     items: [
       { value: 'wheelchairAccess', label: 'Accessible', icon: <WheelchairAccessibleIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'fencedInYard', label: 'Fenced Yard', icon: <FencedYardIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'fencedInYard', label: 'Fenced Yard', icon: <AmenitiesIcons.UpdatedFencedYardIcon className="p-1 mt-0" /> },
       { value: 'keylessEntry', label: 'Keyless Entry', icon: <KeylessEntryIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'alarmSystem', label: 'Alarm System', icon: <AlarmSystemIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'alarmSystem', label: 'Alarm System', icon: <AmenitiesIcons.UpdatedAlarmSystemIcon className="p-1 mt-0" /> },
       { value: 'gatedEntry', label: 'Gated Entry', icon: <GatedEntryIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'smokeDetector', label: 'Smoke Detector', icon: <SmokeDetectorIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'smokeDetector', label: 'Smoke Detector', icon: <AmenitiesIcons.UpdatedSmokeDetectorIcon className="p-1 mt-0" /> },
       { value: 'carbonMonoxide', label: 'CO Detector', icon: <CoDetectorIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'security', label: 'Security System', icon: <SecuritySystemIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'security', label: 'Security System', icon: <AmenitiesIcons.UpdatedSecurityIcon className="p-1 mt-0" /> },
     ]
   },
   {
     group: 'Location & Views',
     items: [
       { value: 'mountainView', label: 'Mountain View', icon: <MountainViewIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'cityView', label: 'City View', icon: <CityViewIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'cityView', label: 'City View', icon: <AmenitiesIcons.UpdatedCityViewIcon className="p-1 mt-0" /> },
       { value: 'waterfront', label: 'Waterfront', icon: <WaterfrontIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'waterView', label: 'Water View', icon: <WaterViewIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'waterView', label: 'Water View', icon: <AmenitiesIcons.UpdatedWaterViewIcon className="p-1 mt-0" /> },
     ]
   },
   {
     group: 'Parking',
     items: [
       { value: 'offStreetParking', label: 'Off Street Parking', icon: <OffStreetParkingIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'evCharging', label: 'EV Charging', icon: <EvChargingIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'evCharging', label: 'EV Charging', icon: <AmenitiesIcons.UpdatedEvChargingIcon className="p-1 mt-0 ml-0" /> },
       { value: 'garageParking', label: 'Garage Parking', icon: <GarageIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
     group: 'Kitchen',
     items: [
-      { value: 'garbageDisposal', label: 'Garbage Disposal', icon: <GarbageDisposalIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'garbageDisposal', label: 'Garbage Disposal', icon: <AmenitiesIcons.UpdatedGarbageDisposalIcon className="p-1 my-0" /> },
       { value: 'dishwasher', label: 'Dishwasher', icon: <DishwasherIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'fridge', label: 'Refrigerator', icon: <RefrigeratorIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'fridge', label: 'Refrigerator', icon: <AmenitiesIcons.UpdatedFridgeIcon className="p-1 mt-0" /> },
       { value: 'oven', label: 'Oven/Stove', icon: <OvenStoveIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'grill', label: 'Grill', icon: <GrillIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'grill', label: 'Grill', icon: <AmenitiesIcons.UpdatedGrillIcon className="p-1" /> },
       { value: 'kitchenEssentials', label: 'Kitchen Essentials', icon: <KitchenEssentialsIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
     group: 'Climate Control & Workspace',
     items: [
-      { value: 'fireplace', label: 'Fireplace', icon: <FireplaceIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'fireplace', label: 'Fireplace', icon: <AmenitiesIcons.UpdatedFireplaceIcon className="p-1 mt-0" /> },
       { value: 'heater', label: 'Heater', icon: <HeatingIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'dedicatedWorkspace', label: 'Workspace', icon: <DedicatedWorkspaceIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'dedicatedWorkspace', label: 'Workspace', icon: <AmenitiesIcons.UpdatedDedicatedWorkspaceIcon className="p-1 mt-0" /> },
       { value: 'airConditioner', label: 'Air Conditioning', icon: <AirConditioningIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
     ]
   },
   {
     group: 'Luxury & Recreation',
     items: [
-      { value: 'gym', label: 'Gym', icon: <GymIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'gym', label: 'Gym', icon: <AmenitiesIcons.UpdatedGymIcon className="p-1 mt-0" /> },
       { value: 'sauna', label: 'Sauna', icon: <SaunaIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'balcony', label: 'Balcony', icon: <BalconyIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'balcony', label: 'Balcony', icon: <AmenitiesIcons.UpdatedBalconyIcon className="p-1 mt-0" /> },
       { value: 'pool', label: 'Pool', icon: <PoolIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'hotTub', label: 'Hot Tub', icon: <HotTubIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'hotTub', label: 'Hot Tub', icon: <AmenitiesIcons.UpdatedHotTubIcon className="p-1 mt-0" /> },
       { value: 'patio', label: 'Patio', icon: <PatioIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
-      { value: 'sunroom', label: 'Sunroom', icon: <SunroomIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> },
+      { value: 'sunroom', label: 'Sunroom', icon: <AmenitiesIcons.UpdatedSunroomIcon className="p-1 mt-0" /> },
     ]
   },
 ];
@@ -204,9 +207,9 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
               onClick={() => handleLaundryChange(option.value)}
             >
               {React.cloneElement(
-                option.value === 'washerInComplex' ? <InComplexIcon className="w-4 h-4" /> : 
-                option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-4 h-4" /> :
-                <AmenitiesIcons.WasherIcon className="w-4 h-4" />,
+                option.value === 'washerInComplex' ? <InUnitOrOnSiteLaundryIcon className="w-4 h-4" /> :
+                option.value === 'washerNotAvailable' ? <NoLaundryPreferenceIcon className="w-4 h-4" /> :
+                <InUnitLaundryIcon className="w-4 h-4" />,
                 { className: "w-4 h-4" }
               )}
               <span className={`font-['Poppins',Helvetica] font-medium text-sm text-center leading-5 ${
@@ -228,9 +231,9 @@ const ListingAmenities: React.FC<ListingAmenitiesProps> = ({ value, onChange, on
               key={option.id}
               name={option.label}
               icon={
-                option.value === 'washerInComplex' ? <InComplexIcon className="w-8 h-8" /> : 
-                option.value === 'washerNotAvailable' ? <NotAvailableIcon className="w-8 h-8" /> :
-                <AmenitiesIcons.WasherIcon className="w-8 h-8" />
+                option.value === 'washerInComplex' ? <InUnitOrOnSiteLaundryIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> :
+                option.value === 'washerNotAvailable' ? <NoLaundryPreferenceIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" /> :
+                <InUnitLaundryIcon className="w-full h-full scale-[1.25] md:scale-[1.33]" />
               }
               isSelected={getLaundrySelection() === option.value}
               onClick={() => handleLaundryChange(option.value)}
