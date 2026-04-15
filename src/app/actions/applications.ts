@@ -181,9 +181,37 @@ export async function getTripApplication(tripId?: string) {
   if (!userId) return { success: false, error: 'Unauthorized' };
 
   try {
-    let application;
+    const applicationInclude = {
+      incomes: true,
+      verificationImages: true,
+      identifications: {
+        include: {
+          idPhotos: true,
+        },
+      },
+      residentialHistories: {
+        orderBy: {
+          index: 'asc' as const,
+        },
+      },
+    };
 
-    if (tripId) {
+    // Always preload from the default application (the source of truth for form
+    // data and uploaded documents). A per-trip application is only created on
+    // submit via upsertApplication, so we never read from it here.
+    let application = await prisma.application.findUnique({
+      where: {
+        userId_isDefault: {
+          userId,
+          isDefault: true,
+        },
+      },
+      include: applicationInclude,
+    });
+
+    // Fallback: if the user has no default application yet but does have a
+    // legacy per-trip application, use it so they can continue editing.
+    if (!application && tripId) {
       application = await prisma.application.findUnique({
         where: {
           userId_tripId: {
@@ -191,45 +219,7 @@ export async function getTripApplication(tripId?: string) {
             tripId,
           },
         },
-        include: {
-          incomes: true,
-          verificationImages: true,
-          identifications: {
-            include: {
-              idPhotos: true,
-            },
-          },
-          residentialHistories: {
-            orderBy: {
-              index: 'asc',
-            },
-          },
-        },
-      });
-    }
-
-    if (!application) {
-      application = await prisma.application.findUnique({
-        where: {
-          userId_isDefault: {
-            userId,
-            isDefault: true,
-          },
-        },
-        include: {
-          incomes: true,
-          verificationImages: true,
-          identifications: {
-            include: {
-              idPhotos: true,
-            },
-          },
-          residentialHistories: {
-            orderBy: {
-              index: 'asc',
-            },
-          },
-        },
+        include: applicationInclude,
       });
     }
 
