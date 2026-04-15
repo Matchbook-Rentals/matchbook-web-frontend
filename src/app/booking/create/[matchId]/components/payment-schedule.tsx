@@ -28,6 +28,10 @@ interface PaymentScheduleProps {
   monthlyPayments: MonthlyPayment[];
   dueToday: DueToday;
   defaultExpandedId?: string;
+  /** Label for the bottom totals row (e.g. "Due today" vs "Paid today" for receipts) */
+  dueTodayLabel?: string;
+  /** Override the section header for the monthly payments list */
+  monthlyPaymentsLabel?: string;
 }
 
 /* ── Text Styles ── */
@@ -49,12 +53,18 @@ function DetailRow({ label, value, bold = false }: { label: string; value: strin
   );
 }
 
-export function PaymentSchedule({ monthlyPayments, dueToday, defaultExpandedId }: PaymentScheduleProps) {
+export function PaymentSchedule({
+  monthlyPayments,
+  dueToday,
+  defaultExpandedId,
+  dueTodayLabel = 'Due today',
+  monthlyPaymentsLabel = 'Monthly Rent Payments',
+}: PaymentScheduleProps) {
   return (
     <div className="rounded-lg bg-white">
       <div className="flex h-[50px] px-5 justify-between items-center self-stretch rounded-lg bg-[#F9F9F9]">
         <h3 className={`${sectionHeaderTextStyle} m-0`}>
-          Monthly Rent Payments
+          {monthlyPaymentsLabel}
         </h3>
       </div>
 
@@ -90,7 +100,7 @@ export function PaymentSchedule({ monthlyPayments, dueToday, defaultExpandedId }
               rightContent={<span className={sectionHeaderTextStyle}>{dueToday.total}</span>}
               className={`${sectionHeaderTextStyle} h-[50px] rounded-lg bg-[#F9F9F9]`}
             >
-              Due today
+              {dueTodayLabel}
             </BrandAccordionTrigger>
             <BrandAccordionContent className={`${contentStyle} pt-4`}>
               {dueToday.details.map((d, i) => (

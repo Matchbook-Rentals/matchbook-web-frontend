@@ -5,6 +5,7 @@ import { auth } from '@clerk/nextjs/server';
 import prisma from '@/lib/prismadb';
 import { LeaseSigningClient } from './lease-signing-client';
 import { AwaitingLeaseClient } from './awaiting-lease-client';
+import { getBookingReceipt } from './get-booking-receipt';
 
 interface LeaseSigningPageProps {
   params: { matchId: string };
@@ -88,6 +89,10 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
   // Prefetch lease document server-side
   const leaseDocument = await getLeaseDocument(match.leaseDocumentId);
 
+  // Build the booking receipt from real RentPayment rows when a booking exists
+  // so the confirmation step can render actuals instead of client-computed estimates.
+  const bookingReceipt = match.booking ? await getBookingReceipt(match.booking.id) : null;
+
   // TODO: temporarily always show the new booking review UI for development
   // Original condition: if (!match.leaseDocumentId)
   const initialStep = computeInitialBookingStep(match);
@@ -100,6 +105,7 @@ export default async function LeaseSigningPage({ params }: LeaseSigningPageProps
       currentUserEmail={dbUser.email}
       leaseDocument={leaseDocument}
       initialStep={initialStep}
+      bookingReceipt={bookingReceipt}
     />
   );
 

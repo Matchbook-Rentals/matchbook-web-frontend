@@ -6,10 +6,21 @@ import { PaymentSchedule } from './payment-schedule';
 import { calculatePayments } from '@/lib/calculate-payments';
 import { getServiceFeeRate, FEES } from '@/lib/fee-constants';
 import type { MatchWithRelations } from '@/types';
+import type { BookingReceipt } from '../get-booking-receipt';
 
 interface BookingSummaryProps {
   match: MatchWithRelations;
   defaultExpandedPaymentId?: string;
+  /**
+   * 'summary' — pre-payment review (default). "Due today" label.
+   *              Always uses client-computed values from the match/listing.
+   * 'receipt' — post-payment confirmation. "Paid today" label.
+   *              Uses the real-data `receipt` prop if provided (authoritative
+   *              RentPayment rows), otherwise falls back to computed.
+   */
+  variant?: 'summary' | 'receipt';
+  /** Real-data receipt from RentPayment rows. Only used when variant === 'receipt'. */
+  receipt?: BookingReceipt | null;
 }
 
 const fmt = (n: number) => `$${n.toFixed(2)}`;
@@ -22,7 +33,14 @@ const formatDate = (date: string | Date) =>
  * and the Confirmation step. Future mods to the booking summary display
  * should land here so both steps stay in sync.
  */
-export function BookingSummary({ match, defaultExpandedPaymentId = 'month-0' }: BookingSummaryProps) {
+export function BookingSummary({
+  match,
+  defaultExpandedPaymentId = 'month-0',
+  variant = 'summary',
+  receipt = null,
+}: BookingSummaryProps) {
+  const isReceipt = variant === 'receipt';
+  const useRealData = isReceipt && receipt !== null;
   const paymentDetails = calculatePayments({
     listing: match.listing,
     trip: match.trip,
@@ -97,9 +115,9 @@ export function BookingSummary({ match, defaultExpandedPaymentId = 'month-0' }: 
   }, [paymentDetails]);
 
   const meta = [
-    `${match.trip.numAdults} ${match.trip.numAdults === 1 ? 'adult' : 'adults'}`,
-    match.trip.numChildren > 0 ? `${match.trip.numChildren} ${match.trip.numChildren === 1 ? 'child' : 'children'}` : null,
-    match.trip.numPets > 0 ? `${match.trip.numPets} ${match.trip.numPets === 1 ? 'pet' : 'pets'}` : null,
+    `${match.trip.numAdults} ${match.trip.numAdults === 1 ? 'Adult' : 'Adults'}`,
+    match.trip.numChildren > 0 ? `${match.trip.numChildren} ${match.trip.numChildren === 1 ? 'Child' : 'Children'}` : null,
+    match.trip.numPets > 0 ? `${match.trip.numPets} ${match.trip.numPets === 1 ? 'Pet' : 'Pets'}` : null,
   ].filter(Boolean).join(', ');
 
   const listingImage = match.listing.listingImages?.[0]?.url;
@@ -115,9 +133,10 @@ export function BookingSummary({ match, defaultExpandedPaymentId = 'month-0' }: 
       />
 
       <PaymentSchedule
-        monthlyPayments={monthlyPayments}
-        dueToday={dueToday}
+        monthlyPayments={useRealData && receipt ? receipt.monthlyPayments : monthlyPayments}
+        dueToday={useRealData && receipt ? receipt.paidToday : dueToday}
         defaultExpandedId={defaultExpandedPaymentId}
+        dueTodayLabel={isReceipt ? 'Paid today' : 'Due today'}
       />
     </>
   );

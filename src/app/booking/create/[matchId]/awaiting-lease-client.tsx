@@ -8,6 +8,7 @@ import { StepSignLease } from './components/step-sign-lease';
 import { StepPayAndBook } from './components/step-pay-and-book';
 import { StepConfirmation } from './components/step-confirmation';
 import type { StepProps, LeaseDocument } from './components/types';
+import type { BookingReceipt } from './get-booking-receipt';
 
 interface AwaitingLeaseClientProps {
   match: MatchWithRelations;
@@ -17,6 +18,8 @@ interface AwaitingLeaseClientProps {
   leaseDocument?: LeaseDocument | null;
   /** Step index to mount the flow on, computed server-side from match state */
   initialStep?: number;
+  /** Real-data receipt built server-side from RentPayment rows (confirmation step only) */
+  bookingReceipt?: BookingReceipt | null;
 }
 
 const STEP_LABELS = ["Review Booking", "Sign Lease", "Pay and Book", "Confirmation"];
@@ -35,6 +38,7 @@ export function AwaitingLeaseClient({
   currentUserEmail,
   leaseDocument,
   initialStep = 0,
+  bookingReceipt = null,
 }: AwaitingLeaseClientProps) {
   const [currentStep, setCurrentStep] = useState(initialStep);
 
@@ -55,14 +59,20 @@ export function AwaitingLeaseClient({
     isAdminDev,
     leaseDocument,
     onAdvanceStep: isLastStep ? undefined : () => setCurrentStep((s) => s + 1),
+    bookingReceipt,
   };
+
+  // Back navigation is only meaningful for the signing and payment steps.
+  // - Step 0 (Review): nothing behind it
+  // - Step 3 (Confirmation): booking is created, going back would be incoherent
+  const hideBackButton = isFirstStep || isLastStep;
 
   return (
     <BookingLayout
       steps={steps}
-      onBack={isFirstStep ? undefined : () => setCurrentStep((s) => s - 1)}
+      onBack={hideBackButton ? undefined : () => setCurrentStep((s) => s - 1)}
       onContinue={isLastStep ? undefined : () => setCurrentStep((s) => s + 1)}
-      backLabel={isFirstStep ? undefined : 'Back'}
+      backLabel={hideBackButton ? undefined : 'Back'}
       continueLabel={isLastStep ? 'Done' : 'Continue'}
     >
       <StepContent {...stepProps} />

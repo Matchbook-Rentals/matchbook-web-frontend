@@ -170,11 +170,10 @@
 }
 
 .booking-review__property-image {
-  width: 240px;
-  height: 170px;
+  flex: 1 0 0;
+  align-self: stretch;
   border-radius: 12px;
   overflow: hidden;
-  flex-shrink: 0;
   background: linear-gradient(135deg, #e8ddd0 0%, #c9bfb2 50%, #a09080 100%);
 }
 
@@ -205,8 +204,11 @@
 }
 
 .booking-review__property-meta {
-  font-size: 14px;
-  color: #666;
+  font-family: 'Poppins', sans-serif;
+  font-size: 16px;
+  font-weight: 300;
+  line-height: normal;
+  color: #000;
   margin: 0 0 8px 0;
 }
 

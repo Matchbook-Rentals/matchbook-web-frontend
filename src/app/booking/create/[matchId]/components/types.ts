@@ -1,4 +1,5 @@
 import { MatchWithRelations } from '@/types';
+import type { BookingReceipt } from '../get-booking-receipt';
 
 export interface LeaseDocument {
   id: string;
@@ -25,4 +26,6 @@ export interface StepProps {
   isAdminDev?: boolean;
   leaseDocument?: LeaseDocument | null;
   onAdvanceStep?: () => void;
+  /** Server-computed receipt using real RentPayment data — used by the confirmation step */
+  bookingReceipt?: BookingReceipt | null;
 }
