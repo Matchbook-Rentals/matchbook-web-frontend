@@ -28,23 +28,31 @@ export function BookingHeader({ title, userId, user, isSignedIn }: BookingHeader
   return (
     <header className="booking-review__header">
       <div className="booking-review__header-left">
+        {/* Mobile-only sidebar toggle. On step 2 (Sign Lease) it takes the title's
+            place on mobile. The title hides on mobile when the sidebar is visible. */}
         {sidebarVisible && (
           <button
             type="button"
             onClick={toggleSidebar}
             aria-label={sidebarOpen ? 'Close signing panel' : 'Open signing panel'}
             aria-expanded={sidebarOpen}
-            className="md:hidden mr-1 inline-flex items-center justify-center w-8 h-8 rounded-md text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 transition-colors"
+            className="md:hidden inline-flex items-center justify-center w-9 h-9 rounded-md text-zinc-700 hover:bg-zinc-100 active:bg-zinc-200 transition-colors"
           >
-            {sidebarOpen ? <X size={18} /> : <Menu size={18} />}
+            {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         )}
-        <div className="booking-review__logo">
+
+        {/* Logo circle — desktop only */}
+        <div className="booking-review__logo hidden md:flex">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0e7c6b" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <polyline points="20 6 9 17 4 12" />
           </svg>
         </div>
-        <span className="booking-review__header-title">{title}</span>
+
+        {/* Title — always on desktop, hidden on mobile when the sidebar toggle takes its place */}
+        <span className={`booking-review__header-title ${sidebarVisible ? 'hidden md:inline' : ''}`}>
+          {title}
+        </span>
       </div>
       <div className="booking-review__header-right">
         <UserMenu

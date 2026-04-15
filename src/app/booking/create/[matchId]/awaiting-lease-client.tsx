@@ -22,7 +22,12 @@ interface AwaitingLeaseClientProps {
   bookingReceipt?: BookingReceipt | null;
 }
 
-const STEP_LABELS = ["Review Booking", "Sign Lease", "Pay and Book", "Confirmation"];
+const STEP_DEFS = [
+  { label: 'Review Booking', shortLabel: 'Review' },
+  { label: 'Sign Lease', shortLabel: 'Sign' },
+  { label: 'Pay and Book', shortLabel: 'Pay' },
+  { label: 'Confirmation', shortLabel: 'Confirm' },
+];
 
 const STEP_COMPONENTS: React.ComponentType<StepProps>[] = [
   StepReviewBooking,
@@ -42,15 +47,16 @@ export function AwaitingLeaseClient({
 }: AwaitingLeaseClientProps) {
   const [currentStep, setCurrentStep] = useState(initialStep);
 
-  const steps = STEP_LABELS.map((label, i) => ({
-    label,
+  const steps = STEP_DEFS.map((def, i) => ({
+    label: def.label,
+    shortLabel: def.shortLabel,
     active: i === currentStep,
     completed: i < currentStep,
   }));
 
   const StepContent = STEP_COMPONENTS[currentStep];
   const isFirstStep = currentStep === 0;
-  const isLastStep = currentStep === STEP_LABELS.length - 1;
+  const isLastStep = currentStep === STEP_DEFS.length - 1;
 
   const stepProps: StepProps = {
     match,

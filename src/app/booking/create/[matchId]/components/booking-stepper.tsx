@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 interface Step {
   label: string;
+  shortLabel?: string;
   active: boolean;
   completed: boolean;
 }
@@ -92,7 +93,8 @@ export function BookingStepper({ steps, dotBgColor = '#fff' }: BookingStepperPro
                 }}
                 transition={{ duration: 0.2, delay: step.active ? dotDelay : 0 }} // label syncs with circle at 0.3
               >
-                {step.label}
+                <span className="booking-review__step-label-full">{step.label}</span>
+                <span className="booking-review__step-label-short">{step.shortLabel ?? step.label}</span>
               </motion.span>
 
               {i < steps.length - 1 && (

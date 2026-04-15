@@ -31,6 +31,9 @@ export function BookingLayout({
     <>
       <BookingStepper steps={steps} />
 
+      {/* MOBILE WIP — content + footer temporarily muted.
+          Restore by uncommenting. */}
+      {/*
       <div className="booking-review__content">
         {children}
       </div>
@@ -41,6 +44,7 @@ export function BookingLayout({
         backLabel={backLabel}
         continueLabel={continueLabel}
       />
+      */}
     </>
   );
 }
