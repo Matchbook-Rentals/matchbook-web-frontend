@@ -158,7 +158,7 @@
   max-width: 680px;
   width: 100%;
   margin: 0 auto;
-  padding: 24px 20px 100px;
+  padding: 0 20px 100px;
 }
 
 /* ── Property Card ── */
@@ -187,6 +187,8 @@
 }
 
 .booking-review__property-info {
+  flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 6px;
@@ -194,11 +196,12 @@
 }
 
 .booking-review__property-title {
-  font-size: 20px;
-  font-weight: 700;
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: normal;
   margin: 0;
-  color: #1a1a1a;
-  letter-spacing: -0.3px;
+  color: #373940;
 }
 
 .booking-review__property-meta {
@@ -210,7 +213,8 @@
 .booking-review__date-chips {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 24px;
+  margin-top: 10px;
 }
 
 .booking-review__chip {
@@ -225,16 +229,21 @@
 }
 
 .booking-review__chip-label {
-  font-size: 15px;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
   font-weight: 500;
-  color: #2a2a2a;
+  line-height: 20px;
+  color: #0D1B2A;
   display: inline-block;
   width: 75px;
 }
 
 .booking-review__chip-date {
-  font-size: 15px;
-  color: #2a2a2a;
+  font-family: 'Poppins', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #0D1B2A;
 }
 
 .booking-review__chip--pill {

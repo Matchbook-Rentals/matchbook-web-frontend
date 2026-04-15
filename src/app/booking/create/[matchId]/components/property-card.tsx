@@ -30,7 +30,7 @@ export function PropertyCard({ title, meta, imageUrl, moveInDate, moveOutDate, c
         )}
       </div>
       <div className="booking-review__property-info">
-        <h2 className="booking-review__property-title" style={{ fontWeight: 500 }}>{title}</h2>
+        <h2 className="booking-review__property-title">{title}</h2>
         <p className="booking-review__property-meta">{meta}</p>
         <div className="booking-review__date-chips">
           <div className={chipClass}>
