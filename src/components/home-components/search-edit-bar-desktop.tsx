@@ -2,6 +2,7 @@ import React from "react";
 // import { useParams } from "next/navigation"; // Removed
 import { Trip } from "@prisma/client";
 import { editTrip } from "@/app/actions/trips";
+import { isSessionExpired, handleSessionExpired } from "@/lib/handle-session-expired";
 import { useToast } from "@/components/ui/use-toast";
 import { Check, X } from "lucide-react";
 import { DesktopDateRange } from "@/components/ui/custom-calendar/date-range-selector/desktop-date-range";
@@ -256,6 +257,8 @@ const SearchEditBarDesktop: React.FC<SearchEditBarDesktopProps> = ({ className, 
       setTimeout(() => {
         window.location.reload();
       }, 1500);
+    } else if (isSessionExpired(response)) {
+      handleSessionExpired();
     } else {
       toast({
         variant: "destructive",

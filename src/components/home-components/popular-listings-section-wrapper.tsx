@@ -9,6 +9,7 @@ import {
 } from '@/app/actions/listings';
 import { optimisticFavorite, optimisticRemoveFavorite } from '@/app/actions/favorites';
 import { createTrip } from '@/app/actions/trips';
+import { isSessionExpired, handleSessionExpired } from '@/lib/handle-session-expired';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { GuestSessionService } from '@/utils/guest-session';
 import { buildSearchUrl } from '@/app/search/search-page-client';
@@ -90,7 +91,10 @@ export default function PopularListingsSectionWrapper({
         latitude: center.lat,
         longitude: center.lng,
       });
-      if (!result.success || !result.trip) return;
+      if (!result.success || !result.trip) {
+        if (isSessionExpired(result)) { handleSessionExpired(); }
+        return;
+      }
       tripId = result.trip.id;
       setRecentTripId(tripId);
     }
@@ -284,6 +288,8 @@ export default function PopularListingsSectionWrapper({
         const response = await createTrip(tripData);
         if (response.success && response.trip) {
           window.location.href = buildSearchUrl({ tripId: response.trip.id });
+        } else if (isSessionExpired(response)) {
+          handleSessionExpired();
         }
       } else {
         const response = await createGuestTrip(tripData);

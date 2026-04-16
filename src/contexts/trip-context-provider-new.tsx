@@ -10,6 +10,7 @@ import { optimisticApplyDb, optimisticRemoveApplyDb } from '@/app/actions/housin
 import { updateTripFilters } from '@/app/actions/trips';
 import { CategoryType, getBooleanFilters, getFiltersByCategory } from '@/constants/filters';
 import { logger } from '@/lib/logger';
+import { isSessionExpired, handleSessionExpired } from '@/lib/handle-session-expired';
 import TripStateContext, { TripState } from './trip-state-context';
 import TripActionsContext, { TripActions } from './trip-actions-context';
 
@@ -481,7 +482,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
       const result = await optimisticRemoveApplyDb(trip.id, listingId);
 
       if (!result.success) {
-        // Rollback on failure
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         setLookup(prev => ({
           ...prev,
           requestedIds: new Set([...prev.requestedIds, listingId])
@@ -518,7 +519,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
       const result = await optimisticRemoveFavorite(trip.id, listingId);
 
       if (!result.success) {
-        // Rollback on failure
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         setLookup(prev => ({
           ...prev,
           favIds: new Set([...prev.favIds, listingId])
@@ -553,7 +554,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
       const result = await optimisticFavorite(trip.id, listingId);
 
       if (!result.success) {
-        // Rollback to previous state
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         setLookup(prev => ({
           ...prev,
           favIds: new Set([...prev.favIds].filter(id => id !== listingId)),
@@ -588,7 +589,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
       const result = await optimisticDislikeDb(trip.id, listingId);
 
       if (!result.success) {
-        // Rollback to the exact previous state
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         setLookup(prev => ({
           ...prev,
           dislikedIds: new Set([...prev.dislikedIds].filter(id => id !== listingId)),
@@ -615,7 +616,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
       const result = await optimisticRemoveDislikeDb(trip.id, listingId);
 
       if (!result.success) {
-        // Rollback on failure
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         setLookup(prev => ({
           ...prev,
           dislikedIds: new Set([...prev.dislikedIds, listingId])
@@ -639,7 +640,7 @@ export const TripContextProviderNew: React.FC<TripContextProviderProps> = ({
       const result = await optimisticApplyDb(trip.id, listing);
 
       if (!result.success) {
-        // Rollback on failure
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         setLookup(prev => ({
           ...prev,
           requestedIds: new Set([...prev.requestedIds].filter(id => id !== listing.id))

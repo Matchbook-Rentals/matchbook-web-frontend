@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { VerificationImage } from '@prisma/client';
 import { markComplete, upsertApplication, updateApplicationField } from '@/app/actions/applications';
+import { isSessionExpired, handleSessionExpired } from '@/lib/handle-session-expired';
 import { ResidentialHistory as PrismaResidentialHistory } from '@prisma/client';
 
 // Client-side version without database-specific fields
@@ -796,6 +797,11 @@ export const useApplicationStore = create<ApplicationState>((set, get) => ({
           isComplete: result.isComplete 
         };
       } else {
+        if (isSessionExpired(result)) {
+          handleSessionExpired();
+          set({ isSaving: false, saveError: null });
+          return { success: false, error: 'Session expired', fieldPath };
+        }
         throw new Error(result.error || 'Failed to save');
       }
     } catch (error) {

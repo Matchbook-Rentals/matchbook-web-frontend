@@ -7,6 +7,7 @@
 'use server';
 
 import { auth } from '@clerk/nextjs/server';
+import { sessionExpiredError } from '@/lib/auth-utils';
 import stripe from '@/lib/stripe';
 import prisma from '@/lib/prismadb';
 import { calculateTotalWithStripeCardFee, FEES } from '@/lib/fee-constants';
@@ -29,7 +30,7 @@ export async function processDirectPayment({
   try {
     const { userId } = auth();
     if (!userId) {
-      return { success: false, error: 'Unauthorized' };
+      return sessionExpiredError();
     }
 
     // Get the match with all necessary relations
@@ -427,7 +428,7 @@ export async function confirmZeroDepositBooking({
   try {
     const { userId } = auth();
     if (!userId) {
-      return { success: false, error: 'Unauthorized' };
+      return sessionExpiredError();
     }
 
     const match = await prisma.match.findUnique({

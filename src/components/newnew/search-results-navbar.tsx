@@ -11,6 +11,7 @@ import DesktopSearchPopover from '@/components/newnew/desktop-search-popover';
 import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
 import { UpdatedFilterIcon } from '@/components/icons';
 import { createTrip, editTrip } from '@/app/actions/trips';
+import { isSessionExpired, handleSessionExpired } from '@/lib/handle-session-expired';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { updateGuestSession } from '@/app/actions/guest-session-db';
 import { GuestSessionService } from '@/utils/guest-session';
@@ -136,6 +137,7 @@ export default function SearchResultsNavbar({
     try {
       const result = await onSaveDates(dates.start ?? null, dates.end ?? null);
       if (!result.success) {
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         toast({ variant: 'destructive', description: result.error || 'Failed to save dates' });
         return;
       }
@@ -164,6 +166,7 @@ export default function SearchResultsNavbar({
     try {
       const result = await onSaveGuests(guestValues.adults, guestValues.children, guestValues.pets);
       if (!result.success) {
+        if (isSessionExpired(result)) { handleSessionExpired(); return; }
         toast({ variant: 'destructive', description: result.error || 'Failed to save guests' });
         return;
       }
@@ -266,6 +269,8 @@ export default function SearchResultsNavbar({
           const response = await editTrip(tripId, tripPayload);
           if (response.success) {
             navigate(buildSearchUrl({ tripId }));
+          } else if (isSessionExpired(response)) {
+            handleSessionExpired();
           } else {
             toast({ variant: 'destructive', description: response.error || 'Failed to update trip' });
           }
@@ -273,6 +278,8 @@ export default function SearchResultsNavbar({
           const response = await createTrip(tripPayload);
           if (response.success && response.trip) {
             navigate(buildSearchUrl({ tripId: response.trip.id }));
+          } else if (isSessionExpired(response)) {
+            handleSessionExpired();
           } else {
             toast({ variant: 'destructive', description: (response as any).error || 'Failed to create trip' });
           }
