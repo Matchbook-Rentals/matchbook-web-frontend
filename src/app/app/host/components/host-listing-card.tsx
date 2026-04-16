@@ -639,22 +639,25 @@ export default function HostListingCard({
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3 relative self-stretch w-full">
-            <CalendarDialog
-              bookings={listing.bookings || []}
-              unavailablePeriods={listing.unavailablePeriods || []}
-              triggerText="View Calendar"
-              listingId={listing.id}
-              showIcon={false}
-              triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-background hover:bg-[#3c8787] hover:text-white transition-all duration-300"
-              variant="outline"
-            />
+            {!isDraft && (
+              <CalendarDialog
+                bookings={listing.bookings || []}
+                unavailablePeriods={listing.unavailablePeriods || []}
+                triggerText="View Calendar"
+                listingId={listing.id}
+                showIcon={false}
+                triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-background hover:bg-[#3c8787] hover:text-white transition-all duration-300"
+                variant="outline"
+              />
+            )}
             <BrandButton
               variant="default"
               className="flex-1 bg-[#3c8787] text-white font-semibold"
-              href={`/app/host/${listing.id}/summary`}
+              href={isDraft ? undefined : `/app/host/${listing.id}/summary`}
+              onClick={isDraft ? () => onViewDetails?.(listing.id) : undefined}
               spinOnClick={true}
             >
-              Manage Listing
+              {isDraft ? 'Finish Listing' : 'Manage Listing'}
             </BrandButton>
           </div>
         </CardFooter>
