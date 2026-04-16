@@ -3,6 +3,7 @@ import prisma from '@/lib/prismadb';
 import { revalidateTag } from 'next/cache';
 import { TripAndMatches } from '@/types/';
 import { auth } from '@clerk/nextjs/server';
+import { sessionExpiredError } from '@/lib/auth-utils';
 import { Trip } from '@prisma/client';
 
 export async function getTripsInSearchStatus(): Promise<TripAndMatches[]> {
@@ -287,7 +288,7 @@ export async function createTrip(tripData: {
 }): Promise<CreateTripResponse> {
   const { userId } = auth();
   if (!userId) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {
@@ -353,7 +354,7 @@ export async function editTrip(tripId: string, tripData: {
 }): Promise<EditTripResponse> {
   const { userId } = auth();
   if (!userId) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {
@@ -463,7 +464,7 @@ export async function createTripFromGuestSession(guestSessionData: {
 }): Promise<CreateTripFromGuestSessionResponse> {
   const { userId } = auth();
   if (!userId) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {
@@ -528,7 +529,7 @@ export async function getOrCreateTripForListing(
 ): Promise<GetOrCreateTripResponse> {
   const { userId } = auth();
   if (!userId) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {

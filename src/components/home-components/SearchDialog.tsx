@@ -13,6 +13,7 @@ import MobileLocationSuggest from "./MobileLocationSuggest";
 import { cn } from "@/lib/utils";
 import { useToast } from "@/components/ui/use-toast";
 import { createTrip } from "@/app/actions/trips";
+import { isSessionExpired, handleSessionExpired } from "@/lib/handle-session-expired";
 import { createGuestTrip } from "@/app/actions/guest-trips";
 import { GuestSessionService } from "@/utils/guest-session";
 import { useRouter } from "next/navigation";
@@ -121,6 +122,8 @@ const SearchDialog: React.FC<SearchDialogProps> = ({
 
         if (response.success && response.trip) {
           router.push(`/app/rent/searches/${response.trip.id}`);
+        } else if (isSessionExpired(response)) {
+          handleSessionExpired();
         } else {
           toast({
             variant: "destructive",

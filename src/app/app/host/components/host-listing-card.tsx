@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { isSessionExpired, handleSessionExpired } from "@/lib/handle-session-expired";
 import Image from "next/image";
 import {
   Dialog,
@@ -226,7 +227,7 @@ export default function HostListingCard({
       const response = await deleteFunction(listing.id, false); // Check only, don't delete yet
 
       if (!response.success) {
-        // Handle basic failures (auth, not found, etc.)
+        if (isSessionExpired(response)) { handleSessionExpired(); return; }
         toast.error(response.message);
         setIsDeleteDialogOpen(false);
         return;
@@ -267,9 +268,11 @@ export default function HostListingCard({
         setIsDeleteDialogOpen(false);
         setDeleteConfirmationText("");
         router.refresh(); // Refresh to update the listing display
+      } else if (isSessionExpired(response)) {
+        handleSessionExpired();
       } else {
         toast.error(response.message || `Failed to delete ${isDraft ? 'draft' : 'listing'}`);
-        setModalState('confirmation'); // Go back to confirmation state
+        setModalState('confirmation');
       }
     } catch (error) {
       console.error("Error deleting:", error);

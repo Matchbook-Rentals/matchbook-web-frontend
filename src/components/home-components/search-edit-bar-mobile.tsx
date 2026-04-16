@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 // import { useParams } from "next/navigation"; // Removed
 import { Trip } from "@prisma/client";
 import { editTrip } from "@/app/actions/trips";
+import { isSessionExpired, handleSessionExpired } from "@/lib/handle-session-expired";
 import { useToast } from "@/components/ui/use-toast"; // Keep for potential errors during save
 import { MapPin, Calendar, Users, Check, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -246,6 +247,8 @@ const SearchEditBarMobile: React.FC<SearchEditBarMobileProps> = ({
       toast({ description: "Trip updated successfully. Page will refresh..." });
       setActiveInput(null); // Close any open sections
       setTimeout(() => window.location.reload(), 1500);
+    } else if (isSessionExpired(response)) {
+      handleSessionExpired();
     } else {
       toast({ variant: "destructive", description: response.error || "Failed to update trip" });
     }

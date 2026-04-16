@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
+import { sessionExpiredError } from '@/lib/auth-utils'
 import { getPaymentTypeLabel } from '@/lib/payment-display-helpers'
 import { processRentPaymentNow } from '@/lib/payment-processing'
 
@@ -294,7 +295,7 @@ export async function getListingPayments(listingId: string): Promise<{ paymentsD
 export async function retryPaymentNow(paymentId: string): Promise<{ success: boolean; status?: string; error?: string; code?: string }> {
   const { userId } = auth();
   if (!userId) {
-    return { success: false, error: 'Unauthorized', code: 'UNAUTHORIZED' };
+    return { ...sessionExpiredError(), code: 'SESSION_EXPIRED' };
   }
 
   const payment = await prisma.rentPayment.findUnique({

@@ -1,6 +1,12 @@
 import { auth, currentUser } from '@clerk/nextjs/server';
 import prismadb from '@/lib/prismadb';
 
+export const SESSION_EXPIRED = 'SESSION_EXPIRED' as const;
+
+export function sessionExpiredError() {
+  return { success: false as const, error: 'Your session has expired', errorCode: SESSION_EXPIRED };
+}
+
 /**
  * Shared authentication check utility that skips auth in test environment
  * Also ensures database user record exists (creates if missing via webhook fallback)
