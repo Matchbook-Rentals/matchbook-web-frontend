@@ -62,6 +62,26 @@ export function PaymentSchedule({
 }: PaymentScheduleProps) {
   return (
     <div className="rounded-lg bg-white">
+      <BrandAccordionGroup
+          type="multiple"
+          defaultValue={['due-today']}
+          className="border-0 rounded-none bg-transparent"
+        >
+          <BrandAccordionItem value="due-today" className="border-b-0">
+            <BrandAccordionTrigger
+              rightContent={<span className={sectionHeaderTextStyle}>{dueToday.total}</span>}
+              className={`${sectionHeaderTextStyle} h-[50px] rounded-lg bg-[#F9F9F9]`}
+            >
+              {dueTodayLabel}
+            </BrandAccordionTrigger>
+            <BrandAccordionContent className={`${contentStyle} pt-4`}>
+              {dueToday.details.map((d, i) => (
+                <DetailRow key={i} label={d.label} value={d.amount} bold />
+              ))}
+            </BrandAccordionContent>
+          </BrandAccordionItem>
+        </BrandAccordionGroup>
+
       <div className="flex h-[50px] px-5 justify-between items-center self-stretch rounded-lg bg-[#F9F9F9]">
         <h3 className={`${sectionHeaderTextStyle} m-0`}>
           {monthlyPaymentsLabel}
@@ -89,26 +109,6 @@ export function PaymentSchedule({
           </BrandAccordionItem>
         ))}
       </BrandAccordionGroup>
-
-      <BrandAccordionGroup
-          type="multiple"
-          defaultValue={['due-today']}
-          className="border-0 rounded-none bg-transparent"
-        >
-          <BrandAccordionItem value="due-today" className="border-b-0">
-            <BrandAccordionTrigger
-              rightContent={<span className={sectionHeaderTextStyle}>{dueToday.total}</span>}
-              className={`${sectionHeaderTextStyle} h-[50px] rounded-lg bg-[#F9F9F9]`}
-            >
-              {dueTodayLabel}
-            </BrandAccordionTrigger>
-            <BrandAccordionContent className={`${contentStyle} pt-4`}>
-              {dueToday.details.map((d, i) => (
-                <DetailRow key={i} label={d.label} value={d.amount} bold />
-              ))}
-            </BrandAccordionContent>
-          </BrandAccordionItem>
-        </BrandAccordionGroup>
     </div>
   );
 }
