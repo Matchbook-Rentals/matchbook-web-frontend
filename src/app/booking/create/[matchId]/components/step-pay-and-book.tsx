@@ -36,7 +36,7 @@ function PropertyHeader({ match }: { match: StepProps['match'] }) {
         {match.listing.title || 'Your Home Away from Home'}
       </h2>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 w-full sm:w-auto">
         <div className="booking-review__chip">
           <span className="booking-review__chip-label">Move-In</span>
           <span className="booking-review__chip-date">{formatDate(match.trip.startDate)}</span>
