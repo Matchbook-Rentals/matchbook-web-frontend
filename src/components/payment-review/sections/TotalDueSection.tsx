@@ -43,7 +43,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
   paymentBreakdown, 
   isUsingCard = false 
 }) => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   const totalDeposits = calculateTotalDeposits(
     paymentBreakdown.securityDeposit,

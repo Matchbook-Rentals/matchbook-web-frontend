@@ -90,7 +90,7 @@ export function PaymentSchedule({
 
       <BrandAccordionGroup
         type="multiple"
-        defaultValue={defaultExpandedId ? [defaultExpandedId] : []}
+        defaultValue={monthlyPayments.map((p) => p.id)}
         className="border-0 rounded-none bg-transparent"
       >
         {monthlyPayments.map((payment) => (
