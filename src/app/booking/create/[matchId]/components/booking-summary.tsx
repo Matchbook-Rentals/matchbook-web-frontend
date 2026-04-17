@@ -66,12 +66,21 @@ export function BookingSummary({
       const daysInMonth = new Date(year, month + 1, 0).getDate();
       const isFirst = i === 0;
       const dayOfMonth = cursor.getDate();
-      const isProrated = isFirst && dayOfMonth > 1;
+      const isFirstProrated = isFirst && dayOfMonth > 1;
+
+      const monthEnd = new Date(year, month + 1, 0);
+      const isLastProrated = !isFirstProrated && monthEnd >= tripEnd && tripEnd.getDate() < daysInMonth;
 
       let rent = baseRent;
-      if (isProrated) {
+      let prorateLabel = 'Rent';
+      if (isFirstProrated) {
         const daysRemaining = daysInMonth - dayOfMonth + 1;
         rent = Math.round((baseRent * daysRemaining / daysInMonth) * 100) / 100;
+        prorateLabel = `Prorated Rent (${daysRemaining} ${daysRemaining === 1 ? 'day' : 'days'})`;
+      } else if (isLastProrated) {
+        const daysUsed = tripEnd.getDate();
+        rent = Math.round((baseRent * daysUsed / daysInMonth) * 100) / 100;
+        prorateLabel = `Prorated Rent (${daysUsed} ${daysUsed === 1 ? 'day' : 'days'})`;
       }
 
       const fee = Math.round(rent * serviceFeeRate * 100) / 100;
@@ -79,7 +88,7 @@ export function BookingSummary({
       const dateLabel = cursor.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
 
       const details = [
-        { label: isProrated ? `Prorated Rent (${daysInMonth - dayOfMonth + 1} days)` : 'Rent', amount: fmt(rent) },
+        { label: (isFirstProrated || isLastProrated) ? prorateLabel : 'Rent', amount: fmt(rent) },
       ];
       if (paymentDetails.monthlyPetRent > 0) {
         details.push({ label: 'Pet Rent', amount: fmt(paymentDetails.monthlyPetRent) });

@@ -301,63 +301,62 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
     actualPaymentAmount: number
   ) => {
     const payments: { amount: number; dueDate: Date; description: string }[] = [];
-    
+
     const start = new Date(startDate);
     const end = new Date(endDate);
-    
-    
+
+
     // Start from the first of the month after start date (or same month if starts on 1st)
     let currentDate = new Date(start.getFullYear(), start.getMonth(), 1);
     let isFirstPayment = true;
-    
+
     // If booking starts after the 1st, add a pro-rated payment for the partial month
     if (start.getDate() > 1) {
       const daysInMonth = new Date(start.getFullYear(), start.getMonth() + 1, 0).getDate();
       const daysFromStart = daysInMonth - start.getDate() + 1;
       const proRatedAmount = Math.round((monthlyRent * daysFromStart) / daysInMonth);
-      
+
       // For first partial month, subtract the actual payment amount already paid at booking
       const finalAmount = Math.max(0, proRatedAmount - actualPaymentAmount);
-      
+
       if (finalAmount > 0) {
         payments.push({
           amount: finalAmount,
           dueDate: start,
-          description: `Pro-rated rent (${daysFromStart} days) - $${actualPaymentAmount.toFixed(2)} paid at booking`
+          description: `Pro-rated rent (${daysFromStart} ${daysFromStart === 1 ? 'day' : 'days'}) - $${actualPaymentAmount.toFixed(2)} paid at booking`
         });
       }
-      
+
       isFirstPayment = false;
       // Move to next month for regular payments
       currentDate = new Date(start.getFullYear(), start.getMonth() + 1, 1);
     }
-    
+
     // Generate monthly payments on the 1st of each month
     while (currentDate <= end) {
       const monthEnd = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 0);
-      
       // Check if this is the last month and we need pro-rating
       if (monthEnd > end && end.getDate() < monthEnd.getDate()) {
         const daysInMonth = monthEnd.getDate();
         const daysToEnd = end.getDate();
         const proRatedAmount = Math.round((monthlyRent * daysToEnd) / daysInMonth);
-        
+
         payments.push({
           amount: proRatedAmount,
           dueDate: currentDate,
-          description: `Pro-rated rent (${daysToEnd} days)`
+          description: `Pro-rated rent (${daysToEnd} ${daysToEnd === 1 ? 'day' : 'days'})`
         });
       } else {
         // Full month payment - subtract rent due at booking from first payment only
         let paymentAmount = monthlyRent;
         let description = 'Monthly rent';
-        
+
         if (isFirstPayment) {
           paymentAmount = Math.max(0, monthlyRent - actualPaymentAmount);
           description = `Monthly rent - $${actualPaymentAmount.toFixed(2)} paid at booking`;
           isFirstPayment = false;
         }
-        
+
         if (paymentAmount > 0) {
           payments.push({
             amount: paymentAmount,
@@ -366,11 +365,11 @@ export function LeaseSigningClient({ match, matchId, testPaymentMethodPreview, i
           });
         }
       }
-      
+
       // Move to next month
       currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
     }
-    
+
     return payments;
   };
 
