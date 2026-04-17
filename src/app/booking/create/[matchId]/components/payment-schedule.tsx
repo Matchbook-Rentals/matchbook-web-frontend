@@ -42,11 +42,11 @@ const paymentLineItemTextStyle = "font-['Poppins'] text-lg font-normal leading-[
 // Dollar amounts on accordion controls & subtotals — 18px, 600
 const payAmountSubTotalTextStyle = "font-['Poppins'] text-lg font-semibold leading-[120%] text-[#333]";
 
-const contentStyle = "bg-white border-b-0 !pl-5 !gap-y-6 flex flex-col";
+const contentStyle = "bg-white border-b-0 !pl-5 !py-2 !gap-y-6 flex flex-col";
 
 function DetailRow({ label, value, bold = false }: { label: string; value: string; bold?: boolean }) {
   return (
-    <div className="flex px-8 justify-between items-end self-stretch">
+    <div className="flex pl-4 justify-between items-end self-stretch">
       <span className={paymentLineItemTextStyle}>{label}</span>
       <span className={bold ? payAmountSubTotalTextStyle : paymentLineItemTextStyle}>{value}</span>
     </div>
@@ -74,15 +74,15 @@ export function PaymentSchedule({
             >
               {dueTodayLabel}
             </BrandAccordionTrigger>
-            <BrandAccordionContent className={`${contentStyle} pt-4`}>
+            <BrandAccordionContent className={contentStyle}>
               {dueToday.details.map((d, i) => (
-                <DetailRow key={i} label={d.label} value={d.amount} bold />
+                <DetailRow key={i} label={d.label} value={d.amount} />
               ))}
             </BrandAccordionContent>
           </BrandAccordionItem>
         </BrandAccordionGroup>
 
-      <div className="flex h-[50px] px-5 justify-between items-center self-stretch rounded-lg bg-[#F9F9F9]">
+      <div className="flex h-[50px] px-5 mt-4 justify-between items-center self-stretch rounded-lg bg-[#F9F9F9]">
         <h3 className={`${sectionHeaderTextStyle} m-0`}>
           {monthlyPaymentsLabel}
         </h3>
@@ -96,10 +96,10 @@ export function PaymentSchedule({
         {monthlyPayments.map((payment) => (
           <BrandAccordionItem key={payment.id} value={payment.id} className="border-b-0">
             <BrandAccordionTrigger
-              rightContent={<span className={payAmountSubTotalTextStyle}>{payment.total}</span>}
+              rightContent={<span className={paymentLineItemTextStyle}>{payment.total}</span>}
               className={paymentLineItemTextStyle}
             >
-              {payment.date}
+              <span className="font-normal">{payment.date}</span>
             </BrandAccordionTrigger>
             <BrandAccordionContent className={contentStyle}>
               {payment.details.map((d, i) => (

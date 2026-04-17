@@ -99,7 +99,7 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
           </div>
         </CollapsibleTrigger>
 
-        <CollapsibleContent className="flex-col items-start gap-4 md:gap-6 self-stretch w-full flex-[0_0_auto] flex relative pt-3 md:pt-4">
+        <CollapsibleContent className="flex-col items-start gap-4 md:gap-6 self-stretch w-full flex-[0_0_auto] flex relative py-2 md:py-3">
           {paymentItems.map((item, index) => (
             <div
               key={index}
@@ -110,26 +110,12 @@ export const TotalDueSection: React.FC<TotalDueSectionProps> = ({
               </div>
 
               <div className="flex items-center justify-end gap-2 md:gap-4 relative">
-                <div className="relative w-fit mt-[-1.00px] font-poppins font-semibold text-[#020202] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
+                <div className="relative w-fit mt-[-1.00px] font-poppins font-normal text-[#333333] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
                   {formatCurrency(item.amount)}
                 </div>
               </div>
             </div>
           ))}
-
-          <div className="border-t border-[#d9dadf] pt-3 md:pt-4 mt-2 w-full">
-            <div className="items-end justify-between px-4 md:px-5 py-0 self-stretch w-full flex-[0_0_auto] flex relative">
-              <div className="relative w-fit mt-[-1.00px] font-poppins font-semibold text-[#020202] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
-                Total
-              </div>
-
-              <div className="flex items-center justify-end gap-2 md:gap-4 relative">
-                <div className="relative w-fit mt-[-1.00px] font-poppins font-bold text-[#020202] text-lg md:text-xl tracking-[0] leading-tight whitespace-nowrap">
-                  {formatCurrency(calculatedTotal)}
-                </div>
-              </div>
-            </div>
-          </div>
         </CollapsibleContent>
       </Collapsible>
     </section>

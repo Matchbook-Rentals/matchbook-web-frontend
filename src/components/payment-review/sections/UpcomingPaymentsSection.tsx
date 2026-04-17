@@ -331,7 +331,7 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
         </CollapsibleTrigger>
 
         <CollapsibleContent>
-          <div className="flex-col items-start gap-4 md:gap-6 self-stretch w-full flex-[0_0_auto] flex relative pt-3 md:pt-4">
+          <div className="flex-col items-start gap-4 md:gap-6 self-stretch w-full flex-[0_0_auto] flex relative py-2 md:py-3">
             {paymentData.map((payment, index) => (
               <div key={index} className="w-full">
                 {payment.hasSubItem ? (
@@ -342,7 +342,7 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
                       </div>
 
                       <div className="flex items-center justify-end gap-2 md:gap-4 relative">
-                        <div className="relative w-fit font-poppins font-semibold text-[#020202] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
+                        <div className="relative w-fit font-poppins font-normal text-[#333333] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
                           ${payment.amount.toFixed(2)}
                         </div>
                         <ChevronDownIcon className={`relative w-5 h-5 md:w-6 md:h-6 transition-transform duration-200 ${expandedPayments.has(index) ? 'rotate-180' : ''}`} />
@@ -372,7 +372,7 @@ export const UpcomingPaymentsSection: React.FC<UpcomingPaymentsSectionProps> = (
                     </div>
 
                     <div className="flex items-center justify-end gap-2 md:gap-4 relative">
-                      <div className="relative w-fit font-poppins font-semibold text-[#020202] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
+                      <div className="relative w-fit font-poppins font-normal text-[#333333] text-base md:text-lg tracking-[0] leading-tight whitespace-nowrap">
                         ${payment.amount.toFixed(2)}
                       </div>
                     </div>
