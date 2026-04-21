@@ -299,16 +299,16 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
 
       {varyPricingByLength && (
         <div className="mt-8">
-          {/* Header — col 3 is wide enough for label + switch */}
-          <div className="flex items-center gap-x-3 sm:gap-x-4 md:gap-x-6 bg-[#e7f0f0] px-4 py-3 font-medium text-xs text-[#475467]">
-            <div className="w-24 shrink-0">
+          {/* Header — mobile: content-sized cols; md+: capped at 1/3 with justify-between */}
+          <div className="flex items-center gap-x-3 sm:gap-x-4 md:gap-x-0 md:justify-between bg-[#e7f0f0] px-4 md:px-8 py-3 font-medium text-xs text-[#475467]">
+            <div className="w-24 shrink-0 md:w-1/3 md:max-w-[33%]">
               <span className="inline-block">Lease Length</span>
             </div>
-            <div className="flex-1 min-w-0">
+            <div className="flex-1 min-w-0 md:flex-none md:w-1/3 md:max-w-[33%]">
               <span className="inline-block">Monthly Rent</span>
             </div>
-            <div className="shrink-0 flex items-center gap-2 pl-1 md:pl-0">
-              <span className="max-w-16 text-right leading-tight">Utilities Included</span>
+            <div className="shrink-0 flex items-center gap-2 pl-1 md:pl-0 md:w-1/3 md:max-w-[33%] md:justify-end">
+              <span className="max-w-16 text-right leading-tight md:max-w-none">Utilities Included</span>
               <Switch
                 checked={allRowsUtilitiesOn}
                 onCheckedChange={setAllRowUtilities}
@@ -317,18 +317,19 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
             </div>
           </div>
 
-          {/* Body rows — col 3 shrinks to just the switch, letting col 2 (input) grow */}
+          {/* Body rows — mobile: col 3 shrinks to just the switch, letting col 2 (input) grow;
+               md+: columns capped at 1/3 with justify-between */}
           {monthlyPricing.map((pricing) => (
             <div
               key={`pricing-${pricing.months}`}
-              className="flex items-center gap-x-3 sm:gap-x-4 md:gap-x-6 px-4 py-4 border-b last:border-b-0"
+              className="flex items-center gap-x-3 sm:gap-x-4 md:gap-x-0 md:justify-between px-4 md:px-8 py-4 border-b last:border-b-0"
             >
-              <div className="w-24 shrink-0 text-sm text-[#373940] whitespace-nowrap">
+              <div className="w-24 shrink-0 text-sm text-[#373940] whitespace-nowrap md:w-1/3 md:max-w-[33%]">
                 <span className="inline-block">
                   {pricing.months} month{pricing.months !== 1 && "s"}
                 </span>
               </div>
-              <div className="flex-1 min-w-0">
+              <div className="flex-1 min-w-0 md:flex-none md:w-1/3 md:max-w-[33%]">
                 <div className="relative w-full">
                   <span className="absolute inset-y-0 left-2 flex items-center text-gray-500">
                     $
@@ -351,7 +352,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
                   />
                 </div>
               </div>
-              <div className="shrink-0 flex justify-end pl-1 md:pl-0">
+              <div className="shrink-0 flex justify-end pl-1 md:pl-0 md:w-1/3 md:max-w-[33%]">
                 <Switch
                   checked={pricing.utilitiesIncluded}
                   onCheckedChange={(checked) =>
