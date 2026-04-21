@@ -123,6 +123,9 @@ export const createListingFromDraftTransaction = async (
       price: number;
       utilitiesIncluded: boolean;
     }>;
+    // If provided, overrides the draft's persisted availableDate.
+    // When set (and in the future), creates a pre-availability unavailability block.
+    availableDate?: Date | null;
   }
 ) => {
   try {
@@ -277,11 +280,30 @@ export const createListingFromDraftTransaction = async (
         });
       }
       
+      // Pre-availability block: the unit isn't rentable until `availableDate`.
+      // Option overrides the draft's stored availableDate.
+      const effectiveAvailable =
+        options?.availableDate !== undefined ? options.availableDate : (draft as any).availableDate;
+      if (effectiveAvailable) {
+        const end = new Date(effectiveAvailable);
+        const now = new Date();
+        if (end > now) {
+          await tx.listingUnavailability.create({
+            data: {
+              listingId: listing.id,
+              startDate: now,
+              endDate: end,
+              reason: 'pre-availability',
+            },
+          });
+        }
+      }
+
       // Delete only the specific draft that was converted to a listing
       await tx.listingInCreation.delete({
         where: { id: draftId }
       });
-      
+
       return listing;
     });
 

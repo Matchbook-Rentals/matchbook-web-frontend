@@ -8,7 +8,8 @@ import path from 'path';
  * Verifies that clicking Next auto-saves the draft (draftId appears in URL)
  * and that refreshing the page restores persisted data for each step.
  *
- * Tests steps 0-10 of the listing creation flow.
+ * Tests steps 0-8 of the listing creation flow (pricing + deposits live on
+ * a single consolidated step 8).
  */
 
 /** Navigate through address confirmation step (handles debounce). */
@@ -99,20 +100,10 @@ async function navigateToStep(page: import('@playwright/test').Page, targetStep:
   // Step 7 (Amenities) -> click Next
   if (targetStep <= 7) return;
   await page.getByTestId('next-button').click();
-  await expect(page.getByText('Set the pricing')).toBeVisible({ timeout: 15000 });
+  await expect(page.getByText('Set pricing and lease terms')).toBeVisible({ timeout: 15000 });
 
-  // Step 8 (Pricing) -> click Next
+  // Step 8 (Pricing & Terms) -> click Next
   if (targetStep <= 8) return;
-  await page.getByTestId('next-button').click();
-  await expect(page.getByText('Select Monthly Rent And Utilities Included')).toBeVisible({ timeout: 15000 });
-
-  // Step 9 (Verify Pricing) -> click Next
-  if (targetStep <= 9) return;
-  await page.getByTestId('next-button').click();
-  await expect(page.getByText('What deposits and additional costs do you require?')).toBeVisible({ timeout: 15000 });
-
-  // Step 10 (Deposits) -> click Next
-  if (targetStep <= 10) return;
   await page.getByTestId('next-button').click();
   await expect(page.getByText('Review your listing')).toBeVisible({ timeout: 15000 });
 }
@@ -123,6 +114,7 @@ test.describe('Add Property Auto-Save', () => {
 
   let sharedPage: import('@playwright/test').Page;
 
+  // Allow extra time for Next.js dev server cold-start on first sign-in
   test.beforeAll(async ({ browser }) => {
     sharedPage = await browser.newPage();
     await signIn(sharedPage);
@@ -365,75 +357,45 @@ test.describe('Add Property Auto-Save', () => {
     // Click Next
     await page.getByTestId('next-button').click();
 
-    // Should advance to pricing step
-    await expect(page.getByText('Set the pricing')).toBeVisible({ timeout: 15000 });
+    // Should advance to pricing & terms step
+    await expect(page.getByText('Set pricing and lease terms')).toBeVisible({ timeout: 15000 });
     await expect(page).toHaveURL(/.*draftId=/);
   });
 
-  test('step 8 (Pricing): set stay lengths and auto-save', async () => {
+  test('step 8 (Pricing & Terms): fill rent, deposit, and per-month prices, auto-save', async () => {
     const page = sharedPage;
 
-    // We should be on pricing step — defaults are shortestStay=1, longestStay=12
-    // which pass validation. Just click Next.
-    await expect(page.getByText('Set the pricing')).toBeVisible({ timeout: 15000 });
+    // We should be on the consolidated pricing & terms step
+    await expect(page.getByText('Set pricing and lease terms')).toBeVisible({ timeout: 15000 });
 
-    // Click Next — defaults should pass validation
-    await page.getByTestId('next-button').click();
+    // Top-level numeric inputs use placeholder "0":
+    //   [0] monthly rent (basePrice)
+    //   [1] security deposit
+    //   [2] pet deposit
+    //   [3] monthly pet fee
+    // Use fill() directly — it dispatches input/change events without requiring
+    // pointer-event visibility (the fixed footer overlaps the bottom rows).
+    const topInputs = page.locator('input[placeholder="0"]');
+    await topInputs.nth(0).fill('1200');
+    await topInputs.nth(1).fill('500');
 
-    // Should advance to verify pricing step
-    await expect(page.getByText('Select Monthly Rent And Utilities Included')).toBeVisible({ timeout: 15000 });
-    await expect(page).toHaveURL(/.*draftId=/);
-  });
-
-  test('step 9 (Verify Pricing): fill monthly prices and auto-save', async () => {
-    const page = sharedPage;
-
-    // We should be on verify pricing step
-    await expect(page.getByText('Select Monthly Rent And Utilities Included')).toBeVisible({ timeout: 15000 });
-
-    // Fill prices for all months — each row has an input with placeholder "0"
-    // The pricing table has inputs for months 1-12 (default range)
-    const priceInputs = page.locator('input[placeholder="0"]');
-    const inputCount = await priceInputs.count();
-
-    for (let i = 0; i < inputCount; i++) {
-      const input = priceInputs.nth(i);
-      if (await input.isVisible()) {
-        await input.click();
-        await input.fill('');
-        await input.type('1200');
-      }
+    // Per-month price rows use placeholder "0.00" (distinguishable from top fields)
+    const rowInputs = page.locator('input[placeholder="0.00"]');
+    const rowCount = await rowInputs.count();
+    for (let i = 0; i < rowCount; i++) {
+      await rowInputs.nth(i).fill('1200');
     }
 
-    // Click Next
+    // Let React flush state before clicking Next
+    await page.waitForTimeout(500);
+
+    // Click Next — should pass consolidated validation and go straight to Review
     await page.getByTestId('next-button').click();
 
-    // Should advance to deposits step
-    await expect(page.getByText('What deposits and additional costs do you require?')).toBeVisible({ timeout: 15000 });
+    await expect(page.getByText('Review your listing')).toBeVisible({ timeout: 15000 });
     await expect(page).toHaveURL(/.*draftId=/);
 
     // Wait for auto-save
     await page.waitForTimeout(2000);
-  });
-
-  test('step 10 (Deposits): fill deposit and auto-save', async () => {
-    const page = sharedPage;
-
-    // We should be on deposits step
-    await expect(page.getByText('What deposits and additional costs do you require?')).toBeVisible({ timeout: 15000 });
-
-    // Fill security deposit — the first input with placeholder "0"
-    const depositInputs = page.locator('input[placeholder="0"]');
-    const firstDeposit = depositInputs.first();
-    await firstDeposit.click();
-    await firstDeposit.fill('');
-    await firstDeposit.type('500');
-
-    // Click Next — deposits have no required validation
-    await page.getByTestId('next-button').click();
-
-    // Should advance to review step
-    await expect(page.getByText('Review your listing')).toBeVisible({ timeout: 15000 });
-    await expect(page).toHaveURL(/.*draftId=/);
   });
 });
