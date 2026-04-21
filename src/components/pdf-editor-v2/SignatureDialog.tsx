@@ -227,9 +227,10 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
         <div className="flex justify-end gap-2">
           <BrandButton
             variant="outline"
-            size="sm"
+            size="xs"
             onClick={onClose}
             disabled={isLoading}
+            className="min-w-0 px-3"
           >
             Cancel
           </BrandButton>
@@ -237,7 +238,8 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
             onClick={handleSign}
             disabled={!canSign || isLoading}
             loading={isLoading}
-            size="sm"
+            size="xs"
+            className="min-w-0 px-3"
           >
             Sign
           </BrandButton>
