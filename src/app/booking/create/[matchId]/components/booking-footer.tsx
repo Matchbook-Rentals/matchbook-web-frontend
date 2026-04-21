@@ -19,27 +19,37 @@ export function BookingFooter({ onBack, onContinue, backLabel = 'Back', continue
   const footerHint = override?.footerHint;
 
   return (
-    <footer className="booking-review__footer">
-      <div className="flex items-center gap-4 min-w-0">
-        {onBack && (
-          <BrandButton variant="tertiary" onClick={onBack}>{backLabel}</BrandButton>
-        )}
-        {footerHint && (
-          <div className="hidden md:flex items-center text-sm text-gray-600 min-w-0 truncate">
-            {footerHint}
-          </div>
+    <footer className="booking-review__footer !flex-col !items-stretch md:!flex-row md:!items-center">
+      {/* Mobile-only hint — stacked above the buttons row */}
+      {footerHint && (
+        <div className="md:hidden text-sm text-gray-600 text-left w-full pb-2">
+          {footerHint}
+        </div>
+      )}
+
+      {/* Back + desktop-hint (left) / Continue (right) */}
+      <div className="flex items-center justify-between gap-4 w-full">
+        <div className="flex items-center gap-4 min-w-0">
+          {onBack && (
+            <BrandButton variant="tertiary" onClick={onBack}>{backLabel}</BrandButton>
+          )}
+          {footerHint && (
+            <div className="hidden md:flex items-center text-sm text-gray-600 min-w-0 truncate">
+              {footerHint}
+            </div>
+          )}
+        </div>
+        {effectiveHandler && (
+          <BrandButton
+            variant="default"
+            onClick={effectiveHandler}
+            disabled={effectiveDisabled}
+            isLoading={effectiveLoading}
+          >
+            {effectiveLabel}
+          </BrandButton>
         )}
       </div>
-      {effectiveHandler && (
-        <BrandButton
-          variant="default"
-          onClick={effectiveHandler}
-          disabled={effectiveDisabled}
-          isLoading={effectiveLoading}
-        >
-          {effectiveLabel}
-        </BrandButton>
-      )}
     </footer>
   );
 }
