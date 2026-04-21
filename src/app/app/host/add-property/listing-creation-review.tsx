@@ -148,7 +148,6 @@ interface ListingReviewProps {
   onEditBasics?: () => void;
   onEditAmenities?: () => void;
   onEditPricing?: () => void;
-  onEditDeposits?: () => void;
   showPricingStructureTitle?: boolean;
 }
 
@@ -241,7 +240,6 @@ export const Box = ({
   onEditBasics = () => {},
   onEditAmenities = () => {},
   onEditPricing = () => {},
-  onEditDeposits = () => {},
   showPricingStructureTitle = true
 }: ListingReviewProps): JSX.Element => {
   

@@ -1228,8 +1228,10 @@ export const updateListingMoveInData = async (
 
 export const createListingTransaction = async (listingData: any, userId: string) => {
   try {
-    // Extract listing images and monthly pricing from the data to handle them separately
-    const { listingImages, monthlyPricing, ...listingDataWithoutRelations } = listingData;
+    // Extract listing images, monthly pricing, and availableDate to handle separately.
+    // availableDate is NOT a Listing column — it becomes a ListingUnavailability record
+    // blocking [creation, availableDate) so bookings can't start before the unit is ready.
+    const { listingImages, monthlyPricing, availableDate, ...listingDataWithoutRelations } = listingData;
 
     // Set the userId for the listing
     listingDataWithoutRelations.userId = userId;
@@ -1277,6 +1279,23 @@ export const createListingTransaction = async (listingData: any, userId: string)
         });
       }
       
+      // Pre-availability block: the unit isn't rentable until `availableDate`.
+      // Classic half-open interval — endDate equals the first rentable day (exclusive).
+      if (availableDate) {
+        const end = new Date(availableDate);
+        const now = new Date();
+        if (end > now) {
+          await tx.listingUnavailability.create({
+            data: {
+              listingId: listing.id,
+              startDate: now,
+              endDate: end,
+              reason: 'pre-availability',
+            },
+          });
+        }
+      }
+
       // Delete all user drafts after successful creation
       await tx.listingInCreation.deleteMany({
         where: { userId: userId }

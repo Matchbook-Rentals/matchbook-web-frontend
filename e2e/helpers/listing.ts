@@ -137,23 +137,13 @@ export async function createFullListing(
   await fillAmenities(page, data);
   await clickNext(page);
 
-  // Step 8: Pricing Setup
-  console.log('Step 8: Filling pricing...');
-  await fillPricing(page, data);
+  // Step 8: Pricing & Terms (stay range, rent, deposits, pet fees, per-month table)
+  console.log('Step 8: Filling pricing and lease terms...');
+  await fillPricingAndTerms(page, data);
   await clickNext(page);
 
-  // Step 9: Verify Pricing
-  console.log('Step 9: Verifying pricing...');
-  await verifyPricing(page, data);
-  await clickNext(page);
-
-  // Step 10: Deposits
-  console.log('Step 10: Filling deposits...');
-  await fillDeposits(page, data);
-  await clickNext(page);
-
-  // Step 11: Review - Submit the listing
-  console.log('Step 11: Submitting listing...');
+  // Step 9: Review - Submit the listing
+  console.log('Step 9: Submitting listing...');
   await submitListing(page);
 
   // Wait for success page
@@ -732,122 +722,60 @@ async function fillAmenities(page: Page, data: ListingData): Promise<void> {
 }
 
 /**
- * Step 8: Fill pricing setup
+ * Step 8: Fill consolidated pricing & terms screen
+ *
+ * Layout (top-down):
+ *  - Shortest / longest stay (stepper buttons, no input field)
+ *  - Available date picker
+ *  - Monthly rent (top-level, placeholder "0")
+ *  - Security deposit (top-level, placeholder "0")
+ *  - Pet deposit (top-level, placeholder "0")
+ *  - Monthly pet fee (top-level, placeholder "0")
+ *  - Utilities-included + vary-by-length toggles
+ *  - Per-month pricing table (row inputs use placeholder "0.00")
  */
-async function fillPricing(page: Page, data: ListingData): Promise<void> {
-  // Shortest stay (in months)
-  const shortestInput = page.locator(
-    'input[name*="shortest" i], ' +
-    'input[name*="minimum" i], ' +
-    '[data-testid="shortest-stay"], ' +
-    '[data-testid="min-stay"]'
-  ).first();
-
-  if (await shortestInput.isVisible({ timeout: 3000 })) {
-    await shortestInput.clear();
-    await shortestInput.fill(String(data.shortestStay || 1));
-  }
-
-  // Longest stay (in months)
-  const longestInput = page.locator(
-    'input[name*="longest" i], ' +
-    'input[name*="maximum" i], ' +
-    '[data-testid="longest-stay"], ' +
-    '[data-testid="max-stay"]'
-  ).first();
-
-  if (await longestInput.isVisible({ timeout: 2000 })) {
-    await longestInput.clear();
-    await longestInput.fill(String(data.longestStay || 12));
-  }
-}
-
-/**
- * Step 9: Verify/set monthly pricing
- * This page shows a table with monthly rent inputs for each lease length
- * Inputs are text inputs displaying values like "$0/mo"
- */
-async function verifyPricing(page: Page, data: ListingData): Promise<void> {
-  // Wait for the verify pricing page
-  await page.waitForSelector('text=Select Monthly Rent', { timeout: 10000 });
-  console.log('Verify pricing page is visible');
+async function fillPricingAndTerms(page: Page, data: ListingData): Promise<void> {
+  await page.waitForSelector('text=Set pricing and lease terms', { timeout: 10000 });
+  console.log('Pricing & terms page is visible');
 
   await page.waitForTimeout(500);
 
-  // Find all text inputs in the pricing table
-  // These inputs are inside table rows, near "$" and "/mo" text
-  const priceInputs = page.locator('input[type="text"], input[inputmode="numeric"]');
+  const monthlyRent = String(data.monthlyRent || 1500);
+  const securityDeposit = String(data.securityDeposit || 1500);
 
-  const count = await priceInputs.count();
-  console.log(`Found ${count} potential price inputs`);
+  // Top-level currency inputs share placeholder "0" in this order:
+  //   [0] Monthly rent (basePrice)
+  //   [1] Security deposit
+  //   [2] Pet deposit (optional)
+  //   [3] Monthly pet fee (optional)
+  // Use fill() directly — dispatches input/change events without requiring
+  // pointer visibility (the fixed footer overlaps bottom rows).
+  const topInputs = page.locator('input[placeholder="0"]');
 
-  // Fill each input with the monthly rent value
-  let filledCount = 0;
-  for (let i = 0; i < count; i++) {
-    const input = priceInputs.nth(i);
-    if (await input.isVisible({ timeout: 500 }).catch(() => false)) {
-      const currentValue = await input.inputValue().catch(() => '');
-      // Skip if already has a non-zero value
-      if (currentValue === '0' || currentValue === '' || currentValue === '$0') {
-        await input.click();
-        await input.clear();
-        await input.fill(String(data.monthlyRent || 1500));
-        filledCount++;
-        await page.waitForTimeout(100);
-      }
-    }
+  await topInputs.nth(0).fill(monthlyRent);
+  console.log(`Filled monthly rent: $${monthlyRent}`);
+
+  await topInputs.nth(1).fill(securityDeposit);
+  console.log(`Filled security deposit: $${securityDeposit}`);
+
+  if (data.petDeposit) {
+    await topInputs.nth(2).fill(String(data.petDeposit));
+    console.log(`Filled pet deposit: $${data.petDeposit}`);
   }
 
-  console.log(`Filled ${filledCount} price inputs with $${data.monthlyRent || 1500}`);
-  await page.waitForTimeout(500);
-}
-
-/**
- * Step 10: Fill deposits
- * This page has 3 inputs: security deposit, pet deposit, pet rent
- */
-async function fillDeposits(page: Page, data: ListingData): Promise<void> {
-  // Wait for the deposits page
-  await page.waitForSelector('text=security deposit', { timeout: 10000 });
-  console.log('Deposits page is visible');
-
-  // Find inputs by their associated labels
-  // Security deposit - "How much is the security deposit?"
-  const securityDepositRow = page.locator('div:has-text("How much is the security deposit?")').first();
-  const securityInput = securityDepositRow.locator('input').first();
-
-  if (await securityInput.isVisible({ timeout: 3000 })) {
-    await securityInput.click();
-    await securityInput.clear();
-    await securityInput.fill(String(data.securityDeposit || 1500));
-    console.log(`Filled security deposit: $${data.securityDeposit || 1500}`);
+  if (data.petRent) {
+    await topInputs.nth(3).fill(String(data.petRent));
+    console.log(`Filled pet rent: $${data.petRent}/mo`);
   }
 
-  // Pet deposit - "Is there an extra deposit for pets?" (optional)
-  const petDepositRow = page.locator('div:has-text("extra deposit for pets")').first();
-  const petDepositInput = petDepositRow.locator('input').first();
-
-  if (await petDepositInput.isVisible({ timeout: 2000 }).catch(() => false)) {
-    if (data.petDeposit) {
-      await petDepositInput.click();
-      await petDepositInput.clear();
-      await petDepositInput.fill(String(data.petDeposit));
-      console.log(`Filled pet deposit: $${data.petDeposit}`);
-    }
+  // Per-month rows (visible when "vary by length" toggle is on — default true).
+  // Row price inputs use placeholder "0.00" (distinct from the top-level "0").
+  const rowInputs = page.locator('input[placeholder="0.00"]');
+  const rowCount = await rowInputs.count();
+  for (let i = 0; i < rowCount; i++) {
+    await rowInputs.nth(i).fill(monthlyRent);
   }
-
-  // Pet rent - "Is there a monthly fee for pets?" (optional)
-  const petRentRow = page.locator('div:has-text("monthly fee for pets")').first();
-  const petRentInput = petRentRow.locator('input').first();
-
-  if (await petRentInput.isVisible({ timeout: 2000 }).catch(() => false)) {
-    if (data.petRent) {
-      await petRentInput.click();
-      await petRentInput.clear();
-      await petRentInput.fill(String(data.petRent));
-      console.log(`Filled pet rent: $${data.petRent}/mo`);
-    }
-  }
+  console.log(`Filled ${rowCount} per-month rent inputs with $${monthlyRent}`);
 
   await page.waitForTimeout(500);
 }

@@ -1994,6 +1994,7 @@ model ListingInCreation {
   basePrice              String?
   utilitiesUpToMonths    Int?
   monthlyPricingData     String? @db.Text
+  availableDate          DateTime?
 
   // General Amenities
   airConditioner     Boolean?
