@@ -1,15 +1,9 @@
 import React from "react";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
-import { BrandCheckbox } from "@/app/brandCheckbox";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
 import { ListingCreationCounter } from "./listing-creation-counter";
 import { MonthlyPricing } from "./listing-creation-pricing";
 import { styles } from "./styles";
@@ -199,11 +193,9 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
         </Row>
 
         <Row label="What date is the unit first available for rent?">
-          <Input
-            type="date"
+          <AvailableDatePicker
             value={availableDate}
-            onChange={(e) => onAvailableDateChange(e.target.value)}
-            className="h-9 rounded-[10px] border-2 border-[#0000004c] w-full max-w-[173px] text-sm"
+            onChange={onAvailableDateChange}
           />
         </Row>
 
@@ -428,7 +420,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   onFocus,
   onBlur,
 }) => (
-  <div className="relative w-full max-w-[173px]">
+  <div className="relative w-[173px]">
     <span className="absolute inset-y-0 left-3 flex items-center text-gray-500 text-base">
       $
     </span>
@@ -453,5 +445,131 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
     />
   </div>
 );
+
+interface AvailableDatePickerProps {
+  value: string; // ISO "YYYY-MM-DD"
+  onChange: (iso: string) => void;
+}
+
+// Auto-format as MM/DD/YYYY while typing
+const formatDateInput = (raw: string): string => {
+  const digits = raw.replace(/\D/g, "").slice(0, 8);
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 4) return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  return `${digits.slice(0, 2)}/${digits.slice(2, 4)}/${digits.slice(4)}`;
+};
+
+// Parse "MM/DD/YYYY" → Date (null on invalid/incomplete)
+const parseDateInput = (formatted: string): Date | null => {
+  const digits = formatted.replace(/\D/g, "");
+  if (digits.length !== 8) return null;
+  const mm = parseInt(digits.slice(0, 2), 10);
+  const dd = parseInt(digits.slice(2, 4), 10);
+  const yyyy = parseInt(digits.slice(4, 8), 10);
+  if (mm < 1 || mm > 12 || dd < 1 || dd > 31 || yyyy < 1900) return null;
+  const d = new Date(yyyy, mm - 1, dd);
+  if (d.getMonth() !== mm - 1 || d.getDate() !== dd) return null;
+  d.setHours(0, 0, 0, 0);
+  return d;
+};
+
+const dateToMMDDYYYY = (d: Date): string => {
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${mm}/${dd}/${d.getFullYear()}`;
+};
+
+const dateToIso = (d: Date): string => {
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${d.getFullYear()}-${mm}-${dd}`;
+};
+
+const isoToDate = (iso: string): Date | null => {
+  if (!iso) return null;
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return null;
+  const result = new Date(y, m - 1, d);
+  result.setHours(0, 0, 0, 0);
+  return result;
+};
+
+const AvailableDatePicker: React.FC<AvailableDatePickerProps> = ({
+  value,
+  onChange,
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const selected = isoToDate(value) ?? undefined;
+  const [text, setText] = React.useState(() =>
+    selected ? dateToMMDDYYYY(selected) : ""
+  );
+
+  // Sync local text when parent value changes externally (e.g., calendar pick)
+  React.useEffect(() => {
+    setText(selected ? dateToMMDDYYYY(selected) : "");
+  }, [value]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const today = React.useMemo(() => {
+    const t = new Date();
+    t.setHours(0, 0, 0, 0);
+    return t;
+  }, []);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const formatted = formatDateInput(e.target.value);
+    setText(formatted);
+    if (formatted === "") {
+      onChange("");
+      return;
+    }
+    const parsed = parseDateInput(formatted);
+    if (parsed && parsed >= today) onChange(dateToIso(parsed));
+  };
+
+  const handleTextBlur = () => {
+    // Snap back to a valid display if text is incomplete/invalid
+    setText(selected ? dateToMMDDYYYY(selected) : "");
+  };
+
+  return (
+    <div className="relative w-[173px]">
+      <Input
+        type="text"
+        inputMode="numeric"
+        placeholder="MM/DD/YYYY"
+        value={text}
+        onChange={handleTextChange}
+        onBlur={handleTextBlur}
+        maxLength={10}
+        className="w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-3 pr-9 text-sm"
+      />
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <button
+            type="button"
+            className="absolute right-1 top-1/2 -translate-y-1/2 p-1.5 rounded hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blueBrand"
+            aria-label="Open calendar"
+          >
+            <CalendarIcon className="h-4 w-4 text-gray-500" />
+          </button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="end">
+          <Calendar
+            mode="single"
+            selected={selected}
+            onSelect={(d) => {
+              if (d) {
+                onChange(dateToIso(d));
+                setOpen(false);
+              }
+            }}
+            disabled={{ before: today }}
+            initialFocus
+          />
+        </PopoverContent>
+      </Popover>
+    </div>
+  );
+};
 
 export default ListingCreationPricingAndTerms;
