@@ -6,7 +6,11 @@
   background: #fff;
   min-height: 100vh;
   max-width: 100vw;
-  overflow-x: hidden;
+  /* `overflow-x: clip` prevents horizontal overflow visually without creating
+   * a scroll container. `overflow-x: hidden` forces overflow-y to computed
+   * `auto`, which breaks `position: sticky` for descendants (e.g. the signing
+   * sidebar). */
+  overflow-x: clip;
   display: flex;
   flex-direction: column;
   color: #1a1a1a;
