@@ -159,7 +159,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
 
   return (
     <div className="relative w-full md:max-w-[886px] px-2 sm:px-4 md:px-6">
-      <div className="space-y-5">
+      <div className="flex flex-col gap-5">
         <Row label="What is the shortest stay you will accommodate?">
           <ListingCreationCounter
             value={shortestStay}
@@ -179,8 +179,6 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
           />
         </Row>
 
-        <Divider />
-
         <Row label="What is the longest stay you will accommodate?">
           <ListingCreationCounter
             value={longestStay}
@@ -199,8 +197,6 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
             monthSuffixClassName="inline"
           />
         </Row>
-
-        <Divider />
 
         <Row label="What date is the unit first available for rent?">
           <Input
@@ -410,10 +406,6 @@ const Row: React.FC<RowProps> = ({
     </div>
     <div className="shrink-0">{children}</div>
   </div>
-);
-
-const Divider: React.FC = () => (
-  <div className="h-px bg-black/10 w-full" aria-hidden="true" />
 );
 
 interface CurrencyInputProps {
