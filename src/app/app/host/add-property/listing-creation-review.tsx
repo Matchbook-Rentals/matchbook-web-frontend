@@ -141,6 +141,7 @@ interface ListingReviewProps {
     deposit: string;
     petDeposit: string;
     petRent: string;
+    availableDate?: string;
   };
   onEditHighlights?: () => void;
   onEditLocation?: () => void;
@@ -715,7 +716,24 @@ export const Box = ({
                       <strong>Max Lease:</strong> {listingPricing?.longestStay || 0} months
                     </span>
                   </Badge>
-                  
+
+                  {listingPricing?.availableDate && (
+                    <Badge
+                      variant="outline"
+                      className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
+                    >
+                      <span className="font-['Poppins',Helvetica] font-medium text-[#344054] text-sm text-center leading-5">
+                        <strong>Available from:</strong> {(() => {
+                          const [y, m, d] = listingPricing.availableDate.split('-').map(Number);
+                          if (!y || !m || !d) return listingPricing.availableDate;
+                          return new Date(y, m - 1, d).toLocaleDateString('en-US', {
+                            month: 'short', day: 'numeric', year: 'numeric',
+                          });
+                        })()}
+                      </span>
+                    </Badge>
+                  )}
+
                   <Badge
                     variant="outline"
                     className="inline-flex items-center justify-center gap-1.5 pl-3 pr-3 py-1 bg-gray-50 rounded-full border border-solid border-[#d9dadf]"
