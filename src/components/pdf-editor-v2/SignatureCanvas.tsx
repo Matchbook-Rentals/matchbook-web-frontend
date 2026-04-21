@@ -14,6 +14,9 @@ interface SignatureCanvasProps {
   height?: number;
   className?: string;
   hideControls?: boolean;
+  /** Optional data URL painted onto the canvas on mount so the user sees their
+   * current signature. The image is wiped the moment they start a new stroke. */
+  initialDataUrl?: string;
 }
 
 interface Point {
@@ -27,12 +30,14 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle, SignatureCanvas
   height = 200,
   className = '',
   hideControls = false,
+  initialDataUrl,
 }, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPoint, setLastPoint] = useState<Point | null>(null);
   const [strokes, setStrokes] = useState<Point[][]>([]);
   const [currentStroke, setCurrentStroke] = useState<Point[]>([]);
+  const hasInitialImageRef = useRef<boolean>(false);
 
   // Initialize canvas
   useEffect(() => {
@@ -54,6 +59,27 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle, SignatureCanvas
     // Clear canvas with transparent background
     ctx.clearRect(0, 0, width, height);
   }, [width, height]);
+
+  // Paint the initial signature (if any) onto the canvas so the user can see
+  // their current sig. Setting drawnSignature upstream via onSignatureComplete
+  // primes the parent to treat the field as "has a value" without requiring a
+  // new stroke.
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas || !initialDataUrl) return;
+
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const img = new Image();
+    img.onload = () => {
+      ctx.clearRect(0, 0, width, height);
+      ctx.drawImage(img, 0, 0, width, height);
+      hasInitialImageRef.current = true;
+      onSignatureComplete(initialDataUrl);
+    };
+    img.src = initialDataUrl;
+  }, [initialDataUrl, width, height, onSignatureComplete]);
 
   // Redraw all strokes
   const redrawCanvas = useCallback(() => {
@@ -113,7 +139,16 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle, SignatureCanvas
   const startDrawing = (event: React.MouseEvent | React.TouchEvent) => {
     event.preventDefault();
     const point = getEventPoint(event);
-    
+
+    // First new stroke wipes any seeded initial signature so drawing doesn't
+    // overlay on top of the old one.
+    if (hasInitialImageRef.current && strokes.length === 0) {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      if (canvas && ctx) ctx.clearRect(0, 0, width, height);
+      hasInitialImageRef.current = false;
+    }
+
     setIsDrawing(true);
     setLastPoint(point);
     setCurrentStroke([point]);
@@ -170,7 +205,8 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle, SignatureCanvas
   const clearCanvas = () => {
     setStrokes([]);
     setCurrentStroke([]);
-    
+    hasInitialImageRef.current = false;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -178,7 +214,7 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle, SignatureCanvas
     if (!ctx) return;
 
     ctx.clearRect(0, 0, width, height);
-    
+
     onSignatureComplete('');
   };
 

@@ -7,6 +7,8 @@ import { useRecipientColors } from './recipient-colors';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent } from '@/components/brandDialog';
+import BrandModal from '@/components/BrandModal';
+import { BrandButton } from '@/components/ui/brandButton';
 import { SignatureDialog } from './SignatureDialog';
 import { InitialsDialog } from './InitialsDialog';
 import type { Recipient } from './RecipientManager';
@@ -249,6 +251,15 @@ export const SignableField: React.FC<SignableFieldProps> = ({
     setIsViewingSignature(false);
   };
 
+  const handleChangeSignature = () => {
+    setIsViewingSignature(false);
+    if (field.type === FieldType.INITIALS) {
+      setIsInitialsDialogOpen(true);
+    } else {
+      setIsSignatureDialogOpen(true);
+    }
+  };
+
   const displayValue = () => {
     // When signed, show the actual value
     if (isSigned) {
@@ -489,6 +500,16 @@ export const SignableField: React.FC<SignableFieldProps> = ({
         onSign={handleSignatureSign}
         recipientName={recipient?.name || 'User'}
         cacheScope={signatureCacheScope}
+        initialSignature={
+          isSigned
+            ? typeof signedValue === 'object' && signedValue?.type && signedValue?.value
+              ? { value: signedValue.value, type: signedValue.type, fontFamily: signedValue.fontFamily }
+              : typeof signedValue === 'string' && signedValue
+                // Legacy bare-string signatures — treat as typed in dancing-script.
+                ? { value: signedValue, type: 'typed' as const, fontFamily: 'dancing-script' }
+                : undefined
+            : undefined
+        }
       />
 
       {/* Initials Dialog */}
@@ -501,59 +522,74 @@ export const SignableField: React.FC<SignableFieldProps> = ({
         onSaveInitials={onSaveInitials}
       />
 
-      {/* Signature Viewing Dialog */}
-      <Dialog open={isViewingSignature} onOpenChange={setIsViewingSignature}>
-        <DialogContent className="max-w-[90vw] sm:max-w-lg max-h-[85dvh] sm:max-h-[90vh] overflow-y-auto p-4 sm:p-6 !top-[10vh] sm:!top-[15vh] sm:!translate-y-0" showCloseButton={false}>
-          <h2 className="text-base sm:text-lg font-semibold">
-            {field.type === FieldType.SIGNATURE ? 'Signature' : FRIENDLY_FIELD_TYPE[field.type]}
-            {recipient?.title && ` - ${recipient.title}`}
-          </h2>
+      {/* Signature/Initials Viewing Dialog */}
+      <BrandModal
+        isOpen={isViewingSignature}
+        onOpenChange={(open) => { if (!open) setIsViewingSignature(false); }}
+        className="max-w-[95vw] sm:max-w-xl max-h-[85dvh] sm:max-h-[90vh] overflow-y-auto p-4 sm:p-6"
+        heightStyle="!top-[10vh] sm:!top-[15vh] sm:!translate-y-0"
+      >
+        <h2 className="text-base sm:text-lg font-semibold text-[#020202]">
+          Your {field.type === FieldType.SIGNATURE ? 'Signature' : field.type === FieldType.INITIALS ? 'Initials' : FRIENDLY_FIELD_TYPE[field.type]}
+        </h2>
 
-          <div className="space-y-3 sm:space-y-4">
-            <div className="border rounded-lg p-4 sm:p-6 bg-gray-50 min-h-[120px] sm:min-h-[150px] flex items-center justify-center">
-              {(field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) && signedValue ? (
-                typeof signedValue === 'object' && signedValue?.type ? (
-                  signedValue.type === 'drawn' ? (
-                    <img
-                      src={signedValue.value}
-                      alt={field.type === FieldType.SIGNATURE ? 'Signature' : 'Initials'}
-                      className="max-h-[100px] sm:max-h-[120px] max-w-full object-contain"
-                    />
-                  ) : (
-                    <div className={`text-xl sm:text-2xl ${signedValue.fontFamily ? `font-signature-${signedValue.fontFamily}` : 'font-signature-dancing'}`}>
-                      {signedValue.value}
-                    </div>
-                  )
-                ) : (
-                  <div className="font-signature-dancing text-xl sm:text-2xl">
-                    {signedValue}
-                  </div>
-                )
+        <div className="rounded-2xl bg-gray-50/50 min-h-[120px] flex items-center justify-center px-4 py-4">
+          {(field.type === FieldType.SIGNATURE || field.type === FieldType.INITIALS) && signedValue ? (
+            typeof signedValue === 'object' && signedValue?.type ? (
+              signedValue.type === 'drawn' ? (
+                <img
+                  src={signedValue.value}
+                  alt={field.type === FieldType.SIGNATURE ? 'Signature' : 'Initials'}
+                  className="max-h-[100px] max-w-full object-contain"
+                />
               ) : (
-                <div className="text-base sm:text-lg">
-                  {signedValue || 'No content'}
+                <div className="font-signature text-xl sm:text-2xl">
+                  {signedValue.value}
                 </div>
-              )}
+              )
+            ) : (
+              <div className="font-signature text-xl sm:text-2xl">
+                {signedValue}
+              </div>
+            )
+          ) : (
+            <div className="text-sm text-gray-600">
+              {signedValue || 'No content'}
             </div>
+          )}
+        </div>
 
-            <div className="flex flex-col-reverse sm:flex-row gap-2 justify-end pt-2">
-              <Button variant="outline" onClick={() => setIsViewingSignature(false)} className="min-h-[44px] touch-manipulation">
-                Close
-              </Button>
+        <div className="flex justify-end gap-2">
+          <BrandButton
+            variant="outline"
+            size="xs"
+            onClick={() => setIsViewingSignature(false)}
+            className="min-w-0 px-3"
+          >
+            Cancel
+          </BrandButton>
 
-              {isForCurrentSigner && (
-                <Button
-                  variant="destructive"
-                  onClick={handleClearSignature}
-                  className="min-h-[44px] touch-manipulation"
-                >
-                  Clear {field.type === FieldType.SIGNATURE ? 'Signature' : field.type === FieldType.INITIALS ? 'Initials' : FRIENDLY_FIELD_TYPE[field.type]}
-                </Button>
-              )}
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+          {isForCurrentSigner && (
+            <>
+              <BrandButton
+                variant="destructive-outline"
+                size="xs"
+                onClick={handleClearSignature}
+                className="min-w-0 px-3"
+              >
+                Clear
+              </BrandButton>
+              <BrandButton
+                size="xs"
+                onClick={handleChangeSignature}
+                className="min-w-0 px-3"
+              >
+                Change {field.type === FieldType.INITIALS ? 'Initials' : 'Signature'}
+              </BrandButton>
+            </>
+          )}
+        </div>
+      </BrandModal>
     </>
   );
 };

@@ -12,7 +12,7 @@ import { SIGNATURE_FONTS } from './signature-fonts';
 import { BrandCheckbox } from '@/app/brandCheckbox';
 import { toast } from '@/components/ui/use-toast';
 import { cn } from '@/lib/utils';
-import { setCachedSignature } from './signatureCache';
+import { getCachedSignature, setCachedSignature } from './signatureCache';
 
 interface UserSignature {
   id: string;
@@ -31,6 +31,9 @@ interface SignatureDialogProps {
   recipientName: string;
   /** Scope key for the client-side signature cache (e.g. recipient email). */
   cacheScope?: string;
+  /** Pre-hydrate the modal with this signature (takes precedence over cache).
+   * Lets callers show the current signed value when opening for a change. */
+  initialSignature?: { value: string; type: 'drawn' | 'typed'; fontFamily?: string };
   // Props kept for backward compatibility — server-backed saved-signature flow has been removed.
   savedSignatures?: UserSignature[];
   onSaveSignature?: (type: 'drawn' | 'typed', data: string, fontFamily?: string, setAsDefault?: boolean) => Promise<void>;
@@ -46,24 +49,52 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
   onSign,
   recipientName,
   cacheScope,
+  initialSignature,
 }) => {
   const [mode, setMode] = useState<SignatureMode>('type');
   const [drawnSignature, setDrawnSignature] = useState<string>('');
   const [typedText, setTypedText] = useState<string>(recipientName);
   const [selectedFont, setSelectedFont] = useState<string>('dancing-script');
+  const [initialDrawnDataUrl, setInitialDrawnDataUrl] = useState<string | undefined>(undefined);
   const [affirmationConfirmed, setAffirmationConfirmed] = useState<boolean>(false);
   const [hasAffirmedThisSession, setHasAffirmedThisSession] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const canvasRef = useRef<SignatureCanvasHandle>(null);
 
   useEffect(() => {
-    if (isOpen) {
+    if (!isOpen) return;
+
+    // Prefer an explicit `initialSignature` (e.g. the field's current signed
+    // value when changing), falling back to the client-side cache, so the
+    // modal always shows the user's actual current signature instead of
+    // defaulting to their typed name.
+    const source =
+      initialSignature ??
+      (() => {
+        const cached = getCachedSignature(cacheScope);
+        return cached ? { value: cached.value, type: cached.type, fontFamily: cached.fontFamily } : null;
+      })();
+
+    if (source?.type === 'typed') {
+      setMode('type');
+      setTypedText(source.value);
+      setSelectedFont(source.fontFamily || 'dancing-script');
       setDrawnSignature('');
+      setInitialDrawnDataUrl(undefined);
+    } else if (source?.type === 'drawn') {
+      setMode('draw');
       setTypedText(recipientName);
       setSelectedFont('dancing-script');
+      setInitialDrawnDataUrl(source.value);
+      setDrawnSignature(''); // canvas's load effect will fire onSignatureComplete with the data URL
+    } else {
       setMode('type');
+      setTypedText(recipientName);
+      setSelectedFont('dancing-script');
+      setDrawnSignature('');
+      setInitialDrawnDataUrl(undefined);
     }
-  }, [isOpen, recipientName]);
+  }, [isOpen, recipientName, cacheScope, initialSignature?.value, initialSignature?.type, initialSignature?.fontFamily]);
 
   const handleDrawnSignature = useCallback((dataUrl: string) => {
     setDrawnSignature(dataUrl);
@@ -162,6 +193,7 @@ export const SignatureDialog: React.FC<SignatureDialogProps> = ({
               width={500}
               height={150}
               hideControls
+              initialDataUrl={initialDrawnDataUrl}
             />
             <button
               type="button"
