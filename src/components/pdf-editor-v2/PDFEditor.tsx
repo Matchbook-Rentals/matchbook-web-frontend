@@ -1710,9 +1710,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
   // Handle field signing/filling
   const signField = (fieldId: string, value: any) => {
     const field = fields.find(f => f.formId === fieldId);
+    const isClear = value === null || value === undefined;
+    const isSignatureLike = !!field && ['SIGNATURE', 'INITIALS'].includes(field.type);
 
     // Check if this is a signature/initial field being signed
-    if (field && ['SIGNATURE', 'INITIALS'].includes(field.type)) {
+    if (isSignatureLike && !isClear) {
       // Log to server with field and all fields array
       fetch('/api/log', {
         method: 'POST',
@@ -1722,8 +1724,8 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           data: {
             signedField: {
               formId: fieldId,
-              type: field.type,
-              recipientIndex: field.recipientIndex,
+              type: field!.type,
+              recipientIndex: field!.recipientIndex,
               wasAlreadySigned: !!useSignedFieldsStore.getState().signedFields[fieldId]
             },
             allFields: fields.map(f => ({
@@ -1735,6 +1737,41 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
           }
         })
       }).catch(console.error);
+    }
+
+    // For signature/initial clears, push the clear to the server so reload
+    // doesn't re-seed the baked value. The server rejects (409) once a booking
+    // exists for the match — roll back the optimistic local clear in that case.
+    if (isClear && isSignatureLike) {
+      const documentId = typeof window !== 'undefined'
+        ? window.sessionStorage.getItem('currentDocumentId')
+        : null;
+      const previousValue = useSignedFieldsStore.getState().signedFields[fieldId];
+
+      if (documentId) {
+        fetch('/api/field-values', {
+          method: 'DELETE',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ documentId, fieldId }),
+        })
+          .then(async (res) => {
+            if (!res.ok) {
+              const err = await res.json().catch(() => ({} as any));
+              console.error('❌ Field clear rejected by server:', err);
+              setSignedField(fieldId, previousValue);
+              brandAlert(
+                err?.error || 'This lease is locked and can no longer be cleared.',
+                'error',
+                'Clear rejected',
+              );
+            }
+          })
+          .catch((e) => {
+            console.error('Network error clearing field:', e);
+            setSignedField(fieldId, previousValue);
+            brandAlert('Could not reach the server. Your change was not saved.', 'error', 'Network error');
+          });
+      }
     }
 
     // Update the field in context
@@ -2186,8 +2223,11 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
                     return null;
                   }
 
-                  // For signed values, check both the signed fields store and the initial field values
-                  const signedValue = useSignedFieldsStore.getState().signedFields[field.formId] || field.value;
+                  // Read from the store first; only fall back to the baked template
+                  // value when the user hasn't touched the field. An explicit clear
+                  // leaves a `null` under the key, which must override the baked value.
+                  const storeFields = useSignedFieldsStore.getState().signedFields;
+                  const signedValue = field.formId in storeFields ? storeFields[field.formId] : field.value;
 
                   // During template or document editing, show draggable fields
                   if (workflow.isTemplatePhase() || workflow.isDocumentPhase()) {

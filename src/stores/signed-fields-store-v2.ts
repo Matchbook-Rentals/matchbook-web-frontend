@@ -21,21 +21,15 @@ export const useSignedFieldsStore = create<SignedFieldsState>((set, get) => ({
       value: value ? 'SIGNED' : 'CLEARED'
     });
 
-    set((state) => {
-      // If value is null or undefined, remove the field entirely
-      if (value === null || value === undefined) {
-        const { [fieldId]: _, ...rest } = state.signedFields;
-        return { signedFields: rest };
-      }
-
-      // Otherwise, set the field value
-      return {
-        signedFields: {
-          ...state.signedFields,
-          [fieldId]: value
-        }
-      };
-    });
+    // Store null for cleared fields (instead of deleting the key) so callers can
+    // distinguish "user explicitly cleared" from "never signed" and avoid
+    // falling back to baked template values.
+    set((state) => ({
+      signedFields: {
+        ...state.signedFields,
+        [fieldId]: value ?? null,
+      },
+    }));
 
     console.log('🏪 Zustand - Field updated:', fieldId in get().signedFields);
   },
