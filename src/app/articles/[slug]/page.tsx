@@ -6,7 +6,6 @@ import { notFound } from 'next/navigation';
 import Image from 'next/image';
 import { Poppins, Lora } from 'next/font/google';
 import { MarketingPageHeader } from '@/components/marketing-landing-components/marketing-page-header';
-import { PAGE_MARGIN } from '@/constants/styles';
 import { checkAdminAccess } from '@/utils/roles';
 import { AdminControls } from './admin-controls';
 import { Metadata } from 'next';
@@ -68,7 +67,7 @@ export default async function ArticlePage({ params }: Params) {
   const showAdminControls = isAdmin && !article.published;
 
   return (
-    <main className={`${PAGE_MARGIN} ${poppins.className} py-8`}>
+    <main className={`max-w-3xl ${poppins.className} mx-auto px-4 py-8`}>
       <div className="flex justify-center mb-10">
         <MarketingPageHeader
           headerText="Articles"
