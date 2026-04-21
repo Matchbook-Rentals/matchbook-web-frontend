@@ -2041,7 +2041,7 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
         <div className="flex-1 flex flex-col min-h-0">
 
           {/* PDF Viewer */}
-          <div className="flex-1 px-6">
+          <div className="flex-1 px-0 md:px-6">
             {/* Header for template creation */}
             {workflow.isTemplatePhase() && listingAddress && (
               <div className="mb-4 p-4 bg-gray-50 border border-gray-200 rounded-lg">

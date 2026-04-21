@@ -411,7 +411,7 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
           </aside>
 
           {/* Document Area */}
-          <main className="flex-1 bg-[#8a9a94] flex items-start justify-center p-6 md:p-10 overflow-auto">
+          <main className="flex-1 bg-[#8a9a94] flex items-start justify-center p-0 md:p-10 overflow-auto">
             <div className="w-full">
               <PDFEditorSigner
                 initialPdfFile={documentPdfFile}
