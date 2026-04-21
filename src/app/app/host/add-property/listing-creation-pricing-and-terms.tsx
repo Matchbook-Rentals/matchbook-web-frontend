@@ -123,10 +123,26 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
     const next = currencyDigits(e.target.value);
     onBasePriceChange(next);
     if (!varyPricingByLength) {
+      // Vary OFF: all rows mirror basePrice so the submission payload is well-formed
       onMonthlyPricingChange(
         monthlyPricing.map((p) => ({ ...p, price: next }))
       );
     }
+    // Vary ON: table rows are the source of truth; we only pre-fill empty rows
+    // on blur (see handleBasePriceBlur). Filling on every keystroke would leave
+    // rows at partial values like "1" when the user was on their way to "1200".
+  };
+
+  // When Vary-by-length is ON and the host commits a basePrice, pre-fill any
+  // empty table rows with that value as a starting point — rows already
+  // populated are left alone so per-month customisation isn't clobbered.
+  const handleBasePriceBlur = () => {
+    setFocusedField(null);
+    if (!varyPricingByLength || !basePrice) return;
+    if (!monthlyPricing.some((p) => !p.price)) return;
+    onMonthlyPricingChange(
+      monthlyPricing.map((p) => (p.price ? p : { ...p, price: basePrice }))
+    );
   };
 
   const handleVaryToggle = (value: boolean) => {
@@ -208,7 +224,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
             value={displayCurrency("basePrice", basePrice)}
             onChange={handleBasePriceChange}
             onFocus={() => setFocusedField("basePrice")}
-            onBlur={() => setFocusedField(null)}
+            onBlur={handleBasePriceBlur}
           />
         </Row>
 
