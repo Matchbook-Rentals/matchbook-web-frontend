@@ -1071,11 +1071,33 @@ export function validateDeposits(listingPricing: ListingPricing): string[] {
   return errors;
 }
 
+export function validateAvailableDate(listingPricing: ListingPricing): string[] {
+  const errors: string[] = [];
+  if (!listingPricing.availableDate) return errors;
+
+  // Parse "YYYY-MM-DD" as a local date to match the UI picker's calendar day
+  const [y, m, d] = listingPricing.availableDate.split('-').map(Number);
+  if (!y || !m || !d) {
+    errors.push("Available date is not a valid date");
+    return errors;
+  }
+  const picked = new Date(y, m - 1, d);
+  picked.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (picked < today) {
+    errors.push("Available date cannot be in the past");
+  }
+  return errors;
+}
+
 export function validatePricingAndTerms(listingPricing: ListingPricing): string[] {
   return [
     ...validatePricing(listingPricing),
     ...validateVerifyPricing(listingPricing),
     ...validateDeposits(listingPricing),
+    ...validateAvailableDate(listingPricing),
   ];
 }
 
