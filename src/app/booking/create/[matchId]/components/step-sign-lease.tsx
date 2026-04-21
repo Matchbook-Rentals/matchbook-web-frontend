@@ -390,12 +390,9 @@ export function StepSignLease({ match, matchId, currentUserEmail, leaseDocument,
                       onClick={() => {
                         setActiveFieldId(field.formId);
                         if (isMobile) setSidebarOpen(false);
-                        // Scroll the PDF to this field and flash it.
-                        // On mobile, wait for the drawer close animation so the
-                        // PDF area has reflowed before we scroll.
-                        const run = () => navigateToFieldUtil({ nextField: field });
-                        if (isMobile) setTimeout(run, 300);
-                        else run();
+                        // Util handles its own mobile delay (to cover drawer
+                        // close + React render settle).
+                        navigateToFieldUtil({ nextField: field });
                       }}
                     />
                   );

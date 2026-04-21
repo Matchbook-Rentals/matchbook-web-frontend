@@ -191,13 +191,33 @@ function scrollElementIntoViewDeep(element: HTMLElement): void {
 }
 
 /**
+ * Detects a mobile-sized viewport (< Tailwind `md` breakpoint). Centralized
+ * here so callers don't each need to pass a flag.
+ */
+function isMobileViewport(): boolean {
+  if (typeof window === 'undefined') return false;
+  return window.matchMedia('(max-width: 767px)').matches;
+}
+
+/**
  * Finds and navigates to the next unsigned field with flash animation.
+ *
+ * Defers the scroll by 300ms on mobile / 50ms on desktop. The delay covers
+ * two things: waiting for any drawer-close animations to finish (mobile
+ * sidebar) and letting React re-renders triggered by the caller's click
+ * handler (e.g. `setIsContinuing`) settle so they can't race-cancel the
+ * smooth scroll.
  *
  * @param params - Object containing the next field to navigate to
  */
 export function navigateToNextField(params: NavigateToNextFieldParams): void {
   const { nextField } = params;
+  const delay = isMobileViewport() ? 300 : 50;
 
+  setTimeout(() => runScrollAndFlash(nextField), delay);
+}
+
+function runScrollAndFlash(nextField: FieldFormType): void {
   // Find the field element first
   const fieldElement = document.querySelector(`[data-field-id="${nextField.formId}"]`) as HTMLElement;
 
