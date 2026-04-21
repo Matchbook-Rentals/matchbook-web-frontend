@@ -213,10 +213,10 @@ export const SignatureCanvas = forwardRef<SignatureCanvasHandle, SignatureCanvas
 
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
-      <div className="border rounded-lg p-4 bg-transparent">
+      <div className="rounded-lg p-4 bg-transparent">
         <canvas
           ref={canvasRef}
-          className="border border-gray-300 rounded cursor-crosshair touch-none"
+          className="rounded cursor-crosshair touch-none"
           style={{ width: '100%', maxWidth: `${width}px`, height: `${height}px` }}
           onMouseDown={startDrawing}
           onMouseMove={draw}
