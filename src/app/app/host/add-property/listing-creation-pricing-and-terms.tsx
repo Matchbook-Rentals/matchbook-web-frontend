@@ -202,6 +202,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
         <Row label="Enter monthly rent">
           <CurrencyInput
             id="basePrice"
+            testId="pricing-base-price"
             placeholder="0"
             suffix="/ mo"
             value={displayCurrency("basePrice", basePrice)}
@@ -219,6 +220,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
         >
           <CurrencyInput
             id="deposit"
+            testId="pricing-security-deposit"
             placeholder="0"
             value={displayCurrency("deposit", deposit)}
             onChange={handleCurrencyChange(onDepositChange)}
@@ -241,6 +243,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
         >
           <CurrencyInput
             id="petDeposit"
+            testId="pricing-pet-deposit"
             placeholder="0"
             value={displayCurrency("petDeposit", petDeposit)}
             onChange={handleCurrencyChange(onPetDepositChange)}
@@ -263,6 +266,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
         >
           <CurrencyInput
             id="petRent"
+            testId="pricing-pet-rent"
             placeholder="0"
             suffix="/ mo"
             value={displayCurrency("petRent", petRent)}
@@ -277,6 +281,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
             checked={includeUtilities}
             onCheckedChange={setAllRowUtilities}
             aria-label="Include utilities in rent"
+            data-testid="pricing-include-utilities"
           />
         </Row>
 
@@ -285,6 +290,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
             checked={varyPricingByLength}
             onCheckedChange={handleVaryToggle}
             aria-label="Vary pricing by lease length"
+            data-testid="pricing-vary-by-length"
           />
         </Row>
       </div>
@@ -305,6 +311,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
                 checked={allRowsUtilitiesOn}
                 onCheckedChange={setAllRowUtilities}
                 aria-label="Toggle utilities for all lease lengths"
+                data-testid="pricing-utilities-master"
               />
             </div>
           </div>
@@ -335,6 +342,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
                     pattern="[0-9,]*"
                     className="w-full pl-7 pr-10 text-base"
                     placeholder="0.00"
+                    data-testid={`pricing-monthly-rent-${pricing.months}`}
                     value={displayRowPrice(pricing)}
                     onFocus={() => setFocusedField(`row-${pricing.months}`)}
                     onBlur={() => setFocusedField(null)}
@@ -351,6 +359,7 @@ const ListingCreationPricingAndTerms: React.FC<ListingCreationPricingAndTermsPro
                     updateMonthUtilities(pricing.months, checked)
                   }
                   aria-label={`Utilities included for ${pricing.months} month lease`}
+                  data-testid={`pricing-utilities-${pricing.months}`}
                 />
               </div>
             </div>
@@ -406,6 +415,7 @@ interface CurrencyInputProps {
   value: string;
   placeholder?: string;
   suffix?: string;
+  testId?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onFocus: () => void;
   onBlur: () => void;
@@ -416,6 +426,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
   value,
   placeholder = "0",
   suffix,
+  testId,
   onChange,
   onFocus,
   onBlur,
@@ -431,6 +442,7 @@ const CurrencyInput: React.FC<CurrencyInputProps> = ({
     )}
     <Input
       id={id}
+      data-testid={testId}
       className={`w-full h-9 rounded-[10px] border-2 border-[#0000004c] pl-7 text-base ${
         suffix ? "pr-12" : ""
       }`}
@@ -537,6 +549,7 @@ const AvailableDatePicker: React.FC<AvailableDatePickerProps> = ({
         type="text"
         inputMode="numeric"
         placeholder="MM/DD/YYYY"
+        data-testid="pricing-available-date-input"
         value={text}
         onChange={handleTextChange}
         onBlur={handleTextBlur}
@@ -549,6 +562,7 @@ const AvailableDatePicker: React.FC<AvailableDatePickerProps> = ({
             type="button"
             className="absolute right-1 top-1/2 -translate-y-1/2 p-1.5 rounded hover:bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-blueBrand"
             aria-label="Open calendar"
+            data-testid="pricing-available-date-calendar"
           >
             <CalendarIcon className="h-4 w-4 text-gray-500" />
           </button>

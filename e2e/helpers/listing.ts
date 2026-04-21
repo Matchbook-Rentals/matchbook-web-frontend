@@ -31,12 +31,11 @@ export interface ListingData {
   amenities?: string[];
   laundryType?: 'inUnit' | 'shared' | 'none';
 
-  // Step 8-9: Pricing
+  // Step 8: Pricing & Terms
   shortestStay?: number;
   longestStay?: number;
   monthlyRent?: number;
-
-  // Step 10: Deposits
+  availableDate?: string; // MM/DD/YYYY
   securityDeposit?: number;
   petDeposit?: number;
   petRent?: number;
@@ -724,15 +723,12 @@ async function fillAmenities(page: Page, data: ListingData): Promise<void> {
 /**
  * Step 8: Fill consolidated pricing & terms screen
  *
- * Layout (top-down):
- *  - Shortest / longest stay (stepper buttons, no input field)
- *  - Available date picker
- *  - Monthly rent (top-level, placeholder "0")
- *  - Security deposit (top-level, placeholder "0")
- *  - Pet deposit (top-level, placeholder "0")
- *  - Monthly pet fee (top-level, placeholder "0")
- *  - Utilities-included + vary-by-length toggles
- *  - Per-month pricing table (row inputs use placeholder "0.00")
+ * Fields targeted by data-testid (see listing-creation-pricing-and-terms.tsx):
+ *  - pricing-available-date-input       (MM/DD/YYYY text field)
+ *  - pricing-base-price                 (monthly rent)
+ *  - pricing-security-deposit
+ *  - pricing-pet-deposit, pricing-pet-rent (optional, only filled when data supplies them)
+ *  - pricing-monthly-rent-${n}          (one per lease length in the table)
  */
 async function fillPricingAndTerms(page: Page, data: ListingData): Promise<void> {
   await page.waitForSelector('text=Set pricing and lease terms', { timeout: 10000 });
@@ -743,34 +739,32 @@ async function fillPricingAndTerms(page: Page, data: ListingData): Promise<void>
   const monthlyRent = String(data.monthlyRent || 1500);
   const securityDeposit = String(data.securityDeposit || 1500);
 
-  // Top-level currency inputs share placeholder "0" in this order:
-  //   [0] Monthly rent (basePrice)
-  //   [1] Security deposit
-  //   [2] Pet deposit (optional)
-  //   [3] Monthly pet fee (optional)
-  // Use fill() directly — dispatches input/change events without requiring
-  // pointer visibility (the fixed footer overlaps bottom rows).
-  const topInputs = page.locator('input[placeholder="0"]');
+  // fill() dispatches input/change events without requiring pointer visibility
+  // (the page has a fixed footer that can intercept clicks near the bottom).
 
-  await topInputs.nth(0).fill(monthlyRent);
+  if (data.availableDate) {
+    await page.getByTestId('pricing-available-date-input').fill(data.availableDate);
+    console.log(`Filled available date: ${data.availableDate}`);
+  }
+
+  await page.getByTestId('pricing-base-price').fill(monthlyRent);
   console.log(`Filled monthly rent: $${monthlyRent}`);
 
-  await topInputs.nth(1).fill(securityDeposit);
+  await page.getByTestId('pricing-security-deposit').fill(securityDeposit);
   console.log(`Filled security deposit: $${securityDeposit}`);
 
   if (data.petDeposit) {
-    await topInputs.nth(2).fill(String(data.petDeposit));
+    await page.getByTestId('pricing-pet-deposit').fill(String(data.petDeposit));
     console.log(`Filled pet deposit: $${data.petDeposit}`);
   }
 
   if (data.petRent) {
-    await topInputs.nth(3).fill(String(data.petRent));
+    await page.getByTestId('pricing-pet-rent').fill(String(data.petRent));
     console.log(`Filled pet rent: $${data.petRent}/mo`);
   }
 
-  // Per-month rows (visible when "vary by length" toggle is on — default true).
-  // Row price inputs use placeholder "0.00" (distinct from the top-level "0").
-  const rowInputs = page.locator('input[placeholder="0.00"]');
+  // Per-month rent rows (visible when "vary by length" toggle is on — default true)
+  const rowInputs = page.locator('[data-testid^="pricing-monthly-rent-"]');
   const rowCount = await rowInputs.count();
   for (let i = 0; i < rowCount; i++) {
     await rowInputs.nth(i).fill(monthlyRent);
