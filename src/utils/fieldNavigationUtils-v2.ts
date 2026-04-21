@@ -86,12 +86,7 @@ export function navigateToField(params: NavigateToFieldParams): void {
   console.log('🎯 navigateToField: Field element found:', !!fieldElement);
 
   if (fieldElement) {
-    // Scroll directly to the field and center it in the viewport
-    fieldElement.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'center'
-    });
+    scrollElementIntoViewDeep(fieldElement);
     console.log('🎯 navigateToField: Scrolled to field');
 
     // Apply flash effect after scroll completes
@@ -139,6 +134,63 @@ export function navigateToField(params: NavigateToFieldParams): void {
 }
 
 /**
+ * Scrolls every scrollable ancestor of `element` so the element is centered.
+ * scrollIntoView only scrolls the nearest scrollable ancestor and doesn't play
+ * nicely with transformed containers (MobilePDFWrapper uses a CSS transform
+ * for pinch-zoom). Walking up and scrolling each ancestor explicitly makes the
+ * behavior consistent regardless of where the scroll container lives.
+ */
+function getAbsoluteOffsetTop(element: HTMLElement): number {
+  // Walk the offsetParent chain to get the element's position relative to the
+  // document (not the viewport). This is stable regardless of how inner
+  // scrollable ancestors are currently scrolled.
+  let top = 0;
+  let el: HTMLElement | null = element;
+  while (el) {
+    top += el.offsetTop;
+    el = el.offsetParent as HTMLElement | null;
+  }
+  return top;
+}
+
+function scrollElementIntoViewDeep(element: HTMLElement): void {
+  // Pass 1: scroll any inner scrollable ancestors instantly (e.g.
+  // MobilePDFWrapper's horizontal scroller, <main> overflow-auto) so by the
+  // time pass 2 runs, any inline offsets added by those containers are gone.
+  let node: HTMLElement | null = element.parentElement;
+  while (node && node !== document.body && node !== document.documentElement) {
+    const style = window.getComputedStyle(node);
+    const canScrollY = /(auto|scroll|overlay)/.test(style.overflowY) && node.scrollHeight > node.clientHeight;
+    const canScrollX = /(auto|scroll|overlay)/.test(style.overflowX) && node.scrollWidth > node.clientWidth;
+    if (canScrollY || canScrollX) {
+      const containerRect = node.getBoundingClientRect();
+      const elRect = element.getBoundingClientRect();
+      if (canScrollY) {
+        const delta = (elRect.top - containerRect.top) - (node.clientHeight - elRect.height) / 2;
+        node.scrollTop += delta;
+      }
+      if (canScrollX) {
+        const delta = (elRect.left - containerRect.left) - (node.clientWidth - elRect.width) / 2;
+        node.scrollLeft += delta;
+      }
+    }
+    node = node.parentElement;
+  }
+
+  // Pass 2: scroll the window using the element's absolute document offset so
+  // we don't depend on rect.top (which resets to the viewport and can get
+  // confused by transforms or weird ancestor positions). This consistently
+  // works regardless of whether the viewport scroll is on <html> or <body>.
+  const absoluteY = getAbsoluteOffsetTop(element);
+  const targetY = Math.max(0, absoluteY - (window.innerHeight - element.offsetHeight) / 2);
+  window.scrollTo({ top: targetY, behavior: 'smooth' });
+
+  // Safety net: also call scrollIntoView in case an ancestor owns the scroll
+  // and offsetTop-based math can't reach it.
+  element.scrollIntoView({ behavior: 'smooth', block: 'center', inline: 'center' });
+}
+
+/**
  * Finds and navigates to the next unsigned field with flash animation.
  *
  * @param params - Object containing the next field to navigate to
@@ -150,12 +202,7 @@ export function navigateToNextField(params: NavigateToNextFieldParams): void {
   const fieldElement = document.querySelector(`[data-field-id="${nextField.formId}"]`) as HTMLElement;
 
   if (fieldElement) {
-    // Scroll directly to the field and center it in the viewport
-    fieldElement.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'center'
-    });
+    scrollElementIntoViewDeep(fieldElement);
 
     // Apply flash effect after scroll completes
     setTimeout(() => {

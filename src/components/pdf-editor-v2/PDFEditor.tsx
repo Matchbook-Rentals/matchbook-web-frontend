@@ -1560,7 +1560,10 @@ export const PDFEditor: React.FC<PDFEditorProps> = ({
     }
 
     const nextField = unsignedFields[0];
-    navigateToNextFieldUtil({ nextField });
+    // Defer so any React re-renders triggered by the button click
+    // (setIsContinuing, etc.) settle before the smooth scroll begins. Matches
+    // the sidebar click path which uses the same 300ms gap on mobile.
+    setTimeout(() => navigateToNextFieldUtil({ nextField }), isMobile ? 300 : 50);
   };
 
   // Handle signing button click - using Zustand store directly
