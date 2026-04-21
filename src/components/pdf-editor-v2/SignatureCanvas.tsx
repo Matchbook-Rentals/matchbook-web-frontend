@@ -1,14 +1,19 @@
 'use client';
 
-import React, { useRef, useState, useEffect, useCallback } from 'react';
+import React, { useRef, useState, useEffect, useCallback, forwardRef, useImperativeHandle } from 'react';
 import { Button } from '@/components/ui/button';
 import { RotateCcw, Trash2 } from 'lucide-react';
+
+export interface SignatureCanvasHandle {
+  clear: () => void;
+}
 
 interface SignatureCanvasProps {
   onSignatureComplete: (dataUrl: string) => void;
   width?: number;
   height?: number;
   className?: string;
+  hideControls?: boolean;
 }
 
 interface Point {
@@ -16,12 +21,13 @@ interface Point {
   y: number;
 }
 
-export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
+export const SignatureCanvas = forwardRef<SignatureCanvasHandle, SignatureCanvasProps>(({
   onSignatureComplete,
   width = 400,
   height = 200,
   className = '',
-}) => {
+  hideControls = false,
+}, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [lastPoint, setLastPoint] = useState<Point | null>(null);
@@ -201,6 +207,10 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
     redrawCanvas();
   }, [redrawCanvas]);
 
+  useImperativeHandle(ref, () => ({
+    clear: clearCanvas,
+  }), [clearCanvas]);
+
   return (
     <div className={`flex flex-col gap-4 ${className}`}>
       <div className="border rounded-lg p-4 bg-transparent">
@@ -217,30 +227,34 @@ export const SignatureCanvas: React.FC<SignatureCanvasProps> = ({
           onTouchEnd={stopDrawing}
         />
       </div>
-      
-      <div className="flex gap-2 justify-center">
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={undoLastStroke}
-          disabled={strokes.length === 0}
-        >
-          <RotateCcw className="h-4 w-4 mr-2" />
-          Undo
-        </Button>
-        
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={clearCanvas}
-          disabled={strokes.length === 0}
-        >
-          <Trash2 className="h-4 w-4 mr-2" />
-          Clear
-        </Button>
-      </div>
+
+      {!hideControls && (
+        <div className="flex gap-2 justify-center">
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={undoLastStroke}
+            disabled={strokes.length === 0}
+          >
+            <RotateCcw className="h-4 w-4 mr-2" />
+            Undo
+          </Button>
+
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={clearCanvas}
+            disabled={strokes.length === 0}
+          >
+            <Trash2 className="h-4 w-4 mr-2" />
+            Clear
+          </Button>
+        </div>
+      )}
     </div>
   );
-};
+});
+
+SignatureCanvas.displayName = 'SignatureCanvas';

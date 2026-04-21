@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { FieldFormType, FieldType, FRIENDLY_FIELD_TYPE } from './types';
 import { useRecipientColors } from './recipient-colors';
@@ -10,6 +10,7 @@ import { Dialog, DialogContent } from '@/components/brandDialog';
 import { SignatureDialog } from './SignatureDialog';
 import { InitialsDialog } from './InitialsDialog';
 import type { Recipient } from './RecipientManager';
+import { getCachedSignature, setCachedSignature } from './signatureCache';
 
 interface UserSignature {
   id: string;
@@ -57,9 +58,38 @@ export const SignableField: React.FC<SignableFieldProps> = ({
   const [isInitialsDialogOpen, setIsInitialsDialogOpen] = useState(false);
   const [isViewingSignature, setIsViewingSignature] = useState(false);
   const [inputValue, setInputValue] = useState(signedValue || '');
-  
+
   const recipientIndex = field.recipientIndex ?? 0;
   const signerStyles = useRecipientColors(recipientIndex);
+
+  // Client-side signature cache: scope by recipient email so a shared machine
+  // doesn't leak signatures between different signers.
+  const signatureCacheScope = recipient?.email || field.signerEmail;
+
+  // Hydrate the cache from any already-signed signature field belonging to
+  // the current signer (covers the "reload with one field already signed" case).
+  useEffect(() => {
+    if (
+      field.type !== FieldType.SIGNATURE ||
+      !isForCurrentSigner ||
+      !isSigned ||
+      !signedValue ||
+      typeof signedValue !== 'object' ||
+      !signedValue.type ||
+      !signedValue.value
+    ) return;
+
+    if (getCachedSignature(signatureCacheScope)) return;
+
+    setCachedSignature(
+      {
+        value: signedValue.value,
+        type: signedValue.type,
+        fontFamily: signedValue.fontFamily,
+      },
+      signatureCacheScope,
+    );
+  }, [field.type, isForCurrentSigner, isSigned, signedValue, signatureCacheScope]);
   
   // Helper function to get the border color for the signer
   const getSignerBorderColor = () => {
@@ -320,6 +350,13 @@ export const SignableField: React.FC<SignableFieldProps> = ({
           // If field is not signed and user is current signer, allow signing
           if (!isSigned && isForCurrentSigner) {
             if (field.type === FieldType.SIGNATURE) {
+              // Auto-sign with the cached signature if the user has already
+              // drawn/typed one earlier in this document (client-side only).
+              const cached = getCachedSignature(signatureCacheScope);
+              if (cached) {
+                handleSignatureSign(cached.value, cached.type, cached.fontFamily);
+                return;
+              }
               setIsSignatureDialogOpen(true);
             } else if (field.type === FieldType.INITIALS) {
               console.log('✍️ SignableField - INITIALS field clicked:', {
@@ -451,10 +488,7 @@ export const SignableField: React.FC<SignableFieldProps> = ({
         onClose={() => setIsSignatureDialogOpen(false)}
         onSign={handleSignatureSign}
         recipientName={recipient?.name || 'User'}
-        savedSignatures={savedSignatures}
-        onSaveSignature={onSaveSignature}
-        onDeleteSignature={onDeleteSignature}
-        onSetDefaultSignature={onSetDefaultSignature}
+        cacheScope={signatureCacheScope}
       />
 
       {/* Initials Dialog */}
