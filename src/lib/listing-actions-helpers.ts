@@ -1040,11 +1040,21 @@ export function validatePricing(listingPricing: ListingPricing): string[] {
 export function validateVerifyPricing(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
 
+  // An empty row is treated as if it held the top-level basePrice. Covers the case
+  // where the host types basePrice then clicks Next without blurring the input —
+  // React batches blur+click, so the row-seeding state update wouldn't have landed
+  // before this validator runs. The table is still the source of truth at submit time.
+  const basePriceRaw = (listingPricing.basePrice ?? '').replace(/,/g, '');
+  const basePriceNumber = basePriceRaw ? parseFloat(basePriceRaw) : NaN;
+  const basePriceValid = !isNaN(basePriceNumber) && basePriceNumber > 0;
+
   const missingPrices: number[] = [];
   const invalidPrices: number[] = [];
 
   listingPricing.monthlyPricing.forEach(p => {
-    if (p.price === null || p.price === undefined || p.price === '') {
+    const hasRow = p.price !== null && p.price !== undefined && p.price !== '';
+    if (!hasRow) {
+      if (basePriceValid) return; // fall back to basePrice — treat as valid
       missingPrices.push(p.months);
       return;
     }

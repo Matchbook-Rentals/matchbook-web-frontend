@@ -738,11 +738,18 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
           listingPhotos: listingPhotos,
           selectedPhotos: selectedPhotos,
           amenities: listingAmenities,
-          monthlyPricing: listingPricing.monthlyPricing.map(p => ({
-            months: p.months,
-            price: p.price ? Number(p.price.replace(/,/g, '')) : 0,
-            utilitiesIncluded: p.utilitiesIncluded
-          })),
+          // Mirror the validator's fallback: empty rows inherit basePrice so
+          // submission doesn't silently write zeroes when the host typed a
+          // headline rate but didn't commit via blur before clicking Next.
+          monthlyPricing: (() => {
+            const baseRaw = (listingPricing.basePrice ?? '').replace(/,/g, '');
+            const baseNum = baseRaw ? Number(baseRaw) : 0;
+            return listingPricing.monthlyPricing.map(p => ({
+              months: p.months,
+              price: p.price ? Number(p.price.replace(/,/g, '')) : baseNum,
+              utilitiesIncluded: p.utilitiesIncluded
+            }));
+          })(),
           // ISO "YYYY-MM-DD" string — server converts to ListingUnavailability
           availableDate: listingPricing.availableDate || null
         };
