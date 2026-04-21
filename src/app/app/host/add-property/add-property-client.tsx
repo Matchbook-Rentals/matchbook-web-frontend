@@ -250,6 +250,21 @@ interface ListingLocation {
 
 // Initialize state with draft data if available
 
+// If the draft's availableDate is already in the past (stale), drop it so
+// the host doesn't ship a listing with a useless unavailability block.
+// Comparison uses the CLIENT's local "today" — the date picker blocks past
+// dates by local day, so this keeps load/save symmetric.
+const pickValidAvailableDate = (iso: unknown): string => {
+  if (typeof iso !== "string" || !iso) return "";
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  const picked = new Date(y, m - 1, d);
+  picked.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return picked < today ? "" : iso;
+};
+
 const initializePricing = () => {
   if (draftData) {
     const monthlyPricing: MonthlyPricing[] = draftData.monthlyPricing?.map((p: any) => ({
@@ -257,8 +272,8 @@ const initializePricing = () => {
       price: p.price ? p.price.toString() : '',
       utilitiesIncluded: p.utilitiesIncluded || false
     })) || [];
-    
-    
+
+
     return {
       shortestStay: draftData.shortestLeaseLength || 1,
       longestStay: draftData.longestLeaseLength || 12,
@@ -267,7 +282,7 @@ const initializePricing = () => {
       utilitiesUpToMonths: 1,
       varyPricingByLength: true,
       basePrice: "",
-      availableDate: draftData.availableDate || "",
+      availableDate: pickValidAvailableDate(draftData.availableDate),
       deposit: draftData.depositSize ? draftData.depositSize.toString() : "",
       petDeposit: draftData.petDeposit ? draftData.petDeposit.toString() : "",
       petRent: draftData.petRent ? draftData.petRent.toString() : ""
