@@ -362,25 +362,25 @@ test.describe('Add Property Auto-Save', () => {
     await expect(page).toHaveURL(/.*draftId=/);
   });
 
-  test('step 8 (Pricing & Terms): fill rent, deposit, and per-month prices, auto-save', async () => {
+  test('step 8 (Pricing & Terms): fill rent, deposit, date, per-month prices, auto-save, persist', async () => {
     const page = sharedPage;
 
     // We should be on the consolidated pricing & terms step
     await expect(page.getByText('Set pricing and lease terms')).toBeVisible({ timeout: 15000 });
 
-    // Top-level numeric inputs use placeholder "0":
-    //   [0] monthly rent (basePrice)
-    //   [1] security deposit
-    //   [2] pet deposit
-    //   [3] monthly pet fee
-    // Use fill() directly — it dispatches input/change events without requiring
-    // pointer-event visibility (the fixed footer overlaps the bottom rows).
-    const topInputs = page.locator('input[placeholder="0"]');
-    await topInputs.nth(0).fill('1200');
-    await topInputs.nth(1).fill('500');
+    // Pick an available date ~30 days out to cover the availableDate lifecycle
+    const future = new Date();
+    future.setDate(future.getDate() + 30);
+    const mm = String(future.getMonth() + 1).padStart(2, '0');
+    const dd = String(future.getDate()).padStart(2, '0');
+    const availableDateMMDDYYYY = `${mm}/${dd}/${future.getFullYear()}`;
 
-    // Per-month price rows use placeholder "0.00" (distinguishable from top fields)
-    const rowInputs = page.locator('input[placeholder="0.00"]');
+    await page.getByTestId('pricing-available-date-input').fill(availableDateMMDDYYYY);
+    await page.getByTestId('pricing-base-price').fill('1200');
+    await page.getByTestId('pricing-security-deposit').fill('500');
+
+    // Fill every per-month rent input in the table
+    const rowInputs = page.locator('[data-testid^="pricing-monthly-rent-"]');
     const rowCount = await rowInputs.count();
     for (let i = 0; i < rowCount; i++) {
       await rowInputs.nth(i).fill('1200');
@@ -395,7 +395,22 @@ test.describe('Add Property Auto-Save', () => {
     await expect(page.getByText('Review your listing')).toBeVisible({ timeout: 15000 });
     await expect(page).toHaveURL(/.*draftId=/);
 
-    // Wait for auto-save
+    // Wait for auto-save POST to land
     await page.waitForTimeout(2000);
+
+    // Refresh and navigate back to step 8 to verify the whole step persisted
+    await page.reload();
+    await expect(page.getByTestId('next-button')).toBeVisible({ timeout: 15000 });
+    await navigateToStep(page, 8);
+
+    // Date round-trips through draft save/load
+    await expect(page.getByTestId('pricing-available-date-input')).toHaveValue(availableDateMMDDYYYY);
+
+    // Security deposit round-trips (formatted with commas on blur — '500' has none)
+    await expect(page.getByTestId('pricing-security-deposit')).toHaveValue('500');
+
+    // At least one per-month row persisted
+    // (basePrice is intentionally UI-only and does NOT persist — the row table is the source of truth)
+    await expect(page.locator('[data-testid^="pricing-monthly-rent-"]').first()).toHaveValue('1,200');
   });
 });
