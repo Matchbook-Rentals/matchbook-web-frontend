@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { BrandButton } from '@/components/ui/brandButton';
 import { Card, CardContent } from '@/components/ui/card';
 import {
   type CarouselApi,
@@ -27,6 +28,7 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
   const [api, setApi] = useState<CarouselApi>();
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
+  const [showPast, setShowPast] = useState(false);
 
   useEffect(() => {
     if (!api) return;
@@ -45,13 +47,18 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
     });
   }, [api]);
 
+  const now = Date.now();
+  const upcomingBookings = bookings.filter((b) => new Date(b.endDate).getTime() >= now);
+  const pastBookings = bookings.filter((b) => new Date(b.endDate).getTime() < now);
+  const visibleBookings = showPast ? [...upcomingBookings, ...pastBookings] : upcomingBookings;
+
   // Group bookings into pairs (showing 2 stacked vertically per slide)
   const bookingSlides = [];
-  for (let i = 0; i < bookings.length; i += 2) {
-    bookingSlides.push(bookings.slice(i, i + 2));
+  for (let i = 0; i < visibleBookings.length; i += 2) {
+    bookingSlides.push(visibleBookings.slice(i, i + 2));
   }
 
-  const showNavigation = bookings.length > 2;
+  const showNavigation = visibleBookings.length > 2;
 
   return (
     <section className="mb-8 overflow-x-hidden">
@@ -168,6 +175,18 @@ export const BookingsSection = ({ bookings }: BookingsSectionProps) => {
                         <ChevronRight className="h-3.5 w-3.5" />
                         <span className="sr-only">Next bookings</span>
                       </Button>
+                    </div>
+                  )}
+
+                  {pastBookings.length > 0 && (
+                    <div className="mt-4">
+                      <BrandButton
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setShowPast((prev) => !prev)}
+                      >
+                        {showPast ? 'Show Less' : 'Show More'}
+                      </BrandButton>
                     </div>
                   )}
                 </div>
