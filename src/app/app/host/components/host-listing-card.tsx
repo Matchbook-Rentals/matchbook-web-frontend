@@ -306,27 +306,19 @@ export default function HostListingCard({
     if (navigator.share) {
       try {
         await navigator.share(shareData);
-        toast.success("Shared successfully!");
       } catch (error: any) {
-        // User cancelled - this is normal behavior, don't show error
-        if (error?.name === 'AbortError') {
-          return; // Silent return, no error toast
-        }
-
-        // Permission denied
+        if (error?.name === 'AbortError') return;
         if (error?.name === 'NotAllowedError') {
           toast.error("Permission denied. Please allow sharing permissions.");
           return;
         }
-
-        // Actual error - open fallback dialog
         console.error("Error sharing:", error);
         toast.error("Could not share. Please try copying the link instead.");
-        setIsShareDialogOpen(true);
       }
-    } else {
-      setIsShareDialogOpen(true);
+      return;
     }
+
+    setIsShareDialogOpen(true);
   };
 
   const handleCopyLink = async () => {
