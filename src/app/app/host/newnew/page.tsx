@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   LayoutGrid,
   Home,
@@ -13,7 +13,6 @@ import {
   Settings,
   LogOut,
   ChevronRight,
-  Code2,
   FileText,
   ClipboardList,
   Coins,
@@ -121,28 +120,18 @@ const Icon = ({ name, ...rest }: { name: keyof typeof iconMap } & React.SVGProps
 /* ---------------------------------------------------------------------------
    LOGO
 --------------------------------------------------------------------------- */
-const Logo = () => (
-  <div className="flex items-center gap-2">
-    <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
-      <path
-        d="M16 4L4 13v2h2v13h8v-8h4v8h8V15h2v-2L16 4z"
-        stroke="#1F5F5B"
-        strokeWidth="1.8"
-        strokeLinejoin="round"
-        fill="none"
-      />
-      <circle cx="16" cy="17" r="2.2" fill="#1F5F5B" />
-      <path d="M14 17l2 2 2-2" stroke="#F5F1EA" strokeWidth="1" strokeLinecap="round" />
-    </svg>
-    <span
-      className={`text-[22px] tracking-tight ${fraunces.variable}`}
-      style={{ fontFamily: "var(--font-fraunces), 'Fraunces', serif", color: "#1F5F5B", fontWeight: 500 }}
+const Logo = ({ expanded }: { expanded: boolean }) => (
+  <div className="relative flex items-center h-9">
+    <div
+      className={`w-10 flex items-center justify-center shrink-0 transition-opacity duration-200 ${expanded ? "opacity-0" : "opacity-100"}`}
     >
-      Match<span style={{ fontWeight: 700 }}>Book</span>
-    </span>
-    <span className="ml-1 px-1.5 py-0.5 rounded-md border border-neutral-200 bg-white">
-      <Code2 size={12} strokeWidth={2.25} className="text-neutral-700" />
-    </span>
+      <img src="/logo-small.svg" alt="MatchBook" className="h-8 w-auto" />
+    </div>
+    <img
+      src="/new-green-logo.png"
+      alt="MatchBook"
+      className={`absolute left-1 top-1/2 -translate-y-1/2 h-8 w-auto transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"}`}
+    />
   </div>
 );
 
@@ -152,65 +141,108 @@ const Logo = () => (
 interface NavItemProps {
   item: { id: string; label: string; icon: keyof typeof iconMap; badge?: number };
   active: boolean;
+  expanded: boolean;
   onClick?: () => void;
 }
 
-const NavItem = ({ item, active, onClick }: NavItemProps) => (
+const NavItem = ({ item, active, expanded, onClick }: NavItemProps) => (
   <button
     onClick={onClick}
-    className={`group flex items-center justify-between w-full px-3 py-2 rounded-lg transition-colors
+    className={`group flex items-center w-full py-2 pr-3 rounded-lg transition-colors
       ${active ? "text-[#1F5F5B]" : "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50"}`}
   >
-    <span className="flex items-center gap-3">
+    <span className="w-10 flex items-center justify-center shrink-0">
       <Icon name={item.icon} size={18} strokeWidth={1.75} />
+    </span>
+    <span
+      className={`flex-1 flex items-center justify-between ml-2 whitespace-nowrap transition-opacity duration-200 ${expanded ? "opacity-100" : "opacity-0"}`}
+    >
       <span className="text-[14.5px]" style={{ fontWeight: active ? 600 : 500 }}>
         {item.label}
       </span>
+      {item.badge ? (
+        <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#E8EEEC] text-neutral-700 font-medium">
+          {item.badge}
+        </span>
+      ) : null}
     </span>
-    {item.badge ? (
-      <span className="text-[11px] px-2 py-0.5 rounded-md bg-[#E8EEEC] text-neutral-700 font-medium">
-        {item.badge}
-      </span>
-    ) : null}
   </button>
 );
 
 interface SidebarProps {
   nav: { id: string; label: string; icon: keyof typeof iconMap; badge?: number }[];
   active: string;
-  footerNav: { id: string; label: string; iconComponent: React.ElementType }[];
+  footerNav: { id: string; label: string; iconComponent: React.ElementType; emphasis?: boolean }[];
 }
 
-const Sidebar = ({ nav, active, footerNav }: SidebarProps) => (
-  <aside className="w-[240px] shrink-0 border-r border-neutral-200/70 bg-white flex flex-col justify-between">
-    <div>
-      <div className="px-5 pt-5 pb-6">
-        <Logo />
-      </div>
-      <nav className="px-3 flex flex-col gap-0.5">
-        {nav.map((item) => (
-          <NavItem key={item.id} item={item} active={item.label === active} />
-        ))}
-      </nav>
+const COMPACT_W = 72;
+const EXPANDED_W = 240;
+
+const Sidebar = ({ nav, active, footerNav }: SidebarProps) => {
+  const [expanded, setExpanded] = useState(false);
+
+  return (
+    <div className="shrink-0 relative z-40" style={{ width: COMPACT_W }}>
+      <aside
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => setExpanded(false)}
+        className={`absolute inset-y-0 left-0 border-r border-neutral-200/70 bg-white flex flex-col justify-between overflow-hidden transition-[width,box-shadow] duration-300 ease-out ${
+          expanded ? "shadow-xl" : ""
+        }`}
+        style={{ width: expanded ? EXPANDED_W : COMPACT_W }}
+      >
+        <div>
+          <div className="px-3 pt-5 pb-6">
+            <Logo expanded={expanded} />
+          </div>
+          <nav className="px-3 flex flex-col gap-0.5">
+            {nav.map((item) => (
+              <NavItem
+                key={item.id}
+                item={item}
+                active={item.label === active}
+                expanded={expanded}
+              />
+            ))}
+          </nav>
+        </div>
+        <div className="px-3 pb-5 flex flex-col gap-0.5">
+          {footerNav.map((item) => (
+            <FooterNavItem key={item.id} item={item} expanded={expanded} />
+          ))}
+        </div>
+      </aside>
     </div>
-    <div className="px-3 pb-5 flex flex-col gap-0.5">
-      {footerNav.map((item) => (
-        <FooterNavItem key={item.id} item={item} />
-      ))}
-    </div>
-  </aside>
-);
+  );
+};
 
 interface FooterNavItemProps {
-  item: { id: string; label: string; iconComponent: React.ElementType };
+  item: { id: string; label: string; iconComponent: React.ElementType; emphasis?: boolean };
+  expanded: boolean;
 }
 
-const FooterNavItem = ({ item }: FooterNavItemProps) => {
+const FooterNavItem = ({ item, expanded }: FooterNavItemProps) => {
   const I = item.iconComponent;
+  const emphasis = item.emphasis;
   return (
-    <button className="flex items-center gap-3 w-full px-3 py-2 rounded-lg text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50 transition-colors">
-      <I size={18} strokeWidth={1.75} />
-      <span className="text-[14.5px]" style={{ fontWeight: 500 }}>
+    <button
+      className={`group flex items-center w-full py-2 pr-3 rounded-lg transition-colors ${
+        emphasis ? "text-neutral-700" : "text-neutral-500 hover:text-neutral-800 hover:bg-neutral-50"
+      }`}
+    >
+      <span
+        className={`w-10 h-10 flex items-center justify-center shrink-0 rounded-lg transition-colors ${
+          emphasis ? "bg-[#5C7080] text-white" : ""
+        }`}
+      >
+        <I size={18} strokeWidth={1.75} />
+      </span>
+      <span
+        className={`ml-2 whitespace-nowrap text-[14.5px] transition-opacity duration-200 ${
+          expanded ? "opacity-100" : "opacity-0"
+        }`}
+        style={{ fontWeight: 500 }}
+      >
         {item.label}
       </span>
     </button>
@@ -514,7 +546,7 @@ export default function HostDashboard() {
     { id: "switch", label: "Switch to Renter", iconComponent: ArrowLeftRight },
     { id: "support", label: "Support", iconComponent: HelpCircle },
     { id: "settings", label: "Settings", iconComponent: Settings },
-    { id: "signout", label: "Sign Out", iconComponent: LogOut },
+    { id: "signout", label: "Sign Out", iconComponent: LogOut, emphasis: true },
   ];
 
   return (
