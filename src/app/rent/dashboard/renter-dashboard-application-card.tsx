@@ -56,7 +56,7 @@ export const RenterDashboardApplicationCard = ({
   const router = useRouter();
   return (
     <>
-    <Card className="w-full bg-inherit rounded-[15px] border-[0.4px] border-[#0b6e6e] shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)] overflow-hidden">
+    <Card className="w-full bg-inherit rounded-[15px] border-0 shadow-[1px_3px_8px_0_rgba(0,0,0,0.25)]">
       <CardContent className="p-[17px]">
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-6">
           {/* Image Column */}

@@ -15,7 +15,7 @@ const PLACEHOLDER_IMAGE = '/stock_interior.webp';
 
 export const ApplicationsSection = ({ applications }: ApplicationsSectionProps) => {
   return (
-    <section className="mb-8 overflow-x-hidden">
+    <section className="mb-8">
       <Accordion type="single" collapsible>
         <AccordionItem value="applications" className="border-b-0">
           <div className="flex items-center justify-between">
@@ -35,7 +35,7 @@ export const ApplicationsSection = ({ applications }: ApplicationsSectionProps) 
                 title="No applications"
               />
             ) : (
-              <div className="space-y-4">
+              <div className="space-y-4 px-1">
                 {applications.map((app) => {
                   const location = app.listing?.city && app.listing?.state
                     ? `${app.listing.city}, ${app.listing.state}`

@@ -40,7 +40,7 @@ export default function RenterDashboardClient({ data }: RenterDashboardClientPro
   const hasActionableMatches = matches.length > 0;
 
   return (
-    <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto overflow-x-hidden`}>
+    <div className={`py-6 ${APP_PAGE_MARGIN} max-w-[1280px] mx-auto`}>
       <DashboardHeader />
       <RecentSearchesSection searches={recentSearches} defaultOpen />
       <FavoritesSection favorites={favorites} defaultOpen={!hasActionableMatches} />
