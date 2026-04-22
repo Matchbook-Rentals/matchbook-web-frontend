@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, FileText } from 'lucide-react';
+import { ExternalLink, FileText } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import type { MatchWithRelations } from '@/types';
 
@@ -10,7 +10,7 @@ interface DownloadableDocumentsProps {
 
 /**
  * Adapted from src/app/app/rent/match/[matchId]/complete/complete-client.tsx.
- * Currently surfaces just the signed lease document for download; additional
+ * Currently surfaces just the signed lease document for viewing; additional
  * docs (payment receipt, move-in checklist) can be wired up as endpoints land.
  */
 export function DownloadableDocuments({ match }: DownloadableDocumentsProps) {
@@ -19,20 +19,15 @@ export function DownloadableDocuments({ match }: DownloadableDocumentsProps) {
       name: 'Signed Lease Agreement',
       icon: FileText,
       available: !!match.leaseDocumentId,
-      downloadUrl: match.leaseDocumentId
-        ? `/api/documents/${match.leaseDocumentId}/view?download=true`
+      viewUrl: match.leaseDocumentId
+        ? `/api/documents/${match.leaseDocumentId}/view`
         : null,
     },
   ];
 
-  const handleDownload = (url: string | null, documentName: string) => {
+  const handleView = (url: string | null) => {
     if (!url) return;
-    const link = document.createElement('a');
-    link.href = url;
-    link.download = documentName;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+    window.open(url, '_blank', 'noopener,noreferrer');
   };
 
   return (
@@ -49,7 +44,7 @@ export function DownloadableDocuments({ match }: DownloadableDocumentsProps) {
             className={`self-stretch w-full bg-[#0a606014] rounded-lg border border-solid border-[#e6e6e6] ${
               document.available ? 'cursor-pointer hover:bg-[#0a606020]' : 'opacity-50'
             }`}
-            onClick={() => document.available && handleDownload(document.downloadUrl, document.name)}
+            onClick={() => document.available && handleView(document.viewUrl)}
           >
             <CardContent className="flex items-center gap-3 px-5 py-4">
               <IconComponent className="w-10 h-10 text-[#484a54]" />
@@ -61,7 +56,7 @@ export function DownloadableDocuments({ match }: DownloadableDocumentsProps) {
                 )}
               </div>
 
-              {document.available && <Download className="w-8 h-8 text-[#484a54]" />}
+              {document.available && <ExternalLink className="w-8 h-8 text-[#484a54]" />}
             </CardContent>
           </Card>
         );
