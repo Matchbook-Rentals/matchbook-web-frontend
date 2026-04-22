@@ -1551,10 +1551,9 @@ export const getPopularListingAreas = async (
 ): Promise<{ city: string; state: string; count: number; avgLat: number; avgLng: number }[]> => {
   // Hardcoded top metros to ensure consistent, aggregated homepage display
   const topMetros = [
-    { city: 'San Antonio', state: 'TX', count: 34, avgLat: 29.6112, avgLng: -98.4720 },
+    { city: 'Las Vegas', state: 'NV', count: 8, avgLat: 36.1309, avgLng: -115.2307 },
     { city: 'Indianapolis', state: 'IN', count: 19, avgLat: 39.7797, avgLng: -86.1410 },
     { city: 'Nashville', state: 'TN', count: 14, avgLat: 36.1478, avgLng: -86.7482 },
-    { city: 'Las Vegas', state: 'NV', count: 8, avgLat: 36.1309, avgLng: -115.2307 },
     { city: 'Portland', state: 'OR', count: 6, avgLat: 45.5152, avgLng: -122.6784 },
     { city: 'Salt Lake City', state: 'UT', count: 5, avgLat: 40.7650, avgLng: -111.9010 },
   ];
