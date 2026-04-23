@@ -7,6 +7,7 @@ import { isHostAccountActive } from '@/lib/verification-utils'
 import { HousingRequest, Notification } from '@prisma/client'
 import { TripAndMatches, ListingAndImages } from '@/types/'
 import { auth } from '@clerk/nextjs/server'
+import { sessionExpiredError } from '@/lib/auth-utils'
 import { calculateRent } from '@/lib/calculate-rent'
 import { findConversationBetweenUsers, createListingConversation } from './conversations'
 import { sendNotificationEmail } from '@/lib/send-notification-email'
@@ -1255,7 +1256,7 @@ export async function applyToListingFromSearch(
   try {
     const { userId } = auth();
     if (!userId) {
-      return { success: false, error: 'Unauthorized' };
+      return sessionExpiredError();
     }
 
     // Get or create the trip

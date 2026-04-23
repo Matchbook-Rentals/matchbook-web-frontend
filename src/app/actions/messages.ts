@@ -1,11 +1,12 @@
 'use server'
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
+import { sessionExpiredError } from '@/lib/auth-utils'
 
 export async function createMessage(data: any) {
   try {
     const { userId } = auth();
-    if (!userId) return { success: false, error: 'Unauthorized' };
+    if (!userId) return sessionExpiredError();
 
     const message = await prisma.message.create({
       data: {
@@ -28,7 +29,7 @@ export async function sendInitialMessage(listingId: string, content: string) {
   try {
     const { userId: senderId } = auth();
     if (!senderId) {
-      return { success: false, error: 'Unauthorized' };
+      return sessionExpiredError();
     }
 
     // 1. Fetch the listing to get the host's userId (receiverId) and sender info
@@ -147,7 +148,7 @@ export async function sendHostMessage(listingId: string, guestUserId: string, co
   try {
     const { userId: senderId } = auth();
     if (!senderId) {
-      return { success: false, error: 'Unauthorized' };
+      return sessionExpiredError();
     }
 
     // 1. Verify the sender is the host of the listing and get sender info
@@ -266,7 +267,7 @@ export async function sendHostMessage(listingId: string, guestUserId: string, co
 export async function markMessagesAsReadByTimestamp(conversationId: string, timestamp: Date) {
   try {
     const { userId } = auth();
-    if (!userId) return { success: false, error: 'Unauthorized' };
+    if (!userId) return sessionExpiredError();
     if (!conversationId) return { success: false, error: 'Conversation ID is required' };
 
     // Optional: Get the conversation to verify the user is a participant

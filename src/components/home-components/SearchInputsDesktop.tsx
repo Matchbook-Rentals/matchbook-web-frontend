@@ -8,6 +8,7 @@ import GuestTypeCounter from "./GuestTypeCounter";
 import { ImSpinner8 } from "react-icons/im";
 import { DisabledDesktopInputs } from "./disabled-inputs.tsx"
 import { createTrip } from "@/app/actions/trips";
+import { isSessionExpired, handleSessionExpired } from "@/lib/handle-session-expired";
 import { checkClientBetaAccess } from '@/utils/client-roles';
 import { useRouter } from "next/navigation";
 
@@ -150,6 +151,8 @@ const SearchInputsDesktop: React.FC<SearchInputsDesktopProps> = ({
 
     if (response.success && response.trip) {
       router.push(`/app/searches/${response.trip.id}`);
+    } else if (isSessionExpired(response)) {
+      handleSessionExpired();
     } else {
       toast({
         variant: "destructive",

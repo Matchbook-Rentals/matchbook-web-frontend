@@ -12,8 +12,8 @@ export default function Footer() {
         </div>
 
         {/* Links Section */}
-        <div className="flex justify-between w-full pt-3 lg:w-3/5 gap-2 lg:gap-0 ">
-          {/* Navigation Links */}
+        <div className="[container-type:inline-size] flex justify-between w-full pt-5 lg:w-3/5 gap-2 lg:gap-0 ">
+          {/* Navigation + inline Resources (inline copy hides when container is wide enough for a standalone Resources column) */}
           <div className="text-lg mx-auto ">
             <h3 className="text-xl font-semibold">Navigation</h3>
             <nav className="flex flex-col gap-1.5 mt-2">
@@ -39,10 +39,27 @@ export default function Footer() {
                 Contact
               </Link>
             </nav>
+            <h3 className="text-xl font-semibold mt-4 [@container(min-width:640px)]:hidden">Resources</h3>
+            <nav className="flex flex-col gap-1.5 mt-2 [@container(min-width:640px)]:hidden">
+              <Link
+                href="/articles"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Articles
+              </Link>
+              <Link
+                href="/faq"
+                className="text-gray-500 hover:text-black"
+                prefetch={true}
+              >
+                FAQ
+              </Link>
+            </nav>
           </div>
 
-          {/* Resource Links */}
-          <div className="text-lg mx-auto">
+          {/* Standalone Resources column (only shown when container is wide enough) */}
+          <div className="text-lg mx-auto hidden [@container(min-width:640px)]:block">
             <h3 className="text-xl font-semibold">Resources</h3>
             <nav className="flex flex-col gap-1.5 mt-2">
               <Link
@@ -62,10 +79,52 @@ export default function Footer() {
             </nav>
           </div>
 
+          {/* Legal Links - hidden on small, shown on sm+ */}
+          <div className="text-lg mx-auto hidden sm:block">
+            <h3 className="text-xl font-semibold">Legal</h3>
+            <nav className="flex flex-col gap-1.5 mt-2">
+              <Link
+                href="/terms-of-service"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Terms of Service
+              </Link>
+              <Link
+                href="/privacy-policy"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                href="/acceptable-use-policy"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Acceptable Use
+              </Link>
+              <Link
+                href="/california-privacy-notice"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                CA Privacy Notice
+              </Link>
+              <Link
+                href="/cookie-notice"
+                className="text-gray-500 hover:text-black"
+                prefetch={false}
+              >
+                Cookie Notice
+              </Link>
+            </nav>
+          </div>
+
           {/* Social Media Links */}
           <div className="text-lg mx-auto">
             <h3 className="text-xl font-semibold">Follow Us</h3>
-            <div className="flex gap-2 pt-3">
+            <div className="flex gap-2 pt-3 pb-4">
               <Link
                 href="https://www.facebook.com/share/MpdT4CSW4cp75vZh/?mibextid=LQQJ4d"
                 className="bg-secondaryBrand hover:bg-secondaryBrand/80 text-white rounded-full p-1.5 md:p-2.5 transition-colors duration-200"
@@ -87,6 +146,48 @@ export default function Footer() {
               >
                 <LinkedinIcon className="h-4 w-4 md:h-6 md:w-6 lg:h-7 lg:w-7" />
               </Link>
+            </div>
+
+            {/* Legal Links - mobile only, stacked under social icons in the Follow Us column */}
+            <div className="sm:hidden mt-6">
+              <h3 className="text-xl font-semibold">Legal</h3>
+              <nav className="flex flex-col gap-1.5 mt-2">
+                <Link
+                  href="/terms-of-service"
+                  className="text-gray-500 hover:text-black"
+                  prefetch={false}
+                >
+                  Terms of Service
+                </Link>
+                <Link
+                  href="/privacy-policy"
+                  className="text-gray-500 hover:text-black"
+                  prefetch={false}
+                >
+                  Privacy Policy
+                </Link>
+                <Link
+                  href="/acceptable-use-policy"
+                  className="text-gray-500 hover:text-black"
+                  prefetch={false}
+                >
+                  Acceptable Use
+                </Link>
+                <Link
+                  href="/california-privacy-notice"
+                  className="text-gray-500 hover:text-black"
+                  prefetch={false}
+                >
+                  CA Privacy Notice
+                </Link>
+                <Link
+                  href="/cookie-notice"
+                  className="text-gray-500 hover:text-black"
+                  prefetch={false}
+                >
+                  Cookie Notice
+                </Link>
+              </nav>
             </div>
           </div>
         </div>

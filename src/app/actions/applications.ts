@@ -2,6 +2,7 @@
 
 import prisma from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
+import { sessionExpiredError } from '@/lib/auth-utils'
 import { UTApi } from 'uploadthing/server'
 import { checkApplicationCompletionServer } from '@/utils/application-completion'
 import { revalidatePath } from 'next/cache'
@@ -9,7 +10,7 @@ import { revalidatePath } from 'next/cache'
 export async function createApplication(data: any) {
   try {
     const { userId } = auth();
-    if (!userId) return { success: false, error: 'Unauthorized' };
+    if (!userId) return sessionExpiredError();
 
     // Handle SSN encryption
     let applicationData = { ...data };
@@ -77,7 +78,7 @@ export async function createApplication(data: any) {
 
 export async function createDefaultApplication(data: any) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   try {
     const existingApplication = await prisma.application.findFirst({
@@ -123,7 +124,7 @@ export async function createDefaultApplication(data: any) {
 
 export async function upsertNonDefaultApplication(data: any) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   if (!data.tripId) {
     return { success: false, error: 'tripId is required for non-default applications' };
@@ -178,12 +179,40 @@ export async function upsertNonDefaultApplication(data: any) {
 
 export async function getTripApplication(tripId?: string) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   try {
-    let application;
+    const applicationInclude = {
+      incomes: true,
+      verificationImages: true,
+      identifications: {
+        include: {
+          idPhotos: true,
+        },
+      },
+      residentialHistories: {
+        orderBy: {
+          index: 'asc' as const,
+        },
+      },
+    };
 
-    if (tripId) {
+    // Always preload from the default application (the source of truth for form
+    // data and uploaded documents). A per-trip application is only created on
+    // submit via upsertApplication, so we never read from it here.
+    let application = await prisma.application.findUnique({
+      where: {
+        userId_isDefault: {
+          userId,
+          isDefault: true,
+        },
+      },
+      include: applicationInclude,
+    });
+
+    // Fallback: if the user has no default application yet but does have a
+    // legacy per-trip application, use it so they can continue editing.
+    if (!application && tripId) {
       application = await prisma.application.findUnique({
         where: {
           userId_tripId: {
@@ -191,45 +220,7 @@ export async function getTripApplication(tripId?: string) {
             tripId,
           },
         },
-        include: {
-          incomes: true,
-          verificationImages: true,
-          identifications: {
-            include: {
-              idPhotos: true,
-            },
-          },
-          residentialHistories: {
-            orderBy: {
-              index: 'asc',
-            },
-          },
-        },
-      });
-    }
-
-    if (!application) {
-      application = await prisma.application.findUnique({
-        where: {
-          userId_isDefault: {
-            userId,
-            isDefault: true,
-          },
-        },
-        include: {
-          incomes: true,
-          verificationImages: true,
-          identifications: {
-            include: {
-              idPhotos: true,
-            },
-          },
-          residentialHistories: {
-            orderBy: {
-              index: 'asc',
-            },
-          },
-        },
+        include: applicationInclude,
       });
     }
 
@@ -328,7 +319,7 @@ export async function getUserApplication() {
 
 export async function updateApplication(data: any) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   const { identifications, incomes, verificationImages, tripId, ...rest } = data;
 
@@ -406,7 +397,7 @@ export async function updateApplication(data: any) {
 export async function upsertApplication(data: any) {
   // Get the user ID from Clerk. If no user is authenticated, return an error.
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   // Destructure the incoming data
   const { identifications, incomes, verificationImages, tripId, residentialHistories, ...rest } = data;
@@ -830,7 +821,7 @@ export async function upsertApplication(data: any) {
 
 export async function deleteIncome(incomeId: string) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   try {
     await prisma.income.delete({
@@ -847,7 +838,7 @@ export async function deleteIncome(incomeId: string) {
 
 export async function deleteIDPhoto(photoId: string) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   try {
     // First verify the photo belongs to the user's application
@@ -896,7 +887,7 @@ export async function deleteIDPhoto(photoId: string) {
 
 export async function deleteIncomeProof(incomeId: string) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   try {
     // First verify the income belongs to the user's application
@@ -947,7 +938,7 @@ export async function deleteIncomeProof(incomeId: string) {
 
 export async function updateApplicationField(fieldPath: string, value: any, tripId?: string, checkCompletion?: boolean) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   try {
     // Parse the field path to handle nested fields like "personalInfo.firstName"
@@ -1056,11 +1047,12 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
       // Check completion status if requested
       if (checkCompletion) {
         const completionStatus = await updateApplicationCompletionStatus(app.id);
-        return { 
-          success: true, 
-          application: app, 
+        if (!completionStatus.success) return completionStatus;
+        return {
+          success: true,
+          application: app,
           completionStatus,
-          isComplete: completionStatus?.isComplete ?? false 
+          isComplete: completionStatus.isComplete ?? false
         };
       }
       
@@ -1105,11 +1097,12 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
       // Check completion status if requested
       if (checkCompletion) {
         const completionStatus = await updateApplicationCompletionStatus(app.id);
-        return { 
-          success: true, 
-          application: app, 
+        if (!completionStatus.success) return completionStatus;
+        return {
+          success: true,
+          application: app,
           completionStatus,
-          isComplete: completionStatus?.isComplete ?? false 
+          isComplete: completionStatus.isComplete ?? false
         };
       }
       
@@ -1151,11 +1144,12 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
       // Check completion status if requested
       if (checkCompletion) {
         const completionStatus = await updateApplicationCompletionStatus(app.id);
-        return { 
-          success: true, 
-          application: app, 
+        if (!completionStatus.success) return completionStatus;
+        return {
+          success: true,
+          application: app,
           completionStatus,
-          isComplete: completionStatus?.isComplete ?? false 
+          isComplete: completionStatus.isComplete ?? false
         };
       }
       
@@ -1270,11 +1264,12 @@ export async function updateApplicationField(fieldPath: string, value: any, trip
     // Check completion status if requested
     if (checkCompletion) {
       const completionStatus = await updateApplicationCompletionStatus(application.id);
-      return { 
-        success: true, 
-        application, 
+      if (!completionStatus.success) return completionStatus;
+      return {
+        success: true,
+        application,
         completionStatus,
-        isComplete: completionStatus?.isComplete ?? false 
+        isComplete: completionStatus.isComplete ?? false
       };
     }
     
@@ -1337,7 +1332,7 @@ export async function markComplete(applicationId: string) {
 
 export async function updateApplicationCompletionStatus(applicationId?: string) {
   const { userId } = auth();
-  if (!userId) return { success: false, error: 'Unauthorized' };
+  if (!userId) return sessionExpiredError();
 
   try {
     // Get the application with all related data

@@ -41,6 +41,8 @@ interface MenuItem {
   requiresPreview?: boolean; // Requires preview
   requiresHostAccess?: boolean; // Requires host_beta, moderator, or admin
   adminOnlyVisible?: boolean; // Only visible to admin
+  mobileOnly?: boolean; // Only visible on mobile (<md)
+  desktopOnly?: boolean; // Only visible on desktop (>=md)
   section: number; // For grouping and dividers
 }
 
@@ -159,11 +161,19 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
     { id: 'home', label: 'Home', href: '/', section: 1 },
     { id: 'renter-dashboard', label: 'Renter Dashboard', href: '/rent/dashboard', section: 1 },
     { id: 'inbox', label: 'Inbox', href: '/app/rent/messages', section: 2 },
+    ...(hasListings === false ? [{
+      id: 'list-your-property',
+      label: 'List Your Property',
+      href: '/app/host/add-property',
+      section: 3,
+      mobileOnly: true,
+    } as MenuItem] : []),
     {
       id: 'switch-mode',
       label: hasListings === false ? 'List your property' : 'Switch to Hosting',
       href: hasListings === false ? '/app/host/add-property' : '/app/host/dashboard/overview',
-      section: 3
+      section: 3,
+      ...(hasListings === false ? { desktopOnly: true } : {}),
     },
     { id: 'settings', label: 'Account', onClick: () => { handleSettings(); setIsMenuOpen(false); }, section: 4 },
     { id: 'support', label: 'Support', onClick: () => { setIsSupportOpen(true); setIsMenuOpen(false); }, section: 4 },
@@ -459,13 +469,19 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                   const sectionChanged = item.section !== lastSection;
                   lastSection = item.section; // Update lastSection for the next iteration
 
+                  const visibilityClass = item.mobileOnly
+                    ? 'md:hidden'
+                    : item.desktopOnly
+                      ? 'hidden md:block'
+                      : '';
+
                   return (
                     <React.Fragment key={item.id}>
                       {sectionChanged && lastSection > 1 && <div className="border-t border-gray-200" />}
                       {href && isItemEnabled ? (
-                        <Link 
-                          href={href} 
-                          className="block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset"
+                        <Link
+                          href={href}
+                          className={`block w-full px-4 py-3 text-left text-sm font-medium text-gray-800 hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-inset ${visibilityClass}`}
                           onClick={() => setIsMenuOpen(false)}
                         >
                           {label}
@@ -477,7 +493,7 @@ export default function UserMenu({ color, mode = 'menu-only', userId, user, isSi
                             isItemEnabled
                               ? 'text-gray-800 hover:bg-gray-50'
                               : 'text-gray-400 cursor-not-allowed'
-                          }`}
+                          } ${visibilityClass}`}
                           disabled={!isItemEnabled}
                         >
                           {label}

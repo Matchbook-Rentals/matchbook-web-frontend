@@ -8,6 +8,7 @@ import UserMenu from '@/components/userMenu';
 import MobileSearchOverlay from '@/components/newnew/mobile-search-overlay';
 import DesktopSearchPopover from '@/components/newnew/desktop-search-popover';
 import { createTrip } from '@/app/actions/trips';
+import { isSessionExpired, handleSessionExpired } from '@/lib/handle-session-expired';
 import { createGuestTrip } from '@/app/actions/guest-trips';
 import { GuestSessionService } from '@/utils/guest-session';
 import { buildSearchUrl } from '@/app/search/search-page-client';
@@ -100,6 +101,8 @@ export default function SearchNavbar({ userId, user, isSignedIn, hasListings: ha
         const response = await createTrip(tripData);
         if (response.success && response.trip) {
           window.location.href = buildSearchUrl({ tripId: response.trip.id });
+        } else if (isSessionExpired(response)) {
+          handleSessionExpired();
         } else {
           toast({ variant: 'destructive', description: (response as any).error || 'Failed to create trip' });
         }

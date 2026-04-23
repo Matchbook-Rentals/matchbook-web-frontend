@@ -3,6 +3,7 @@ import prismadb from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 import { currentUser, auth } from '@clerk/nextjs/server'
+import { sessionExpiredError } from '@/lib/auth-utils'
 import { clerkClient } from '@clerk/nextjs/server'
 import { logger } from '@/lib/logger';
 import { unstable_noStore as noStore } from 'next/cache';
@@ -838,7 +839,7 @@ export async function confirmAuthenticatedName(dateOfBirth: string) {
   const clerkUser = await currentUser();
 
   if (!clerkUser?.id) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {
@@ -974,7 +975,7 @@ export async function updateAuthenticatedName(firstName: string, middleName: str
   const clerkUser = await currentUser();
 
   if (!clerkUser?.id) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {

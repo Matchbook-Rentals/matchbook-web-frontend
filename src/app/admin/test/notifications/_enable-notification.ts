@@ -2,6 +2,7 @@
 
 import prismadb from '@/lib/prismadb'
 import { auth } from '@clerk/nextjs/server'
+import { sessionExpiredError } from '@/lib/auth-utils'
 
 // Map notification action types to their corresponding email preference fields
 const notificationToPreferenceMap: Record<string, string> = {
@@ -45,7 +46,7 @@ export async function enableNotificationForAllUsers(notificationId: string) {
   const { userId } = auth()
 
   if (!userId) {
-    return { success: false, error: 'Unauthorized' }
+    return sessionExpiredError()
   }
 
   // Map the notification ID to the preference field

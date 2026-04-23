@@ -2,6 +2,7 @@
 import prisma from '@/lib/prismadb'
 import { revalidatePath } from 'next/cache'
 import { auth } from '@clerk/nextjs/server'
+import { sessionExpiredError } from '@/lib/auth-utils'
 import { Notification, Prisma } from '@prisma/client'
 import { buildNotificationEmailData, getNotificationEmailSubject } from '@/lib/notification-email-config'
 import { sendNotificationEmail } from '@/lib/send-notification-email'
@@ -216,7 +217,7 @@ export async function getNotifications(): Promise<GetNotificationsResponse> {
   try {
     const { userId } = auth()
     if (!userId) {
-      return { success: false, error: 'Unauthorized' }
+      return sessionExpiredError()
     }
     const notifications = await prisma.notification.findMany({
       where: {

@@ -1,6 +1,7 @@
 'use server';
 
 import { currentUser } from '@clerk/nextjs/server';
+import { sessionExpiredError } from '@/lib/auth-utils';
 import prismadb from '@/lib/prismadb';
 import stripe from '@/lib/stripe';
 import { logger } from '@/lib/logger';
@@ -18,7 +19,7 @@ export async function createStripeVerificationSession() {
   const clerkUser = await currentUser();
 
   if (!clerkUser?.id) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {
@@ -256,7 +257,7 @@ export async function getStripeVerificationStatus() {
   const clerkUser = await currentUser();
 
   if (!clerkUser?.id) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {
@@ -307,7 +308,7 @@ export async function refreshStripeVerificationStatus() {
   const clerkUser = await currentUser();
 
   if (!clerkUser?.id) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {
@@ -449,7 +450,7 @@ export async function cancelStripeVerificationSession() {
   const clerkUser = await currentUser();
 
   if (!clerkUser?.id) {
-    return { success: false, error: 'Unauthorized' };
+    return sessionExpiredError();
   }
 
   try {

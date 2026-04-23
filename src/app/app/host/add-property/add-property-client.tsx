@@ -35,9 +35,7 @@ import {
   validatePhotos,
   validateFeaturedPhotos,
   validateAmenities,
-  validatePricing,
-  validateVerifyPricing,
-  validateDeposits,
+  validatePricingAndTerms,
   validateAllSteps,
 } from "@/lib/listing-actions-helpers";
 import LocationInput from "./listing-creation-location-input";
@@ -48,9 +46,8 @@ import { ListingBasics } from "./listing-creation-basics";
 import { ListingPhotos } from "./listing-creation-photos-upload-batched";
 import ListingPhotoSelection from "./listing-creation-photo-selection";
 import ListingAmenities from "./listing-creation-amenities";
-import ListingCreationPricing, { MonthlyPricing } from "./listing-creation-pricing";
-import ListingCreationVerifyPricing from "./listing-creation-verify-pricing";
-import ListingCreationDeposit from "./listing-creation-deposit";
+import { MonthlyPricing } from "./listing-creation-pricing";
+import ListingCreationPricingAndTerms from "./listing-creation-pricing-and-terms";
 import { Box as ListingCreationReview } from "./listing-creation-review";
 import { loadDraftData } from "@/lib/listing-actions-helpers";
 
@@ -253,6 +250,21 @@ interface ListingLocation {
 
 // Initialize state with draft data if available
 
+// If the draft's availableDate is already in the past (stale), drop it so
+// the host doesn't ship a listing with a useless unavailability block.
+// Comparison uses the CLIENT's local "today" — the date picker blocks past
+// dates by local day, so this keeps load/save symmetric.
+const pickValidAvailableDate = (iso: unknown): string => {
+  if (typeof iso !== "string" || !iso) return "";
+  const [y, m, d] = iso.split("-").map(Number);
+  if (!y || !m || !d) return "";
+  const picked = new Date(y, m - 1, d);
+  picked.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return picked < today ? "" : iso;
+};
+
 const initializePricing = () => {
   if (draftData) {
     const monthlyPricing: MonthlyPricing[] = draftData.monthlyPricing?.map((p: any) => ({
@@ -260,8 +272,8 @@ const initializePricing = () => {
       price: p.price ? p.price.toString() : '',
       utilitiesIncluded: p.utilitiesIncluded || false
     })) || [];
-    
-    
+
+
     return {
       shortestStay: draftData.shortestLeaseLength || 1,
       longestStay: draftData.longestLeaseLength || 12,
@@ -270,6 +282,7 @@ const initializePricing = () => {
       utilitiesUpToMonths: 1,
       varyPricingByLength: true,
       basePrice: "",
+      availableDate: pickValidAvailableDate(draftData.availableDate),
       deposit: draftData.depositSize ? draftData.depositSize.toString() : "",
       petDeposit: draftData.petDeposit ? draftData.petDeposit.toString() : "",
       petRent: draftData.petRent ? draftData.petRent.toString() : ""
@@ -283,6 +296,7 @@ const initializePricing = () => {
     utilitiesUpToMonths: 1,
     varyPricingByLength: true,
     basePrice: "",
+    availableDate: "",
     deposit: "",
     petDeposit: "",
     petRent: ""
@@ -386,11 +400,9 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
     { name: "Photos", position: 5 },
     { name: "Featured Photos", position: 6 },
     { name: "Amenities", position: 7 },
-    { name: "Pricing", position: 8 },
-    { name: "Verify Pricing", position: 9 },
-    { name: "Deposits", position: 10 },
-    { name: "Review", position: 11 },
-    { name: "Success", position: 12 },
+    { name: "Pricing & Terms", position: 8 },
+    { name: "Review", position: 9 },
+    { name: "Success", position: 10 },
   ];
 
 
@@ -510,11 +522,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       case 7:
         return validateAmenities(listingAmenities);
       case 8:
-        return validatePricing(listingPricing);
-      case 9:
-        return validateVerifyPricing(listingPricing);
-      case 10:
-        return validateDeposits(listingPricing);
+        return validatePricingAndTerms(listingPricing);
       default:
         return [];
     }
@@ -581,7 +589,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         
         setSlideDirection('right'); // Slide from right to left (next)
         setAnimationKey(prevKey => prevKey + 1); // Increment key to force animation to rerun
-        setCurrentStep(11); // Go to review step
+        setCurrentStep(9); // Go to review step
         setCameFromReview(false); // Reset the flag
       } else {
         // Normal flow
@@ -684,7 +692,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
   const handleSubmitListing = async () => {
     // If admin mode and not disabled, skip validation and API call, show success preview
     if (isAdmin && !adminModeDisabled && !adminSkipButtonsHidden) {
-      setCurrentStep(12); // Move to success step
+      setCurrentStep(10); // Move to success step
       setSlideDirection('right');
       setAnimationKey(prevKey => prevKey + 1);
       return;
@@ -730,11 +738,20 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
           listingPhotos: listingPhotos,
           selectedPhotos: selectedPhotos,
           amenities: listingAmenities,
-          monthlyPricing: listingPricing.monthlyPricing.map(p => ({
-            months: p.months,
-            price: p.price ? Number(p.price.replace(/,/g, '')) : 0,
-            utilitiesIncluded: p.utilitiesIncluded
-          }))
+          // Mirror the validator's fallback: empty rows inherit basePrice so
+          // submission doesn't silently write zeroes when the host typed a
+          // headline rate but didn't commit via blur before clicking Next.
+          monthlyPricing: (() => {
+            const baseRaw = (listingPricing.basePrice ?? '').replace(/,/g, '');
+            const baseNum = baseRaw ? Number(baseRaw) : 0;
+            return listingPricing.monthlyPricing.map(p => ({
+              months: p.months,
+              price: p.price ? Number(p.price.replace(/,/g, '')) : baseNum,
+              utilitiesIncluded: p.utilitiesIncluded
+            }));
+          })(),
+          // ISO "YYYY-MM-DD" string — server converts to ListingUnavailability
+          availableDate: listingPricing.availableDate || null
         };
 
         // Always use the normal submission logic - the helper will handle draft vs non-draft internally
@@ -751,7 +768,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         await revalidateHostDashboard();
 
         // Show success state instead of immediate redirect
-        setCurrentStep(12); // Move to success step
+        setCurrentStep(10); // Move to success step
         setSlideDirection('right');
         setAnimationKey(prevKey => prevKey + 1);
       } catch (error) {
@@ -945,61 +962,41 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         );
       case 8:
         return (
-          <ListingCreationPricing
+          <ListingCreationPricingAndTerms
             shortestStay={listingPricing.shortestStay}
             longestStay={listingPricing.longestStay}
-            includeUtilities={listingPricing.includeUtilities}
-            utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
-            varyPricingByLength={listingPricing.varyPricingByLength}
+            availableDate={listingPricing.availableDate || ""}
             basePrice={listingPricing.basePrice}
-            onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
-            onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
-            onIncludeUtilitiesChange={(value) => setListingPricing(prev => ({ ...prev, includeUtilities: value }))}
-            onUtilitiesUpToMonthsChange={(value) => setListingPricing(prev => ({ ...prev, utilitiesUpToMonths: value }))}
-            onVaryPricingByLengthChange={(value) => setListingPricing(prev => ({ ...prev, varyPricingByLength: value }))}
-            onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
-            onContinue={handleNext}
-            questionTextStyles={questionTextStyles}
-            questionSubTextStyles={questionSubTextStyles}
-          />
-        );
-      case 9:
-        return (
-          <ListingCreationVerifyPricing
-            shortestStay={listingPricing.shortestStay}
-            longestStay={listingPricing.longestStay}
-            monthlyPricing={listingPricing.monthlyPricing}
+            deposit={listingPricing.deposit}
+            petDeposit={listingPricing.petDeposit}
+            petRent={listingPricing.petRent}
             includeUtilities={listingPricing.includeUtilities}
-            utilitiesUpToMonths={listingPricing.utilitiesUpToMonths}
+            varyPricingByLength={listingPricing.varyPricingByLength}
+            monthlyPricing={listingPricing.monthlyPricing}
             onShortestStayChange={(value) => setListingPricing(prev => ({ ...prev, shortestStay: value }))}
             onLongestStayChange={(value) => setListingPricing(prev => ({ ...prev, longestStay: value }))}
+            onAvailableDateChange={(value) => setListingPricing(prev => ({ ...prev, availableDate: value }))}
+            onBasePriceChange={(value) => setListingPricing(prev => ({ ...prev, basePrice: value }))}
+            onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
+            onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
+            onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
+            onIncludeUtilitiesChange={(value) => setListingPricing(prev => ({ ...prev, includeUtilities: value }))}
+            onVaryPricingByLengthChange={(value) => setListingPricing(prev => ({ ...prev, varyPricingByLength: value }))}
             onMonthlyPricingChange={(pricing) => {
               setListingPricing(prev => ({ ...prev, monthlyPricing: pricing }));
-              // Update cache with new pricing values
               setPricingCache(prev => {
                 const newCache = new Map(prev);
                 pricing.forEach(p => newCache.set(p.months, { ...p }));
                 return newCache;
               });
             }}
-          />
-        );
-      case 10:
-        return (
-          <ListingCreationDeposit
-            deposit={listingPricing.deposit}
-            petDeposit={listingPricing.petDeposit}
-            petRent={listingPricing.petRent}
-            onDepositChange={(value) => setListingPricing(prev => ({ ...prev, deposit: value }))}
-            onPetDepositChange={(value) => setListingPricing(prev => ({ ...prev, petDeposit: value }))}
-            onPetRentChange={(value) => setListingPricing(prev => ({ ...prev, petRent: value }))}
             questionTextStyles={questionTextStyles}
             questionSubTextStyles={questionSubTextStyles}
           />
         );
-      case 11:
+      case 9:
         return (
-          <ListingCreationReview 
+          <ListingCreationReview
             listingHighlights={listingHighlights}
             listingLocation={listingLocation}
             listingRooms={listingRooms}
@@ -1011,19 +1008,17 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
             onEditRooms={() => handleEditFromReview(3)}
             onEditBasics={() => handleEditFromReview(4)}
             onEditAmenities={() => handleEditFromReview(7)}
-            onEditPricing={() => handleEditFromReview(9)}
-            onEditDeposits={() => handleEditFromReview(10)}
+            onEditPricing={() => handleEditFromReview(8)}
             showPricingStructureTitle={false}
           />
         );
-      case 12:
-        // Success page - determine if from Save & Exit or final submission
-        const isSaveAndExit = currentStep === 12 && listing.status === "draft";
-        
+      case 10:
+        const isSaveAndExit = currentStep === 10 && listing.status === "draft";
+
         return (
-          <ListingCreationSuccess 
-            isSaveAndExit={isSaveAndExit} 
-            listingId={createdListingId} 
+          <ListingCreationSuccess
+            isSaveAndExit={isSaveAndExit}
+            listingId={createdListingId}
           />
         );
       default:
@@ -1042,10 +1037,8 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
       case 5: return { title: 'Add some photos' };
       case 6: return { title: 'Choose the photos renters see first' };
       case 7: return { title: 'What amenities does your property offer?' };
-      case 8: return { title: 'Set the pricing' };
-      case 9: return { title: 'Select Monthly Rent And Utilities Included', subtitle: 'Hosts often discount rates for extended stays. You can adjust pricing and utilities for each lease length.' };
-      case 10: return { title: 'What deposits and additional costs do you require?', subtitle: 'Set your security deposit and any pet-related fees' };
-      case 11: return { title: 'Review your listing' };
+      case 8: return { title: 'Set pricing and lease terms', subtitle: 'Configure stay length, rent, deposits, utilities, and per-month rates in one place.' };
+      case 9: return { title: 'Review your listing' };
       default: return { title: 'Create Listing' };
     }
   };
@@ -1054,10 +1047,10 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
 
   return (
     <main className="bg-background flex flex-row justify-center w-full">
-      <div className="bg-background overflow-auto w-full max-w-[1920px] relative" style={{ paddingBottom: (currentStep !== 12 || (isAdmin && !adminModeDisabled)) ? '160px' : '0' }}>
+      <div className="bg-background overflow-auto w-full max-w-[1920px] relative" style={{ paddingBottom: (currentStep !== 10 || (isAdmin && !adminModeDisabled)) ? '160px' : '0' }}>
 
         {/* Mobile restructured header */}
-        {currentStep !== 12 && (
+        {currentStep !== 10 && (
           <div className="w-full max-w-[883px] mx-auto">
             {/* Title row - title on left, video button on right for medium+ */}
             <div className="px-4 pt-6">
@@ -1155,7 +1148,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
         `}</style>
 
         {/* Footer with navigation buttons - fixed to bottom */}
-        {(currentStep !== 12 || (isAdmin && !adminModeDisabled)) && (
+        {(currentStep !== 10 || (isAdmin && !adminModeDisabled)) && (
           <div className="fixed bottom-0 left-0 right-0 bg-background z-10">
             {/* Progress bar above footer */}
             <ProgressBar 
@@ -1184,7 +1177,7 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                       size="sm"
                       className="border-orange-500 text-orange-500 hover:bg-orange-500 text-xs px-3 py-1"
                       onClick={handleAdminSkipNext}
-                      disabled={currentStep >= steps.length - 1 || currentStep === 11}
+                      disabled={currentStep >= steps.length - 1 || currentStep === 9}
                     >
                       Skip
                     </BrandButton>
@@ -1210,11 +1203,11 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                     data-testid="next-button"
                     variant="default"
                     size="lg"
-                    onClick={currentStep === 11 ? handleSubmitListing : currentStep === 12 ? () => setCurrentStep(11) : handleNext}
-                    disabled={currentStep === 11 ? isSubmittingListing : false}
+                    onClick={currentStep === 9 ? handleSubmitListing : currentStep === 10 ? () => setCurrentStep(9) : handleNext}
+                    disabled={currentStep === 9 ? isSubmittingListing : false}
                     className="text-sm px-6"
                   >
-                    {currentStep === 11 ? (
+                    {currentStep === 9 ? (
                       isSubmittingListing ? (
                         <>
                           <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -1223,10 +1216,10 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                       ) : (
                         isAdmin && !adminModeDisabled && !adminSkipButtonsHidden ? 'Preview Success' : 'Submit Listing'
                       )
-                    ) : currentStep === 12 ? (
+                    ) : currentStep === 10 ? (
                       'Back to Review'
                     ) : (
-                      (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'
+                      (cameFromReview && currentStep !== 8) ? 'Review' : 'Next'
                     )}
                   </BrandButton>
                 </div>
@@ -1281,11 +1274,11 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                   data-testid="next-button"
                   variant="default"
                   size="lg"
-                  onClick={currentStep === 11 ? handleSubmitListing : currentStep === 12 ? () => setCurrentStep(11) : handleNext}
-                  disabled={currentStep === 11 ? isSubmittingListing : false}
+                  onClick={currentStep === 9 ? handleSubmitListing : currentStep === 10 ? () => setCurrentStep(9) : handleNext}
+                  disabled={currentStep === 9 ? isSubmittingListing : false}
                   className="text-sm px-6"
                 >
-                  {currentStep === 11 ? (
+                  {currentStep === 9 ? (
                     isSubmittingListing ? (
                       <>
                         <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -1294,10 +1287,10 @@ const [listingBasics, setListingBasics] = useState(initializeBasicInfo(draftData
                     ) : (
                       'Submit Listing'
                     )
-                  ) : currentStep === 12 ? (
+                  ) : currentStep === 10 ? (
                     'Back to Review'
                   ) : (
-                    (cameFromReview && currentStep !== 10) ? 'Review' : 'Next'
+                    (cameFromReview && currentStep !== 8) ? 'Review' : 'Next'
                   )}
                 </BrandButton>
               </div>

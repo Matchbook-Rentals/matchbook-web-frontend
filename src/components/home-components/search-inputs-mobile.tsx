@@ -3,6 +3,7 @@ import { DisabledMobileInputs } from "./disabled-inputs";
 import { useRouter } from "next/navigation";
 import { useToast } from "@/components/ui/use-toast";
 import { createTrip } from "@/app/actions/trips";
+import { isSessionExpired, handleSessionExpired } from "@/lib/handle-session-expired";
 import { MobileDateRange } from "@/components/ui/custom-calendar/mobile-date-range";
 import GuestTypeCounter from "./GuestTypeCounter";
 import { cn } from "@/lib/utils";
@@ -125,6 +126,8 @@ const SearchInputsMobile: React.FC<SearchInputsMobileProps> = ({
 
       if (response.success && response.trip) {
         router.push(`/app/searches/set-preferences/${response.trip.id}`);
+      } else if (isSessionExpired(response)) {
+        handleSessionExpired();
       } else {
         toast({
           variant: "destructive",

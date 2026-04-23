@@ -15,6 +15,7 @@ import { Input } from "@/components/ui/input";
 import { XIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { isSessionExpired, handleSessionExpired } from "@/lib/handle-session-expired";
 import Image from "next/image";
 import {
   Dialog,
@@ -226,7 +227,7 @@ export default function HostListingCard({
       const response = await deleteFunction(listing.id, false); // Check only, don't delete yet
 
       if (!response.success) {
-        // Handle basic failures (auth, not found, etc.)
+        if (isSessionExpired(response)) { handleSessionExpired(); return; }
         toast.error(response.message);
         setIsDeleteDialogOpen(false);
         return;
@@ -267,9 +268,11 @@ export default function HostListingCard({
         setIsDeleteDialogOpen(false);
         setDeleteConfirmationText("");
         router.refresh(); // Refresh to update the listing display
+      } else if (isSessionExpired(response)) {
+        handleSessionExpired();
       } else {
         toast.error(response.message || `Failed to delete ${isDraft ? 'draft' : 'listing'}`);
-        setModalState('confirmation'); // Go back to confirmation state
+        setModalState('confirmation');
       }
     } catch (error) {
       console.error("Error deleting:", error);
@@ -639,22 +642,25 @@ export default function HostListingCard({
 
           {/* Action Buttons */}
           <div className="flex items-center gap-3 relative self-stretch w-full">
-            <CalendarDialog
-              bookings={listing.bookings || []}
-              unavailablePeriods={listing.unavailablePeriods || []}
-              triggerText="View Calendar"
-              listingId={listing.id}
-              showIcon={false}
-              triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-background hover:bg-[#3c8787] hover:text-white transition-all duration-300"
-              variant="outline"
-            />
+            {!isDraft && (
+              <CalendarDialog
+                bookings={listing.bookings || []}
+                unavailablePeriods={listing.unavailablePeriods || []}
+                triggerText="View Calendar"
+                listingId={listing.id}
+                showIcon={false}
+                triggerClassName="flex-1 border-[#3c8787] text-[#3c8787] font-semibold bg-background hover:bg-[#3c8787] hover:text-white transition-all duration-300"
+                variant="outline"
+              />
+            )}
             <BrandButton
               variant="default"
               className="flex-1 bg-[#3c8787] text-white font-semibold"
-              href={`/app/host/${listing.id}/summary`}
+              href={isDraft ? undefined : `/app/host/${listing.id}/summary`}
+              onClick={isDraft ? () => onViewDetails?.(listing.id) : undefined}
               spinOnClick={true}
             >
-              Manage Listing
+              {isDraft ? 'Finish Listing' : 'Manage Listing'}
             </BrandButton>
           </div>
         </CardFooter>

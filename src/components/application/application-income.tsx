@@ -353,16 +353,6 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
             <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
               <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
                 <div className="flex flex-col items-start gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-                  <div className="flex flex-col items-start justify-center gap-1.5 relative self-stretch w-full flex-[0_0_auto]">
-                    <Label className="relative w-fit mt-[-1.00px] [font-family:'Poppins',Helvetica] font-medium text-[#344054] text-sm tracking-[0] leading-5 whitespace-nowrap">
-                      Income Proof
-                    </Label>
-
-                    <div className="relative self-stretch font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-600 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                      Upload Income proof Document
-                    </div>
-                  </div>
-
                   <div className="flex flex-col items-start gap-[18px] relative self-stretch w-full flex-[0_0_auto]">
                     <div className="flex flex-col items-start gap-3 relative self-stretch w-full flex-[0_0_auto]">
                       {(item.imageUrl || item.fileKey) ? (
@@ -380,6 +370,7 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                           onRemove={() => clearIncomeImage(index)}
                         />
                       ) : (
+                        <>
                         <UploadButton<UploadData, unknown>
                           endpoint="incomeUploader"
                           config={{
@@ -490,17 +481,17 @@ export const Income: React.FC<IncomeProps> = ({ inputClassName, isMobile = false
                             });
                           }}
                         />
+                        <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
+                          <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                            Supported formats: PNG, JPG, DOC, PDF
+                          </div>
+
+                          <div className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
+                            Maximum size: 50MB
+                          </div>
+                        </div>
+                        </>
                       )}
-
-                      <div className="flex items-center gap-1 relative self-stretch w-full flex-[0_0_auto]">
-                        <div className="relative flex-1 mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                          Supported formats: PNG, JPG, DOC
-                        </div>
-
-                        <div className="relative w-fit mt-[-1.00px] font-text-label-small-regular font-[number:var(--text-label-small-regular-font-weight)] text-neutralneutral-400 text-[length:var(--text-label-small-regular-font-size)] tracking-[var(--text-label-small-regular-letter-spacing)] leading-[var(--text-label-small-regular-line-height)] [font-style:var(--text-label-small-regular-font-style)]">
-                          Maximum size: 50MB
-                        </div>
-                      </div>
                     </div>
                     {error?.imageUrl?.[index] && (
                       <p className="mt-1 text-red-500 text-sm">{error.imageUrl[index]}</p>

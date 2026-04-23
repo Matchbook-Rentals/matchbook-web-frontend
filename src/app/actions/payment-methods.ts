@@ -1,6 +1,7 @@
 'use server';
 
 import { auth } from '@clerk/nextjs/server';
+import { sessionExpiredError } from '@/lib/auth-utils';
 import stripe from '@/lib/stripe';
 import prisma from '@/lib/prismadb';
 
@@ -21,7 +22,7 @@ export async function getUserPaymentMethods(): Promise<{
   try {
     const { userId } = auth();
     if (!userId) {
-      return { success: false, error: 'Unauthorized' };
+      return sessionExpiredError();
     }
 
     // Get user with Stripe customer ID

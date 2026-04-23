@@ -168,6 +168,8 @@ export async function handleSaveDraft(draftData: any, userId: string, draftId?: 
     longestLeaseLength: draftData.longestLeaseLength || null,
     shortestLeasePrice: null,
     longestLeasePrice: null,
+    // Pre-availability date — accepted as Date, ISO string, or null
+    availableDate: draftData.availableDate ? new Date(draftData.availableDate) : null,
     requireBackgroundCheck: draftData.requireBackgroundCheck !== undefined ? draftData.requireBackgroundCheck : true,
     // Highlights
     category: draftData.category || null,
@@ -307,17 +309,21 @@ export async function handleSubmitListing(listingData: any, userId: string, draf
     });
   }
 
+  // If the host picked a future "available from" date, create a pre-availability block.
+  const availableDate = listingData.availableDate ? new Date(listingData.availableDate) : null;
+
   // If we have a draftId, use the draft-specific transaction
   // Otherwise, create a new listing directly
   if (draftId) {
     // Use createListingFromDraftTransaction which handles draft deletion internally
     return await createListingFromDraftTransaction(draftId, userId, {
       listingImages: finalListing.listingImages,
-      monthlyPricing: finalListing.monthlyPricing
+      monthlyPricing: finalListing.monthlyPricing,
+      availableDate,
     });
   } else {
     // Create a new listing directly (this will delete any existing drafts)
-    return await createListing(finalListing, userId);
+    return await createListing({ ...finalListing, availableDate }, userId);
   }
 
 }
@@ -538,6 +544,7 @@ export function transformComponentStateToDraftData(componentState: {
     rentDueAtBooking: string;
     shortestStay: number;
     longestStay: number;
+    availableDate?: string;
     monthlyPricing: Array<{
       months: number;
       price: string;
@@ -557,6 +564,10 @@ export function transformComponentStateToDraftData(componentState: {
     title: componentState.listingBasics.title,
     description: componentState.listingBasics.description,
     status: "draft",
+    // Pre-availability block — stored as ISO date string ("YYYY-MM-DD" from <input type="date">)
+    availableDate: componentState.listingPricing.availableDate
+      ? new Date(componentState.listingPricing.availableDate)
+      : null,
     // Location fields
     locationString: componentState.listingLocation.locationString,
     latitude: componentState.listingLocation.latitude,
@@ -663,6 +674,7 @@ export async function handleSaveAndExit(
       petRent: string;
       shortestStay: number;
       longestStay: number;
+      availableDate?: string;
       monthlyPricing: Array<{
         months: number;
         price: string;
@@ -752,6 +764,10 @@ export async function loadDraftData(draftId: string) {
     rentDueAtBooking: draftListing.rentDueAtBooking !== null ? draftListing.rentDueAtBooking : null,
     shortestLeaseLength: draftListing.shortestLeaseLength || 1,
     longestLeaseLength: draftListing.longestLeaseLength || 12,
+    // ISO "YYYY-MM-DD" for the UI <input type="date">
+    availableDate: draftListing.availableDate
+      ? new Date(draftListing.availableDate).toISOString().slice(0, 10)
+      : "",
 
     // Photos
     listingPhotos: [] as any[],
@@ -875,6 +891,10 @@ export interface ListingPricing {
   petDeposit: string;
   petRent: string;
   rentDueAtBooking: string;
+  availableDate?: string;
+  includeUtilities?: boolean;
+  varyPricingByLength?: boolean;
+  basePrice?: string;
 }
 
 export interface NullableListingImage {
@@ -1002,7 +1022,6 @@ export function validateAmenities(listingAmenities: string[]): string[] {
 export function validatePricing(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
 
-  // Step 7 validation - check basic settings
   if (listingPricing.shortestStay < 1 || listingPricing.shortestStay > 12) {
     errors.push("Shortest stay must be between 1 and 12 months");
   }
@@ -1021,20 +1040,25 @@ export function validatePricing(listingPricing: ListingPricing): string[] {
 export function validateVerifyPricing(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
 
+  // An empty row is treated as if it held the top-level basePrice. Covers the case
+  // where the host types basePrice then clicks Next without blurring the input —
+  // React batches blur+click, so the row-seeding state update wouldn't have landed
+  // before this validator runs. The table is still the source of truth at submit time.
+  const basePriceRaw = (listingPricing.basePrice ?? '').replace(/,/g, '');
+  const basePriceNumber = basePriceRaw ? parseFloat(basePriceRaw) : NaN;
+  const basePriceValid = !isNaN(basePriceNumber) && basePriceNumber > 0;
 
-  // Check each pricing entry
   const missingPrices: number[] = [];
   const invalidPrices: number[] = [];
 
   listingPricing.monthlyPricing.forEach(p => {
-
-    // Check if price is missing (empty, null, undefined)
-    if (p.price === null || p.price === undefined || p.price === '') {
+    const hasRow = p.price !== null && p.price !== undefined && p.price !== '';
+    if (!hasRow) {
+      if (basePriceValid) return; // fall back to basePrice — treat as valid
       missingPrices.push(p.months);
       return;
     }
 
-    // Convert to number and validate
     const priceAsNumber = parseFloat(p.price);
     if (isNaN(priceAsNumber) || priceAsNumber < 0) {
       invalidPrices.push(p.months);
@@ -1054,9 +1078,29 @@ export function validateVerifyPricing(listingPricing: ListingPricing): string[] 
 
 export function validateDeposits(listingPricing: ListingPricing): string[] {
   const errors: string[] = [];
-
-
   return errors;
+}
+
+export function validateAvailableDate(listingPricing: ListingPricing): string[] {
+  const errors: string[] = [];
+  if (!listingPricing.availableDate) return errors;
+
+  const [y, m, d] = listingPricing.availableDate.split('-').map(Number);
+  if (!y || !m || !d) {
+    errors.push("Available date is not a valid date");
+  }
+  // Past dates are intentionally allowed — the submit path skips creating the
+  // unavailability block, effectively treating them as "available immediately".
+  return errors;
+}
+
+export function validatePricingAndTerms(listingPricing: ListingPricing): string[] {
+  return [
+    ...validatePricing(listingPricing),
+    ...validateVerifyPricing(listingPricing),
+    ...validateDeposits(listingPricing),
+    ...validateAvailableDate(listingPricing),
+  ];
 }
 
 /**
@@ -1102,14 +1146,8 @@ export function validateAllSteps(formData: {
   const amenitiesErrors = validateAmenities(formData.listingAmenities);
   if (amenitiesErrors.length > 0) allErrors[7] = amenitiesErrors;
 
-  const pricingErrors = validatePricing(formData.listingPricing);
+  const pricingErrors = validatePricingAndTerms(formData.listingPricing);
   if (pricingErrors.length > 0) allErrors[8] = pricingErrors;
-
-  const verifyPricingErrors = validateVerifyPricing(formData.listingPricing);
-  if (verifyPricingErrors.length > 0) allErrors[9] = verifyPricingErrors;
-
-  const depositErrors = validateDeposits(formData.listingPricing);
-  if (depositErrors.length > 0) allErrors[10] = depositErrors;
 
   return allErrors;
 }
